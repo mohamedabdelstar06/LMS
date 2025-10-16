@@ -1,0 +1,45 @@
+name: lms
+description: "Learning Management System"
+
+publish_to: 'Egyptian Air Force'
+
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.9.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  google_fonts: ^6.3.2
+  table_calendar: ^3.2.0
+  flutter_svg: ^2.2.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+
+  flutter_lints: ^5.0.0
+
+flutter:
+
+  uses-material-design: true
+
+  fonts:
+    - family: inter
+      fonts:
+        - asset: assets/fonts/Inter_18pt-SemiBold.ttf
+        - asset: assets/fonts/Inter_18pt-Bold.ttf
+        - asset: assets/fonts/Inter_18pt-ExtraBold.ttf
+
+  assets:
+    - assets/
+    - assets/logo/
+    - assets/icons/
+    - assets/images/
+    - assets/fonts/
+
