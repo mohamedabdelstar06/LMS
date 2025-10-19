@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../../core/Colors/app_colors.dart';
+
+import '../../../core/cons/Colors/app_colors.dart';
 
 class CourseScreen extends StatelessWidget {
   const CourseScreen({super.key});
