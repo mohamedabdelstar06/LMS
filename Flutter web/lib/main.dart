@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lms/features/screens/login/view.dart';
 
+import 'features/screens/courses/view.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -20,7 +22,16 @@ class MyApp extends StatelessWidget {
           
         ),
         debugShowCheckedModeBanner: false,
-        home: LoginScreen(),
+        home: SizedBox(
+          height: 1500,
+          child: PageView(
+            children: [
+              // LoginScreen(),
+              CourseScreen(),
+            ],
+          ),
+        )
+
       ),
     );
   }
