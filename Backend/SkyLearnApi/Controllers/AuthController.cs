@@ -1,46 +1,49 @@
-using System.Security.Claims;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SkyLearnApi.Services.Interfaces;
 using SkyLearnApi.DTOs;
+using SkyLearnApi.Services;
 
-namespace SkyLearn.Api.Controllers
+namespace SkyLearnApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        private readonly IAuthService _authService;
+        private readonly IAuthService _auth;
 
-        public AuthController(IAuthService authService)
+        public AuthController(IAuthService auth)
         {
-            _authService = authService;
+            _auth = auth;
         }
 
-       [HttpPost("login")]
-public async Task<IActionResult> Login([FromBody] LoginDto dto)
-{
-    var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "Unknown";
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginDto dto)
+        {
+            var res = await _auth.LoginAsync(dto.Email, dto.Password);
+            if (res == null)
+                return Unauthorized(new { message = "Invalid credentials" });
 
-    var token = await _authService.LoginAsync(dto.Email, dto.Password);
+            return Ok(new
+            {
+                message = "Login successful",
+                token = res.Token,
+                expiresIn = res.ExpiresIn,
+                user = res.User
+            });
+        }
 
-    if (string.IsNullOrEmpty(token))
-        return Unauthorized();
-
-    return Ok(new { token });
-}
-
-
+        [Authorize]
         [HttpPost("logout")]
         public async Task<IActionResult> Logout()
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var authHeader = Request.Headers["Authorization"].FirstOrDefault();
+            if (string.IsNullOrWhiteSpace(authHeader) || !authHeader.StartsWith("Bearer "))
+                return BadRequest(new { message = "No token provided" });
 
-            if (string.IsNullOrEmpty(userId))
-                return Unauthorized();
+            var token = authHeader.Substring("Bearer ".Length).Trim();
+            await _auth.LogoutAsync(token);
 
-            await _authService.LogoutAsync(int.Parse(userId));
-
-            return Ok(new { message = "Logged out successfully" });
+            return Ok(new { message = "Logged out" });
         }
     }
 }
