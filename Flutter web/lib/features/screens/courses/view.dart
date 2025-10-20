@@ -1,15 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lms/core/helpers/cach_helper/shared_pref_helper.dart';
 
 
 import '../../../core/cons/Colors/app_colors.dart';
 
-class CourseScreen extends StatelessWidget {
+class CourseScreen extends StatefulWidget {
   const CourseScreen({super.key});
 
   @override
+  State<CourseScreen> createState() => _CourseScreenState();
+}
+
+class _CourseScreenState extends State<CourseScreen> {
+
+
+
+  // String? email;
+  //
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   loadEmail();
+  // }
+  //
+  // void loadEmail() async {
+  //   email = await PrefHelper.getEmail();
+  //   setState(() {});
+  // }
+
+  @override
   Widget build(BuildContext context) {
-    return Container(
+    return
+      Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
@@ -157,6 +180,7 @@ width: 1092,
                 color: Color(0xFF545F70),
               ),
             ),
+            // Text(email.toString()),
           ],
         ),
         )
@@ -171,3 +195,18 @@ width: 1092,
     );
   }
 }
+
+// String? email;
+//
+// @override
+// void initState() {
+//   super.initState();
+//   loadEmail();
+// }
+//
+// void loadEmail() async {
+//   email = await SharedPrefHelper.getEmail();
+//   setState(() {});
+// }
+
+// Text(email.toString()),

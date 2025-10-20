@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/cons/api_helper_resources/api_resources.dart';
+import '../../../../core/cons/context/navigation_key.dart';
+import '../../../../core/helpers/cach_helper/shared_pref_helper.dart';
 import '../../courses/view.dart';
+import '../user_model/data.dart';
 import 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
@@ -26,20 +29,25 @@ class LoginCubit extends Cubit<LoginState> {
 
       if (response.statusCode == 200 ) {
         emit(LoginSuccessState());
+        final model = UserModel.fromJson(response.data);
+        await PrefHelper.saveLoginData(model);
+
+
+
         passwordController.clear();
         emailController.clear();
 
-        ScaffoldMessenger.of(context).showSnackBar(
+        ScaffoldMessenger.of(navigatorKey.currentContext!).showSnackBar(
           SnackBar(
             content: Text(response.data["message"] ?? "Login successful"),
             backgroundColor: Colors.green,
           ),
         );
 
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) =>  CourseScreen() ,));
+        Navigator.pushReplacement(navigatorKey.currentContext!, MaterialPageRoute(builder: (context) =>  CourseScreen() ,));
       } else {
         emit(LoginErrorState());
-        ScaffoldMessenger.of(context).showSnackBar(
+        ScaffoldMessenger.of(navigatorKey.currentContext!).showSnackBar(
           SnackBar(
             content: Text(response.data["message"] ?? "Invalid email or password"),
             backgroundColor: Colors.redAccent,
@@ -59,7 +67,7 @@ class LoginCubit extends Cubit<LoginState> {
         errorMessage = "Server took too long to respond";
       }
 
-      ScaffoldMessenger.of(context).showSnackBar(
+      ScaffoldMessenger.of(navigatorKey.currentContext!).showSnackBar(
         SnackBar(
           content: Text(errorMessage),
           backgroundColor: Colors.redAccent,
@@ -67,7 +75,7 @@ class LoginCubit extends Cubit<LoginState> {
       );
     } catch (e) {
       emit(LoginErrorState());
-      ScaffoldMessenger.of(context).showSnackBar(
+      ScaffoldMessenger.of(navigatorKey.currentContext!).showSnackBar(
         SnackBar(
           content: Text("Unexpected error: $e"),
           backgroundColor: Colors.redAccent,
