@@ -1,46 +1,94 @@
 using Microsoft.EntityFrameworkCore;
-using Serilog;
+using Microsoft.IdentityModel.Tokens;
 using SkyLearnApi.Data;
+using SkyLearnApi.Dtos;
 using SkyLearnApi.Entities;
-using SkyLearnApi.Services.Interfaces;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
-namespace SkyLearnApi.Services.Implementations
+namespace SkyLearnApi.Services
 {
     public class AuthService : IAuthService
     {
-        private readonly AppDbContext _context;
-        private readonly JwtService _jwtService;
+        private readonly AppDbContext _db;
+        private readonly JwtSettings _jwtSettings;
+        private readonly AuditService _audit;
 
-        public AuthService(AppDbContext context, JwtService jwtService)
+        public AuthService(AppDbContext db, IConfiguration config, AuditService audit)
         {
-            _context = context;
-            _jwtService = jwtService;
+            _db = db;
+            _audit = audit;
+            _jwtSettings = config.GetSection("Jwt").Get<JwtSettings>() ?? new JwtSettings();
         }
 
-        public async Task<string?> LoginAsync(string email, string password)
+        public async Task<AuthResponseDto?> LoginAsync(string email, string password)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
-            if (user == null)
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.Email == email);
+            if (user == null || user.Password != password)
             {
-                Log.Warning("Failed login attempt: invalid email {Email}", email);
+                await _audit.LogAsync("Failed Login", $"Login failed for {email}", "Auth", user?.Id);
                 return null;
             }
 
-            
-            if (user.Password != password)
+            var jti = Guid.NewGuid().ToString();
+            var claims = new List<Claim>
             {
-                Log.Warning("Failed login attempt: invalid password for {Email}", email);
-                return null;
-            }
+                new Claim("UserId", user.Id.ToString()),
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Role, user.Role.ToString()),
+                new Claim(JwtRegisteredClaimNames.Jti, jti)
+            };
 
-            Log.Information("User {UserId} logged in", user.Id);
-            return _jwtService.GenerateToken(user);
+            var key = Encoding.UTF8.GetBytes(_jwtSettings.Key);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.UtcNow.AddMinutes(_jwtSettings.ExpireMinutes),
+                Issuer = _jwtSettings.Issuer,
+                Audience = _jwtSettings.Audience,
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var tokenString = tokenHandler.WriteToken(token);
+
+            await _audit.LogAsync("User Login", $"User {user.Email} logged in", "Auth", user.Id, jti, tokenDescriptor.Expires);
+
+            return new AuthResponseDto
+            {
+                Token = tokenString,
+                ExpiresIn = tokenDescriptor.Expires!.Value,
+                User = new UserDto
+                {
+                    Id = user.Id,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Email = user.Email,
+                    Role = user.Role.ToString(),
+                    Gender = user.Gender,
+                    City = user.City,
+                    AcademicLevel = user.AcademicLevel,
+                    ProfileImageUrl = user.ProfileImageUrl
+                }
+            };
         }
 
-        public async Task LogoutAsync(long userId)
+        public async Task LogoutAsync(string token)
         {
-            Log.Information("User {UserId} logged out", userId);
-            await Task.CompletedTask;
+            var handler = new JwtSecurityTokenHandler();
+            try
+            {
+                var jwt = handler.ReadJwtToken(token);
+                int? userId = int.TryParse(jwt.Claims.FirstOrDefault(c => c.Type == "UserId")?.Value, out var uid) ? uid : null;
+
+                await _audit.LogAsync("User Logout", $"Token revoked (jti={jwt.Id})", "Auth", userId, jwt.Id, jwt.ValidTo);
+            }
+            catch
+            {
+                await _audit.LogAsync("Failed Logout", "Invalid or missing token", "Auth", null);
+            }
         }
     }
 }
