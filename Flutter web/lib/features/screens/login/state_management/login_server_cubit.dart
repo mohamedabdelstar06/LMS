@@ -31,6 +31,8 @@ class LoginCubit extends Cubit<LoginState> {
         emit(LoginSuccessState());
         final model = UserModel.fromJson(response.data);
         await PrefHelper.saveLoginData(model);
+        await TokenStorageHelper.saveTokenSecure(model);
+
 
 
 
@@ -83,25 +85,5 @@ class LoginCubit extends Cubit<LoginState> {
       );
     }
   }
-  // Future<void> postLoginData(
-  //   emailController,
-  //   passwordController,
-  //   context,
-  // ) async {
-  //   emit(LoadingLoginState());
-  //   final response = await Dio(BaseOptions(baseUrl: ApiResources.apiUrl)).post(
-  //     ApiResources.loginEndPoint,
-  //     data: {
-  //       "email": emailController.text,
-  //       "password": passwordController.text,
-  //     },
-  //   );
-  //
-  //   emit(LoginSuccessState());
-  //   passwordController.clear();
-  //   emailController.clear();
-  //   ScaffoldMessenger.of(
-  //     context,
-  //   ).showSnackBar(SnackBar(content: Text(response.data["message"])));
-  // }
+
 }
