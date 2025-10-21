@@ -6,10 +6,7 @@ import 'package:lms/features/screens/login/state_management/login_state.dart';
 
 import '../../../core/cons/Colors/app_colors.dart';
 
-<<<<<<< HEAD
 
-=======
->>>>>>> ebe08394bbecd59dce62bb0ece32cdfaa8812d06
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
