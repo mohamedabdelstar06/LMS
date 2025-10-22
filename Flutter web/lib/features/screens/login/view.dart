@@ -25,7 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    // Remove artificial delay - this was causing additional lag!
+
   }
 
   @override
