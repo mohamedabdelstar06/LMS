@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:lms/core/cons/context/navigation_key.dart';
+import 'package:lms/features/screens/courses/admin/view.dart';
+import 'package:lms/features/screens/courses/teacher/view.dart';
+import 'package:lms/features/screens/hero_section/view.dart';
 import 'package:lms/features/screens/login/view.dart';
-import 'package:lms/core/widgets/loading_screen.dart';
+import 'package:lms/features/screens/pre_loading/loading_screen.dart';
 import 'package:lms/core/services/app_initialization_service.dart';
+
 
 
 
@@ -27,15 +31,12 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    // Start initialization immediately but don't wait for it
     _initializeApp();
   }
 
   Future<void> _initializeApp() async {
-    // Show loading screen immediately, then initialize
-    await Future.delayed(Duration(milliseconds: 100)); // Small delay to show loading screen
+    await Future.delayed(Duration(milliseconds: 100));
     
-    // Initialize app services
     await AppInitializationService.initializeApp();
     
     setState(() {
@@ -57,11 +58,16 @@ class _MyAppState extends State<MyApp> {
         theme: ThemeData(
           useMaterial3: true,
           fontFamily: 'inter',
-          // Prevent white flash by setting scaffold background
           scaffoldBackgroundColor: Color(0xFFE0F2FE),
         ),
         debugShowCheckedModeBanner: false,
-        home: _isInitialized ? LoginScreen() : LoadingScreen(),
+        home:
+        // AdminCourseScreen()
+        // TeacherCourseScreen()
+        // StudentCourseScreen()
+        // HeroSectionScreen()
+        // UploadCoursePage()
+        _isInitialized ? LoginScreen() : LoadingScreen(),
       ),
     );
   }

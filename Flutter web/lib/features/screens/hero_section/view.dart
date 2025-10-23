@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/cons/Colors/app_colors.dart';
 import '../../../core/widgets/app_bar.dart';
+import '../../../generated/assets.dart';
 
 class HeroSectionScreen extends StatelessWidget {
   const HeroSectionScreen({super.key});
@@ -162,13 +163,13 @@ class HeroSectionScreen extends StatelessWidget {
 
             Stack(
               children: [
-                Image.asset("assets/images/man-welcom.png",width: 732,height: 600,),
+                Image.asset(Assets.manWelcome,width: 732,height: 600,),
                 Positioned(top: 290,
                     left: 25,
-                    child: Image.asset("assets/images/frame_1.png")),
+                    child: Image.asset(Assets.frame_1)),
                 Positioned(top: 200,
                     right: 100,
-                    child: Image.asset("assets/images/frame_2.png")),
+                    child: Image.asset(Assets.frame_2)),
 
               ],
             )

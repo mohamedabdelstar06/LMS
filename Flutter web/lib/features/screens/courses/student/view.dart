@@ -1,20 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../../core/cons/Colors/app_colors.dart';
-import '../../../core/helpers/logout_server/logout.dart';
-import '../../../generated/assets.dart';
-import 'course_model/courses.dart';
+import '../../../../core/cons/Colors/app_colors.dart';
+import '../../../../core/helpers/cach_helper/shared_pref_helper.dart';
+import '../../../../core/helpers/logout_server/logout.dart';
+import '../../../../generated/assets.dart';
+import '../course_model/courses.dart';
 
-class CourseScreen extends StatefulWidget {
-  const CourseScreen({super.key});
+class StudentCourseScreen extends StatefulWidget {
+  const StudentCourseScreen({super.key});
 
   @override
-  State<CourseScreen> createState() => _CourseScreenState();
+  State<StudentCourseScreen> createState() => _CourseScreenState();
 }
 
-class _CourseScreenState extends State<CourseScreen> {
+class _CourseScreenState extends State<StudentCourseScreen> {
   bool _isLoading = true;
+
+
+
+String? imageProfile;
+
+
+
+void loadImageProfile() async {
+  imageProfile = await PrefHelper.getImageProfile();
+  setState(() {});
+}
 
   @override
   void initState() {
@@ -27,6 +39,9 @@ class _CourseScreenState extends State<CourseScreen> {
         });
       }
     });
+
+    loadImageProfile();
+
   }
 
   @override
@@ -107,7 +122,7 @@ class _CourseScreenState extends State<CourseScreen> {
                 ),
                 padding: EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.9),
+                  color: Color(0xffE3F6FF),
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
@@ -234,7 +249,8 @@ class _CourseScreenState extends State<CourseScreen> {
                                             Text(
                                               "Welcome Back",
                                               style: TextStyle(
-                                                color: Colors.lightBlue,
+                                                                                        color: Color(0xff175CD3),
+
                                                 fontSize: isLargeScreen
                                                     ? 36
                                                     : 28,
@@ -349,7 +365,8 @@ class _CourseScreenState extends State<CourseScreen> {
   }) {
     return Material(
       color: Colors.transparent,
-      child: InkWell(
+      child:
+      InkWell(
         onTap: onPressed,
         borderRadius: BorderRadius.circular(12),
         child: Container(
@@ -394,7 +411,11 @@ class _CourseScreenState extends State<CourseScreen> {
         children: [
           CircleAvatar(
             radius: 16,
-            backgroundImage: AssetImage(Assets.logo),
+
+            ///TODO
+
+
+            backgroundImage: NetworkImage(imageProfile ?? Assets.logo),
           ),
           SizedBox(width: 8),
           Text(
