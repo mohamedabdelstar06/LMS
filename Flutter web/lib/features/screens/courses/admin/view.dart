@@ -49,12 +49,13 @@ class _CourseScreenState extends State<AdminCourseScreen> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return Container(
+      return
+        Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
               MYColors.gradientColor_3,
-              MYColors.gradientColor_1.withValues(alpha: 0.35),
+              MYColors.gradientColor_2.withValues(alpha: 0.25),
               MYColors.gradientColor_3,
             ],
             begin: Alignment.topLeft,
@@ -98,7 +99,7 @@ class _CourseScreenState extends State<AdminCourseScreen> {
         gradient: LinearGradient(
           colors: [
             MYColors.gradientColor_3,
-            MYColors.gradientColor_1.withValues(alpha: 0.35),
+            MYColors.gradientColor_2.withValues(alpha: 0.25),
             MYColors.gradientColor_3,
           ],
           begin: Alignment.topLeft,
@@ -665,7 +666,7 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                                       gradient: LinearGradient(
                                         colors: [
                                           MYColors.gradientColor_3,
-                                          MYColors.gradientColor_1.withValues(alpha: 0.7),
+                                          MYColors.gradientColor_2.withValues(alpha: 0.25),
                                           MYColors.gradientColor_3,
                                         ],
                                         begin: Alignment.topLeft,

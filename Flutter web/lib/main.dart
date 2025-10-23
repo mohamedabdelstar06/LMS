@@ -7,6 +7,8 @@ import 'package:lms/features/screens/login/view.dart';
 import 'package:lms/features/screens/pre_loading/loading_screen.dart';
 import 'package:lms/core/services/app_initialization_service.dart';
 
+import 'features/screens/courses/student/view.dart';
+
 
 
 

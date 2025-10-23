@@ -12,7 +12,7 @@ import '../user_model/data.dart';
 import 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
-  LoginCubit() : super(LoginState());
+  LoginCubit() : super(LoginInitialState());
   Future<void> postLoginData(
       TextEditingController emailController,
       TextEditingController passwordController,
@@ -78,10 +78,8 @@ class LoginCubit extends Cubit<LoginState> {
           Navigator.pushReplacement(navigatorKey.currentContext!, MaterialPageRoute(builder: (context) =>  StudentCourseScreen() ,));
         }else if (model.user!.role == "Instructor"){
           Navigator.pushReplacement(navigatorKey.currentContext!, MaterialPageRoute(builder: (context) =>  TeacherCourseScreen() ,));
-
-    } else {
+        } else {
           Navigator.pushReplacement(navigatorKey.currentContext!, MaterialPageRoute(builder: (context) =>  AdminCourseScreen() ,));
-
         }
 
 

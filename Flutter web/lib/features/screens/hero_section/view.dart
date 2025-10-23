@@ -17,7 +17,7 @@ class HeroSectionScreen extends StatelessWidget {
           gradient: LinearGradient(
             colors: [
               MYColors.gradientColor_3,
-              MYColors.gradientColor_1.withValues(alpha: 0.35),
+              MYColors.gradientColor_2.withValues(alpha: 0.25),
               MYColors.gradientColor_3,
             ],
             begin: Alignment.topLeft,
@@ -94,15 +94,15 @@ class HeroSectionScreen extends StatelessWidget {
             width: 185,
             height: 45,
 
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  Color(0xFF1849A9),
-                  Color(0xFF53B1FD),
-                ],
-              ),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Color(0xFF1849A9),
+                    Color(0xFF53B1FD),
+                  ],
+                ),
 
               color: Color(0xFF175CD3),
               borderRadius:

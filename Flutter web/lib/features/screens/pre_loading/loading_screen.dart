@@ -14,7 +14,7 @@ class LoadingScreen extends StatelessWidget {
           gradient: LinearGradient(
             colors: [
               MYColors.gradientColor_3,
-              MYColors.gradientColor_1.withValues(alpha: 0.35),
+              MYColors.gradientColor_2.withValues(alpha: 0.25),
               MYColors.gradientColor_3,
             ],
             begin: Alignment.topLeft,
@@ -85,10 +85,10 @@ class LoadingScreen extends StatelessWidget {
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(26),
                                 gradient: LinearGradient(
-                                  colors: [Color(0xFF175CD3), Color(0xFF53B1FD)],
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                ),
+                              colors: [Color(0xFF175CD3), Color(0xFF53B1FD), Color(0xFF175CD3)],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
                               ),
                               child: Icon(
                                 Icons.rocket_launch,
