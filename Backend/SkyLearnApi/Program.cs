@@ -1,3 +1,10 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using SkyLearnApi.Data;
+using SkyLearnApi.Middleware;
+using SkyLearnApi.Services;
+using System.Text;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,6 +28,7 @@ builder.Services.AddScoped<IYearService, YearService>();
 builder.Services.AddScoped<ICourseService, CourseService>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IAuditService, AuditService>();
 
 // Register Mapster mappings
 MapConfig.RegisterMappings();
@@ -73,8 +81,11 @@ app.UseCors(x => x
 app.UseStaticFiles();    
 
 app.UseAuthentication();
+app.UseAuditLogging();
 app.UseAuthorization();
 
 app.MapControllers();
+
+
 
 app.Run();
