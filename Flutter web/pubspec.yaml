@@ -22,6 +22,7 @@ dependencies:
   flutter_bloc: ^9.1.1
   awesome_dialog: ^3.3.0
   flutter_secure_storage: ^9.2.4
+  file_picker: ^10.3.3
 
 dev_dependencies:
   flutter_test:
@@ -40,6 +41,8 @@ flutter:
     - assets/images/
     - assets/fonts/
     - assets/test_images/
+    - assets/images/wing.svg
+    - assets/icons/delete_icon.svg
 
 
   fonts:

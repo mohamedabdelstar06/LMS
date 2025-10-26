@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../../generated/assets.dart';
+
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   const CustomAppBar({super.key,});
@@ -19,15 +21,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           children: [
             CircleAvatar(
               radius: 25,
-              backgroundImage: AssetImage("assets/logo/logo.jpg"),
+              backgroundImage: AssetImage(Assets.logo),
             ),
-           // Image.asset("assets/logo/logo.jpg",width: 60,height: 60,),
 
             SizedBox(
               width: 400,
               child: Row(
                 mainAxisSize: MainAxisSize.min,
-                // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
 
                 InkWell(
@@ -71,13 +71,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 children: [
 
 
-                  InkWell(child: SvgPicture.asset("assets/icons/search_icon.svg"),onTap: (){},),
+                  InkWell(child: SvgPicture.asset(Assets.iconsSearchIcon),onTap: (){},),
             Spacer(),
-                  InkWell(child: SvgPicture.asset("assets/icons/bell_icon.svg"),onTap: (){},),
+                  InkWell(child: SvgPicture.asset(Assets.iconsBellIcon),onTap: (){},),
                   Spacer(),
-                  InkWell(child: SvgPicture.asset("assets/icons/message-icon.svg"),onTap: (){},),
+                  InkWell(child: SvgPicture.asset(Assets.iconsMessageIcon),onTap: (){},),
                   Spacer(),
-                  InkWell(child: SvgPicture.asset("assets/icons/man_icon.svg"),onTap: (){},),
+                  InkWell(child: SvgPicture.asset(Assets.iconsManIcon),onTap: (){},),
 
 
 
