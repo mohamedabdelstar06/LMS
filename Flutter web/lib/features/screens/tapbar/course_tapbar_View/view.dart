@@ -229,7 +229,6 @@ class CustomCardScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // عنوان رئيسي
             const Text(
               "Activities",
               style: TextStyle(
@@ -239,7 +238,6 @@ class CustomCardScreen extends StatelessWidget {
             ),
             const SizedBox(height: 16),
 
-            // أول بطاقة
             Row(
               children: [
                 Image.asset(
@@ -275,7 +273,6 @@ class CustomCardScreen extends StatelessWidget {
             const Divider(height: 32, thickness: 1, color: Colors.grey),
 
 
-            //Flutter web/assets/icons/glossary_icon.png// ← Divider هنا
             Row(
               children: [
                 SvgPicture.asset("assets/icons/glossary_icon.png", width: 20,
@@ -322,9 +319,8 @@ class CustomCardScreen extends StatelessWidget {
             //   ],
             // ),
 
-            const Divider(height: 32, thickness: 1, color: Colors.grey), // ← Divider هنا
+            const Divider(height: 32, thickness: 1, color: Colors.grey),
 
-            // بطاقة ثالثة
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: const [

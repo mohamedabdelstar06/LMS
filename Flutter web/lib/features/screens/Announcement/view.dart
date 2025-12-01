@@ -32,7 +32,6 @@ class _CourseScreenState extends State<AnnouncementScreen> {
   @override
   void initState() {
     super.initState();
-    // Simulate loading time and then show content
     Future.delayed(Duration(milliseconds: 500), () {
       if (mounted) {
         setState(() {
@@ -109,7 +108,6 @@ class _CourseScreenState extends State<AnnouncementScreen> {
         body: SafeArea(
           child: Column(
             children: [
-              // Fixed Header Section
               Container(
                 width: double.infinity,
                 constraints: BoxConstraints(
@@ -136,7 +134,6 @@ class _CourseScreenState extends State<AnnouncementScreen> {
                 ),
                 child: Row(
                   children: [
-                    // Search Bar
                     Expanded(
                       flex: isLargeScreen ? 2 : 1,
                       child: Container(
@@ -181,7 +178,6 @@ class _CourseScreenState extends State<AnnouncementScreen> {
                     ),
                     SizedBox(width: 20),
 
-                    // User Actions
                     Row(
                       children: [
                         _buildNotificationButton(
@@ -201,7 +197,6 @@ class _CourseScreenState extends State<AnnouncementScreen> {
                 ),
               ),
 
-              // Scrollable Content Area
               Expanded(
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
@@ -219,7 +214,6 @@ class _CourseScreenState extends State<AnnouncementScreen> {
                     ),
                     child: Column(
                       children: [
-                        // Welcome Section
                         Container(
                           width: double.infinity,
 
@@ -296,7 +290,6 @@ class _CourseScreenState extends State<AnnouncementScreen> {
                         ),
                         SizedBox(height: 30),
 
-                        // Courses Container with White Background and Shadow
                         Container(
                           width: double.infinity,
                           height:1238 ,
@@ -417,7 +410,7 @@ class _CourseScreenState extends State<AnnouncementScreen> {
 
 }
 
-//
+
 
 
 void _showUserMenu(BuildContext context) async {
@@ -508,11 +501,9 @@ class PieChartScreen extends StatefulWidget {
 }
 
 class _PieChartScreenState extends State<PieChartScreen> with SingleTickerProviderStateMixin {
-  // Animation
   late AnimationController _animationController;
   late Animation<double> _scaleAnimation;
 
-  // UI state
   bool _isInitialized = false;
   bool _isHovered = false;
   bool _isDatePickerHovered = false;
@@ -520,7 +511,6 @@ class _PieChartScreenState extends State<PieChartScreen> with SingleTickerProvid
   int _touchedIndex = -1;
 
 
-  // Date selection
   final TextEditingController _dateController = TextEditingController();
   DateTime? _selectedDate;
 
@@ -536,7 +526,6 @@ class _PieChartScreenState extends State<PieChartScreen> with SingleTickerProvid
       CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
     );
 
-    // Delay small init to avoid layout problems if you render this inside other build flows
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
         setState(() {
@@ -553,7 +542,6 @@ class _PieChartScreenState extends State<PieChartScreen> with SingleTickerProvid
     super.dispose();
   }
 
-  // Helper: parse DD/MM/YYYY
   void _parseAndSetDate(String input, BuildContext context) {
     try {
       final parts = input.split('/');
@@ -564,7 +552,6 @@ class _PieChartScreenState extends State<PieChartScreen> with SingleTickerProvid
 
         final parsedDate = DateTime(year, month, day);
 
-        // check valid (DateTime will roll over invalid dates; re-check)
         if (parsedDate.year == year &&
             parsedDate.month == month &&
             parsedDate.day == day) {
@@ -578,7 +565,7 @@ class _PieChartScreenState extends State<PieChartScreen> with SingleTickerProvid
         }
       }
     } catch (_) {
-      // continue to error handler below
+      // TODO: continue to error handler below
     }
 
     ScaffoldMessenger.of(context).showSnackBar(
@@ -598,7 +585,6 @@ class _PieChartScreenState extends State<PieChartScreen> with SingleTickerProvid
     const double centerSpaceRadius = 60.0;
     const double outerRadius = 100.0;
 
-    // If your PieChart widget is sized to 200x200 the center is (100,100)
     final center = Offset(100.0, 100.0);
 
     final dx = localPosition.dx - center.dx;
@@ -609,12 +595,10 @@ class _PieChartScreenState extends State<PieChartScreen> with SingleTickerProvid
       return -1;
     }
 
-    double angle = math.atan2(dy, dx) * 180 / math.pi; // -180..180
-    if (angle < 0) angle += 360; // 0..360, 0 = +x axis
-    // convert so 0 starts at top (-90 offset used in chart)
+    double angle = math.atan2(dy, dx) * 180 / math.pi;
+    if (angle < 0) angle += 360;
     double adjustedAngle = (angle + 90) % 360;
 
-    // present = 80% -> 0..288 deg ; absent = remaining 288..360
     if (adjustedAngle >= 0 && adjustedAngle < 288) {
       return 0;
     } else {
@@ -731,7 +715,6 @@ class _PieChartScreenState extends State<PieChartScreen> with SingleTickerProvid
 
                       const SizedBox(height: 8),
 
-                      // Legend Row
                       Row(
                         children: [
                           Row(
@@ -754,13 +737,11 @@ class _PieChartScreenState extends State<PieChartScreen> with SingleTickerProvid
 
                       const SizedBox(height: 12),
 
-                      // Pie chart area with fixed size so hit-testing coordinates are stable
                       SizedBox(
                         height: 200,
                         width: double.infinity,
                         child: GestureDetector(
                           onTapDown: (details) {
-                            // localPosition within this SizedBox
                             final local = details.localPosition;
                             final section = _getTouchedSection(local);
                             if (section != _touchedIndex && mounted) {
@@ -793,7 +774,6 @@ class _PieChartScreenState extends State<PieChartScreen> with SingleTickerProvid
 
                       const SizedBox(height: 10),
 
-                      // Date Picker Row (animated)
                       MouseRegion(
                         onEnter: (_) {
                           if (!_isDatePickerHovered && mounted) {
@@ -848,23 +828,23 @@ class _PieChartScreenState extends State<PieChartScreen> with SingleTickerProvid
                                       return Theme(
                                         data: Theme.of(context).copyWith(
                                           colorScheme: ColorScheme.light(
-                                            primary: Colors.blue.shade600,       // لون العنوان والأزرار
-                                            onPrimary: Colors.black,             // لون النص فوق اللون الأساسي
-                                            surface: Colors.grey.shade100,       // خلفية نافذة الـ DatePicker
-                                            onSurface: Colors.grey.shade900,     // لون النص العام
-                                            secondary: Colors.blueAccent.shade100, // لون مميز إضافي للأيام المحددة
+                                            primary: Colors.blue.shade600,
+                                            onPrimary: Colors.black,
+                                            surface: Colors.grey.shade100,
+                                            onSurface: Colors.grey.shade900,
+                                            secondary: Colors.blueAccent.shade100,
                                           ),
                                           datePickerTheme: DatePickerThemeData(
                                             backgroundColor: Colors.grey.shade50,
-                                            headerBackgroundColor: Colors.blueGrey.withValues(alpha: 0.8), // خلفية الشريط العلوي
-                                            headerForegroundColor: Colors.white,  // لون النص في الشريط العلوي
+                                            headerBackgroundColor: Colors.blueGrey.withValues(alpha: 0.8),
+                                            headerForegroundColor: Colors.white,
                                             dayBackgroundColor: WidgetStateProperty.resolveWith<Color?>(
                                                   (states) {
                                                 if (states.contains(WidgetState.selected)) {
-                                                  return Colors.blue.shade200; // اليوم المحدد
+                                                  return Colors.blue.shade200;
                                                 }
                                                 if (states.contains(WidgetState.hovered)) {
-                                                  return Colors.blue.shade50; // اليوم عند المرور عليه
+                                                  return Colors.blue.shade50;
                                                 }
                                                 return null;
                                               },

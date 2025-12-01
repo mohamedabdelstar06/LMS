@@ -36,7 +36,6 @@ class CelebratingScreen extends StatelessWidget {
 
             const SizedBox(height: 25),
 
-            /// ————— TabBar + TabBarView —————
             DefaultTabController(
               length: 4,
               child: Column(
@@ -55,7 +54,6 @@ class CelebratingScreen extends StatelessWidget {
                     ],
                   ),
 
-                  /// لازم يتحدد ارتفاع علشان جوه ListView
                   SizedBox(
                     height: 500,
                     child: const TabBarView(
