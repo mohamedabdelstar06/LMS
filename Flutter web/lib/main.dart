@@ -9,6 +9,7 @@ import 'package:lms/features/screens/pre_loading/loading_screen.dart';
 import 'package:lms/core/services/app_initialization_service.dart';
 
 import 'features/draft/test_screen.dart';
+import 'features/screens/Courses_dashboard/view.dart';
 import 'features/screens/celeberating cultures/view.dart';
 import 'features/screens/chat_bot/view.dart';
 import 'features/screens/courses/student/view.dart';
@@ -69,8 +70,9 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         home:
         // CelebratingScreen()
-        LearnMateChat()
+        // LearnMateChat()
         // ChatBot()
+        DashboardPage()
         // ChatScreen()
         // AnnouncementScreen()
         // AttendanceChart()
