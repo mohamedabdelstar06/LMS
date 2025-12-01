@@ -47,7 +47,8 @@ void loadImageProfile() async {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return Container(
+      return
+        Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [

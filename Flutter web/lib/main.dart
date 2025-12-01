@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lms/core/cons/context/navigation_key.dart';
+import 'package:lms/features/screens/Announcement/view.dart';
 import 'package:lms/features/screens/courses/admin/view.dart';
 import 'package:lms/features/screens/courses/teacher/view.dart';
 import 'package:lms/features/screens/hero_section/view.dart';
@@ -7,6 +8,9 @@ import 'package:lms/features/screens/login/view.dart';
 import 'package:lms/features/screens/pre_loading/loading_screen.dart';
 import 'package:lms/core/services/app_initialization_service.dart';
 
+import 'features/draft/test_screen.dart';
+import 'features/screens/celeberating cultures/view.dart';
+import 'features/screens/chat_bot/view.dart';
 import 'features/screens/courses/student/view.dart';
 
 
@@ -64,12 +68,18 @@ class _MyAppState extends State<MyApp> {
         ),
         debugShowCheckedModeBanner: false,
         home:
+        // CelebratingScreen()
+        LearnMateChat()
+        // ChatBot()
+        // ChatScreen()
+        // AnnouncementScreen()
+        // AttendanceChart()
         // AdminCourseScreen()
         // TeacherCourseScreen()
         // StudentCourseScreen()
         // HeroSectionScreen()
         // UploadCoursePage()
-        _isInitialized ? LoginScreen() : LoadingScreen(),
+        // _isInitialized ? LoginScreen() : LoadingScreen(),
       ),
     );
   }
