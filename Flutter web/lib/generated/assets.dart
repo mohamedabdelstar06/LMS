@@ -16,4 +16,7 @@ class Assets {
   static const String frame_2 = 'assets/images/frame_2.png';
   static const String wing = "assets/images/wing.svg";
   static const String deleteIcon = "assets/icons/delete_icon.svg";
+  static const String listAnnouncementIcon = "assets/icons/list_announcement_icon.svg";
+
+
 }
