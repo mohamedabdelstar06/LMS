@@ -42,10 +42,15 @@ namespace SkyLearnApi.Configuration
             builder.Property(u => u.City)
                    .HasMaxLength(50);
 
-            builder.Property(u => u.AcademicLevel)
+            builder.Property(u => u.AcademicYear)
+                .IsRequired()
                    .HasMaxLength(50);
 
-           
+            builder.Property(u => u.GroupName)
+                .IsRequired()
+                   .HasMaxLength(50);
+
+
             builder.Property(u => u.Role)
                    .HasConversion<string>()
                    .IsRequired();
