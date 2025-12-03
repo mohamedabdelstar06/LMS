@@ -109,7 +109,6 @@ void loadImageProfile() async {
         body: SafeArea(
           child: Column(
             children: [
-              // Fixed Header Section
               Container(
                 width: double.infinity,
                 constraints: BoxConstraints(
@@ -136,7 +135,6 @@ void loadImageProfile() async {
                 ),
                 child: Row(
                   children: [
-                    // Search Bar
                     Expanded(
                       flex: isLargeScreen ? 2 : 1,
                       child: Container(
@@ -181,7 +179,6 @@ void loadImageProfile() async {
                     ),
                     SizedBox(width: 20),
 
-                    // User Actions
                     Row(
                       children: [
                         _buildNotificationButton(
@@ -201,7 +198,6 @@ void loadImageProfile() async {
                 ),
               ),
 
-              // Scrollable Content Area
               Expanded(
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),

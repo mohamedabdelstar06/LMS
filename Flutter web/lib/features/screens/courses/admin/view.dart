@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lms/core/widgets/app_bar.dart';
 
 import '../../../../core/cons/Colors/app_colors.dart';
 import '../../../../core/cons/context/navigation_key.dart';
@@ -94,7 +95,8 @@ class _CourseScreenState extends State<AdminCourseScreen> {
     final isLargeScreen = screenWidth > 1200;
     final isMediumScreen = screenWidth > 800;
 
-    return Container(
+    return
+      Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
@@ -107,124 +109,122 @@ class _CourseScreenState extends State<AdminCourseScreen> {
         ),
       ),
       child: Scaffold(
+        appBar: CustomAppBar(),
         backgroundColor: Colors.transparent,
         body: SafeArea(
           child: Column(
             children: [
-              // Fixed Header Section
-              Container(
-                width: double.infinity,
-                constraints: BoxConstraints(
-                  maxWidth: isLargeScreen
-                      ? 1400
-                      : (isMediumScreen ? 1000 : double.infinity),
-                ),
-                margin: EdgeInsets.symmetric(
-                  horizontal: isLargeScreen ? 40 : (isMediumScreen ? 20 : 16),
-                  vertical: 20,
-                ),
-                padding: EdgeInsets.all(20),
-                decoration: BoxDecoration(
+              SizedBox(height: 20),
+              // Container(
+              //   width: double.infinity,
+              //   constraints: BoxConstraints(
+              //     maxWidth: isLargeScreen
+              //         ? 1400
+              //         : (isMediumScreen ? 1000 : double.infinity),
+              //   ),
+              //   margin: EdgeInsets.symmetric(
+              //     horizontal: isLargeScreen ? 40 : (isMediumScreen ? 20 : 16),
+              //     vertical: 20,
+              //   ),
+              //   padding: EdgeInsets.all(20),
+              //   decoration: BoxDecoration(
+              //
+              //     color: Color(0xffE3F6FF),
+              //     borderRadius: BorderRadius.circular(20),
+              //     boxShadow: [
+              //       BoxShadow(
+              //         color: Colors.black.withValues(alpha: 0.05),
+              //         blurRadius: 20,
+              //         spreadRadius: 0,
+              //         offset: Offset(0, 10),
+              //       ),
+              //     ],
+              //   ),
+              //   child: Row(
+              //     children: [
+              //       Row(
+              //         mainAxisSize: MainAxisSize.min,
+              //         children: [
+              //           SvgPicture.asset(Assets.wing, width: 64, height: 61),
+              //           SizedBox(width: 10,),
+              //           Text("SkyLearn",style:
+              //             TextStyle(
+              //               fontFamily: "inter",
+              //               fontSize: 48,
+              //               fontWeight: FontWeight.w700,
+              //               color: Color(0xff2E90FA)
+              //
+              //             ),),
+              //         ],
+              //
+              //       ),
+              //       SizedBox(width: 60,),
+              //       Expanded(
+              //         flex: isLargeScreen ? 2 : 1,
+              //         child: Container(
+              //           height: 50,
+              //           decoration: BoxDecoration(
+              //             color: Color(0xffF8FAFC),
+              //             borderRadius: BorderRadius.circular(15),
+              //             border: Border.all(
+              //               color: Color(0xffE2E8F0),
+              //               width: 1,
+              //             ),
+              //           ),
+              //           child:
+              //           TextFormField(
+              //             decoration: InputDecoration(
+              //               border: InputBorder.none,
+              //               contentPadding: EdgeInsets.symmetric(
+              //                 horizontal: 20,
+              //                 vertical: 15,
+              //               ),
+              //               hintText: "Search courses...",
+              //               hintStyle: TextStyle(
+              //                 fontSize: 14,
+              //                 fontWeight: FontWeight.w400,
+              //                 fontFamily: "inter",
+              //                 color: Color(0xFF64748B),
+              //               ),
+              //               prefixIcon: Padding(
+              //                 padding: EdgeInsets.all(12),
+              //                 child: SvgPicture.asset(
+              //                   Assets.courseSearchIcon,
+              //                   width: 20,
+              //                   height: 20,
+              //                   colorFilter: ColorFilter.mode(
+              //                     Color(0xFF64748B),
+              //                     BlendMode.srcIn,
+              //                   ),
+              //                 ),
+              //               ),
+              //             ),
+              //           ),
+              //         ),
+              //       ),
+              //       SizedBox(width: 10),
+              //
+              //       InkWell(
+              //         onTap: () => _showUserMenu(context),
+              //         child: Container(
+              //           width: 38,
+              //           height: 38,
+              //           decoration: BoxDecoration(
+              //             color: Colors.transparent,
+              //             borderRadius: BorderRadius.circular(30),
+              //             border: Border.all(color: Colors.black.withValues(alpha: 0.2), width: 2),
+              //           ),
+              //           child: Center(
+              //             child: Icon(Icons.keyboard_arrow_down_outlined),
+              //
+              //           ),
+              //         ),
+              //       ),
+              //
+              //     ],
+              //   ),
+              // ),
 
-                  color: Color(0xffE3F6FF),
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.05),
-                      blurRadius: 20,
-                      spreadRadius: 0,
-                      offset: Offset(0, 10),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SvgPicture.asset(Assets.wing, width: 64, height: 61),
-                        SizedBox(width: 10,),
-                        Text("SkyLearn",style:
-                          TextStyle(
-                            fontFamily: "inter",
-                            fontSize: 48,
-                            fontWeight: FontWeight.w700,
-                            color: Color(0xff2E90FA)
-
-                          ),),
-                      ],
-
-                    ),
-                    SizedBox(width: 60,),
-                    // Search Bar
-                    Expanded(
-                      flex: isLargeScreen ? 2 : 1,
-                      child: Container(
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: Color(0xffF8FAFC),
-                          borderRadius: BorderRadius.circular(15),
-                          border: Border.all(
-                            color: Color(0xffE2E8F0),
-                            width: 1,
-                          ),
-                        ),
-                        child:
-                        TextFormField(
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(
-                              horizontal: 20,
-                              vertical: 15,
-                            ),
-                            hintText: "Search courses...",
-                            hintStyle: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              fontFamily: "inter",
-                              color: Color(0xFF64748B),
-                            ),
-                            prefixIcon: Padding(
-                              padding: EdgeInsets.all(12),
-                              child: SvgPicture.asset(
-                                Assets.courseSearchIcon,
-                                width: 20,
-                                height: 20,
-                                colorFilter: ColorFilter.mode(
-                                  Color(0xFF64748B),
-                                  BlendMode.srcIn,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 10),
-
-                    InkWell(
-                      onTap: () => _showUserMenu(context),
-                      // borderRadius: BorderRadius.circular(12),
-                      child: Container(
-                        width: 38,
-                        height: 38,
-                        decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          borderRadius: BorderRadius.circular(30),
-                          border: Border.all(color: Colors.black.withValues(alpha: 0.2), width: 2),
-                        ),
-                        child: Center(
-                          child: Icon(Icons.keyboard_arrow_down_outlined),
-
-                        ),
-                      ),
-                    ),
-
-                  ],
-                ),
-              ),
-
-              // Scrollable Content Area
               Expanded(
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
@@ -242,7 +242,6 @@ class _CourseScreenState extends State<AdminCourseScreen> {
                     ),
                     child: Column(
                       children: [
-                        // Welcome Section
                         Container(
                           width: double.infinity,
                           padding: EdgeInsets.all(24),
@@ -309,7 +308,6 @@ class _CourseScreenState extends State<AdminCourseScreen> {
                         ),
                         SizedBox(height: 30),
 
-                        // Courses Container with White Background and Shadow
                         Container(
                           width: double.infinity,
                           padding: EdgeInsets.all(24),
