@@ -10,19 +10,24 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+
       width: double.infinity,
         height: 100,
       decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 8,
+            offset: const Offset(0, 4),
+          ),
+        ],
         color: Color(0xffE3F6FF),
       ) ,
       child: Center(
         child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            CircleAvatar(
-              radius: 25,
-              backgroundImage: AssetImage(Assets.logo),
-            ),
+            AnimatedCircleAvatar(),
 
             SizedBox(
               width: 400,
@@ -90,20 +95,73 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
     );
-    //   AppBar(
-    //   backgroundColor: Colors.teal,
-    //   centerTitle: true,
-    //   leading: IconButton(
-    //     icon: const Icon(Icons.arrow_back),
-    //     onPressed: () => Navigator.pop(context),
-    //   ),
-    //
-    //   actions: [
-    //     IconButton(icon: const Icon(Icons.notifications), onPressed: () {}),
-    //   ],
-    // );
+
+
+
   }
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+}
+class AnimatedCircleAvatar extends StatefulWidget {
+  const AnimatedCircleAvatar({super.key});
+
+  @override
+  State<AnimatedCircleAvatar> createState() => _AnimatedCircleAvatarState();
+}
+
+class _AnimatedCircleAvatarState extends State<AnimatedCircleAvatar>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    )..repeat(reverse: true);
+
+    _scaleAnimation = Tween<double>(begin: 0.9, end: 1.1).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: AnimatedBuilder(
+        animation: _scaleAnimation,
+        builder: (context, child) {
+          return Transform.scale(
+            scale: _scaleAnimation.value,
+            child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.3),
+                    blurRadius: 2,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: const CircleAvatar(
+                radius: 20,
+                backgroundImage: AssetImage(Assets.logo),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
 }

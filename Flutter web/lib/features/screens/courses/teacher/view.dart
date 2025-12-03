@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lms/features/screens/teacher_profile/view.dart';
 
 import '../../../../core/cons/Colors/app_colors.dart';
 import '../../../../core/helpers/logout_server/logout.dart';
@@ -26,7 +27,6 @@ class _CourseScreenState extends State<TeacherCourseScreen> {
   void initState() {
     super.initState();
     // loadImageProfile();
-    // Simulate loading time and then show content
     Future.delayed(Duration(milliseconds: 500), () {
       if (mounted) {
         setState(() {
@@ -100,7 +100,7 @@ class _CourseScreenState extends State<TeacherCourseScreen> {
         body: SafeArea(
           child: Column(
             children: [
-              // Fixed Header Section
+           
               Container(
                 width: double.infinity,
                 constraints: BoxConstraints(
@@ -127,7 +127,7 @@ class _CourseScreenState extends State<TeacherCourseScreen> {
                 ),
                 child: Row(
                   children: [
-                    // Search Bar
+                 
                     Expanded(
                       flex: isLargeScreen ? 2 : 1,
                       child: Container(
@@ -172,7 +172,7 @@ class _CourseScreenState extends State<TeacherCourseScreen> {
                     ),
                     SizedBox(width: 20),
 
-                    // User Actions
+              
                     Row(
                       children: [
                         _buildNotificationButton(
@@ -192,7 +192,7 @@ class _CourseScreenState extends State<TeacherCourseScreen> {
                 ),
               ),
 
-              // Scrollable Content Area
+        
               Expanded(
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
@@ -210,7 +210,7 @@ class _CourseScreenState extends State<TeacherCourseScreen> {
                     ),
                     child: Column(
                       children: [
-                        // Welcome Section
+                    
                         Container(
                           width: double.infinity,
                           padding: EdgeInsets.all(24),
@@ -718,6 +718,7 @@ void _showUserMenu(BuildContext context) async {
   if (result == 'logout') {
     await LogoutServer.logout();
   } else if (result == 'profile') {
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ProfileScreen(),));
     // TODO: Add profile action later
   } else if (result == 'settings') {
     // TODO: Add settings action later
