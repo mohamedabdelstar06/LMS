@@ -68,25 +68,6 @@ class DashboardScreen extends StatelessWidget {
       );
     }
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-
-      appBar: CustomAppBar(),
-      body: SingleChildScrollView(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(minHeight: screenSize.height),
-          child: const CoursesManagementContent(),
-        ),
-      ),
-    );
-  }
-}
-
-class CoursesManagementContent extends StatelessWidget {
-  const CoursesManagementContent({super.key});
-
-  @override
-  Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -100,7 +81,44 @@ class CoursesManagementContent extends StatelessWidget {
         ),
       ),
 
-      padding: const EdgeInsets.fromLTRB(40.0, 40.0, 40.0, 40.0),
+      child: Scaffold(
+backgroundColor: Colors.transparent,
+        appBar: CustomAppBar(),
+        body: ScrollConfiguration(
+          behavior:
+          MyCustomScrollBehavior(),
+          child: SingleChildScrollView(
+
+
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: screenSize.height),
+                child: const CoursesManagementContent(),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+class MyCustomScrollBehavior extends MaterialScrollBehavior {
+  @override
+  Widget buildScrollbar(
+      BuildContext context, Widget child, ScrollableDetails details) {
+    return child;
+  }
+}
+class CoursesManagementContent extends StatelessWidget {
+  const CoursesManagementContent({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      // padding: EdgeInsetsGeometry.symmetric(horizontal: 80),
+
+      padding: const EdgeInsets.fromLTRB(100.0, 40.0, 100.0, 40.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
@@ -108,7 +126,7 @@ class CoursesManagementContent extends StatelessWidget {
             width: double.infinity,
             padding: EdgeInsets.all(24),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.7),
+              color: Colors.white70.withValues(alpha: 0.3),
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
@@ -230,7 +248,7 @@ class _CourseListSectionState extends State<CourseListSection> {
     return ConstrainedBox(
       constraints: const BoxConstraints(minHeight: 400),
       child: SizedBox(
-        width: 1150,
+        // width: 1150,
         child: Card(
           elevation: 4,
           shadowColor: primaryColor.withOpacity(0.1),
@@ -476,7 +494,7 @@ class FeatureCardsRow extends StatelessWidget {
             ),
             title: 'Create Course',
             description:
-                'Build course structure, add lessons, quizzes, and materials',
+                'Build course structure, add lessons and quizzes ',
           ),
         ),
         const SizedBox(width: 24),
@@ -592,10 +610,10 @@ class _FeatureCardState extends State<FeatureCard> {
                 Text(
                   widget.description,
                   style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
+                    fontSize:  14,
+                    fontWeight: _isHovering? FontWeight.w700 : FontWeight.w400,
                     color: _isHovering
-                        ? Colors.white
+                        ? Colors.white.withValues(alpha: 0.6)
                         : Colors.black.withValues(alpha: 0.4),
                     height: 1.4,
                   ),

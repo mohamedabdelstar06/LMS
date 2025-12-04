@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lms/features/screens/student_profile/view.dart';
 
 import '../../../../core/cons/Colors/app_colors.dart';
 import '../../../../core/helpers/cach_helper/shared_pref_helper.dart';
@@ -31,7 +32,6 @@ void loadImageProfile() async {
   @override
   void initState() {
     super.initState();
-    // Simulate loading time and then show content
     Future.delayed(Duration(milliseconds: 500), () {
       if (mounted) {
         setState(() {
@@ -215,7 +215,6 @@ void loadImageProfile() async {
                     ),
                     child: Column(
                       children: [
-                        // Welcome Section
                         Container(
                           width: double.infinity,
                           padding: EdgeInsets.all(24),
@@ -283,7 +282,6 @@ void loadImageProfile() async {
                         ),
                         SizedBox(height: 30),
 
-                        // Courses Container with White Background and Shadow
                         Container(
                           width: double.infinity,
                           padding: EdgeInsets.all(24),
@@ -343,7 +341,7 @@ void loadImageProfile() async {
                             },
                           ),
                         ),
-                        SizedBox(height: 40), // Bottom padding
+                        SizedBox(height: 40),
                       ],
                     ),
                   ),
@@ -715,7 +713,8 @@ void _showUserMenu(BuildContext context) async {
   if (result == 'logout') {
     await LogoutServer.logout();
   } else if (result == 'profile') {
-    // TODO: Add profile action later
+Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => StudentProfileScreen(),));
+
   } else if (result == 'settings') {
     // TODO: Add settings action later
   }
