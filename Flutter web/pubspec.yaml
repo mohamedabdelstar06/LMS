@@ -27,6 +27,11 @@ dependencies:
   file_picker: ^10.3.3
   fl_chart: ^1.1.1
   provider: ^6.1.5+1
+  image_picker_web:
+  cached_network_image:
+  animations:
+  permission_handler:
+  flutter_dropzone:
 
 dev_dependencies:
   flutter_test:

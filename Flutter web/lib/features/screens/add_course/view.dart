@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 
 import '../../../core/cons/Colors/app_colors.dart';
 import '../../../core/widgets/app_bar.dart';
+import 'Adding_view.dart';
 
-void main() {
-  runApp(const CoursesManagementApp());
-}
+
 
 class CoursesManagementApp extends StatelessWidget {
   const CoursesManagementApp({super.key});
@@ -304,8 +303,12 @@ class _CourseListSectionState extends State<CourseListSection> {
                 ),
                 const SizedBox(height: 24),
                 ElevatedButton.icon(
-                  onPressed: () {},
-                  // _addMockCourse,
+                  onPressed: () {
+                   Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AddCourseScreen()));
+                  },
+
                   icon: const Icon(Icons.add, size: 20),
                   label: const Text(
                     'Add New Course',
