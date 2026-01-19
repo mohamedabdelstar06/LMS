@@ -73,11 +73,12 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         home:
         // CelebratingScreen()
+        CoursesManagementApp()
         // LearnMateChat()
         // LearnMateApp()
         // DashboardPage()
         // ProfileScreen()
-        StudentProfileScreen()
+        // StudentProfileScreen()
         // CoursesManagementApp()
         // LearnMateChat()
         // AdminCourseScreen()
