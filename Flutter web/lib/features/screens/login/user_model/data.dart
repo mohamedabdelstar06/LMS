@@ -1,3 +1,49 @@
+// // class UserModel {
+// //   String? message;
+// //   String? token;
+// //   String? expiresIn;
+// //   User? user;
+// //
+// //
+// //
+// //   UserModel.fromJson(Map<String, dynamic> json) {
+// //     message = json['message'];
+// //     token = json['token'];
+// //     expiresIn = json['expiresIn'];
+// //     user = json['user'] != null ?  User.fromJson(json['user']) : null;
+// //   }
+// //
+// //
+// // }
+// //
+// // class User {
+// //   int? id;
+// //   String? firstName;
+// //   String? lastName;
+// //   String? email;
+// //   String? role;
+// //   String? gender;
+// //   String? city;
+// //   String? academicLevel;
+// //   String? profileImageUrl;
+// //
+// //
+// //
+// //   User.fromJson(Map<String, dynamic> json) {
+// //     id = json['id'];
+// //     firstName = json['firstName'];
+// //     lastName = json['lastName'];
+// //     email = json['email'];
+// //     role = json['role'];
+// //     gender = json['gender'];
+// //     city = json['city'];
+// //     academicLevel = json['academicLevel'];
+// //     profileImageUrl = json['profileImageUrl'];
+// //   }
+// //
+// //
+// // }
+//
 // class UserModel {
 //   String? message;
 //   String? token;
@@ -5,21 +51,18 @@
 //   User? user;
 //
 //
-//
 //   UserModel.fromJson(Map<String, dynamic> json) {
 //     message = json['message'];
 //     token = json['token'];
 //     expiresIn = json['expiresIn'];
-//     user = json['user'] != null ?  User.fromJson(json['user']) : null;
+//     user = json['user'] != null ? User.fromJson(json['user']) : null;
 //   }
-//
 //
 // }
 //
 // class User {
 //   int? id;
-//   String? firstName;
-//   String? lastName;
+//   String? fullName;
 //   String? email;
 //   String? role;
 //   String? gender;
@@ -28,11 +71,9 @@
 //   String? profileImageUrl;
 //
 //
-//
 //   User.fromJson(Map<String, dynamic> json) {
 //     id = json['id'];
-//     firstName = json['firstName'];
-//     lastName = json['lastName'];
+//     fullName = json['fullName'];
 //     email = json['email'];
 //     role = json['role'];
 //     gender = json['gender'];
@@ -40,7 +81,6 @@
 //     academicLevel = json['academicLevel'];
 //     profileImageUrl = json['profileImageUrl'];
 //   }
-//
 //
 // }
 
@@ -50,6 +90,12 @@ class UserModel {
   String? expiresIn;
   User? user;
 
+  UserModel({
+    this.message,
+    this.token,
+    this.expiresIn,
+    this.user,
+  });
 
   UserModel.fromJson(Map<String, dynamic> json) {
     message = json['message'];
@@ -58,6 +104,14 @@ class UserModel {
     user = json['user'] != null ? User.fromJson(json['user']) : null;
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'message': message,
+      'token': token,
+      'expiresIn': expiresIn,
+      'user': user?.toJson(),
+    };
+  }
 }
 
 class User {
@@ -65,21 +119,43 @@ class User {
   String? fullName;
   String? email;
   String? role;
-  String? gender;
-  String? city;
-  String? academicLevel;
-  String? profileImageUrl;
+  // String? gender;
+  // String? city;
+  // String? academicLevel;
+  // String? profileImageUrl;
 
+  User({
+    this.id,
+    this.fullName,
+    this.email,
+    this.role,
+    // this.gender,
+    // this.city,
+    // this.academicLevel,
+    // this.profileImageUrl,
+  });
 
   User.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     fullName = json['fullName'];
     email = json['email'];
     role = json['role'];
-    gender = json['gender'];
-    city = json['city'];
-    academicLevel = json['academicLevel'];
-    profileImageUrl = json['profileImageUrl'];
+    // gender = json['gender'];
+    // city = json['city'];
+    // academicLevel = json['academicLevel'];
+    // profileImageUrl = json['profileImageUrl'];
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'fullName': fullName,
+      'email': email,
+      'role': role,
+      // 'gender': gender,
+      // 'city': city,
+      // 'academicLevel': academicLevel,
+      // 'profileImageUrl': profileImageUrl,
+    };
+  }
 }
