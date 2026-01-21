@@ -90,6 +90,97 @@ namespace SkyLearnApi.Migrations
                         });
                 });
 
+            modelBuilder.Entity("SkyLearnApi.Entities.Assignment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("AssignedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CreatedById")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(4000)
+                        .HasColumnType("nvarchar(4000)");
+
+                    b.Property<DateTime>("DueDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FileUrl")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("CourseId", "DueDate");
+
+                    b.ToTable("Assignments", (string)null);
+                });
+
+            modelBuilder.Entity("SkyLearnApi.Entities.AssignmentSubmission", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AssignmentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Feedback")
+                        .HasMaxLength(4000)
+                        .HasColumnType("nvarchar(4000)");
+
+                    b.Property<string>("FileUrl")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<string>("Grade")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("SubmittedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StudentId");
+
+                    b.HasIndex("AssignmentId", "StudentId");
+
+                    b.ToTable("AssignmentSubmissions", (string)null);
+                });
+
             modelBuilder.Entity("SkyLearnApi.Entities.AuditLog", b =>
                 {
                     b.Property<int>("Id")
@@ -175,6 +266,9 @@ namespace SkyLearnApi.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(150)
@@ -195,6 +289,86 @@ namespace SkyLearnApi.Migrations
                     b.HasIndex("YearId");
 
                     b.ToTable("Courses", (string)null);
+                });
+
+            modelBuilder.Entity("SkyLearnApi.Entities.CourseInstructor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("ApplicationUserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("InstructorId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("InstructorId");
+
+                    b.HasIndex("CourseId", "InstructorId")
+                        .IsUnique();
+
+                    b.ToTable("CourseInstructors", (string)null);
+                });
+
+            modelBuilder.Entity("SkyLearnApi.Entities.CourseMaterial", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<int>("CreatedById")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(4000)
+                        .HasColumnType("nvarchar(4000)");
+
+                    b.Property<string>("ExternalLink")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<string>("FileUrl")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<int>("MaterialTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("MaterialTypeId");
+
+                    b.HasIndex("CourseId", "MaterialTypeId");
+
+                    b.ToTable("CourseMaterials", (string)null);
                 });
 
             modelBuilder.Entity("SkyLearnApi.Entities.Department", b =>
@@ -231,6 +405,105 @@ namespace SkyLearnApi.Migrations
                     b.HasIndex("HeadId");
 
                     b.ToTable("Departments", (string)null);
+                });
+
+            modelBuilder.Entity("SkyLearnApi.Entities.Enrollment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("ApplicationUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CompletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DroppedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("EnrolledAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<string>("Grade")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("Status");
+
+                    b.HasIndex("StudentId", "CourseId");
+
+                    b.ToTable("Enrollments", (string)null);
+                });
+
+            modelBuilder.Entity("SkyLearnApi.Entities.EnrollmentStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("EnrollmentStatuses", (string)null);
+                });
+
+            modelBuilder.Entity("SkyLearnApi.Entities.MaterialType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name");
+
+                    b.ToTable("MaterialTypes", (string)null);
                 });
 
             modelBuilder.Entity("SkyLearnApi.Entities.Year", b =>
@@ -291,6 +564,44 @@ namespace SkyLearnApi.Migrations
                     b.ToTable("Years", (string)null);
                 });
 
+            modelBuilder.Entity("SkyLearnApi.Entities.Assignment", b =>
+                {
+                    b.HasOne("SkyLearnApi.Entities.Course", "Course")
+                        .WithMany("Assignments")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SkyLearnApi.Entities.ApplicationUser", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("CreatedBy");
+                });
+
+            modelBuilder.Entity("SkyLearnApi.Entities.AssignmentSubmission", b =>
+                {
+                    b.HasOne("SkyLearnApi.Entities.Assignment", "Assignment")
+                        .WithMany("Submissions")
+                        .HasForeignKey("AssignmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SkyLearnApi.Entities.ApplicationUser", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Assignment");
+
+                    b.Navigation("Student");
+                });
+
             modelBuilder.Entity("SkyLearnApi.Entities.AuditLog", b =>
                 {
                     b.HasOne("SkyLearnApi.Entities.ApplicationUser", "User")
@@ -328,6 +639,56 @@ namespace SkyLearnApi.Migrations
                     b.Navigation("Year");
                 });
 
+            modelBuilder.Entity("SkyLearnApi.Entities.CourseInstructor", b =>
+                {
+                    b.HasOne("SkyLearnApi.Entities.ApplicationUser", null)
+                        .WithMany("Courses")
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.HasOne("SkyLearnApi.Entities.Course", "Course")
+                        .WithMany("Instructors")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SkyLearnApi.Entities.ApplicationUser", "Instructor")
+                        .WithMany()
+                        .HasForeignKey("InstructorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Instructor");
+                });
+
+            modelBuilder.Entity("SkyLearnApi.Entities.CourseMaterial", b =>
+                {
+                    b.HasOne("SkyLearnApi.Entities.Course", "Course")
+                        .WithMany("Materials")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SkyLearnApi.Entities.ApplicationUser", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SkyLearnApi.Entities.MaterialType", "MaterialType")
+                        .WithMany("CourseMaterials")
+                        .HasForeignKey("MaterialTypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("MaterialType");
+                });
+
             modelBuilder.Entity("SkyLearnApi.Entities.Department", b =>
                 {
                     b.HasOne("SkyLearnApi.Entities.ApplicationUser", "Head")
@@ -337,6 +698,37 @@ namespace SkyLearnApi.Migrations
                         .IsRequired();
 
                     b.Navigation("Head");
+                });
+
+            modelBuilder.Entity("SkyLearnApi.Entities.Enrollment", b =>
+                {
+                    b.HasOne("SkyLearnApi.Entities.ApplicationUser", null)
+                        .WithMany("Enrollments")
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.HasOne("SkyLearnApi.Entities.Course", "Course")
+                        .WithMany("Enrollments")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SkyLearnApi.Entities.EnrollmentStatus", "EnrollmentStatus")
+                        .WithMany("Enrollments")
+                        .HasForeignKey("Status")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SkyLearnApi.Entities.ApplicationUser", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("EnrollmentStatus");
+
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("SkyLearnApi.Entities.Year", b =>
@@ -361,6 +753,26 @@ namespace SkyLearnApi.Migrations
             modelBuilder.Entity("SkyLearnApi.Entities.ApplicationUser", b =>
                 {
                     b.Navigation("AuditLogs");
+
+                    b.Navigation("Courses");
+
+                    b.Navigation("Enrollments");
+                });
+
+            modelBuilder.Entity("SkyLearnApi.Entities.Assignment", b =>
+                {
+                    b.Navigation("Submissions");
+                });
+
+            modelBuilder.Entity("SkyLearnApi.Entities.Course", b =>
+                {
+                    b.Navigation("Assignments");
+
+                    b.Navigation("Enrollments");
+
+                    b.Navigation("Instructors");
+
+                    b.Navigation("Materials");
                 });
 
             modelBuilder.Entity("SkyLearnApi.Entities.Department", b =>
@@ -368,6 +780,16 @@ namespace SkyLearnApi.Migrations
                     b.Navigation("Courses");
 
                     b.Navigation("Years");
+                });
+
+            modelBuilder.Entity("SkyLearnApi.Entities.EnrollmentStatus", b =>
+                {
+                    b.Navigation("Enrollments");
+                });
+
+            modelBuilder.Entity("SkyLearnApi.Entities.MaterialType", b =>
+                {
+                    b.Navigation("CourseMaterials");
                 });
 
             modelBuilder.Entity("SkyLearnApi.Entities.Year", b =>
