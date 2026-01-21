@@ -46,9 +46,9 @@ class LoginCubit extends Cubit<LoginState> {
               children: [
                 const Icon(Icons.check_circle, color: Colors.white),
                 const SizedBox(width: 10),
-                 Expanded(
+                Expanded(
                   child: Text(
-                      response.data["message"] ?? "Login successful",
+                    response.data["message"] ?? "Login successful",
                     style: TextStyle(fontSize: 16),
                   ),
                 ),
@@ -65,15 +65,15 @@ class LoginCubit extends Cubit<LoginState> {
           ),
 
 
-        // ScaffoldMessenger.of(navigatorKey.currentContext!).showSnackBar(
-        //   SnackBar(
-        //     content: Text(response.data["message"] ?? "Login successful",),
-        //     backgroundColor: Colors.green,
-        //   ),
+          // ScaffoldMessenger.of(navigatorKey.currentContext!).showSnackBar(
+          //   SnackBar(
+          //     content: Text(response.data["message"] ?? "Login successful",),
+          //     backgroundColor: Colors.green,
+          //   ),
         );
 
 
-///ToDO: authentication flow
+        ///ToDO: authentication flow
         if (model.user!.role == "Student"){
           Navigator.pushReplacement(navigatorKey.currentContext!, MaterialPageRoute(builder: (context) =>  StudentCourseScreen() ,));
         }else if (model.user!.role == "Instructor"){

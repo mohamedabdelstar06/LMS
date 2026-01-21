@@ -4,6 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:lms/features/screens/login/user_model/data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../features/screens/Create_user/User_model/model.dart';
 import '../../../features/screens/login/view.dart';
 import '../../cons/api_helper_resources/api_resources.dart';
 import '../../cons/context/navigation_key.dart';
@@ -153,14 +154,34 @@ class PrefHelper {
     final prefs = await SharedPreferences.getInstance();
     // await prefs.setString("tokenKey", user.token!);
     await prefs.setInt("id", user.user!.id!);
-    await prefs.setString("academicLevel", user.user!.academicLevel!);
-    await prefs.setString("city", user.user!.city!);
+    // await prefs.setString("academicLevel", user.user!.academicLevel!);
+    // await prefs.setString("city", user.user!.city!);
     await prefs.setString("email", user.user!.email!);
  await prefs.setString("fullName", user.user!.fullName!.split(" ")[0]);
-    await prefs.setString("gender", user.user!.gender!);
-    await prefs.setString("profileImageUrl", user.user!.profileImageUrl!);
+    // await prefs.setString("gender", user.user!.gender!);
+    // await prefs.setString("profileImageUrl", user.user!.profileImageUrl!);
     await prefs.setString("role", user.user!.role!);
     await prefs.setString("message", user.message!);
+  }
+  static Future<void> saveCreatedUserData(CreateUserModel user) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString("email", user.email);
+    await prefs.setString("fullName", user.fullName);
+    await prefs.setString("role", user.role);
+    await prefs.setString("nationalId", user.nationalId);
+    await prefs.setString("dateOfBirth", user.dateOfBirth.toString());
+    await prefs.setString("gender", user.gender);
+    await prefs.setString("city", user.city);
+    await prefs.setString("academicLevel", user.academicLevel);
+    await prefs.setString("profileImageUrl", user.profileImageUrl);
+    await prefs.setBool("isActive", user.isActive);
+    await prefs.setBool("emailConfirmed", user.emailConfirmed);
+    await prefs.setString("createdAt", user.createdAt.toString());
+    await prefs.setString("updatedAt", user.updatedAt.toString());
+
+
+
+
   }
 
   // static Future<void> saveTokenSecure(UserModel user) async {
@@ -186,11 +207,11 @@ class TokenStorageHelper {
     await storage.write(key: "tokenKey", value: user.token!);
   }
 
-  // static Future<String?> getTokenSecure() async {
-  //   final storage = FlutterSecureStorage(aOptions: _getAndroidOptions());
-  //   String? token = await storage.read(key: "tokenKey");
-  //   return token;
-  // }
+  static Future<String?> getTokenSecure() async {
+    final storage = FlutterSecureStorage(aOptions: _getAndroidOptions());
+    String? token = await storage.read(key: "tokenKey");
+    return token;
+  }
   //
   // static Future<void> deleteTokenSecure() async {
   //   final storage = FlutterSecureStorage(aOptions: _getAndroidOptions());

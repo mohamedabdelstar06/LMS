@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lms/core/cons/context/navigation_key.dart';
+import 'package:lms/features/draft/test.dart';
 import 'package:lms/features/screens/Announcement/view.dart';
 import 'package:lms/features/screens/courses/admin/view.dart';
 import 'package:lms/features/screens/courses/teacher/view.dart';
@@ -11,6 +13,7 @@ import 'package:lms/features/screens/student_profile/view.dart';
 
 import 'features/draft/test_screen.dart';
 import 'features/screens/Courses_dashboard/view.dart';
+import 'features/screens/Create_user/View.dart';
 import 'features/screens/add_course/view.dart';
 import 'features/screens/celeberating cultures/view.dart';
 import 'features/screens/chat_bot/view.dart';
@@ -24,6 +27,15 @@ import 'features/screens/teacher_profile/view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  if (kDebugMode && kIsWeb) {
+    FlutterError.onError = (FlutterErrorDetails details) {
+      // Filter out the widget inspector error
+      if (!details.toString().contains('toJsonMap') &&
+          !details.toString().contains('_nodeToJson')) {
+        FlutterError.presentError(details);
+      }
+    };
+  }
   
   runApp(MyApp());
 }
@@ -73,7 +85,7 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         home:
         // CelebratingScreen()
-        CoursesManagementApp()
+        // CoursesManagementApp()
         // LearnMateChat()
         // LearnMateApp()
         // DashboardPage()
@@ -89,7 +101,9 @@ class _MyAppState extends State<MyApp> {
         // StudentCourseScreen()
         // HeroSectionScreen()
         // UploadCoursePage()
-        // _isInitialized ? LoginScreen() : LoadingScreen(),
+        // CreateUserScreen()
+
+        _isInitialized ? LoginScreen() : LoadingScreen(),
       ),
     );
   }
