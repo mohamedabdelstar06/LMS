@@ -5,6 +5,7 @@ import 'package:lms/features/screens/login/user_model/data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../features/screens/Create_user/User_model/model.dart';
+import '../../../features/screens/Create_user/View.dart';
 import '../../../features/screens/login/view.dart';
 import '../../cons/api_helper_resources/api_resources.dart';
 import '../../cons/context/navigation_key.dart';
@@ -184,6 +185,46 @@ class PrefHelper {
 
   }
 
+  static Future<Map<String, dynamic>> getUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    return {
+      "email": prefs.getString("email") ?? "",
+      "fullName": prefs.getString("fullName") ?? "User",
+      "role": prefs.getString("role") ?? "",
+      "nationalId": prefs.getString("nationalId") ?? "",
+      "dateOfBirth": prefs.getString("dateOfBirth") ?? "",
+      "gender": prefs.getString("gender") ?? "",
+      "city": prefs.getString("city") ?? "",
+      "academicLevel": prefs.getString("academicLevel") ?? "",
+      "profileImageUrl": prefs.getString("profileImageUrl") ?? "assets/logo/logo.jpg",
+      "isActive": prefs.getBool("isActive") ?? false,
+      "emailConfirmed": prefs.getBool("emailConfirmed") ?? false,
+      "createdAt": prefs.getString("createdAt") ?? "",
+      "updatedAt": prefs.getString("updatedAt") ?? "",
+    };
+  }
+
+  static Future<String?> getFullName() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString("fullName");
+  }
+
+  static Future<String?> getUserCreatedEmail() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString("email");
+  }
+
+  static Future<String?> getUserCreatedRole() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString("role");
+  }
+
+  static Future<String?> getUserCreatedProfileImageUrl() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString("profileImageUrl");
+  }
+
   // static Future<void> saveTokenSecure(UserModel user) async {
   //   AndroidOptions _getAndroidOptions() => const AndroidOptions(
   //     encryptedSharedPreferences: true,
@@ -226,3 +267,62 @@ class TokenStorageHelper {
 }
 
 
+
+
+class UserStorageHelper {
+  static Future<void> saveCreatedUserData(CreateUserModel user) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    await prefs.setInt("id", user.id);
+    await prefs.setString("email", user.email);
+    await prefs.setString("fullName", user.fullName);
+    await prefs.setString("role", user.role);
+    await prefs.setString("nationalId", user.nationalId);
+
+    if (user.dateOfBirth != null) {
+      await prefs.setString("dateOfBirth", user.dateOfBirth!.toIso8601String());
+    }
+
+    if (user.gender != null) {
+      await prefs.setString("gender", user.gender!);
+    }
+
+    if (user.city != null) {
+      await prefs.setString("city", user.city!);
+    }
+
+    if (user.academicInfo != null) {
+      final info = user.academicInfo!;
+
+      if (info.department != null && info.department!.name != null) {
+        await prefs.setString("academicDepartment", info.department!.name!);
+      }
+
+      if (info.year != null && info.year!.name != null) {
+        await prefs.setString("academicYear", info.year!.name!);
+      }
+
+      if (info.squadron != null && info.squadron!.name != null) {
+        await prefs.setString("squadron", info.squadron!.name!);
+      }
+
+      if (info.admissionYear != null) {
+        await prefs.setInt("admissionYear", info.admissionYear!);
+      }
+    }
+
+    if (user.profileImageUrl != null) {
+      await prefs.setString("profileImageUrl", user.profileImageUrl!);
+    }
+
+    await prefs.setBool("isActive", user.accountStatus == "Active");
+    await prefs.setBool("emailConfirmed", user.emailConfirmed);
+
+    await prefs.setString("createdAt", user.createdAt.toIso8601String());
+    await prefs.setString("updatedAt", user.updatedAt.toIso8601String());
+
+    if (user.lastLoginAt != null) {
+      await prefs.setString("lastLoginAt", user.lastLoginAt!.toIso8601String());
+    }
+  }
+}

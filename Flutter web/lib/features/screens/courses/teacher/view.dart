@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lms/features/screens/teacher_profile/view.dart';
 
 import '../../../../core/cons/Colors/app_colors.dart';
+import '../../../../core/helpers/cach_helper/shared_pref_helper.dart';
 import '../../../../core/helpers/logout_server/logout.dart';
 import '../../../../generated/assets.dart';
 import '../course_model/courses.dart';
@@ -17,16 +18,23 @@ class TeacherCourseScreen extends StatefulWidget {
 class _CourseScreenState extends State<TeacherCourseScreen> {
   bool _isLoading = true;
   String? imageProfile;
+  Map<String, dynamic> userData = {};
 
   // void loadImageProfile() async {
   //   imageProfile = await PrefHelper.getImageProfile();
   //   setState(() {});
   // }
-
+  Future<void> _loadUserData() async {
+    final data = await PrefHelper.getUserData();
+    setState(() {
+      userData = data;
+    });
+  }
   @override
   void initState() {
     super.initState();
     // loadImageProfile();
+    _loadUserData();
     Future.delayed(Duration(milliseconds: 500), () {
       if (mounted) {
         setState(() {
@@ -413,14 +421,16 @@ class _CourseScreenState extends State<TeacherCourseScreen> {
             radius: 16,
 
             /// TODO ADJUST IMAGE
-            backgroundImage: imageProfile != null && imageProfile!.isNotEmpty
-                ? NetworkImage(imageProfile!)
-                : AssetImage(Assets.logo) as ImageProvider,
+            // backgroundImage: imageProfile != null && imageProfile!.isNotEmpty
+            //     ? NetworkImage(imageProfile!)
+            //     : AssetImage(Assets.logo) as ImageProvider,
+            backgroundImage: NetworkImage( userData["profileImageUrl"]  ?? Assets.logo),
+
             // NetworkImage(imageProfile!),
           ),
           SizedBox(width: 8),
           Text(
-            "Mohamed Ahmed",
+            userData["fullName"] ?? "User",
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w600,

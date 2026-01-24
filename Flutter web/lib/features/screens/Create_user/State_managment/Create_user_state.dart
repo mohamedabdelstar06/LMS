@@ -7,6 +7,7 @@
 // class CreateUserSuccessState extends CreateState {}
 //
 // class CreateUserErrorState extends CreateState {}
+//************************
 abstract class CreateState {}
 
 class CreateUserInitialState extends CreateState {}
@@ -26,3 +27,4 @@ class CreateUserErrorState extends CreateState {
 
   CreateUserErrorState(this.errorMessage, {this.statusCode});
 }
+
