@@ -240,7 +240,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   Color(0xFF53B1FD),
                                                 ],
                                               ),
-                                              borderRadius: BorderRadius.circular(12),
                                             ),
                                             child: Center(
                                               child: isLoading
@@ -277,6 +276,15 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 ),
                                               ),
                                             ),
+                                          ],
+                                        )
+                                            : Text(
+                                          "Login",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600,
+                                            fontFamily: "inter",
+                                            color: Colors.white,
                                           ),
                                         ),
                                       ),

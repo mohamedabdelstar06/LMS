@@ -164,6 +164,26 @@ class PrefHelper {
     await prefs.setString("role", user.user!.role!);
     await prefs.setString("message", user.message!);
   }
+  static Future<void> saveCreatedUserData(CreateUserModel user) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString("email", user.email);
+    await prefs.setString("fullName", user.fullName);
+    await prefs.setString("role", user.role);
+    await prefs.setString("nationalId", user.nationalId);
+    await prefs.setString("dateOfBirth", user.dateOfBirth.toString());
+    await prefs.setString("gender", user.gender);
+    await prefs.setString("city", user.city);
+    await prefs.setString("academicLevel", user.academicLevel);
+    await prefs.setString("profileImageUrl", user.profileImageUrl);
+    await prefs.setBool("isActive", user.isActive);
+    await prefs.setBool("emailConfirmed", user.emailConfirmed);
+    await prefs.setString("createdAt", user.createdAt.toString());
+    await prefs.setString("updatedAt", user.updatedAt.toString());
+
+
+
+
+  }
 
   static Future<Map<String, dynamic>> getUserData() async {
     final prefs = await SharedPreferences.getInstance();
