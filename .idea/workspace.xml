@@ -5,19 +5,31 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="452b91ea-76a4-4ee0-a5af-ce79dd67eb84" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/Create_user/State_managment/Create_user_cubit.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/Create_user/State_managment/Create_user_state.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/Create_user/User_model/model.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/Create_user/View.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/Create_department/State_Mangment/create_dep_cubit.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/Create_department/State_Mangment/create_dep_state.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/Create_department/view.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/Sign-up screen/state_management/sign-up_server_cubit.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/Sign-up screen/state_management/sign-up_state.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/Sign-up screen/user_model/data.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/Sign-up screen/view.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/get_users/get_user_model/view.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/get_users/state_managment/get_users_cubit.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/get_users/state_managment/get_users_state.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/get_users/view.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Flutter web/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/.flutter-plugins-dependencies" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Flutter web/lib/core/cons/api_helper_resources/api_resources.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/lib/core/cons/api_helper_resources/api_resources.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Flutter web/lib/core/helpers/cach_helper/shared_pref_helper.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/lib/core/helpers/cach_helper/shared_pref_helper.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Flutter web/lib/features/screens/Create_user/State_managment/Create_user_cubit.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/Create_user/State_managment/Create_user_cubit.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Flutter web/lib/features/screens/Create_user/State_managment/Create_user_state.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/Create_user/State_managment/Create_user_state.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Flutter web/lib/features/screens/Create_user/User_model/model.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/Create_user/User_model/model.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Flutter web/lib/features/screens/courses/admin/view.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/courses/admin/view.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Flutter web/lib/features/screens/login/state_management/login_server_cubit.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/login/state_management/login_server_cubit.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Flutter web/lib/features/screens/login/user_model/data.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/login/user_model/data.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Flutter web/lib/features/screens/courses/student/view.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/courses/student/view.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Flutter web/lib/features/screens/courses/teacher/view.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/courses/teacher/view.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Flutter web/lib/features/screens/login/view.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/login/view.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Flutter web/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/components/Landingpage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/components/Landingpage.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,17 +83,17 @@
     &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
     &quot;git-widget-placeholder&quot;: &quot;mofeed&quot;,
     &quot;io.flutter.reload.alreadyRun&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/XPRISTO/StudioProjects/LMS/Flutter web/assets/icons&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/XPRISTO/StudioProjects/LMS/Flutter web/lib/features/screens/Sign-up screen&quot;,
     &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;
   }
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\XPRISTO\StudioProjects\LMS\Flutter web\lib\features\screens\Sign-up screen" />
       <recent name="C:\Users\XPRISTO\StudioProjects\LMS\Flutter web\assets\icons" />
       <recent name="C:\Users\XPRISTO\StudioProjects\LMS\Flutter web\assets\images" />
       <recent name="C:\Users\XPRISTO\StudioProjects\LMS\Flutter web\lib\features\screens\tapbar\activites" />
       <recent name="C:\Users\XPRISTO\StudioProjects\LMS\Flutter web\lib\features\screens\tapbar\grades" />
-      <recent name="C:\Users\XPRISTO\StudioProjects\LMS\Flutter web\lib\features\screens\tapbar\participants" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\XPRISTO\StudioProjects\LMS\Flutter web\lib\features\screens\Create_user\State_managment" />
@@ -117,12 +129,12 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="Dart">
           <url>file://$PROJECT_DIR$/Flutter web/lib/features/screens/courses/admin/view.dart</url>
-          <line>54</line>
+          <line>55</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="Dart">
           <url>file://$PROJECT_DIR$/Flutter web/lib/features/screens/courses/admin/view.dart</url>
-          <line>162</line>
+          <line>163</line>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="Dart">
@@ -134,6 +146,11 @@
           <url>file://$PROJECT_DIR$/Flutter web/lib/features/screens/student_profile/view.dart</url>
           <line>983</line>
           <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/Flutter web/lib/core/helpers/cach_helper/shared_pref_helper.dart</url>
+          <line>197</line>
+          <option name="timeStamp" value="5" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

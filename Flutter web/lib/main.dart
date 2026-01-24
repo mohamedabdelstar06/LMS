@@ -14,10 +14,13 @@ import 'package:lms/features/screens/student_profile/view.dart';
 import 'features/draft/test_screen.dart';
 import 'features/screens/Courses_dashboard/view.dart';
 import 'features/screens/Create_user/View.dart';
+import 'features/screens/Sign-up screen/view.dart';
 import 'features/screens/add_course/view.dart';
 import 'features/screens/celeberating cultures/view.dart';
 import 'features/screens/chat_bot/view.dart';
 import 'features/screens/courses/student/view.dart';
+import 'features/screens/get_users/state_managment/get_users_cubit.dart';
+import 'features/screens/get_users/view.dart';
 import 'features/screens/teacher_profile/view.dart';
 
 
@@ -36,7 +39,8 @@ void main() async {
       }
     };
   }
-  
+  DioHelper.init();
+
   runApp(MyApp());
 }
 
@@ -102,8 +106,9 @@ class _MyAppState extends State<MyApp> {
         // HeroSectionScreen()
         // UploadCoursePage()
         // CreateUserScreen()
-
+// SignUpScreen()
         _isInitialized ? LoginScreen() : LoadingScreen(),
+//           GetUsersScreen()
       ),
     );
   }

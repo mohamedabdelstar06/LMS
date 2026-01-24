@@ -17,6 +17,7 @@ class StudentCourseScreen extends StatefulWidget {
 
 class _CourseScreenState extends State<StudentCourseScreen> {
   bool _isLoading = true;
+  Map<String, dynamic> userData = {};
 
 
 
@@ -28,7 +29,12 @@ void loadImageProfile() async {
   imageProfile = await PrefHelper.getImageProfile();
   setState(() {});
 }
-
+  Future<void> _loadUserData() async {
+    final data = await PrefHelper.getUserData();
+    setState(() {
+      userData = data;
+    });
+  }
   @override
   void initState() {
     super.initState();
@@ -41,6 +47,7 @@ void loadImageProfile() async {
     });
 
     loadImageProfile();
+    _loadUserData();
 
   }
 
@@ -410,11 +417,11 @@ void loadImageProfile() async {
             ///TODO
 
 
-            backgroundImage: NetworkImage(imageProfile ?? Assets.logo),
+            backgroundImage: NetworkImage( userData["profileImageUrl"]  ?? Assets.logo),
           ),
           SizedBox(width: 8),
           Text(
-            "Mohamed Ahmed",
+              userData["fullName"] ?? "User",
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w600,
@@ -538,7 +545,6 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Course Image - Fixed height
                     SizedBox(
                       width: 304,
                       height: 164,
@@ -574,7 +580,6 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                       ),
                     ),
 
-                    // Course Content - Fixed height
                     Expanded(
                       child: SizedBox(
                         width: 304,

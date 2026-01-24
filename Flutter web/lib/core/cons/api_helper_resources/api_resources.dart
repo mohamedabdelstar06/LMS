@@ -3,6 +3,8 @@ class ApiResources {
   static final loginEndPoint = "Auth/login";
   static final logoutEndPoint = "Auth/logout";
   static final createUserEndPoint = "Users";
+  static final signUpUserEndPoint = "SignUp";
+  static final getusersEndPoint = "Users";
 
 
 }

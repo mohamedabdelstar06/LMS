@@ -1,27 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lms/features/screens/Sign-up%20screen/state_management/sign-up_server_cubit.dart';
+import 'package:lms/features/screens/Sign-up%20screen/state_management/sign-up_state.dart';
 import 'package:lms/features/screens/login/state_management/login_server_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lms/features/screens/login/state_management/login_state.dart';
 
 import '../../../core/cons/Colors/app_colors.dart';
 import '../../../generated/assets.dart';
-import '../Sign-up screen/view.dart';
 
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SignUpScreenState extends State<SignUpScreen> {
   bool isPressed = false;
   bool isObscure = true;
+  bool isConfirmedPressed = false;
+  bool isConfirmedObscure = true;
   final formKey = GlobalKey<FormState>();
-  final usernameController = TextEditingController(text: "mohamedabdelstar06@gmail.com");
+  final usernameController = TextEditingController(text: "admin@skylearn.edu");
   final passwordController = TextEditingController(text: "Admin@123");
+  final confirmedPasswordController = TextEditingController(text: "Admin@123");
 
 
   @override
@@ -34,16 +38,17 @@ class _LoginScreenState extends State<LoginScreen> {
   void dispose() {
     usernameController.dispose();
     passwordController.dispose();
+    confirmedPasswordController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => LoginCubit(),
+      create: (context) => SignUpCubit(),
       child: Builder(
         builder: (context) {
-          final login_Cubit = BlocProvider.of<LoginCubit>(context);
+          final sign_Up_Cubit = BlocProvider.of<SignUpCubit>(context);
           return Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -73,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            "Welcome Back",
+                            "SignUp ",
                             style: TextStyle(
                               color: Color(0xFF1E3A8A),
                               fontSize: 32,
@@ -99,7 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         padding: EdgeInsets.all(20),
 
                         width: 514,
-                        height: 351,
+                        height: 410,
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(24),
@@ -136,7 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               ),
                             ),
-                            SizedBox(height: 25),
+                            SizedBox(height: 18),
                             Text(
                               "Password",
                               style: TextStyle(
@@ -182,48 +187,91 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               ),
                             ),
-                            SizedBox(height: 9),
-                            InkWell(
-                              onTap: () {},
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Text(
-                                    "Forget Password?",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400,
-                                      fontFamily: "inter",
-                                      color: Color(0xff38BDF8),
-                                    ),
-                                  ),
-                                ],
+                            SizedBox(height: 18),
+                            Text(
+                              "Confirmed Password",
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: "inter",
+                                color: Color(0xFF175CD3),
                               ),
                             ),
-                            SizedBox(height: 30),
+                            SizedBox(height: 12),
+                            TextFormField(
+                              controller: confirmedPasswordController,
+                              obscureText: isConfirmedObscure,
+                              decoration: InputDecoration(
+                                suffixIcon: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      isConfirmedPressed = !isConfirmedPressed;
+                                      isConfirmedObscure = !isConfirmedObscure;
+                                    });
+                                  },
+                                  icon: Icon(
+                                    isConfirmedPressed == true
+                                        ? Icons.visibility_outlined
+                                        : Icons.visibility_off_outlined,
+                                    size: 17,
+                                    color: Color(0xFF99A1AF),
+                                  ),
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                ),
+                                hintText: "Enter your password Again",
 
-                            BlocBuilder<LoginCubit, LoginState>(
-                              bloc: login_Cubit,
+                                hintStyle: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: "inter",
+                                  color: Color(0xFF08303D),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 18),
+                            // InkWell(
+                            //   onTap: () {},
+                            //   child: Row(
+                            //     mainAxisAlignment: MainAxisAlignment.end,
+                            //     children: [
+                            //       Text(
+                            //         "Forget Password?",
+                            //         style: TextStyle(
+                            //           fontSize: 14,
+                            //           fontWeight: FontWeight.w400,
+                            //           fontFamily: "inter",
+                            //           color: Color(0xff38BDF8),
+                            //         ),
+                            //       ),
+                            //     ],
+                            //   ),
+                            // ),
+                            // SizedBox(height: 30),
+
+                            BlocBuilder<SignUpCubit, SignUpState>(
+                              bloc: sign_Up_Cubit,
                               builder: (context, state) {
-                                final isLoading = state is LoadingLoginState;
+                                final isLoading = state is LoadingSignUpState;
 
                                 return
 
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
 
-                                  children: [
-                                    Expanded(
-                                      child: InkWell(
+                                      InkWell(
                                         onTap: isLoading ? null : () {
                                           SystemSound.play(
                                             SystemSoundType.click,
                                           );
                                           context
-                                              .read<LoginCubit>()
-                                              .postLoginData(
+                                              .read<SignUpCubit>()
+                                              .postSignUpData(
                                             usernameController,
                                             passwordController,
+                                            confirmedPasswordController,
                                             context,
                                           );
                                         },
@@ -257,7 +305,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   ),
                                                   SizedBox(width: 10),
                                                   Text(
-                                                    "Logging in...",
+                                                    "SignUp...",
                                                     style: TextStyle(
                                                       fontSize: 16,
                                                       fontWeight: FontWeight.w600,
@@ -268,7 +316,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 ],
                                               )
                                                   : Text(
-                                                "Login",
+                                                "SignUp",
                                                 style: TextStyle(
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.w600,
@@ -279,42 +327,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 16),
 
-                                    Expanded(
-                                      flex: 1,
-                                      child: InkWell(
-                                        onTap: () {
-                                          Navigator.push(context, MaterialPageRoute(builder: (context) => SignUpScreen()));
-                                        },
-                                        child: Container(
-                                          height: 45,
-                                          decoration: BoxDecoration(
-                                            color: Colors.transparent,
-                                            border: Border.all(
-                                              color: const Color(0xFF1849A9),
-                                              width: 2,
-                                            ),
-                                            borderRadius: BorderRadius.circular(12),
-                                          ),
-                                          child: const Center(
-                                            child: Text(
-                                              "Sign Up",
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w600,
-                                                fontFamily: "inter",
-                                                color: Color(0xFF1849A9),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                );
+                                      // const SizedBox(width: 16),
+
+
+                                      );
                               },
                             ),
                           ],
