@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:lms/features/screens/Sign-up%20screen/state_management/sign-up_server_cubit.dart';
-import 'package:lms/features/screens/Sign-up%20screen/state_management/sign-up_state.dart';
-import 'package:lms/features/screens/login/state_management/login_server_cubit.dart';
+import 'package:lms/features/screens/Verify_email/state_management/verify_server_cubit.dart';
+import 'package:lms/features/screens/Verify_email/state_management/verify_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lms/features/screens/login/state_management/login_state.dart';
 
@@ -10,22 +9,17 @@ import '../../../core/cons/Colors/app_colors.dart';
 import '../../../generated/assets.dart';
 
 
-class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
+class VerifyScreen  extends StatefulWidget {
+  const VerifyScreen({super.key});
 
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  State<VerifyScreen> createState() => _LoginScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
-  bool isPressed = false;
-  bool isObscure = true;
-  bool isConfirmedPressed = false;
-  bool isConfirmedObscure = true;
+class _LoginScreenState extends State<VerifyScreen> {
+
   final formKey = GlobalKey<FormState>();
-  final usernameController = TextEditingController(text: "admin@skylearn.edu");
-  final passwordController = TextEditingController(text: "Admin@123");
-  final confirmedPasswordController = TextEditingController(text: "Admin@123");
+  final usernameController = TextEditingController(text: "mohamedabdelstar06@gmail.com");
 
 
   @override
@@ -37,18 +31,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   void dispose() {
     usernameController.dispose();
-    passwordController.dispose();
-    confirmedPasswordController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => SignUpCubit(),
+      create: (context) => VerifyCubit(),
       child: Builder(
         builder: (context) {
-          final sign_Up_Cubit = BlocProvider.of<SignUpCubit>(context);
+          final verify_Cubit = BlocProvider.of<VerifyCubit>(context);
           return Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -78,7 +70,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            "SignUp ",
+                            "Welcome Back",
                             style: TextStyle(
                               color: Color(0xFF1E3A8A),
                               fontSize: 32,
@@ -91,7 +83,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ],
                       ),
                       Text(
-                        "Enter your details below to access your courses and progress.",
+                        "Enter your email address to check your account and continue.",
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
@@ -104,7 +96,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         padding: EdgeInsets.all(20),
 
                         width: 514,
-                        height: 410,
+                        height: 223,
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(24),
@@ -114,7 +106,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           children: [
                             SizedBox(height: 20),
                             Text(
-                              "Username",
+                              "Email",
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
@@ -132,7 +124,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 contentPadding: EdgeInsets.symmetric(
                                   horizontal: 16,
                                 ),
-                                hintText: "Enter your username",
+                                hintText: "Enter your Email",
                                 hintStyle: TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w400,
@@ -141,122 +133,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 ),
                               ),
                             ),
-                            SizedBox(height: 18),
-                            Text(
-                              "Password",
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                                fontFamily: "inter",
-                                color: Color(0xFF175CD3),
-                              ),
-                            ),
-                            SizedBox(height: 12),
-                            TextFormField(
-                              controller: passwordController,
-                              obscureText: isObscure,
-                              decoration: InputDecoration(
-                                suffixIcon: IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      isPressed = !isPressed;
-                                      isObscure = !isObscure;
-                                    });
-                                  },
-                                  icon: Icon(
-                                    isPressed == true
-                                        ? Icons.visibility_outlined
-                                        : Icons.visibility_off_outlined,
-                                    size: 17,
-                                    color: Color(0xFF99A1AF),
-                                  ),
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                ),
-                                hintText: "Enter your password",
+                            SizedBox(height: 25),
 
-                                hintStyle: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: "inter",
-                                  color: Color(0xFF08303D),
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: 18),
-                            Text(
-                              "Confirmed Password",
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                                fontFamily: "inter",
-                                color: Color(0xFF175CD3),
-                              ),
-                            ),
-                            SizedBox(height: 12),
-                            TextFormField(
-                              controller: confirmedPasswordController,
-                              obscureText: isConfirmedObscure,
-                              decoration: InputDecoration(
-                                suffixIcon: IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      isConfirmedPressed = !isConfirmedPressed;
-                                      isConfirmedObscure = !isConfirmedObscure;
-                                    });
-                                  },
-                                  icon: Icon(
-                                    isConfirmedPressed == true
-                                        ? Icons.visibility_outlined
-                                        : Icons.visibility_off_outlined,
-                                    size: 17,
-                                    color: Color(0xFF99A1AF),
-                                  ),
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                ),
-                                hintText: "Enter your password Again",
+                            SizedBox(height: 9),
 
-                                hintStyle: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: "inter",
-                                  color: Color(0xFF08303D),
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: 18),
-                            // InkWell(
-                            //   onTap: () {},
-                            //   child: Row(
-                            //     mainAxisAlignment: MainAxisAlignment.end,
-                            //     children: [
-                            //       Text(
-                            //         "Forget Password?",
-                            //         style: TextStyle(
-                            //           fontSize: 14,
-                            //           fontWeight: FontWeight.w400,
-                            //           fontFamily: "inter",
-                            //           color: Color(0xff38BDF8),
-                            //         ),
-                            //       ),
-                            //     ],
-                            //   ),
-                            // ),
-                            // SizedBox(height: 30),
-
-                            BlocBuilder<SignUpCubit, SignUpState>(
-                              bloc: sign_Up_Cubit,
+                            BlocBuilder<VerifyCubit, VerifyState>(
+                              bloc: verify_Cubit,
                               builder: (context, state) {
-                                final isLoading = state is LoadingSignUpState;
+                                final isLoading = state is LoadingVerifyState;
 
                                 return
 
@@ -267,11 +151,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                             SystemSoundType.click,
                                           );
                                           context
-                                              .read<SignUpCubit>()
-                                              .postSignUpData(
+                                              .read<VerifyCubit>()
+                                              .postVerifyData(
                                             usernameController,
-                                            passwordController,
-                                            confirmedPasswordController,
                                             context,
                                           );
                                         },
@@ -305,7 +187,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                   ),
                                                   SizedBox(width: 10),
                                                   Text(
-                                                    "SignUp...",
+                                                    "Verifying Email...",
                                                     style: TextStyle(
                                                       fontSize: 16,
                                                       fontWeight: FontWeight.w600,
@@ -316,7 +198,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                 ],
                                               )
                                                   : Text(
-                                                "SignUp",
+                                                "Continue",
                                                 style: TextStyle(
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.w600,
@@ -327,11 +209,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                             ),
                                           ),
                                         ),
-
-                                      // const SizedBox(width: 16),
-
-
                                       );
+                                    // const SizedBox(width: 16),
+
+
+
+
                               },
                             ),
                           ],

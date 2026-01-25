@@ -4,8 +4,10 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:lms/features/screens/login/user_model/data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../features/screens/ActivateAccountScreen/user_model/data.dart';
 import '../../../features/screens/Create_user/User_model/model.dart';
 import '../../../features/screens/Create_user/View.dart';
+import '../../../features/screens/Verify_email/user_model/data.dart';
 import '../../../features/screens/login/view.dart';
 import '../../cons/api_helper_resources/api_resources.dart';
 import '../../cons/context/navigation_key.dart';
@@ -185,6 +187,9 @@ class PrefHelper {
 
   }
 
+
+
+
   static Future<Map<String, dynamic>> getUserData() async {
     final prefs = await SharedPreferences.getInstance();
 
@@ -225,49 +230,52 @@ class PrefHelper {
     return prefs.getString("profileImageUrl");
   }
 
-  // static Future<void> saveTokenSecure(UserModel user) async {
-  //   AndroidOptions _getAndroidOptions() => const AndroidOptions(
-  //     encryptedSharedPreferences: true,
-  //   );
-  //   final storage = FlutterSecureStorage(aOptions: _getAndroidOptions());
-  //   await storage.write(key: "tokenKey", value: user.token!);
-  //
-  // }
 
 }
 
 
+
+// class TokenStorageHelper {
+//   static AndroidOptions _getAndroidOptions() => const AndroidOptions(
+//     encryptedSharedPreferences: true,
+//   );
+//
+//   static Future<void> saveTokenSecure(UserModel user) async {
+//     final storage = FlutterSecureStorage(aOptions: _getAndroidOptions());
+//     await storage.write(key: "tokenKey", value: user.token!);
+//   }
+//
+//   static Future<String?> getTokenSecure() async {
+//     final storage = FlutterSecureStorage(aOptions: _getAndroidOptions());
+//     String? token = await storage.read(key: "tokenKey");
+//     return token;
+//   }
+//
+// }
 
 class TokenStorageHelper {
   static AndroidOptions _getAndroidOptions() => const AndroidOptions(
     encryptedSharedPreferences: true,
   );
 
-  static Future<void> saveTokenSecure(UserModel user) async {
-    final storage = FlutterSecureStorage(aOptions: _getAndroidOptions());
-    await storage.write(key: "tokenKey", value: user.token!);
+  static Future<void> saveTokenSecure(String token) async {
+    final storage =
+    FlutterSecureStorage(aOptions: _getAndroidOptions());
+    await storage.write(key: "tokenKey", value: token);
   }
 
   static Future<String?> getTokenSecure() async {
-    final storage = FlutterSecureStorage(aOptions: _getAndroidOptions());
-    String? token = await storage.read(key: "tokenKey");
-    return token;
+    final storage =
+    FlutterSecureStorage(aOptions: _getAndroidOptions());
+    return await storage.read(key: "tokenKey");
   }
-  //
-  // static Future<void> deleteTokenSecure() async {
-  //   final storage = FlutterSecureStorage(aOptions: _getAndroidOptions());
-  //   await storage.delete(key: "tokenKey");
-  // }
 
-  // static Future<bool> isLoggedIn() async {
-  //   final storage = FlutterSecureStorage(aOptions: _getAndroidOptions());
-  //   String? token = await storage.read(key: "tokenKey");
-  //   return token != null && token.isNotEmpty;
-  // }
+  static Future<void> clearToken() async {
+    final storage =
+    FlutterSecureStorage(aOptions: _getAndroidOptions());
+    await storage.delete(key: "tokenKey");
+  }
 }
-
-
-
 
 class UserStorageHelper {
   static Future<void> saveCreatedUserData(CreateUserModel user) async {
@@ -324,5 +332,66 @@ class UserStorageHelper {
     if (user.lastLoginAt != null) {
       await prefs.setString("lastLoginAt", user.lastLoginAt!.toIso8601String());
     }
+  }
+}
+
+
+class VerifyStorageHelper {
+  static Future<void> saveVerifyData(UserStatusModel status) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    await prefs.setBool("exists", status.exists);
+    await prefs.setBool("isActivated", status.isActivated);
+  }
+
+  static Future<UserStatusModel?> getVerifyData() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    if (!prefs.containsKey("exists")) return null;
+
+    return UserStatusModel(
+      exists: prefs.getBool("exists") ?? false,
+      isActivated: prefs.getBool("isActivated") ?? false,
+    );
+  }
+
+  static Future<void> clearVerifyData() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove("exists");
+    await prefs.remove("isActivated");
+  }
+}
+
+
+class ActivateUserPrefs {
+  static Future<void> saveActivateUserData(
+      ActivateUserModel model) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    await prefs.setInt('user_id', model.user.id);
+    await prefs.setString('email', model.user.email);
+    await prefs.setString(
+      'fullName',
+      model.user.fullName.split(' ').first,
+    );
+    await prefs.setString('role', model.user.role);
+
+    if (model.user.nationalId != null) {
+      await prefs.setString(
+          'nationalId', model.user.nationalId!);
+    }
+
+    if (model.user.accountStatus != null) {
+      await prefs.setString(
+          'accountStatus', model.user.accountStatus!);
+    }
+
+    if (model.user.profileImageUrl != null) {
+      await prefs.setString(
+          'profileImageUrl', model.user.profileImageUrl!);
+    }
+
+    await prefs.setString('activateMessage', model.message);
+    await prefs.setString('expiresIn', model.expiresIn);
   }
 }

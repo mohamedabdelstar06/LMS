@@ -728,7 +728,7 @@ void _showUserMenu(BuildContext context) async {
   if (result == 'logout') {
     await LogoutServer.logout();
   } else if (result == 'profile') {
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ProfileScreen(),));
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => TeacherOrAdminProfileScreen(),));
     // TODO: Add profile action later
   } else if (result == 'settings') {
     // TODO: Add settings action later
