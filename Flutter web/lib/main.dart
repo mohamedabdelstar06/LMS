@@ -107,9 +107,9 @@ class _MyAppState extends State<MyApp> {
         // HeroSectionScreen()
         // UploadCoursePage()
         // CreateUserScreen()
-        ActivateAccountScreen()
+        // ActivateAccountScreen()
 // SignUpScreen()
-//         _isInitialized ? VerifyScreen() : LoadingScreen(),
+        _isInitialized ? VerifyScreen() : LoadingScreen(),
 //           GetUsersScreen()
       ),
     );

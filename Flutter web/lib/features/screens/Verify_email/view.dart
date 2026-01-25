@@ -158,7 +158,8 @@ class _LoginScreenState extends State<VerifyScreen> {
                                           );
                                         },
                                         child: Center(
-                                          child: Container(
+                                          child:
+                                          Container(
                                             width: 470,
                                             height: 45,
                                             decoration: BoxDecoration(

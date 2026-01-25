@@ -173,11 +173,15 @@ class PrefHelper {
     await prefs.setString("role", user.role);
     await prefs.setString("nationalId", user.nationalId);
     await prefs.setString("dateOfBirth", user.dateOfBirth.toString());
-    await prefs.setString("gender", user.gender);
-    await prefs.setString("city", user.city);
-    await prefs.setString("academicLevel", user.academicLevel);
-    await prefs.setString("profileImageUrl", user.profileImageUrl);
-    await prefs.setBool("isActive", user.isActive);
+    await prefs.setString("gender", user.gender!);
+    await prefs.setString("city", user.city!);
+    await prefs.setString("academicLevel", user.academicInfo!.department!.name!);
+    await prefs.setString("academicLevel", user.academicInfo!.department!.id!.toString());
+    await prefs.setString("academicLevel", user.academicInfo!.year! as String);
+    await prefs.setString("academicLevel", user.academicInfo!.admissionYear! as String);
+    await prefs.setString("academicLevel", user.academicInfo!.squadron!.name!);
+
+    await prefs.setString("profileImageUrl", user.profileImageUrl!);
     await prefs.setBool("emailConfirmed", user.emailConfirmed);
     await prefs.setString("createdAt", user.createdAt.toString());
     await prefs.setString("updatedAt", user.updatedAt.toString());
@@ -215,10 +219,6 @@ class PrefHelper {
     return prefs.getString("fullName");
   }
 
-  static Future<String?> getUserCreatedEmail() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString("email");
-  }
 
   static Future<String?> getUserCreatedRole() async {
     final prefs = await SharedPreferences.getInstance();
@@ -334,7 +334,6 @@ class UserStorageHelper {
     }
   }
 }
-
 
 class VerifyStorageHelper {
   static Future<void> saveVerifyData(UserStatusModel status) async {

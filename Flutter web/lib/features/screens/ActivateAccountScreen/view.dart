@@ -122,7 +122,7 @@ class _SignUpScreenState extends State<ActivateAccountScreen> {
                                 color: Color(0xFF175CD3),
                               ),
                             ),
-                            SizedBox(height: 12),
+                            SizedBox(height: 8),
                             TextFormField(
                               controller: usernameController,
                               decoration: InputDecoration(
@@ -141,7 +141,7 @@ class _SignUpScreenState extends State<ActivateAccountScreen> {
                                 ),
                               ),
                             ),
-                            SizedBox(height: 18),
+                            SizedBox(height: 16),
                             Text(
                               "Password",
                               style: TextStyle(
@@ -151,7 +151,7 @@ class _SignUpScreenState extends State<ActivateAccountScreen> {
                                 color: Color(0xFF175CD3),
                               ),
                             ),
-                            SizedBox(height: 12),
+                            SizedBox(height: 8),
                             TextFormField(
                               controller: passwordController,
                               obscureText: isObscure,
@@ -187,7 +187,7 @@ class _SignUpScreenState extends State<ActivateAccountScreen> {
                                 ),
                               ),
                             ),
-                            SizedBox(height: 18),
+                            SizedBox(height: 16),
                             Text(
                               "Confirmed Password",
                               style: TextStyle(
@@ -197,7 +197,7 @@ class _SignUpScreenState extends State<ActivateAccountScreen> {
                                 color: Color(0xFF175CD3),
                               ),
                             ),
-                            SizedBox(height: 12),
+                            SizedBox(height: 8),
                             TextFormField(
                               controller: confirmedPasswordController,
                               obscureText: isConfirmedObscure,
@@ -233,7 +233,7 @@ class _SignUpScreenState extends State<ActivateAccountScreen> {
                                 ),
                               ),
                             ),
-                            SizedBox(height: 18),
+                            SizedBox(height: 22),
 
 
                             BlocBuilder<ActivateCubit, ActivateState>(
