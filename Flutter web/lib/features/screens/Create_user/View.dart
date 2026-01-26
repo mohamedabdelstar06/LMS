@@ -7,6 +7,7 @@ import 'package:lms/features/screens/courses/student/view.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/cons/Colors/app_colors.dart';
 import '../../../core/helpers/logout_server/logout.dart';
+import '../get_users/view.dart';
 import 'State_managment/Create_user_cubit.dart';
 import 'State_managment/Create_user_state.dart';
 
@@ -77,7 +78,7 @@ class _ProfileScreenState extends State<CreateUserScreen> {
   final FocusNode fullNameFocus = FocusNode();
   final FocusNode emailFocus = FocusNode();
   final FocusNode nationalIdFocus = FocusNode();
-  final FocusNode passwordFocus = FocusNode();
+  // final FocusNode passwordFocus = FocusNode();
   final FocusNode academicLevelFocus = FocusNode();
   final FocusNode roleFocus = FocusNode();
   final FocusNode dateOfBirthFocus = FocusNode();
@@ -89,7 +90,7 @@ class _ProfileScreenState extends State<CreateUserScreen> {
   final TextEditingController fullNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController nationalIdController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  // final TextEditingController passwordController = TextEditingController();
   final TextEditingController academicLevelController = TextEditingController();
 
   // final TextEditingController roleController = TextEditingController();
@@ -108,8 +109,8 @@ class _ProfileScreenState extends State<CreateUserScreen> {
     emailFocus.dispose();
     nationalIdController.dispose();
     nationalIdFocus.dispose();
-    passwordController.dispose();
-    passwordFocus.dispose();
+    // passwordController.dispose();
+    // passwordFocus.dispose();
     academicLevelController.dispose();
     academicLevelFocus.dispose();
     genderController.dispose();
@@ -199,7 +200,7 @@ class _ProfileScreenState extends State<CreateUserScreen> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const StudentCourseScreen(),
+                  builder: (context) => const GetUsersScreen(),
                 ),
               );
             },
@@ -410,14 +411,14 @@ class _ProfileScreenState extends State<CreateUserScreen> {
                   Icons.email,
                   "mohamed@gmail.com",
                 ),
-                const SizedBox(height: 16),
-                _buildTextField(
-                  'Password',
-                  passwordController,
-                  passwordFocus,
-                  Icons.password,
-                  "Mofeed123#*znu",
-                ),
+                // const SizedBox(height: 16),
+                // _buildTextField(
+                //   'Password',
+                //   passwordController,
+                //   passwordFocus,
+                //   Icons.password,
+                //   "Mofeed123#*znu",
+                // ),
                 const SizedBox(height: 16),
                 _buildTextField(
                   'National ID',
@@ -474,7 +475,7 @@ class _ProfileScreenState extends State<CreateUserScreen> {
                 RoleDropdownField(),
                 const SizedBox(height: 16),
 
-                ToggleButtonActiveOrDeactive(),
+                // ToggleButtonActiveOrDeactive(),
 
                 const SizedBox(height: 16),
                 BlocListener<CreateUserCubit, CreateState>(
@@ -518,7 +519,6 @@ class _ProfileScreenState extends State<CreateUserScreen> {
                       );
                     }
 
-                    // Error State - مع الـ status code
                     if (state is CreateUserErrorState) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
@@ -577,7 +577,7 @@ class _ProfileScreenState extends State<CreateUserScreen> {
                           SystemSound.play(SystemSoundType.click);
                           context.read<CreateUserCubit>().postCreatedUserData(
                             emailController,
-                            passwordController,
+                            // passwordController,
                             fullNameController,
                             nationalIdController,
                             genderController,
@@ -949,69 +949,7 @@ class _ProfileScreenState extends State<CreateUserScreen> {
     // );
   }
 
-  // Widget _buildImageSourceOption({
-  //   required IconData icon,
-  //   required String title,
-  //   required String subtitle,
-  //   required VoidCallback onTap,
-  //   Color color = const Color(0xFF2563EB),
-  // }) {
-  //   return MouseRegion(
-  //     cursor: SystemMouseCursors.click,
-  //     child: GestureDetector(
-  //       onTap: onTap,
-  //       child: Container(
-  //         padding: const EdgeInsets.all(16),
-  //         decoration: BoxDecoration(
-  //           color: color.withOpacity(0.05),
-  //           borderRadius: BorderRadius.circular(12),
-  //           border: Border.all(color: color.withOpacity(0.2), width: 1),
-  //         ),
-  //         child: Row(
-  //           children: [
-  //             Container(
-  //               padding: const EdgeInsets.all(12),
-  //               decoration: BoxDecoration(
-  //                 color: color.withOpacity(0.1),
-  //                 borderRadius: BorderRadius.circular(10),
-  //               ),
-  //               child: Icon(icon, color: color, size: 24),
-  //             ),
-  //             const SizedBox(width: 16),
-  //             Expanded(
-  //               child: Column(
-  //                 crossAxisAlignment: CrossAxisAlignment.start,
-  //                 children: [
-  //                   Text(
-  //                     title,
-  //                     style: TextStyle(
-  //                       fontSize: 16,
-  //                       fontWeight: FontWeight.w600,
-  //                       color: color,
-  //                     ),
-  //                   ),
-  //                   const SizedBox(height: 2),
-  //                   Text(
-  //                     subtitle,
-  //                     style: const TextStyle(
-  //                       fontSize: 12,
-  //                       color: Color(0xFF64748B),
-  //                     ),
-  //                   ),
-  //                 ],
-  //               ),
-  //             ),
-  //             Icon(
-  //               Icons.arrow_forward_ios,
-  //               color: color.withOpacity(0.5),
-  //               size: 16,
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
+
 
   Future<void> _pickImageFromSource(ImageSource source) async {
     try {

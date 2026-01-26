@@ -722,5 +722,8 @@ Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Stude
 
   } else if (result == 'settings') {
     // TODO: Add settings action later
+  } else if (result == 'profile') {
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => StudentProfileScreen(),));
+
   }
 }

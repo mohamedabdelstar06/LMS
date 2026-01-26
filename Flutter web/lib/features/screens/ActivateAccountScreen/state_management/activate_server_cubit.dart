@@ -5,11 +5,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/cons/api_helper_resources/api_resources.dart';
 import '../../../../core/cons/context/navigation_key.dart';
 import '../../../../core/helpers/cach_helper/shared_pref_helper.dart';
+import '../../courses/admin/view.dart';
+import '../../courses/student/view.dart';
+import '../../courses/teacher/view.dart';
 import '../../login/view.dart';
 import '../user_model/data.dart';
 import 'activate_state.dart';
 
 class ActivateCubit extends Cubit<ActivateState> {
+
   ActivateCubit() : super(ActivateInitialState());
 
   Future<void> postActivateData(
@@ -68,10 +72,14 @@ class ActivateCubit extends Cubit<ActivateState> {
           ),
         );
 
-        Navigator.pushReplacement(
-          navigatorKey.currentContext!,
-          MaterialPageRoute(builder: (_) => const LoginScreen()),
-        );
+        if (model.user.role == "Student"){
+          Navigator.pushReplacement(navigatorKey.currentContext!, MaterialPageRoute(builder: (context) =>  StudentCourseScreen() ,));
+        }else if (model.user.role == "Instructor"){
+          Navigator.pushReplacement(navigatorKey.currentContext!, MaterialPageRoute(builder: (context) =>  TeacherCourseScreen() ,));
+        } else {
+          Navigator.pushReplacement(navigatorKey.currentContext!, MaterialPageRoute(builder: (context) =>  AdminCourseScreen() ,));
+        }
+
       } else {
         emit(ActivateErrorState());
 

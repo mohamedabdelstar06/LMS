@@ -27,7 +27,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       }
 
       final response = await dio.get(
-        ApiResources.getUsersProfile,
+        ApiResources.getProfileEndpoint,
         options: Options(
           headers: {'Authorization': 'Bearer $token'},
         ),
