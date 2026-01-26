@@ -1,30 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lms/features/screens/courses/student/view.dart';
+import 'package:lms/features/screens/profiles/admin_profile/state_managment/cubit_d_profile.dart';
+import 'package:lms/features/screens/profiles/admin_profile/state_managment/state_d_profile.dart';
+import 'package:lms/features/screens/profiles/student_profile/state_mangement/cubit.dart';
+import 'package:lms/features/screens/profiles/student_profile/state_mangement/states.dart';
+import 'package:lms/features/screens/profiles/teacher_profile/state_managment/cubit_d_profile.dart';
+import 'package:lms/features/screens/profiles/teacher_profile/state_managment/state_d_profile.dart';
 
-import '../../../core/cons/Colors/app_colors.dart';
-import '../../../core/helpers/logout_server/logout.dart';
-import '../../../core/widgets/app_bar.dart';
-import '../courses/teacher/view.dart';
-import 'State_managment/t_profile_cubit.dart';
-import 'State_managment/t_profile_state.dart';
+import '../../../../core/cons/Colors/app_colors.dart';
+import '../../../../core/helpers/logout_server/logout.dart';
+import '../../Announcement/view.dart';
+import '../../Create_user/View.dart';
+import 'model/view.dart';
 
-class TeacherOrAdminProfileScreen extends StatefulWidget {
-  const TeacherOrAdminProfileScreen({Key? key}) : super(key: key);
+class TeacherProfileScreen extends StatefulWidget {
+  const TeacherProfileScreen({Key? key}) : super(key: key);
 
   @override
-  State<TeacherOrAdminProfileScreen> createState() => _ProfileScreenState();
+  State<TeacherProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<TeacherOrAdminProfileScreen> {
+class _ProfileScreenState extends State<TeacherProfileScreen> {
   Uint8List? _webImage;
   String selectedMenuItem = 'Profile';
   bool isNextButtonHovered = false;
   String? hoveredMenuItem;
   bool isLogoutHovered = false;
   bool isProfilePictureHovered = false;
+  String selectedStartYear = "2020";
+  String selectedEndYear = "2025";
+
+  bool isStartExpanded = false;
+  bool isEndExpanded = false;
+
+  List<String> yearsList = [for (int y = 1980; y <= 2060; y++) y.toString()];
 
   File? _selectedImage;
   final ImagePicker _imagePicker = ImagePicker();
@@ -34,41 +47,14 @@ class _ProfileScreenState extends State<TeacherOrAdminProfileScreen> {
   final FocusNode nationalIdFocus = FocusNode();
   final FocusNode dobFocus = FocusNode();
   final FocusNode addressFocus = FocusNode();
+  final TextEditingController fullNameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController nationalIdController = TextEditingController();
+  final TextEditingController dobController = TextEditingController();
 
-  final TextEditingController fullNameController =
-  TextEditingController();
-  final TextEditingController emailController =
-  TextEditingController();
-  final TextEditingController nationalIdController =
-  TextEditingController();
-  final TextEditingController dobController =
-  TextEditingController( );
-  final TextEditingController addressController =
-  TextEditingController();
 
-  String selectedNationality = 'Egyptian';
-  String selectedCity = 'Cairo';
-  bool isNationalityExpanded = false;
+  String selectedCity = 'Select City';
   bool isCityExpanded = false;
-
-  final List<String> nationalities = [
-    'Egyptian',
-    'American',
-    'British',
-    'Canadian',
-    'French',
-    'German',
-    'Italian',
-    'Spanish',
-    'Indian',
-    'Chinese',
-    'Japanese',
-    'Australian',
-    'Brazilian',
-    'Mexican',
-    'Russian',
-    'South African'
-  ];
 
 
   final List<String> cities = [
@@ -99,68 +85,37 @@ class _ProfileScreenState extends State<TeacherOrAdminProfileScreen> {
     'Qalyubia',
     'Sharqia',
     'Daqahlia',
-    'Gharbia'
+    'Gharbia',
   ];
-  late ProfileCubit profileCubit;
 
-
-  void initState() {
-    super.initState();
-
-    profileCubit = ProfileCubit();
-    profileCubit.getProfileData();
-  }
   @override
   void dispose() {
-    profileCubit.close();
 
     fullNameController.dispose();
     emailController.dispose();
     nationalIdController.dispose();
     dobController.dispose();
-    addressController.dispose();
     fullNameFocus.dispose();
     emailFocus.dispose();
     nationalIdFocus.dispose();
     dobFocus.dispose();
-    addressFocus.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => ProfileCubit(),
-      child: BlocListener<ProfileCubit, ProfileState>(
-        listener: (context, state) {
-          if (state is NavigateToTeacherProfile) {
-            // Navigate لـ Teacher/Admin Profile
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const TeacherOrAdminProfileScreen(),
-              ),
-            );
-          } else if (state is NavigateToStudentProfile) {
-            // Student → رسالة منع الدخول
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Students are not allowed to access this profile'),
-              ),
-            );
-          } else if (state is ProfileError) {
-            // أي Error تانية
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
-            );
-          }
+      create: (context) => TeacherProfileCubit()..getProfile(),
+      child: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
         },
         child: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
                 MYColors.gradientColor_3,
-                MYColors.gradientColor_2.withOpacity(0.25),
+                MYColors.gradientColor_2.withValues(alpha: 0.25),
                 MYColors.gradientColor_3,
               ],
               begin: Alignment.topLeft,
@@ -169,11 +124,24 @@ class _ProfileScreenState extends State<TeacherOrAdminProfileScreen> {
           ),
           child: Scaffold(
             backgroundColor: Colors.transparent,
-            appBar: const CustomAppBar(),
             body: Row(
               children: [
-                _buildSidebar(), // Sidebar موجود عندك
-                Expanded(child: _buildProfileContent()), // المحتوى حسب Cubit
+                _buildSidebar(),
+                Expanded(
+                  child: BlocBuilder<TeacherProfileCubit, TeacherProfileState>(
+                    builder: (context, state) {
+                      if (state is TeacherProfileLoading) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (state is TeacherProfileError) {
+                        return Center(child: Text(state.message));
+                      } else if (state is TeacherProfileLoaded) {
+                        final user = state.profile.user;
+                        return _buildProfileContent(user: user);
+                      }
+                      return const Center(child: Text('Loading...'));
+                    },
+                  ),
+                ),
               ],
             ),
           ),
@@ -182,13 +150,15 @@ class _ProfileScreenState extends State<TeacherOrAdminProfileScreen> {
     );
   }
 
-
-
   Widget _buildSidebar() {
     return Container(
       width: 250,
-      margin: const EdgeInsetsGeometry.directional(start: 40,end: 0,top: 50,bottom: 50),
-
+      margin: const EdgeInsetsGeometry.directional(
+        start: 40,
+        end: 0,
+        top: 50,
+        bottom: 50,
+      ),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -204,17 +174,50 @@ class _ProfileScreenState extends State<TeacherOrAdminProfileScreen> {
       child: Column(
         children: [
           const SizedBox(height: 40),
-          _buildMenuItem(Icons.person_outline, Icons.person, 'Profile', 'Profile',(){
+          _buildMenuItem(
+            Icons.person_outline,
+            Icons.person,
+            'Profile',
+            'Profile',
+                () {},
+          ),
+          _buildMenuItem(
+            Icons.book_outlined,
+            Icons.book,
+            'My Courses',
+            'My Courses',
+                () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const StudentCourseScreen(),
+                ),
+              );
+            },
+          ),
+          _buildMenuItem(
+            Icons.notifications_active_outlined,
+            Icons.notifications_active_rounded,
+            'Announcements',
+            'Announcements',
+                () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const AnnouncementScreen(),
+                ),
+              );
 
-          }),
-          _buildMenuItem(Icons.book_outlined, Icons.book, 'My Courses', 'My Courses',(){
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const TeacherCourseScreen()));
-          }),
-          //TODO: Complete
-          _buildMenuItem(Icons.grade_outlined, Icons.grade, 'Grades overview', 'Grades overview',(){
+            },
+          ),
 
-
-          }),
+          _buildMenuItem(
+            Icons.grade_outlined,
+            Icons.grade,
+            'Grades overview',
+            'Grades overview',
+                () {},
+          ),
           const Spacer(),
           _buildLogoutButton(),
           const SizedBox(height: 20),
@@ -223,7 +226,13 @@ class _ProfileScreenState extends State<TeacherOrAdminProfileScreen> {
     );
   }
 
-  Widget _buildMenuItem(IconData outlinedIcon, IconData filledIcon, String title, String value,onTap) {
+  Widget _buildMenuItem(
+      IconData outlinedIcon,
+      IconData filledIcon,
+      String title,
+      String value,
+      onTap,
+      ) {
     final isSelected = selectedMenuItem == value;
     final isHovered = hoveredMenuItem == value;
 
@@ -280,7 +289,7 @@ class _ProfileScreenState extends State<TeacherOrAdminProfileScreen> {
                         ? Colors.white
                         : isHovered
                         ? const Color(0xFF2563EB)
-                        :  Colors.black87,
+                        : Colors.black87,
                     fontSize: 14,
                     fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
                   ),
@@ -341,11 +350,7 @@ class _ProfileScreenState extends State<TeacherOrAdminProfileScreen> {
           ),
           child: Row(
             children: [
-              Icon(
-                Icons.logout,
-                color: const Color(0xFFEF4444),
-                size: 20,
-              ),
+              Icon(Icons.logout, color: const Color(0xFFEF4444), size: 20),
               const SizedBox(width: 12),
               const Text(
                 'Logout',
@@ -362,144 +367,12 @@ class _ProfileScreenState extends State<TeacherOrAdminProfileScreen> {
     );
   }
 
-  // Widget _buildProfileContent() {
-  //   return Center(
-  //     child: Padding(
-  //       padding: const EdgeInsets.all(20),
-  //       child: Container(
-  //         margin: EdgeInsets.symmetric(horizontal: 20,vertical: 20),
-  //         constraints: const BoxConstraints(maxWidth: 1132),
-  //         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 30),
-  //         decoration: BoxDecoration(
-  //           color: Colors.white,
-  //           borderRadius: BorderRadius.circular(16),
-  //           boxShadow: [
-  //             BoxShadow(
-  //               color: Colors.black.withOpacity(0.08),
-  //               blurRadius: 20,
-  //               offset: const Offset(0, 4),
-  //               spreadRadius: 2,
-  //             ),
-  //           ],
-  //         ),
-  //         child: SingleChildScrollView(
-  //           padding: const EdgeInsets.symmetric(horizontal: 40),
-  //           child: Column(
-  //             crossAxisAlignment: CrossAxisAlignment.center,
-  //             children: [
-  //               const Text(
-  //                 'Your Profile',
-  //                 style: TextStyle(
-  //                   fontSize: 24,
-  //                   fontWeight: FontWeight.w700,
-  //                   color: Color(0xFF2563EB),
-  //                 ),
-  //               ),
-  //               const SizedBox(height: 8),
-  //               const Text(
-  //                 'Here are all your personal details that you can view and update anytime',
-  //                 style: TextStyle(
-  //                   fontSize: 14,
-  //                   color: Color(0xFF64748B),
-  //                 ),
-  //               ),
-  //               const SizedBox(height: 32),
-  //               _buildProfilePicture(),
-  //               const SizedBox(height: 24),
-  //               _buildTextField('Full Name', fullNameController, fullNameFocus, Icons.person,"Mohamed Mofeed"),
-  //               const SizedBox(height: 16),
-  //               _buildTextField('Email address', emailController, emailFocus, Icons.email,"mohamed@gmail.com"),
-  //               const SizedBox(height: 16),
-  //               _buildTextField('National ID', nationalIdController, nationalIdFocus, Icons.badge,"3040105050096"),
-  //               const SizedBox(height: 16),
-  //               _buildDateField('Date of Birth', dobController, dobFocus,"1/9/1975"),
-  //               const SizedBox(height: 16),
-  //               _buildDropdownField('Nationality', selectedNationality, nationalities, isNationalityExpanded, (value) {
-  //                 setState(() {
-  //                   selectedNationality = value;
-  //                   isNationalityExpanded = false;
-  //                 });
-  //               }, () {
-  //                 setState(() {
-  //                   isNationalityExpanded = !isNationalityExpanded;
-  //                   isCityExpanded = false;
-  //                 });
-  //               }),
-  //               const SizedBox(height: 16),
-  //               _buildDropdownField('City', selectedCity, cities, isCityExpanded, (value) {
-  //                 setState(() {
-  //                   selectedCity = value;
-  //                   isCityExpanded = false;
-  //                 });
-  //               }, () {
-  //                 setState(() {
-  //                   isCityExpanded = !isCityExpanded;
-  //                   isNationalityExpanded = false;
-  //                 });
-  //               }),
-  //               const SizedBox(height: 16),
-  //               _buildTextField('Address', addressController, addressFocus, Icons.location_on,"Bldg 10, Al-Nashet St. — Nasr City, Cairo"),
-  //               const SizedBox(height: 32),
-  //               _buildNextButton(),
-  //             ],
-  //           ),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-  Widget _buildProfileContent() {
-    return BlocBuilder<ProfileCubit, ProfileState>(
-      builder: (context, state) {
-        // Loading indicator
-        if (state is ProfileLoading) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
-        // Error
-        if (state is ProfileError) {
-          return Center(child: Text(state.message));
-        }
-
-        // Admin / Instructor
-        if (state is NavigateToTeacherProfile) {
-          final user = state.user;
-
-          // حط البيانات في الـ controllers
-          fullNameController.text = user.fullName;
-          emailController.text = user.email;
-          nationalIdController.text = user.nationalId ?? '';
-          dobController.text = user.dateOfBirth != null
-              ? user.dateOfBirth!.toLocal().toString().split(' ')[0]
-              : '';
-          selectedCity = user.city ?? '';
-          selectedNationality = user.gender ?? ''; // لو عندك nationality field عدلها
-
-          return _profileUI();
-        }
-
-        // Student (لو حبيت تعرض حاجة)
-        if (state is NavigateToStudentProfile) {
-          return const Center(
-            child: Text(
-              "Students are not allowed to access this profile",
-              style: TextStyle(fontSize: 16, color: Colors.red),
-            ),
-          );
-        }
-
-        return const SizedBox();
-      },
-    );
-  }
-
-
-  Widget _profileUI() {
+  Widget _buildProfileContent({required User user}) {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           constraints: const BoxConstraints(maxWidth: 1132),
           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 30),
           decoration: BoxDecoration(
@@ -530,69 +403,44 @@ class _ProfileScreenState extends State<TeacherOrAdminProfileScreen> {
                 const SizedBox(height: 8),
                 const Text(
                   'Here are all your personal details that you can view and update anytime',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Color(0xFF64748B),
-                  ),
+                  style: TextStyle(fontSize: 14, color: Color(0xFF64748B)),
                 ),
                 const SizedBox(height: 32),
-                _buildProfilePicture(),
+                _buildProfilePicture(userImageUrl: user.profileImageUrl),
                 const SizedBox(height: 24),
-
                 _buildTextField(
                   'Full Name',
                   fullNameController,
                   fullNameFocus,
                   Icons.person,
-                  '',
+                  user.fullName,
+                  true,
                 ),
-
                 const SizedBox(height: 16),
                 _buildTextField(
                   'Email address',
                   emailController,
                   emailFocus,
                   Icons.email,
-                  '',
+                  user.email,
+                  true,
                 ),
-
                 const SizedBox(height: 16),
                 _buildTextField(
                   'National ID',
                   nationalIdController,
                   nationalIdFocus,
                   Icons.badge,
-                  '',
+                  user.nationalId.toString(),
+                  true,
                 ),
-
                 const SizedBox(height: 16),
                 _buildDateField(
                   'Date of Birth',
                   dobController,
                   dobFocus,
-                  '',
+                  user.dateOfBirth ?? "Select Date",
                 ),
-
-                const SizedBox(height: 16),
-                _buildDropdownField(
-                  'Nationality',
-                  selectedNationality,
-                  nationalities,
-                  isNationalityExpanded,
-                      (value) {
-                    setState(() {
-                      selectedNationality = value;
-                      isNationalityExpanded = false;
-                    });
-                  },
-                      () {
-                    setState(() {
-                      isNationalityExpanded = !isNationalityExpanded;
-                      isCityExpanded = false;
-                    });
-                  },
-                ),
-
                 const SizedBox(height: 16),
                 _buildDropdownField(
                   'City',
@@ -608,20 +456,55 @@ class _ProfileScreenState extends State<TeacherOrAdminProfileScreen> {
                       () {
                     setState(() {
                       isCityExpanded = !isCityExpanded;
-                      isNationalityExpanded = false;
                     });
                   },
                 ),
-
                 const SizedBox(height: 16),
-                _buildTextField(
-                  'Address',
-                  addressController,
-                  addressFocus,
-                  Icons.location_on,
-                  '',
-                ),
-
+                // Row(
+                //   children: [
+                //     Expanded(
+                //       child: _buildDropdownField(
+                //         "Start Date",
+                //         selectedStartYear,
+                //         yearsList,
+                //         isStartExpanded,
+                //             (value) {
+                //           setState(() {
+                //             selectedStartYear = value;
+                //             isStartExpanded = false;
+                //           });
+                //         },
+                //             () {
+                //           setState(() {
+                //             isStartExpanded = !isStartExpanded;
+                //             isEndExpanded = false;
+                //           });
+                //         },
+                //       ),
+                //     ),
+                //     const SizedBox(width: 20),
+                //     Expanded(
+                //       child: _buildDropdownField(
+                //         "End Date",
+                //         selectedEndYear,
+                //         yearsList,
+                //         isEndExpanded,
+                //             (value) {
+                //           setState(() {
+                //             selectedEndYear = value;
+                //             isEndExpanded = false;
+                //           });
+                //         },
+                //             () {
+                //           setState(() {
+                //             isEndExpanded = !isEndExpanded;
+                //             isStartExpanded = false;
+                //           });
+                //         },
+                //       ),
+                //     ),
+                //   ],
+                // ),
                 const SizedBox(height: 32),
                 _buildNextButton(),
               ],
@@ -632,8 +515,164 @@ class _ProfileScreenState extends State<TeacherOrAdminProfileScreen> {
     );
   }
 
-
-  Widget _buildProfilePicture() {
+  // Widget _buildProfileContent({required User user}) {
+  //   return Center(
+  //     child: Padding(
+  //       padding: const EdgeInsets.all(20),
+  //       child: Container(
+  //         margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+  //         constraints: const BoxConstraints(maxWidth: 1132),
+  //         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 30),
+  //         decoration: BoxDecoration(
+  //           color: Colors.white,
+  //           borderRadius: BorderRadius.circular(16),
+  //           boxShadow: [
+  //             BoxShadow(
+  //               color: Colors.black.withOpacity(0.08),
+  //               blurRadius: 20,
+  //               offset: const Offset(0, 4),
+  //               spreadRadius: 2,
+  //             ),
+  //           ],
+  //         ),
+  //         child: SingleChildScrollView(
+  //           padding: const EdgeInsets.symmetric(horizontal: 40),
+  //           child: Column(
+  //             crossAxisAlignment: CrossAxisAlignment.center,
+  //             children: [
+  //               const Text(
+  //                 'Your Profile',
+  //                 style: TextStyle(
+  //                   fontSize: 24,
+  //                   fontWeight: FontWeight.w700,
+  //                   color: Color(0xFF2563EB),
+  //                 ),
+  //               ),
+  //               const SizedBox(height: 8),
+  //               const Text(
+  //                 'Here are all your personal details that you can view and update anytime',
+  //                 style: TextStyle(fontSize: 14, color: Color(0xFF64748B)),
+  //               ),
+  //               const SizedBox(height: 32),
+  //               _buildProfilePicture(),
+  //               const SizedBox(height: 24),
+  //               _buildTextField(
+  //                 'Full Name',
+  //                 fullNameController,
+  //                 fullNameFocus,
+  //                 Icons.person,
+  //                 "Mohamed Mofeed",
+  //               ),
+  //               const SizedBox(height: 16),
+  //               _buildTextField(
+  //                 'Email address',
+  //                 emailController,
+  //                 emailFocus,
+  //                 Icons.email,
+  //                 "mohamed@gmail.com",
+  //               ),
+  //               const SizedBox(height: 16),
+  //               _buildTextField(
+  //                 'National ID',
+  //                 nationalIdController,
+  //                 nationalIdFocus,
+  //                 Icons.badge,
+  //                 "3040105050096",
+  //               ),
+  //               const SizedBox(height: 16),
+  //               _buildDateField(
+  //                 'Date of Birth',
+  //                 dobController,
+  //                 dobFocus,
+  //                 "1/9/1975",
+  //               ),
+  //               const SizedBox(height: 16),
+  //
+  //
+  //               _buildTextField(
+  //                 'Year Level',
+  //                 nationalIdController,
+  //                 nationalIdFocus,
+  //                 Icons.badge,
+  //                 "Level Four",
+  //               ),
+  //               const SizedBox(height: 16),
+  //               _buildDropdownField(
+  //                 'City',
+  //                 selectedCity,
+  //                 cities,
+  //                 isCityExpanded,
+  //                     (value) {
+  //                   setState(() {
+  //                     selectedCity = value;
+  //                     isCityExpanded = false;
+  //                   });
+  //                 },
+  //                     () {
+  //                   setState(() {
+  //                     isCityExpanded = !isCityExpanded;
+  //                     isNationalityExpanded = false;
+  //                   });
+  //                 },
+  //               ),
+  //               const SizedBox(height: 16),
+  //
+  //               // Row(
+  //               //   children: [
+  //               //     Expanded(
+  //               //       child: _buildDropdownField(
+  //               //         "Start Date",
+  //               //         selectedStartYear,
+  //               //         yearsList,
+  //               //         isStartExpanded,
+  //               //             (value) {
+  //               //           setState(() {
+  //               //             selectedStartYear = value;
+  //               //             isStartExpanded = false;
+  //               //           });
+  //               //         },
+  //               //             () {
+  //               //           setState(() {
+  //               //             isStartExpanded = !isStartExpanded;
+  //               //             isEndExpanded = false;
+  //               //           });
+  //               //         },
+  //               //       ),
+  //               //     ),
+  //               //     const SizedBox(width: 20),
+  //               //     Expanded(
+  //               //       child: _buildDropdownField(
+  //               //         "End Date",
+  //               //         selectedEndYear,
+  //               //         yearsList,
+  //               //         isEndExpanded,
+  //               //             (value) {
+  //               //           setState(() {
+  //               //             selectedEndYear = value;
+  //               //             isEndExpanded = false;
+  //               //           });
+  //               //         },
+  //               //             () {
+  //               //           setState(() {
+  //               //             isEndExpanded = !isEndExpanded;
+  //               //             isStartExpanded = false;
+  //               //           });
+  //               //         },
+  //               //       ),
+  //               //     ),
+  //               //   ],
+  //               // ),
+  //
+  //               const SizedBox(height: 32),
+  //               _buildNextButton(),
+  //             ],
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
+  Widget _buildProfilePicture({String? userImageUrl}) {
     return Center(
       child: MouseRegion(
         cursor: SystemMouseCursors.click,
@@ -658,9 +697,9 @@ class _ProfileScreenState extends State<TeacherOrAdminProfileScreen> {
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xFF2563EB).withOpacity(
-                          isProfilePictureHovered ? 0.3 : 0.1,
-                        ),
+                        color: const Color(
+                          0xFF2563EB,
+                        ).withOpacity(isProfilePictureHovered ? 0.3 : 0.1),
                         blurRadius: isProfilePictureHovered ? 20 : 10,
                         offset: const Offset(0, 4),
                       ),
@@ -668,17 +707,9 @@ class _ProfileScreenState extends State<TeacherOrAdminProfileScreen> {
                   ),
                   child: CircleAvatar(
                     radius: 50,
-                    backgroundImage: kIsWeb
-                        ? (_webImage != null
-                        ? MemoryImage(_webImage!)
-                        : const AssetImage('assets/images/chatbot man.png') as ImageProvider)
-                        : (_selectedImage != null
-                        ? FileImage(_selectedImage!)
-                        : const AssetImage('assets/images/chatbot man.png')),
-
+                    backgroundImage: _getProfileImage(userImageUrl),
                   ),
                 ),
-
                 if (isProfilePictureHovered)
                   Positioned.fill(
                     child: Container(
@@ -709,7 +740,6 @@ class _ProfileScreenState extends State<TeacherOrAdminProfileScreen> {
                       ),
                     ),
                   ),
-
                 Positioned(
                   bottom: 0,
                   right: 0,
@@ -747,6 +777,137 @@ class _ProfileScreenState extends State<TeacherOrAdminProfileScreen> {
     );
   }
 
+  ImageProvider _getProfileImage(String? userImageUrl) {
+    if (kIsWeb && _webImage != null) {
+      return MemoryImage(_webImage!);
+    }
+    if (!kIsWeb && _selectedImage != null) {
+      return FileImage(_selectedImage!);
+    }
+
+    if (userImageUrl != null && userImageUrl.isNotEmpty) {
+      return NetworkImage(userImageUrl);
+    }
+
+    return const AssetImage('assets/images/chatbot man.png');
+  }
+  // Widget _buildProfilePicture() {
+  //   return Center(
+  //     child: MouseRegion(
+  //       cursor: SystemMouseCursors.click,
+  //       onEnter: (_) => setState(() => isProfilePictureHovered = true),
+  //       onExit: (_) => setState(() => isProfilePictureHovered = false),
+  //       child: GestureDetector(
+  //         onTap: _pickImage,
+  //         child: AnimatedContainer(
+  //           duration: const Duration(milliseconds: 300),
+  //           transform: Matrix4.identity()
+  //             ..scale(isProfilePictureHovered ? 1.05 : 1.0),
+  //           child: Stack(
+  //             children: [
+  //               Container(
+  //                 decoration: BoxDecoration(
+  //                   shape: BoxShape.circle,
+  //                   border: Border.all(
+  //                     color: isProfilePictureHovered
+  //                         ? const Color(0xFF2563EB)
+  //                         : const Color(0xFF2563EB).withOpacity(0.3),
+  //                     width: isProfilePictureHovered ? 4 : 3,
+  //                   ),
+  //                   boxShadow: [
+  //                     BoxShadow(
+  //                       color: const Color(
+  //                         0xFF2563EB,
+  //                       ).withOpacity(isProfilePictureHovered ? 0.3 : 0.1),
+  //                       blurRadius: isProfilePictureHovered ? 20 : 10,
+  //                       offset: const Offset(0, 4),
+  //                     ),
+  //                   ],
+  //                 ),
+  //                 child: CircleAvatar(
+  //                   radius: 50,
+  //                   backgroundImage: kIsWeb
+  //                       ? (_webImage != null
+  //                             ? MemoryImage(_webImage!)
+  //                             : const AssetImage(
+  //                                     'assets/images/chatbot man.png',
+  //                                   )
+  //                                   as ImageProvider)
+  //                       : (_selectedImage != null
+  //                             ? FileImage(_selectedImage!)
+  //                             : const AssetImage(
+  //                                 'assets/images/chatbot man.png',
+  //                               )),
+  //                 ),
+  //               ),
+  //
+  //               if (isProfilePictureHovered)
+  //                 Positioned.fill(
+  //                   child: Container(
+  //                     decoration: BoxDecoration(
+  //                       shape: BoxShape.circle,
+  //                       color: Colors.black.withOpacity(0.4),
+  //                     ),
+  //                     child: const Center(
+  //                       child: Column(
+  //                         mainAxisSize: MainAxisSize.min,
+  //                         children: [
+  //                           Icon(
+  //                             Icons.cloud_upload_outlined,
+  //                             color: Colors.white,
+  //                             size: 28,
+  //                           ),
+  //                           SizedBox(height: 4),
+  //                           Text(
+  //                             'Change Photo',
+  //                             style: TextStyle(
+  //                               color: Colors.white,
+  //                               fontSize: 11,
+  //                               fontWeight: FontWeight.w600,
+  //                             ),
+  //                           ),
+  //                         ],
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 ),
+  //
+  //               Positioned(
+  //                 bottom: 0,
+  //                 right: 0,
+  //                 child: AnimatedContainer(
+  //                   duration: const Duration(milliseconds: 300),
+  //                   transform: Matrix4.identity()
+  //                     ..rotateZ(isProfilePictureHovered ? 0.2 : 0),
+  //                   child: Container(
+  //                     padding: const EdgeInsets.all(8),
+  //                     decoration: BoxDecoration(
+  //                       color: const Color(0xFF2563EB),
+  //                       shape: BoxShape.circle,
+  //                       border: Border.all(color: Colors.white, width: 3),
+  //                       boxShadow: [
+  //                         BoxShadow(
+  //                           color: const Color(0xFF2563EB).withOpacity(0.5),
+  //                           blurRadius: isProfilePictureHovered ? 12 : 8,
+  //                           offset: const Offset(0, 2),
+  //                         ),
+  //                       ],
+  //                     ),
+  //                     child: Icon(
+  //                       isProfilePictureHovered ? Icons.edit : Icons.camera_alt,
+  //                       color: Colors.white,
+  //                       size: 18,
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Future<void> _pickImage() async {
     _pickImageFromSource(ImageSource.gallery);
@@ -792,7 +953,7 @@ class _ProfileScreenState extends State<TeacherOrAdminProfileScreen> {
     //         const SizedBox(height: 12),
     //         _buildImageSourceOption(
     //           icon: Icons.camera_alt,
-    //           title: 'Take a Photo',
+    //           title: 'Take admin_profile Photo',
     //           subtitle: 'Use your camera',
     //           onTap: () {
     //             Navigator.pop(context);
@@ -838,10 +999,7 @@ class _ProfileScreenState extends State<TeacherOrAdminProfileScreen> {
           decoration: BoxDecoration(
             color: color.withOpacity(0.05),
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: color.withOpacity(0.2),
-              width: 1,
-            ),
+            border: Border.all(color: color.withOpacity(0.2), width: 1),
           ),
           child: Row(
             children: [
@@ -851,11 +1009,7 @@ class _ProfileScreenState extends State<TeacherOrAdminProfileScreen> {
                   color: color.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Icon(
-                  icon,
-                  color: color,
-                  size: 24,
-                ),
+                child: Icon(icon, color: color, size: 24),
               ),
               const SizedBox(width: 16),
               Expanded(
@@ -916,7 +1070,6 @@ class _ProfileScreenState extends State<TeacherOrAdminProfileScreen> {
     }
   }
 
-
   void _showSuccessSnackbar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -929,9 +1082,7 @@ class _ProfileScreenState extends State<TeacherOrAdminProfileScreen> {
         ),
         backgroundColor: const Color(0xFF10B981),
         behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         duration: const Duration(seconds: 2),
       ),
     );
@@ -949,15 +1100,20 @@ class _ProfileScreenState extends State<TeacherOrAdminProfileScreen> {
         ),
         backgroundColor: const Color(0xFFEF4444),
         behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         duration: const Duration(seconds: 2),
       ),
     );
   }
 
-  Widget _buildTextField(String label, TextEditingController controller, FocusNode focusNode, IconData icon, String hint) {
+  Widget _buildTextField(
+      String label,
+      TextEditingController controller,
+      FocusNode focusNode,
+      IconData icon,
+      String hint,
+      bool isReadOnly,
+      ) {
     return StatefulBuilder(
       builder: (context, setFieldState) {
         bool isHovered = false;
@@ -965,7 +1121,7 @@ class _ProfileScreenState extends State<TeacherOrAdminProfileScreen> {
         return AnimatedBuilder(
           animation: focusNode,
           builder: (context, child) {
-            final isFocused = focusNode.hasFocus;
+            final isFocused = isReadOnly ? false : focusNode.hasFocus;
             final bool isActive = isFocused || isHovered;
 
             return Column(
@@ -986,8 +1142,10 @@ class _ProfileScreenState extends State<TeacherOrAdminProfileScreen> {
                 ),
                 const SizedBox(height: 8),
                 MouseRegion(
-                  cursor: SystemMouseCursors.text,
-                  onEnter: (_) => setFieldState(() => isHovered = true),
+                  cursor: isReadOnly
+                      ? SystemMouseCursors.forbidden
+                      : SystemMouseCursors.text,
+                  onEnter: (_) => setFieldState(() => isHovered = !isReadOnly),
                   onExit: (_) => setFieldState(() => isHovered = false),
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 200),
@@ -1006,7 +1164,11 @@ class _ProfileScreenState extends State<TeacherOrAdminProfileScreen> {
                             : isHovered
                             ? const Color(0xFF93C5FD)
                             : const Color(0xFFE2E8F0),
-                        width: isFocused ? 2 : isHovered ? 1.5 : 1,
+                        width: isFocused
+                            ? 2
+                            : isHovered
+                            ? 1.5
+                            : 1,
                       ),
                       boxShadow: isFocused
                           ? [
@@ -1020,7 +1182,9 @@ class _ProfileScreenState extends State<TeacherOrAdminProfileScreen> {
                           : isHovered
                           ? [
                         BoxShadow(
-                          color: const Color(0xFF2563EB).withOpacity(0.08),
+                          color: const Color(
+                            0xFF2563EB,
+                          ).withOpacity(0.08),
                           blurRadius: 8,
                           offset: const Offset(0, 2),
                         ),
@@ -1028,13 +1192,16 @@ class _ProfileScreenState extends State<TeacherOrAdminProfileScreen> {
                           : [],
                     ),
                     child: TextField(
-
+                      readOnly: isReadOnly,
                       controller: controller,
-                      focusNode: focusNode,
+                      focusNode: isReadOnly ? FocusNode() : focusNode,
+                      enableInteractiveSelection: !isReadOnly,
                       style: TextStyle(
                         fontSize: 14,
                         color: const Color(0xFF1E293B),
-                        fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
+                        fontWeight: isActive
+                            ? FontWeight.w600
+                            : FontWeight.w500,
                       ),
                       decoration: InputDecoration(
                         hintText: hint,
@@ -1058,7 +1225,9 @@ class _ProfileScreenState extends State<TeacherOrAdminProfileScreen> {
                           opacity: isActive ? 1.0 : 0.0,
                           child: Icon(
                             isFocused ? Icons.edit : Icons.touch_app,
-                            color: const Color(0xFF2563EB).withOpacity(0.4),
+                            color: const Color(
+                              0xFF2563EB,
+                            ).withOpacity(0.4),
                             size: 18,
                           ),
                         )
@@ -1083,7 +1252,154 @@ class _ProfileScreenState extends State<TeacherOrAdminProfileScreen> {
     );
   }
 
-  Widget _buildDateField(String label, TextEditingController controller, FocusNode focusNode,String hint) {
+  // Widget _buildTextField(String label,
+  //     TextEditingController controller,
+  //     FocusNode focusNode,
+  //     IconData icon,
+  //     String hint,
+  //     bool isReadOnly) {
+  //   return StatefulBuilder(
+  //     builder: (context, setFieldState) {
+  //       bool isHovered = false;
+  //
+  //       return AnimatedBuilder(
+  //         animation: focusNode,
+  //         builder: (context, child) {
+  //           final isFocused = focusNode.hasFocus;
+  //           final bool isActive = isFocused || isHovered;
+  //
+  //           return Column(
+  //             crossAxisAlignment: CrossAxisAlignment.start,
+  //             children: [
+  //               AnimatedDefaultTextStyle(
+  //                 duration: const Duration(milliseconds: 200),
+  //                 style: TextStyle(
+  //                   fontSize: isActive ? 15 : 14,
+  //                   fontWeight: FontWeight.w600,
+  //                   color: isFocused
+  //                       ? const Color(0xFF2563EB)
+  //                       : isHovered
+  //                       ? const Color(0xFF3B82F6)
+  //                       : const Color(0xFF2563EB),
+  //                 ),
+  //                 child: Text(label),
+  //               ),
+  //               const SizedBox(height: 8),
+  //               MouseRegion(
+  //                 cursor: SystemMouseCursors.text,
+  //                 onEnter: (_) => setFieldState(() => isHovered = true),
+  //                 onExit: (_) => setFieldState(() => isHovered = false),
+  //                 child: AnimatedContainer(
+  //                   duration: const Duration(milliseconds: 200),
+  //                   transform: Matrix4.identity()
+  //                     ..translate(0.0, isActive ? -2.0 : 0.0),
+  //                   decoration: BoxDecoration(
+  //                     color: isFocused
+  //                         ? Colors.white
+  //                         : isHovered
+  //                         ? const Color(0xFFFEFEFE)
+  //                         : const Color(0xFFF8FAFC),
+  //                     borderRadius: BorderRadius.circular(8),
+  //                     border: Border.all(
+  //                       color: isFocused
+  //                           ? const Color(0xFF2563EB)
+  //                           : isHovered
+  //                           ? const Color(0xFF93C5FD)
+  //                           : const Color(0xFFE2E8F0),
+  //                       width: isFocused
+  //                           ? 2
+  //                           : isHovered
+  //                           ? 1.5
+  //                           : 1,
+  //                     ),
+  //                     boxShadow: isFocused
+  //                         ? [
+  //                       BoxShadow(
+  //                         color: const Color(0xFF2563EB).withOpacity(0.2),
+  //                         blurRadius: 12,
+  //                         offset: const Offset(0, 4),
+  //                         spreadRadius: 1,
+  //                       ),
+  //                     ]
+  //                         : isHovered
+  //                         ? [
+  //                       BoxShadow(
+  //                         color: const Color(
+  //                           0xFF2563EB,
+  //                         ).withOpacity(0.08),
+  //                         blurRadius: 8,
+  //                         offset: const Offset(0, 2),
+  //                       ),
+  //                     ]
+  //                         : [],
+  //                   ),
+  //
+  //                   child: TextField(
+  //                     readOnly: isReadOnly,
+  //                     controller: controller,
+  //                     focusNode: focusNode,
+  //                     style: TextStyle(
+  //                       fontSize: 14,
+  //                       color: const Color(0xFF1E293B),
+  //                       fontWeight: isActive
+  //                           ? FontWeight.w600
+  //                           : FontWeight.w500,
+  //                     ),
+  //                     decoration: InputDecoration(
+  //                       hintText: hint,
+  //                       prefixIcon: AnimatedContainer(
+  //                         duration: const Duration(milliseconds: 200),
+  //                         transform: Matrix4.identity()
+  //                           ..scale(isActive ? 1.1 : 1.0),
+  //                         child: Icon(
+  //                           icon,
+  //                           color: isFocused
+  //                               ? const Color(0xFF2563EB)
+  //                               : isHovered
+  //                               ? const Color(0xFF3B82F6)
+  //                               : const Color(0xFF94A3B8),
+  //                           size: 20,
+  //                         ),
+  //                       ),
+  //                       suffixIcon: isActive
+  //                           ? AnimatedOpacity(
+  //                         duration: const Duration(milliseconds: 200),
+  //                         opacity: isActive ? 1.0 : 0.0,
+  //                         child: Icon(
+  //                           isFocused ? Icons.edit : Icons.touch_app,
+  //                           color: const Color(
+  //                             0xFF2563EB,
+  //                           ).withOpacity(0.4),
+  //                           size: 18,
+  //                         ),
+  //                       )
+  //                           : null,
+  //                       border: OutlineInputBorder(
+  //                         borderRadius: BorderRadius.circular(8),
+  //                         borderSide: BorderSide.none,
+  //                       ),
+  //                       contentPadding: const EdgeInsets.symmetric(
+  //                         horizontal: 16,
+  //                         vertical: 12,
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ),
+  //             ],
+  //           );
+  //         },
+  //       );
+  //     },
+  //   );
+  // }
+
+  Widget _buildDateField(
+      String label,
+      TextEditingController controller,
+      FocusNode focusNode,
+      String hint,
+      ) {
     return AnimatedBuilder(
       animation: focusNode,
       builder: (context, child) {
@@ -1168,7 +1484,8 @@ class _ProfileScreenState extends State<TeacherOrAdminProfileScreen> {
                     },
                   );
                   if (picked != null) {
-                    controller.text = '${picked.day}/${picked.month}/${picked.year}';
+                    controller.text =
+                    '${picked.day}/${picked.month}/${picked.year}';
                   }
                 },
               ),
@@ -1270,10 +1587,7 @@ class _ProfileScreenState extends State<TeacherOrAdminProfileScreen> {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(
-                color: const Color(0xFFE2E8F0),
-                width: 1,
-              ),
+              border: Border.all(color: const Color(0xFFE2E8F0), width: 1),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.1),
@@ -1342,7 +1656,6 @@ class _ProfileScreenState extends State<TeacherOrAdminProfileScreen> {
       onExit: (_) => setState(() => isNextButtonHovered = false),
       child: GestureDetector(
         onTap: () {
-          // Show success message
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: const Row(
@@ -1393,7 +1706,7 @@ class _ProfileScreenState extends State<TeacherOrAdminProfileScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 const Text(
-                  'Next',
+                  'Save Changes',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 16,
@@ -1409,7 +1722,7 @@ class _ProfileScreenState extends State<TeacherOrAdminProfileScreen> {
                     0,
                   ),
                   child: const Icon(
-                    Icons.arrow_forward,
+                    Icons.save,
                     color: Colors.white,
                     size: 18,
                   ),
@@ -1422,3 +1735,116 @@ class _ProfileScreenState extends State<TeacherOrAdminProfileScreen> {
     );
   }
 }
+
+class DateRangeSelector extends StatelessWidget {
+  final List<String> years = [for (int y = 1980; y <= 2030; y++) y.toString()];
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          "Start / End Date",
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: Colors.blue,
+          ),
+        ),
+        const SizedBox(height: 12),
+
+        Row(
+          children: [
+            Expanded(child: _buildDropdown("2020")),
+            const SizedBox(width: 16),
+            Expanded(child: _buildDropdown("2025")),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDropdown(String initialValue) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      decoration: BoxDecoration(
+        color: const Color(0xF3F7FBFF),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: DropdownButtonFormField<String>(
+        value: initialValue,
+        icon: const Icon(Icons.keyboard_arrow_down_rounded, size: 20),
+        decoration: const InputDecoration(border: InputBorder.none),
+        items: years
+            .map(
+              (y) => DropdownMenuItem(
+            value: y,
+            child: Text(y, style: const TextStyle(fontSize: 15)),
+          ),
+        )
+            .toList(),
+        onChanged: (value) {},
+      ),
+    );
+  }
+}
+
+// class StudentProfileScreen extends StatelessWidget {
+//   const StudentProfileScreen({super.key});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return BlocProvider(
+//       create: (_) =>
+//       StudentProfileCubit()
+//         ..getProfile(),
+//       child: Scaffold(
+//         appBar: AppBar(title: const Text("Profile")),
+//         body:
+//         BlocBuilder<StudentProfileCubit, StudentProfileState>(
+//           builder: (context, state) {
+//             if (state is StudentProfileLoading) {
+//               return const Center(child: CircularProgressIndicator());
+//             } else if (state is StudentProfileError) {
+//               return Center(child: Text(state.message));
+//             } else if (state is StudentProfileLoaded) {
+//               final user = state.profile.user;
+//
+//               return Padding(
+//                 padding: const EdgeInsets.all(16),
+//                 child: Column(
+//                   crossAxisAlignment: CrossAxisAlignment.start,
+//                   children: [
+//                     Text("Full Name: ${user.fullName}",
+//                         style: const TextStyle(fontSize: 18)),
+//                     const SizedBox(height: 8),
+//                     Text("Email: ${user.email}",
+//                         style: const TextStyle(fontSize: 16)),
+//                     const SizedBox(height: 8),
+//                     Text("Role: ${user.role}",
+//                         style: const TextStyle(fontSize: 16)),
+//                     const SizedBox(height: 8),
+//                     Text("National ID: ${user.nationalId}",
+//                         style: const TextStyle(fontSize: 16)),
+//                     const SizedBox(height: 16),
+//
+//                     if (user.role == "Student") ...[
+//                       Text(
+//                         "Year: ${user.academicInfo.year.name}",
+//                         style: const TextStyle(
+//                             fontSize: 16, fontWeight: FontWeight.bold),
+//                       ),
+//                     ],
+//                   ],
+//                 ),
+//               );
+//             } else {
+//               return const SizedBox.shrink();
+//             }
+//           },
+//         ),
+//       ),
+//     );
+//   }
+// }

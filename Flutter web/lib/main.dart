@@ -10,7 +10,6 @@ import 'package:lms/features/screens/hero_section/view.dart';
 import 'package:lms/features/screens/login/view.dart';
 import 'package:lms/features/screens/pre_loading/loading_screen.dart';
 import 'package:lms/core/services/app_initialization_service.dart';
-import 'package:lms/features/screens/student_profile/view.dart';
 
 import 'features/draft/test_screen.dart';
 import 'features/screens/Courses_dashboard/view.dart';
@@ -22,7 +21,6 @@ import 'features/screens/chat_bot/view.dart';
 import 'features/screens/courses/student/view.dart';
 import 'features/screens/get_users/state_managment/get_users_cubit.dart';
 import 'features/screens/get_users/view.dart';
-import 'features/screens/teacher_profile/view.dart';
 
 
 

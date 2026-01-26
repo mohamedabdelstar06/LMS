@@ -4,23 +4,25 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:lms/features/screens/courses/student/view.dart';
-import 'package:lms/features/screens/student_profile/state_mangement/cubit.dart';
-import 'package:lms/features/screens/student_profile/state_mangement/states.dart';
-import 'package:lms/features/screens/teacher_profile/State_managment/t_profile_cubit.dart';
+import 'package:lms/features/screens/profiles/admin_profile/state_managment/cubit_d_profile.dart';
+import 'package:lms/features/screens/profiles/admin_profile/state_managment/state_d_profile.dart';
+import 'package:lms/features/screens/profiles/student_profile/state_mangement/cubit.dart';
+import 'package:lms/features/screens/profiles/student_profile/state_mangement/states.dart';
 
-import '../../../core/cons/Colors/app_colors.dart';
-import '../../../core/helpers/logout_server/logout.dart';
-import '../Announcement/view.dart';
-import 'ProfileModel/view.dart';
+import '../../../../core/cons/Colors/app_colors.dart';
+import '../../../../core/helpers/logout_server/logout.dart';
+import '../../Announcement/view.dart';
+import '../../Create_user/View.dart';
+import 'model/view.dart';
 
-class StudentProfileScreen extends StatefulWidget {
-  const StudentProfileScreen({Key? key}) : super(key: key);
+class AdminProfileScreen extends StatefulWidget {
+  const AdminProfileScreen({Key? key}) : super(key: key);
 
   @override
-  State<StudentProfileScreen> createState() => _ProfileScreenState();
+  State<AdminProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<StudentProfileScreen> {
+class _ProfileScreenState extends State<AdminProfileScreen> {
   Uint8List? _webImage;
   String selectedMenuItem = 'Profile';
   bool isNextButtonHovered = false;
@@ -43,38 +45,15 @@ class _ProfileScreenState extends State<StudentProfileScreen> {
   final FocusNode nationalIdFocus = FocusNode();
   final FocusNode dobFocus = FocusNode();
   final FocusNode addressFocus = FocusNode();
-  final FocusNode yearLevelFocus = FocusNode();
-
   final TextEditingController fullNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController nationalIdController = TextEditingController();
   final TextEditingController dobController = TextEditingController();
-  final TextEditingController addressController = TextEditingController();
-  final TextEditingController yearLevelController = TextEditingController();
 
-  String selectedNationality = 'Egyptian';
-  String selectedCity = 'Cairo';
-  bool isNationalityExpanded = false;
+
+  String selectedCity = 'Select City';
   bool isCityExpanded = false;
 
-  final List<String> nationalities = [
-    'Egyptian',
-    'American',
-    'British',
-    'Canadian',
-    'French',
-    'German',
-    'Italian',
-    'Spanish',
-    'Indian',
-    'Chinese',
-    'Japanese',
-    'Australian',
-    'Brazilian',
-    'Mexican',
-    'Russian',
-    'South African',
-  ];
 
   final List<String> cities = [
     'Cairo',
@@ -109,23 +88,22 @@ class _ProfileScreenState extends State<StudentProfileScreen> {
 
   @override
   void dispose() {
+
     fullNameController.dispose();
     emailController.dispose();
     nationalIdController.dispose();
     dobController.dispose();
-    addressController.dispose();
     fullNameFocus.dispose();
     emailFocus.dispose();
     nationalIdFocus.dispose();
     dobFocus.dispose();
-    addressFocus.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => StudentProfileCubit()..getProfile(),
+      create: (context) => AdminProfileCubit()..getProfile(),
       child: GestureDetector(
         onTap: () {
           FocusScope.of(context).unfocus();
@@ -148,17 +126,16 @@ class _ProfileScreenState extends State<StudentProfileScreen> {
               children: [
                 _buildSidebar(),
                 Expanded(
-                  child: BlocBuilder<StudentProfileCubit, StudentProfileState>(
+                  child: BlocBuilder<AdminProfileCubit, AdminProfileState>(
                     builder: (context, state) {
-                      if (state is StudentProfileLoading) {
+                      if (state is AdminProfileLoading) {
                         return const Center(child: CircularProgressIndicator());
-                      } else if (state is StudentProfileError) {
+                      } else if (state is AdminProfileError) {
                         return Center(child: Text(state.message));
-                      } else if (state is StudentProfileLoaded) {
+                      } else if (state is AdminProfileLoaded) {
                         final user = state.profile.user;
                         return _buildProfileContent(user: user);
                       }
-                      // Default state (initial)
                       return const Center(child: Text('Loading...'));
                     },
                   ),
@@ -200,14 +177,14 @@ class _ProfileScreenState extends State<StudentProfileScreen> {
             Icons.person,
             'Profile',
             'Profile',
-            () {},
+                () {},
           ),
           _buildMenuItem(
             Icons.book_outlined,
             Icons.book,
             'My Courses',
             'My Courses',
-            () {
+                () {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
@@ -229,13 +206,29 @@ class _ProfileScreenState extends State<StudentProfileScreen> {
                 ),
               );
 
-                },
-          ),          _buildMenuItem(
+            },
+          ),
+          _buildMenuItem(
+            Icons.person_add_alt_1_outlined,
+            Icons.person_add_alt_1,
+            'Create Users',
+            'Create users',
+                () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const CreateUserScreen(),
+                ),
+              );
+
+            },
+          ),
+          _buildMenuItem(
             Icons.grade_outlined,
             Icons.grade,
             'Grades overview',
             'Grades overview',
-            () {},
+                () {},
           ),
           const Spacer(),
           _buildLogoutButton(),
@@ -246,12 +239,12 @@ class _ProfileScreenState extends State<StudentProfileScreen> {
   }
 
   Widget _buildMenuItem(
-    IconData outlinedIcon,
-    IconData filledIcon,
-    String title,
-    String value,
-    onTap,
-  ) {
+      IconData outlinedIcon,
+      IconData filledIcon,
+      String title,
+      String value,
+      onTap,
+      ) {
     final isSelected = selectedMenuItem == value;
     final isHovered = hoveredMenuItem == value;
 
@@ -450,7 +443,7 @@ class _ProfileScreenState extends State<StudentProfileScreen> {
                   nationalIdController,
                   nationalIdFocus,
                   Icons.badge,
-                  user.nationalId,
+                  user.nationalId.toString(),
                   true,
                 ),
                 const SizedBox(height: 16),
@@ -461,30 +454,20 @@ class _ProfileScreenState extends State<StudentProfileScreen> {
                   user.dateOfBirth ?? "Select Date",
                 ),
                 const SizedBox(height: 16),
-                _buildTextField(
-                  'Year Level',
-                  yearLevelController,
-                  yearLevelFocus,
-                  Icons.school,
-                  user.academicInfo.year.name.toString(),
-                  true,
-                ),
-                const SizedBox(height: 16),
                 _buildDropdownField(
                   'City',
                   selectedCity,
                   cities,
                   isCityExpanded,
-                  (value) {
+                      (value) {
                     setState(() {
                       selectedCity = value;
                       isCityExpanded = false;
                     });
                   },
-                  () {
+                      () {
                     setState(() {
                       isCityExpanded = !isCityExpanded;
-                      isNationalityExpanded = false;
                     });
                   },
                 ),
@@ -982,7 +965,7 @@ class _ProfileScreenState extends State<StudentProfileScreen> {
     //         const SizedBox(height: 12),
     //         _buildImageSourceOption(
     //           icon: Icons.camera_alt,
-    //           title: 'Take a Photo',
+    //           title: 'Take admin_profile Photo',
     //           subtitle: 'Use your camera',
     //           onTap: () {
     //             Navigator.pop(context);
@@ -1136,13 +1119,13 @@ class _ProfileScreenState extends State<StudentProfileScreen> {
   }
 
   Widget _buildTextField(
-    String label,
-    TextEditingController controller,
-    FocusNode focusNode,
-    IconData icon,
-    String hint,
-    bool isReadOnly,
-  ) {
+      String label,
+      TextEditingController controller,
+      FocusNode focusNode,
+      IconData icon,
+      String hint,
+      bool isReadOnly,
+      ) {
     return StatefulBuilder(
       builder: (context, setFieldState) {
         bool isHovered = false;
@@ -1201,23 +1184,23 @@ class _ProfileScreenState extends State<StudentProfileScreen> {
                       ),
                       boxShadow: isFocused
                           ? [
-                              BoxShadow(
-                                color: const Color(0xFF2563EB).withOpacity(0.2),
-                                blurRadius: 12,
-                                offset: const Offset(0, 4),
-                                spreadRadius: 1,
-                              ),
-                            ]
+                        BoxShadow(
+                          color: const Color(0xFF2563EB).withOpacity(0.2),
+                          blurRadius: 12,
+                          offset: const Offset(0, 4),
+                          spreadRadius: 1,
+                        ),
+                      ]
                           : isHovered
                           ? [
-                              BoxShadow(
-                                color: const Color(
-                                  0xFF2563EB,
-                                ).withOpacity(0.08),
-                                blurRadius: 8,
-                                offset: const Offset(0, 2),
-                              ),
-                            ]
+                        BoxShadow(
+                          color: const Color(
+                            0xFF2563EB,
+                          ).withOpacity(0.08),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ]
                           : [],
                     ),
                     child: TextField(
@@ -1250,16 +1233,16 @@ class _ProfileScreenState extends State<StudentProfileScreen> {
                         ),
                         suffixIcon: isActive
                             ? AnimatedOpacity(
-                                duration: const Duration(milliseconds: 200),
-                                opacity: isActive ? 1.0 : 0.0,
-                                child: Icon(
-                                  isFocused ? Icons.edit : Icons.touch_app,
-                                  color: const Color(
-                                    0xFF2563EB,
-                                  ).withOpacity(0.4),
-                                  size: 18,
-                                ),
-                              )
+                          duration: const Duration(milliseconds: 200),
+                          opacity: isActive ? 1.0 : 0.0,
+                          child: Icon(
+                            isFocused ? Icons.edit : Icons.touch_app,
+                            color: const Color(
+                              0xFF2563EB,
+                            ).withOpacity(0.4),
+                            size: 18,
+                          ),
+                        )
                             : null,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
@@ -1424,11 +1407,11 @@ class _ProfileScreenState extends State<StudentProfileScreen> {
   // }
 
   Widget _buildDateField(
-    String label,
-    TextEditingController controller,
-    FocusNode focusNode,
-    String hint,
-  ) {
+      String label,
+      TextEditingController controller,
+      FocusNode focusNode,
+      String hint,
+      ) {
     return AnimatedBuilder(
       animation: focusNode,
       builder: (context, child) {
@@ -1458,12 +1441,12 @@ class _ProfileScreenState extends State<StudentProfileScreen> {
                 ),
                 boxShadow: isFocused
                     ? [
-                        BoxShadow(
-                          color: const Color(0xFF2563EB).withOpacity(0.1),
-                          blurRadius: 8,
-                          offset: const Offset(0, 2),
-                        ),
-                      ]
+                  BoxShadow(
+                    color: const Color(0xFF2563EB).withOpacity(0.1),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ]
                     : [],
               ),
               child: TextField(
@@ -1514,7 +1497,7 @@ class _ProfileScreenState extends State<StudentProfileScreen> {
                   );
                   if (picked != null) {
                     controller.text =
-                        '${picked.day}/${picked.month}/${picked.year}';
+                    '${picked.day}/${picked.month}/${picked.year}';
                   }
                 },
               ),
@@ -1526,13 +1509,13 @@ class _ProfileScreenState extends State<StudentProfileScreen> {
   }
 
   Widget _buildDropdownField(
-    String label,
-    String value,
-    List<String> options,
-    bool isExpanded,
-    Function(String) onSelected,
-    Function() onToggle,
-  ) {
+      String label,
+      String value,
+      List<String> options,
+      bool isExpanded,
+      Function(String) onSelected,
+      Function() onToggle,
+      ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -1563,12 +1546,12 @@ class _ProfileScreenState extends State<StudentProfileScreen> {
                 ),
                 boxShadow: isExpanded
                     ? [
-                        BoxShadow(
-                          color: const Color(0xFF2563EB).withOpacity(0.1),
-                          blurRadius: 8,
-                          offset: const Offset(0, 2),
-                        ),
-                      ]
+                  BoxShadow(
+                    color: const Color(0xFF2563EB).withOpacity(0.1),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ]
                     : [],
               ),
               child: Row(
@@ -1715,20 +1698,20 @@ class _ProfileScreenState extends State<StudentProfileScreen> {
             borderRadius: BorderRadius.circular(8),
             boxShadow: isNextButtonHovered
                 ? [
-                    BoxShadow(
-                      color: const Color(0xFF2563EB).withOpacity(0.4),
-                      blurRadius: 16,
-                      offset: const Offset(0, 6),
-                      spreadRadius: 2,
-                    ),
-                  ]
+              BoxShadow(
+                color: const Color(0xFF2563EB).withOpacity(0.4),
+                blurRadius: 16,
+                offset: const Offset(0, 6),
+                spreadRadius: 2,
+              ),
+            ]
                 : [
-                    BoxShadow(
-                      color: const Color(0xFF2563EB).withOpacity(0.2),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
+              BoxShadow(
+                color: const Color(0xFF2563EB).withOpacity(0.2),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ],
           ),
           child: Center(
             child: Row(
@@ -1808,10 +1791,10 @@ class DateRangeSelector extends StatelessWidget {
         items: years
             .map(
               (y) => DropdownMenuItem(
-                value: y,
-                child: Text(y, style: const TextStyle(fontSize: 15)),
-              ),
-            )
+            value: y,
+            child: Text(y, style: const TextStyle(fontSize: 15)),
+          ),
+        )
             .toList(),
         onChanged: (value) {},
       ),
