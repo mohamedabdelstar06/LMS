@@ -48,7 +48,6 @@ class GetDepartmentModel {
       );
     } catch (e) {
       print('Error parsing department: $e');
-      // بدل ما نرجع null، هنرجع instance بقيم افتراضية
       return GetDepartmentModel(
         id: 0,
         name: 'Unknown Department',
@@ -108,7 +107,6 @@ class YearModel {
       );
     } catch (e) {
       print('Error parsing year: $e');
-      // بدل ما نرجع null، هنرجع instance بقيم افتراضية
       return YearModel(
         id: 0,
         name: 'Unknown Year',
