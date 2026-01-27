@@ -480,7 +480,6 @@ class _ProfileScreenState extends State<CreateUserScreen> {
                 const SizedBox(height: 16),
                 BlocListener<CreateUserCubit, CreateState>(
                   listener: (context, state) {
-                    // Success State - مع الـ status code
                     if (state is CreateUserSuccessState) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(

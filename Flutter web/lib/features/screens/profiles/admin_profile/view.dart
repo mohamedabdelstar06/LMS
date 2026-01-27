@@ -3,7 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
+import 'package:lms/features/screens/Create_department/view.dart';
+import 'package:lms/features/screens/courses/admin/view.dart';
 import 'package:lms/features/screens/courses/student/view.dart';
+import 'package:lms/features/screens/create_years/view.dart';
 import 'package:lms/features/screens/profiles/admin_profile/state_managment/cubit_d_profile.dart';
 import 'package:lms/features/screens/profiles/admin_profile/state_managment/state_d_profile.dart';
 import 'package:lms/features/screens/profiles/student_profile/state_mangement/cubit.dart';
@@ -188,7 +191,7 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const StudentCourseScreen(),
+                  builder: (context) => const AdminCourseScreen(),
                 ),
               );
             },
@@ -220,6 +223,36 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
                   builder: (context) => const CreateUserScreen(),
                 ),
               );
+
+            },
+          ),
+          _buildMenuItem(
+            Icons.folder_copy_outlined,
+            Icons.folder_copy_rounded,
+            'Create Departments',
+            'Create Departments',
+                () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>  CreateDepartmentPage(),
+                ),
+              );
+
+            },
+          ),
+          _buildMenuItem(
+            Icons.calendar_month,
+            Icons.calendar_month_outlined,
+            'Create Years',
+            'Create Years',
+                () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>  CreateYearPage(),
+                    ),
+                  );
 
             },
           ),

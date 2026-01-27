@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker_web/image_picker_web.dart';
+import 'package:lms/features/screens/create_years/state_management/years_cubit.dart';
+import 'package:lms/features/screens/create_years/state_management/years_states.dart';
 
 import '../../../core/cons/Colors/app_colors.dart';
 import '../../../core/cons/api_helper_resources/api_resources.dart';
@@ -10,53 +12,66 @@ import '../../../core/helpers/logout_server/logout.dart';
 import '../Announcement/view.dart';
 import '../Create_user/View.dart';
 import '../courses/admin/view.dart';
-import '../create_years/view.dart';
-import '../get_users/get_user_dropdown/model_dropdown/view.dart';
-import '../get_users/get_user_dropdown/state_managment/cubit.dart';
-import '../get_users/get_user_dropdown/state_managment/states.dart';
-import '../profiles/admin_profile/view.dart';
-import 'State_Mangment/create_dep_cubit.dart';
-import 'State_Mangment/create_dep_state.dart';
+import '../get_department/model/model.dart';
+import '../get_department/state_mangment/cubit.dart';
+import '../get_department/state_mangment/states.dart';
 
-class CreateDepartmentPage extends StatelessWidget {
-  const CreateDepartmentPage({super.key});
+import '../profiles/admin_profile/view.dart';
+
+
+class CreateYearPage extends StatelessWidget {
+  const CreateYearPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => DepartmentCubit(),
-      child: const CreateDepartmentScreen(),
+      create: (_) => YearCubit(),
+      child: const CreateYearScreen(),
     );
   }
 }
 
-class CreateDepartmentScreen extends StatefulWidget {
-  const CreateDepartmentScreen({super.key});
+class CreateYearScreen extends StatefulWidget {
+  const CreateYearScreen({super.key});
 
   @override
-  State<CreateDepartmentScreen> createState() => _CreateDepartmentScreenState();
+  State<CreateYearScreen> createState() => _CreateDepartmentScreenState();
 }
 
-class _CreateDepartmentScreenState extends State<CreateDepartmentScreen> {
+class _CreateDepartmentScreenState extends State<CreateYearScreen> {
   final nameController = TextEditingController();
   final descriptionController = TextEditingController();
-  final headNameController = TextEditingController();
+  final departmentNameController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  bool isHeadExpanded = false;
-
+  bool isDepartmentExpanded = false;
 
   Uint8List? selectedImageBytes;
-  String selectedMenuItem = 'Create Departments';
+  String selectedMenuItem = 'Create Years';
   String? hoveredMenuItem;
   bool isLogoutHovered = false;
-  String selectedHeadName = "Select Head";
+  String selectedDepartmentName = "Select Department";
+  late DateTime selectedStartDate;
+  late DateTime selectedEndDate;
+  final dobStartController = TextEditingController();
+  final dobEndController = TextEditingController();
+  final dobStartFocus = FocusNode();
+  final dobEndFocus = FocusNode();
 
-  Future<void> pickImage() async {
-    final bytes = await ImagePickerWeb.getImageAsBytes();
-    if (bytes != null) {
-      setState(() => selectedImageBytes = bytes);
-    }
+  @override
+  void dispose() {
+    nameController.dispose();
+    descriptionController.dispose();
+    departmentNameController.dispose();
+    dobStartController.dispose();
+    dobEndController.dispose();
+    dobStartFocus.dispose();
+    dobEndFocus.dispose();
+
+    super.dispose();
   }
+
+
+
 
 
   InputDecoration _inputStyle(String label) {
@@ -99,15 +114,15 @@ class _CreateDepartmentScreenState extends State<CreateDepartmentScreen> {
         child: Row(
           children: [
             _buildSidebar(),
-            BlocConsumer<DepartmentCubit, DepartmentState>(
+            BlocConsumer<YearCubit, YearState>(
               listener: (context, state) {
-                if (state is DepartmentSuccess) {
+                if (state is YearSuccess) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text(state.message), backgroundColor: Colors.green),
                   );
                   _clearForm();
                 }
-                if (state is DepartmentError) {
+                if (state is YearError) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text(state.message), backgroundColor: Colors.red),
                   );
@@ -131,8 +146,9 @@ class _CreateDepartmentScreenState extends State<CreateDepartmentScreen> {
   void _clearForm() {
     nameController.clear();
     descriptionController.clear();
-    headNameController.clear();
-    setState(() => selectedImageBytes = null);
+    departmentNameController.clear();
+
+    setState(() =>  selectedDepartmentName = "Select Department");
   }
 
   Widget _buildField(
@@ -160,60 +176,22 @@ class _CreateDepartmentScreenState extends State<CreateDepartmentScreen> {
     );
   }
 
-  Widget _buildUploadArea() {
-    return GestureDetector(
-      onTap: pickImage,
-      child: Container(
-        height: 200,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: const Color(0xFFE2E8F0), width: 2),
-          color: const Color(0xFFF8FAFC),
-        ),
-        child: selectedImageBytes == null
-            ? Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Icon(Icons.cloud_upload_outlined, size: 48, color: Color(0xFF94A3B8)),
-            SizedBox(height: 12),
-            Text("Upload Department Image", style: TextStyle(color: Color(0xFF64748B))),
-          ],
-        )
-            : ClipRRect(
-          borderRadius: BorderRadius.circular(14),
-          child: Image.memory(selectedImageBytes!, fit: BoxFit.cover),
-        ),
-      ),
-    );
-  }
-  Widget _buildActionButtons(DepartmentState state) {
-    bool isLoading = state is DepartmentLoading;
+
+  Widget _buildActionButtons(YearState state) {
+    bool isLoading = state is YearLoading;
     return Row(
       children: [
-        // Expanded(
-        //   child: OutlinedButton(
-        //     onPressed: () => Navigator.pop(context),
-        //     style: OutlinedButton.styleFrom(
-        //       padding: const EdgeInsets.symmetric(vertical: 22),
-        //       side: const BorderSide(color: Color(0xFF3B82F6)),
-        //       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        //     ),
-        //     child: const Text("Cancel",
-        //         style: TextStyle(color: Color(0xFF3B82F6), fontWeight: FontWeight.bold)),
-        //   ),
-        // ),
-        // const SizedBox(width: 20),
+
         Expanded(
           flex: 2,
           child: InkWell(
             onTap: isLoading ? null : () {
               if (_formKey.currentState!.validate()) {
 
-                if (selectedHeadName == "Select Head" || selectedHeadName.isEmpty) {
+                if (selectedDepartmentName == "Select Department" || selectedDepartmentName.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text("Please select a department head"),
+                      content: Text("Please select a department name"),
                       backgroundColor: Colors.red,
                     ),
                   );
@@ -221,11 +199,12 @@ class _CreateDepartmentScreenState extends State<CreateDepartmentScreen> {
                 }
 
 
-                context.read<DepartmentCubit>().createDepartment(
+                context.read<YearCubit>().createYear(
                   nameController,
                   descriptionController,
-                  selectedHeadName,
-                  selectedImageBytes,
+                  selectedDepartmentName,
+                  selectedStartDate,
+                  selectedEndDate,
                 );
               }
             },
@@ -257,7 +236,7 @@ class _CreateDepartmentScreenState extends State<CreateDepartmentScreen> {
                     ),
                     SizedBox(width: 12),
                     Text(
-                      "Creating Department...",
+                      "Creating Year...",
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -267,7 +246,7 @@ class _CreateDepartmentScreenState extends State<CreateDepartmentScreen> {
                   ],
                 )
                     : const Text(
-                  "Create Department",
+                  "Create Year",
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
@@ -281,7 +260,7 @@ class _CreateDepartmentScreenState extends State<CreateDepartmentScreen> {
       ],
     );
   }
-  Widget _buildFormContainer(DepartmentState state) {
+  Widget _buildFormContainer(YearState state) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
       child: TweenAnimationBuilder(
@@ -316,7 +295,7 @@ class _CreateDepartmentScreenState extends State<CreateDepartmentScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  "Create Department",
+                  "Create Year",
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
@@ -330,52 +309,52 @@ class _CreateDepartmentScreenState extends State<CreateDepartmentScreen> {
                   children: [
                     Expanded(
                       child: _buildField(
-                        "Department Name",
+                        "Year Name",
                         nameController,
                       ),
                     ),
                     const SizedBox(width: 20),
                     Expanded(
                       child: BlocProvider(
-                        create: (_) => UsersCubitDrop()..fetchAdminsAndInstructors(),
-                        child: BlocBuilder<UsersCubitDrop, UsersStateDrop>(
-                          builder: (context, userState) {
-                            if (userState is UsersLoadingState) {
+                        create: (_) => DepartmentsCubitDrop()..fetchDepartments(),
+                        child: BlocBuilder<DepartmentsCubitDrop, DepartmentsStateDrop>(
+                          builder: (context, departmentState) {
+                            if (departmentState is DepartmentLoadingState) {
                               return const Padding(
                                 padding: EdgeInsets.only(top: 30),
                                 child: Center(child: CircularProgressIndicator()),
                               );
                             }
 
-                            if (userState is UsersErrorState) {
+                            if (departmentState is DepartmentsErrorState) {
                               return Padding(
                                 padding: const EdgeInsets.only(top: 30),
-                                child: Text("Error: ${userState.message}",
+                                child: Text("Error: ${departmentState.message}",
                                     style: const TextStyle(color: Colors.red)),
                               );
                             }
 
-                            if (userState is UsersLoadedState) {
-                              if (userState.users.isEmpty) {
+                            if (departmentState is DepartmentLoadedState) {
+                              if (departmentState.departments.isEmpty) {
                                 return const Padding(
                                   padding: EdgeInsets.only(top: 30),
-                                  child: Text("No users found"),
+                                  child: Text("No departments found"),
                                 );
                               }
 
-                              List<UserLiteModel> users = userState.users.whereType<UserLiteModel>().toList();
+                              List<GetDepartmentModel> departments = departmentState.departments.whereType<GetDepartmentModel>().toList();
 
                               return _buildDropdownField(
-                                selectedHeadName,
-                                users,
-                                isHeadExpanded,
+                                selectedDepartmentName,
+                                departments,
+                                isDepartmentExpanded,
                                     (chosenUser) {
                                   setState(() {
-                                    selectedHeadName = chosenUser.fullName;
-                                    isHeadExpanded = false;
+                                    selectedDepartmentName = chosenUser.name;
+                                    isDepartmentExpanded = false;
                                   });
                                 },
-                                    () => setState(() => isHeadExpanded = !isHeadExpanded),
+                                    () => setState(() => isDepartmentExpanded = !isDepartmentExpanded),
                               );
                             }
 
@@ -389,21 +368,31 @@ class _CreateDepartmentScreenState extends State<CreateDepartmentScreen> {
 
                 const SizedBox(height: 24),
 
+Row(
+  children: [
+    Expanded(child:  _buildDateField(
+      'Start Date',
+      dobStartController,
+      dobStartFocus,
+      "Select Date",
+    ),),
+    SizedBox(width: 50,),
+    Expanded(child:  _buildDateField(
+      'End date',
+      dobEndController,
+      dobEndFocus,
+      "Select Date",
+    ),),
+  ],
+),
+
+                const SizedBox(height: 24),
+
                 _buildField(
                   "Description",
                   descriptionController,
                   maxLines: 4,
                 ),
-                const SizedBox(height: 24),
-
-                const Text(
-                  "Photo",
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Color(0xFF2563EB)),
-
-                ),
-                const SizedBox(height: 8),
-                _buildUploadArea(),
-
                 const SizedBox(height: 40),
 
                 _buildActionButtons(state),
@@ -416,16 +405,16 @@ class _CreateDepartmentScreenState extends State<CreateDepartmentScreen> {
   }
   Widget _buildDropdownField(
       String displayValue,
-      List<UserLiteModel> users,
+      List<GetDepartmentModel> departments,
       bool isExpanded,
-      Function(UserLiteModel) onSelected,
+      Function(GetDepartmentModel) onSelected,
       Function() onToggle,
       ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          "Department Head",
+          "Department Name",
           style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Color(0xFF2563EB)),
         ),
         const SizedBox(height: 8),
@@ -472,22 +461,22 @@ class _CreateDepartmentScreenState extends State<CreateDepartmentScreen> {
             constraints: const BoxConstraints(maxHeight: 250),
             child: ListView.builder(
               shrinkWrap: true,
-              itemCount: users.length,
+              itemCount: departments.length,
               itemBuilder: (context, index) {
-                final user = users[index];
+                final department = departments[index];
                 return InkWell(
-                  onTap: () => onSelected(user),
+                  onTap: () => onSelected(department),
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                     child: Row(
                       children: [
                         Expanded(
                           child: Text(
-                            "${user.fullName} (${user.role})",
+                            "${department.name} (${department.headName})",
                             style: const TextStyle(fontSize: 14, color: Color(0xFF1E293B)),
                           ),
                         ),
-                        if (displayValue == user.fullName)
+                        if (displayValue == department.name)
                           const Icon(Icons.check, color: Color(0xFF2563EB), size: 18),
                       ],
                     ),
@@ -594,12 +583,6 @@ class _CreateDepartmentScreenState extends State<CreateDepartmentScreen> {
             'Create Years',
             'Create Years',
                 () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>  CreateYearPage(),
-                ),
-              );
 
             },
           ),
@@ -758,5 +741,109 @@ class _CreateDepartmentScreenState extends State<CreateDepartmentScreen> {
       ),
     );
   }
+
+  Widget _buildDateField(
+      String label,
+      TextEditingController controller,
+      FocusNode focusNode,
+      String hint,
+      ) {
+    return AnimatedBuilder(
+      animation: focusNode,
+      builder: (context, child) {
+        final isFocused = focusNode.hasFocus;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              label,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF2563EB),
+              ),
+            ),
+            const SizedBox(height: 8),
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              decoration: BoxDecoration(
+                color: isFocused ? Colors.white : const Color(0xFFF8FAFC),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                  color: isFocused
+                      ? const Color(0xFF2563EB)
+                      : const Color(0xFFE2E8F0),
+                  width: isFocused ? 2 : 1,
+                ),
+                boxShadow: isFocused
+                    ? [
+                  BoxShadow(
+                    color: const Color(0xFF2563EB).withOpacity(0.1),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ]
+                    : [],
+              ),
+              child: TextField(
+                controller: controller,
+                focusNode: focusNode,
+                readOnly: true,
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: Color(0xFF1E293B),
+                  fontWeight: FontWeight.w500,
+                ),
+                decoration: InputDecoration(
+                  hintText: hint,
+                  prefixIcon: const Icon(
+                    Icons.calendar_today,
+                    color: Color(0xFF94A3B8),
+                    size: 20,
+                  ),
+                  suffixIcon: const Icon(
+                    Icons.arrow_drop_down,
+                    color: Color(0xFF94A3B8),
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide.none,
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
+                ),
+                onTap: () async {
+                  final DateTime? picked = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime(1975, 9, 1),
+                    firstDate: DateTime(1900),
+                    lastDate: DateTime.now(),
+                    builder: (context, child) {
+                      return Theme(
+                        data: Theme.of(context).copyWith(
+                          colorScheme: const ColorScheme.light(
+                            primary: Color(0xFF2563EB),
+                          ),
+                        ),
+                        child: child!,
+                      );
+                    },
+                  );
+                  if (picked != null) {
+                    selectedDateOfBirth = picked;
+                    controller.text =
+                    '${picked.day}/${picked.month}/${picked.year}';
+                  }
+                },
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 }
 

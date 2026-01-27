@@ -7,6 +7,8 @@ class ApiResources {
   static final getProfileEndpoint = "Auth/me";
   static final verifyUserEmailEndPoint = "Auth/verify-account";
   static final activateUserEmailEndPoint = "Auth/activate-account";
+  static final createDepartmentEndPoint = "Department/";
+  static final createYearEndPoint = "years";
 
 
 

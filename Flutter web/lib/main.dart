@@ -10,6 +10,7 @@ import 'package:lms/features/screens/hero_section/view.dart';
 import 'package:lms/features/screens/login/view.dart';
 import 'package:lms/features/screens/pre_loading/loading_screen.dart';
 import 'package:lms/core/services/app_initialization_service.dart';
+import 'package:lms/features/screens/profiles/admin_profile/view.dart';
 
 import 'features/draft/test_screen.dart';
 import 'features/screens/Courses_dashboard/view.dart';
@@ -106,6 +107,8 @@ class _MyAppState extends State<MyApp> {
         // UploadCoursePage()
         // CreateUserScreen()
         // ActivateAccountScreen()
+        // AdminProfileScreen()
+        // CreateDepartmentScreen()
 // SignUpScreen()
         _isInitialized ? VerifyScreen() : LoadingScreen(),
 //           GetUsersScreen()

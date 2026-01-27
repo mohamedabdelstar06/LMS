@@ -170,7 +170,7 @@ class CreateUserCubit extends Cubit<CreateState> {
       BuildContext context, {
         Uint8List? profileImageBytes,
       }) async {
-    // Validation
+
     if (emailController.text.trim().isEmpty ||
         // passwordController.text.trim().isEmpty ||
         fullNameController.text.trim().isEmpty) {
@@ -282,7 +282,6 @@ class CreateUserCubit extends Cubit<CreateState> {
   }
 }
 /*
-// ✅ لو الـ API بيقبل صورة + بيانات في request واحد
 
 Future<void> postCreatedUserData(
   TextEditingController emailController,
@@ -318,7 +317,6 @@ Future<void> postCreatedUserData(
       return;
     }
 
-    // ✅ إنشاء FormData مع كل البيانات
     final formData = FormData.fromMap({
       "email": emailController.text.trim(),
       "fullName": fullNameController.text.trim(),
@@ -331,7 +329,6 @@ Future<void> postCreatedUserData(
       "role": role,
       "dateOfBirth": dateOfBirth.toIso8601String(),
 
-      // ✅ إضافة الصورة (لو موجودة)
       if (profileImageBytes != null)
         'profileImage': MultipartFile.fromBytes(
           profileImageBytes,
