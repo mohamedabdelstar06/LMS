@@ -8,7 +8,7 @@
 // import '../../../../core/cons/context/navigation_key.dart';
 // import '../../../../core/helpers/cach_helper/shared_pref_helper.dart';
 //
-// import '../User_model/model.dart';
+// import '../User_model/ProfileModel.dart';
 // import 'Create_user_state.dart';
 //
 //
@@ -56,8 +56,8 @@
 //
 //       if (response.statusCode == 200 ) {
 //         emit(CreateUserSuccessState());
-//         final model = CreateUserModel.fromJson(response.data);
-//         await PrefHelper.saveCreatedUserData(model);
+//         final ProfileModel = CreateUserModel.fromJson(response.data);
+//         await PrefHelper.saveCreatedUserData(ProfileModel);
 //         passwordController.clear();
 //         emailController.clear();
 //         fullNameController.clear();
@@ -158,7 +158,7 @@ class CreateUserCubit extends Cubit<CreateState> {
 
   Future<void> postCreatedUserData(
       TextEditingController emailController,
-      TextEditingController passwordController,
+      // TextEditingController passwordController,
       TextEditingController fullNameController,
       TextEditingController nationalIdController,
       TextEditingController genderController,
@@ -170,9 +170,9 @@ class CreateUserCubit extends Cubit<CreateState> {
       BuildContext context, {
         Uint8List? profileImageBytes,
       }) async {
-    // Validation
+
     if (emailController.text.trim().isEmpty ||
-        passwordController.text.trim().isEmpty ||
+        // passwordController.text.trim().isEmpty ||
         fullNameController.text.trim().isEmpty) {
       emit(CreateUserErrorState("Please fill all required fields"));
       return;
@@ -201,7 +201,7 @@ class CreateUserCubit extends Cubit<CreateState> {
         "email": emailController.text.trim(),
         "fullName": fullNameController.text.trim(),
         "nationalId": nationalIdController.text.trim(),
-        "password": passwordController.text.trim(),
+        // "password": passwordController.text.trim(),
         "city": city,
         "gender": genderController.text.trim(),
         "isActive": isActive,
@@ -242,7 +242,7 @@ class CreateUserCubit extends Cubit<CreateState> {
         ));
 
         if (context.mounted) {
-          passwordController.clear();
+          // passwordController.clear();
           emailController.clear();
           fullNameController.clear();
           nationalIdController.clear();
@@ -282,7 +282,6 @@ class CreateUserCubit extends Cubit<CreateState> {
   }
 }
 /*
-// ✅ لو الـ API بيقبل صورة + بيانات في request واحد
 
 Future<void> postCreatedUserData(
   TextEditingController emailController,
@@ -318,7 +317,6 @@ Future<void> postCreatedUserData(
       return;
     }
 
-    // ✅ إنشاء FormData مع كل البيانات
     final formData = FormData.fromMap({
       "email": emailController.text.trim(),
       "fullName": fullNameController.text.trim(),
@@ -331,7 +329,6 @@ Future<void> postCreatedUserData(
       "role": role,
       "dateOfBirth": dateOfBirth.toIso8601String(),
 
-      // ✅ إضافة الصورة (لو موجودة)
       if (profileImageBytes != null)
         'profileImage': MultipartFile.fromBytes(
           profileImageBytes,
@@ -355,8 +352,8 @@ Future<void> postCreatedUserData(
     );
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      final model = CreateUserModel.fromJson(response.data);
-      await PrefHelper.saveCreatedUserData(model);
+      final ProfileModel = CreateUserModel.fromJson(response.data);
+      await PrefHelper.saveCreatedUserData(ProfileModel);
 
       emit(CreateUserSuccessState(
         statusCode: response.statusCode,
@@ -406,7 +403,7 @@ Future<void> postCreatedUserData(
 //
 // import '../../../../core/cons/api_helper_resources/api_resources.dart';
 // import '../../../../core/helpers/cach_helper/shared_pref_helper.dart';
-// import '../User_model/model.dart';
+// import '../User_model/ProfileModel.dart';
 // import 'Create_user_state.dart';
 //
 // class CreateUserCubit extends Cubit<CreateState> {
@@ -495,8 +492,8 @@ Future<void> postCreatedUserData(
 //       );
 //
 //       if (response.statusCode == 200 || response.statusCode == 201) {
-//         final model = CreateUserModel.fromJson(response.data);
-//         await PrefHelper.saveCreatedUserData(model);
+//         final ProfileModel = CreateUserModel.fromJson(response.data);
+//         await PrefHelper.saveCreatedUserData(ProfileModel);
 //
 //         emit(CreateUserSuccessState(
 //           statusCode: response.statusCode,

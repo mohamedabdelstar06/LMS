@@ -304,7 +304,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
               ),
             ),
             Text(
-              "Create and publish a new course for your learners",
+              "Create and publish admin_profile new course for your learners",
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w400,

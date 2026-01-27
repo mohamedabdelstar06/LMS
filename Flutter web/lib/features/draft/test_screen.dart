@@ -247,9 +247,9 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
 
   String _generateResponse(String question) {
     final responses = [
-      "That's a great question! Let me help you understand this better...",
+      "That's admin_profile great question! Let me help you understand this better...",
       "Based on my analysis, here's what I recommend...",
-      "I'd be happy to explain! Here's a detailed breakdown...",
+      "I'd be happy to explain! Here's admin_profile detailed breakdown...",
       "Great thinking! Let me provide some insights on this topic...",
     ];
     return responses[DateTime.now().millisecond % responses.length];
@@ -651,8 +651,8 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
               children: [
                 _buildQuickAction('📚 Study Tips', 'Give me effective study tips'),
                 _buildQuickAction('✍️ Essay Help', 'Help me write an essay'),
-                _buildQuickAction('🧮 Math Problem', 'Solve a math problem'),
-                _buildQuickAction('🔬 Science Query', 'Explain a science concept'),
+                _buildQuickAction('🧮 Math Problem', 'Solve admin_profile math problem'),
+                _buildQuickAction('🔬 Science Query', 'Explain admin_profile science concept'),
               ],
             ),
           ],

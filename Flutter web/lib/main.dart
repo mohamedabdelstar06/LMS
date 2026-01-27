@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lms/core/cons/context/navigation_key.dart';
 import 'package:lms/features/draft/test.dart';
+import 'package:lms/features/screens/ActivateAccountScreen/view.dart';
 import 'package:lms/features/screens/Announcement/view.dart';
 import 'package:lms/features/screens/courses/admin/view.dart';
 import 'package:lms/features/screens/courses/teacher/view.dart';
@@ -9,19 +10,18 @@ import 'package:lms/features/screens/hero_section/view.dart';
 import 'package:lms/features/screens/login/view.dart';
 import 'package:lms/features/screens/pre_loading/loading_screen.dart';
 import 'package:lms/core/services/app_initialization_service.dart';
-import 'package:lms/features/screens/student_profile/view.dart';
+import 'package:lms/features/screens/profiles/admin_profile/view.dart';
 
 import 'features/draft/test_screen.dart';
 import 'features/screens/Courses_dashboard/view.dart';
 import 'features/screens/Create_user/View.dart';
-import 'features/screens/Sign-up screen/view.dart';
+import 'features/screens/Verify_email/view.dart';
 import 'features/screens/add_course/view.dart';
 import 'features/screens/celeberating cultures/view.dart';
 import 'features/screens/chat_bot/view.dart';
 import 'features/screens/courses/student/view.dart';
 import 'features/screens/get_users/state_managment/get_users_cubit.dart';
 import 'features/screens/get_users/view.dart';
-import 'features/screens/teacher_profile/view.dart';
 
 
 
@@ -106,8 +106,11 @@ class _MyAppState extends State<MyApp> {
         // HeroSectionScreen()
         // UploadCoursePage()
         // CreateUserScreen()
+        // ActivateAccountScreen()
+        // AdminProfileScreen()
+        // CreateDepartmentScreen()
 // SignUpScreen()
-        _isInitialized ? LoginScreen() : LoadingScreen(),
+        _isInitialized ? VerifyScreen() : LoadingScreen(),
 //           GetUsersScreen()
       ),
     );
