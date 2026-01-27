@@ -22,6 +22,235 @@ namespace SkyLearnApi.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<int>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("SkyLearnApi.Entities.ActivityLog", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("ActionName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<int?>("EntityId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("EntityName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("IpAddress")
+                        .HasMaxLength(45)
+                        .HasColumnType("nvarchar(45)");
+
+                    b.Property<string>("Jti")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("LoginTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("LogoutTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Metadata")
+                        .HasColumnType("NVARCHAR(MAX)");
+
+                    b.Property<long?>("ProcessingTimeMs")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("SessionDurationSeconds")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("SessionId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("Timestamp")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<DateTime?>("TokenExpiresAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserAgent")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Jti")
+                        .HasDatabaseName("IX_ActivityLog_Jti")
+                        .HasFilter("[Jti] IS NOT NULL");
+
+                    b.HasIndex("SessionId")
+                        .HasDatabaseName("IX_ActivityLog_SessionId")
+                        .HasFilter("[SessionId] IS NOT NULL");
+
+                    b.HasIndex("Timestamp")
+                        .HasDatabaseName("IX_ActivityLog_Timestamp");
+
+                    b.HasIndex("ActionName", "Timestamp")
+                        .HasDatabaseName("IX_ActivityLog_ActionName_Timestamp");
+
+                    b.HasIndex("EntityName", "EntityId")
+                        .HasDatabaseName("IX_ActivityLog_EntityName_EntityId")
+                        .HasFilter("[EntityName] IS NOT NULL AND [EntityId] IS NOT NULL");
+
+                    b.HasIndex("UserId", "LoginTime")
+                        .HasDatabaseName("IX_ActivityLog_UserId_LoginTime")
+                        .HasFilter("[LoginTime] IS NOT NULL");
+
+                    b.HasIndex("UserId", "Timestamp")
+                        .HasDatabaseName("IX_ActivityLog_UserId_Timestamp");
+
+                    b.ToTable("ActivityLogs", (string)null);
+                });
+
             modelBuilder.Entity("SkyLearnApi.Entities.ApplicationUser", b =>
                 {
                     b.Property<int>("Id")
@@ -30,204 +259,136 @@ namespace SkyLearnApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AcademicYear")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
 
                     b.Property<string>("City")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<DateTime?>("DateOfBirth")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
+<<<<<<< HEAD
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+=======
                     b.Property<string>("FullName")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)")
                         .HasDefaultValue("First Middle Last");
+>>>>>>> c663dc8d7ae7c4beafe7f487de1ed1cdf6ad29b6
 
                     b.Property<string>("Gender")
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<string>("GroupName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<bool>("IsActive")
+<<<<<<< HEAD
+                    b.Property<bool>("IsActivated")
                         .HasColumnType("bit");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("ProfileImageUrl")
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
-
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users", null, t =>
-                        {
-                            t.HasCheckConstraint("CK_User_FullName_MinWords", "FullName = '' OR LEN(FullName) - LEN(REPLACE(FullName, ' ', '')) + 1 >= 3");
-                        });
-                });
-
-            modelBuilder.Entity("SkyLearnApi.Entities.Assignment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("AssignedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CreatedById")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(4000)
-                        .HasColumnType("nvarchar(4000)");
-
-                    b.Property<DateTime>("DueDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("FileUrl")
-                        .IsRequired()
-                        .HasMaxLength(2000)
-                        .HasColumnType("nvarchar(2000)");
 
                     b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
-
-                    b.Property<string>("Title")
+=======
+                    b.Property<string>("Password")
                         .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+>>>>>>> c663dc8d7ae7c4beafe7f487de1ed1cdf6ad29b6
 
-                    b.HasKey("Id");
+                    b.Property<DateTime?>("LastLoginAt")
+                        .HasColumnType("datetime2");
 
-                    b.HasIndex("CreatedById");
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
 
-                    b.HasIndex("CourseId", "DueDate");
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
 
-                    b.ToTable("Assignments", (string)null);
-                });
+                    b.Property<string>("NationalId")
+                        .HasMaxLength(14)
+                        .HasColumnType("nvarchar(14)");
 
-            modelBuilder.Entity("SkyLearnApi.Entities.AssignmentSubmission", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
-                    b.Property<int>("AssignmentId")
-                        .HasColumnType("int");
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Feedback")
-                        .HasMaxLength(4000)
-                        .HasColumnType("nvarchar(4000)");
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FileUrl")
-                        .IsRequired()
-                        .HasMaxLength(2000)
-                        .HasColumnType("nvarchar(2000)");
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("Grade")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                    b.Property<string>("ProfileImageUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("SubmittedAt")
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETUTCDATE()");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("StudentId");
-
-                    b.HasIndex("AssignmentId", "StudentId");
-
-                    b.ToTable("AssignmentSubmissions", (string)null);
-                });
-
-            modelBuilder.Entity("SkyLearnApi.Entities.AuditLog", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("AcademicYear")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Action")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("EntityName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("ExpiresAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ExtraDataJson")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("GroupName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Jti")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+<<<<<<< HEAD
+                    b.HasIndex("NationalId")
+                        .IsUnique()
+                        .HasFilter("[NationalId] IS NOT NULL");
 
-                    b.ToTable("AuditLogs");
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers", (string)null);
+=======
+                    b.ToTable("Users", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_User_FullName_MinWords", "FullName = '' OR LEN(FullName) - LEN(REPLACE(FullName, ' ', '')) + 1 >= 3");
+                        });
+>>>>>>> c663dc8d7ae7c4beafe7f487de1ed1cdf6ad29b6
                 });
 
             modelBuilder.Entity("SkyLearnApi.Entities.Course", b =>
@@ -266,9 +427,6 @@ namespace SkyLearnApi.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(150)
@@ -289,86 +447,6 @@ namespace SkyLearnApi.Migrations
                     b.HasIndex("YearId");
 
                     b.ToTable("Courses", (string)null);
-                });
-
-            modelBuilder.Entity("SkyLearnApi.Entities.CourseInstructor", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("ApplicationUserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("InstructorId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("InstructorId");
-
-                    b.HasIndex("CourseId", "InstructorId")
-                        .IsUnique();
-
-                    b.ToTable("CourseInstructors", (string)null);
-                });
-
-            modelBuilder.Entity("SkyLearnApi.Entities.CourseMaterial", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<int>("CreatedById")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(4000)
-                        .HasColumnType("nvarchar(4000)");
-
-                    b.Property<string>("ExternalLink")
-                        .HasMaxLength(2000)
-                        .HasColumnType("nvarchar(2000)");
-
-                    b.Property<string>("FileUrl")
-                        .IsRequired()
-                        .HasMaxLength(2000)
-                        .HasColumnType("nvarchar(2000)");
-
-                    b.Property<int>("MaterialTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreatedById");
-
-                    b.HasIndex("MaterialTypeId");
-
-                    b.HasIndex("CourseId", "MaterialTypeId");
-
-                    b.ToTable("CourseMaterials", (string)null);
                 });
 
             modelBuilder.Entity("SkyLearnApi.Entities.Department", b =>
@@ -407,7 +485,7 @@ namespace SkyLearnApi.Migrations
                     b.ToTable("Departments", (string)null);
                 });
 
-            modelBuilder.Entity("SkyLearnApi.Entities.Enrollment", b =>
+            modelBuilder.Entity("SkyLearnApi.Entities.Squadron", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -415,73 +493,33 @@ namespace SkyLearnApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("ApplicationUserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("CompletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("DroppedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("EnrolledAt")
+                    b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETUTCDATE()");
 
-                    b.Property<string>("Grade")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("CourseId");
-
-                    b.HasIndex("Status");
-
-                    b.HasIndex("StudentId", "CourseId");
-
-                    b.ToTable("Enrollments", (string)null);
-                });
-
-            modelBuilder.Entity("SkyLearnApi.Entities.EnrollmentStatus", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Name")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasDatabaseName("IX_Squadron_Name");
 
-                    b.ToTable("EnrollmentStatuses", (string)null);
+                    b.ToTable("Squadrons", (string)null);
                 });
 
-            modelBuilder.Entity("SkyLearnApi.Entities.MaterialType", b =>
+            modelBuilder.Entity("SkyLearnApi.Entities.StudentProfile", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -489,23 +527,147 @@ namespace SkyLearnApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("IsActive")
+                    b.Property<int>("AdmissionYear")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SquadronId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("YearId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId")
+                        .HasDatabaseName("IX_StudentProfile_DepartmentId");
+
+                    b.HasIndex("SquadronId")
+                        .HasDatabaseName("IX_StudentProfile_SquadronId");
+
+                    b.HasIndex("UserId")
+                        .IsUnique()
+                        .HasDatabaseName("IX_StudentProfile_UserId");
+
+                    b.HasIndex("YearId")
+                        .HasDatabaseName("IX_StudentProfile_YearId");
+
+                    b.HasIndex("DepartmentId", "YearId")
+                        .HasDatabaseName("IX_StudentProfile_Department_Year");
+
+                    b.ToTable("StudentProfiles", (string)null);
+                });
+
+<<<<<<< HEAD
+=======
+            modelBuilder.Entity("SkyLearnApi.Entities.Course", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<int>("CreatedById")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CreditHours")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<int>("EnrolledStudentsCount")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("YearId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.HasIndex("YearId");
+
+                    b.ToTable("Courses", (string)null);
+                });
+
+            modelBuilder.Entity("SkyLearnApi.Entities.Department", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("HeadId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImageUrl")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("Name");
+                    b.HasIndex("HeadId");
 
-                    b.ToTable("MaterialTypes", (string)null);
+                    b.ToTable("Departments", (string)null);
                 });
 
+>>>>>>> c663dc8d7ae7c4beafe7f487de1ed1cdf6ad29b6
             modelBuilder.Entity("SkyLearnApi.Entities.Year", b =>
                 {
                     b.Property<int>("Id")
@@ -564,48 +726,65 @@ namespace SkyLearnApi.Migrations
                     b.ToTable("Years", (string)null);
                 });
 
-            modelBuilder.Entity("SkyLearnApi.Entities.Assignment", b =>
+<<<<<<< HEAD
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
-                    b.HasOne("SkyLearnApi.Entities.Course", "Course")
-                        .WithMany("Assignments")
-                        .HasForeignKey("CourseId")
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<int>", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
+                {
+                    b.HasOne("SkyLearnApi.Entities.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
+                {
+                    b.HasOne("SkyLearnApi.Entities.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<int>", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SkyLearnApi.Entities.ApplicationUser", "CreatedBy")
+                    b.HasOne("SkyLearnApi.Entities.ApplicationUser", null)
                         .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Course");
-
-                    b.Navigation("CreatedBy");
-                });
-
-            modelBuilder.Entity("SkyLearnApi.Entities.AssignmentSubmission", b =>
-                {
-                    b.HasOne("SkyLearnApi.Entities.Assignment", "Assignment")
-                        .WithMany("Submissions")
-                        .HasForeignKey("AssignmentId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("SkyLearnApi.Entities.ApplicationUser", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Assignment");
-
-                    b.Navigation("Student");
                 });
 
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
+                {
+                    b.HasOne("SkyLearnApi.Entities.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("SkyLearnApi.Entities.ActivityLog", b =>
+=======
             modelBuilder.Entity("SkyLearnApi.Entities.AuditLog", b =>
+>>>>>>> c663dc8d7ae7c4beafe7f487de1ed1cdf6ad29b6
                 {
                     b.HasOne("SkyLearnApi.Entities.ApplicationUser", "User")
-                        .WithMany("AuditLogs")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.SetNull);
 
@@ -613,6 +792,8 @@ namespace SkyLearnApi.Migrations
                 });
 
             modelBuilder.Entity("SkyLearnApi.Entities.Course", b =>
+<<<<<<< HEAD
+=======
                 {
                     b.HasOne("SkyLearnApi.Entities.ApplicationUser", "CreatedBy")
                         .WithMany()
@@ -639,56 +820,6 @@ namespace SkyLearnApi.Migrations
                     b.Navigation("Year");
                 });
 
-            modelBuilder.Entity("SkyLearnApi.Entities.CourseInstructor", b =>
-                {
-                    b.HasOne("SkyLearnApi.Entities.ApplicationUser", null)
-                        .WithMany("Courses")
-                        .HasForeignKey("ApplicationUserId");
-
-                    b.HasOne("SkyLearnApi.Entities.Course", "Course")
-                        .WithMany("Instructors")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SkyLearnApi.Entities.ApplicationUser", "Instructor")
-                        .WithMany()
-                        .HasForeignKey("InstructorId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Course");
-
-                    b.Navigation("Instructor");
-                });
-
-            modelBuilder.Entity("SkyLearnApi.Entities.CourseMaterial", b =>
-                {
-                    b.HasOne("SkyLearnApi.Entities.Course", "Course")
-                        .WithMany("Materials")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SkyLearnApi.Entities.ApplicationUser", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("SkyLearnApi.Entities.MaterialType", "MaterialType")
-                        .WithMany("CourseMaterials")
-                        .HasForeignKey("MaterialTypeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Course");
-
-                    b.Navigation("CreatedBy");
-
-                    b.Navigation("MaterialType");
-                });
-
             modelBuilder.Entity("SkyLearnApi.Entities.Department", b =>
                 {
                     b.HasOne("SkyLearnApi.Entities.ApplicationUser", "Head")
@@ -698,37 +829,6 @@ namespace SkyLearnApi.Migrations
                         .IsRequired();
 
                     b.Navigation("Head");
-                });
-
-            modelBuilder.Entity("SkyLearnApi.Entities.Enrollment", b =>
-                {
-                    b.HasOne("SkyLearnApi.Entities.ApplicationUser", null)
-                        .WithMany("Enrollments")
-                        .HasForeignKey("ApplicationUserId");
-
-                    b.HasOne("SkyLearnApi.Entities.Course", "Course")
-                        .WithMany("Enrollments")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SkyLearnApi.Entities.EnrollmentStatus", "EnrollmentStatus")
-                        .WithMany("Enrollments")
-                        .HasForeignKey("Status")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("SkyLearnApi.Entities.ApplicationUser", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Course");
-
-                    b.Navigation("EnrollmentStatus");
-
-                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("SkyLearnApi.Entities.Year", b =>
@@ -751,28 +851,96 @@ namespace SkyLearnApi.Migrations
                 });
 
             modelBuilder.Entity("SkyLearnApi.Entities.ApplicationUser", b =>
+>>>>>>> c663dc8d7ae7c4beafe7f487de1ed1cdf6ad29b6
                 {
-                    b.Navigation("AuditLogs");
+                    b.HasOne("SkyLearnApi.Entities.ApplicationUser", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                    b.Navigation("Courses");
+                    b.HasOne("SkyLearnApi.Entities.Department", "Department")
+                        .WithMany("Courses")
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                    b.Navigation("Enrollments");
+                    b.HasOne("SkyLearnApi.Entities.Year", "Year")
+                        .WithMany("Courses")
+                        .HasForeignKey("YearId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("Department");
+
+                    b.Navigation("Year");
                 });
 
-            modelBuilder.Entity("SkyLearnApi.Entities.Assignment", b =>
+            modelBuilder.Entity("SkyLearnApi.Entities.Department", b =>
                 {
-                    b.Navigation("Submissions");
+                    b.HasOne("SkyLearnApi.Entities.ApplicationUser", "Head")
+                        .WithMany()
+                        .HasForeignKey("HeadId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Head");
                 });
 
-            modelBuilder.Entity("SkyLearnApi.Entities.Course", b =>
+            modelBuilder.Entity("SkyLearnApi.Entities.StudentProfile", b =>
                 {
-                    b.Navigation("Assignments");
+                    b.HasOne("SkyLearnApi.Entities.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                    b.Navigation("Enrollments");
+                    b.HasOne("SkyLearnApi.Entities.Squadron", "Squadron")
+                        .WithMany("Students")
+                        .HasForeignKey("SquadronId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                    b.Navigation("Instructors");
+                    b.HasOne("SkyLearnApi.Entities.ApplicationUser", "User")
+                        .WithOne()
+                        .HasForeignKey("SkyLearnApi.Entities.StudentProfile", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Materials");
+                    b.HasOne("SkyLearnApi.Entities.Year", "Year")
+                        .WithMany()
+                        .HasForeignKey("YearId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Department");
+
+                    b.Navigation("Squadron");
+
+                    b.Navigation("User");
+
+                    b.Navigation("Year");
+                });
+
+            modelBuilder.Entity("SkyLearnApi.Entities.Year", b =>
+                {
+                    b.HasOne("SkyLearnApi.Entities.ApplicationUser", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SkyLearnApi.Entities.Department", "Department")
+                        .WithMany("Years")
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("Department");
                 });
 
             modelBuilder.Entity("SkyLearnApi.Entities.Department", b =>
@@ -782,14 +950,21 @@ namespace SkyLearnApi.Migrations
                     b.Navigation("Years");
                 });
 
-            modelBuilder.Entity("SkyLearnApi.Entities.EnrollmentStatus", b =>
+            modelBuilder.Entity("SkyLearnApi.Entities.Squadron", b =>
                 {
-                    b.Navigation("Enrollments");
+                    b.Navigation("Students");
                 });
 
-            modelBuilder.Entity("SkyLearnApi.Entities.MaterialType", b =>
+            modelBuilder.Entity("SkyLearnApi.Entities.Year", b =>
                 {
-                    b.Navigation("CourseMaterials");
+                    b.Navigation("Courses");
+                });
+
+            modelBuilder.Entity("SkyLearnApi.Entities.Department", b =>
+                {
+                    b.Navigation("Courses");
+
+                    b.Navigation("Years");
                 });
 
             modelBuilder.Entity("SkyLearnApi.Entities.Year", b =>
