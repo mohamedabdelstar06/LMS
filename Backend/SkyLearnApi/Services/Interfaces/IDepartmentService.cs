@@ -1,5 +1,3 @@
-using SkyLearnApi.Dtos.Department;
-
 namespace SkyLearnApi.Services.Interfaces
 {
     public interface IDepartmentService

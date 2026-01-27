@@ -1,32 +1,12 @@
-using SkyLearnApi.Services.Base;
-
-namespace SkyLearnApi.Services.Implementation
+namespace SkyLearnApi.Services
 {
-    public class AuditService : IAuditService
+    public class AuditService
     {
         private readonly AppDbContext _db;
-        private readonly ICurrentUserService _currentUserService;
 
-        public AuditService(AppDbContext db, ICurrentUserService currentUserService)
+        public AuditService(AppDbContext db)
         {
             _db = db;
-            _currentUserService = currentUserService;
-        }
-
-        public async Task LogAuditAsync(string action, string description, string entityName)
-        {
-            await LogAsync(new AuditLog
-            {
-                UserId = _currentUserService.UserId,
-                Action = action,
-                Description = description,
-                EntityName = entityName,
-                Jti = _currentUserService.Jti,
-                CreatedAt = DateTime.UtcNow,
-                ExpiresAt = _currentUserService.ExpiresAt,
-                GroupName = _currentUserService.GroupName,
-                AcademicYear = _currentUserService.AcademicYear
-            });
         }
 
         public async Task LogAsync(string action, string? description = null, string? entityName = null, int? userId = null, string? jti = null, DateTime? expiresAt = null)
@@ -38,17 +18,10 @@ namespace SkyLearnApi.Services.Implementation
                 Description = description,
                 EntityName = entityName,
                 Jti = jti,
-                ExpiresAt = expiresAt,
-                IsActive = true
+                ExpiresAt = expiresAt
             };
 
             _db.AuditLogs.Add(audit);
-            await _db.SaveChangesAsync();
-        }
-
-        public async Task LogAsync(AuditLog auditLog)
-        {
-            _db.AuditLogs.Add(auditLog);
             await _db.SaveChangesAsync();
         }
     }
