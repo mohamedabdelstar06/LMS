@@ -32,7 +32,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (kDebugMode && kIsWeb) {
     FlutterError.onError = (FlutterErrorDetails details) {
-      // Filter out the widget inspector error
       if (!details.toString().contains('toJsonMap') &&
           !details.toString().contains('_nodeToJson')) {
         FlutterError.presentError(details);
