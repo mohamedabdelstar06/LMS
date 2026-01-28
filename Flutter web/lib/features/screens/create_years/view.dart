@@ -45,13 +45,12 @@ class _CreateDepartmentScreenState extends State<CreateYearScreen> {
   final _formKey = GlobalKey<FormState>();
   bool isDepartmentExpanded = false;
 
-  Uint8List? selectedImageBytes;
   String selectedMenuItem = 'Create Years';
   String? hoveredMenuItem;
   bool isLogoutHovered = false;
   String selectedDepartmentName = "Select Department";
-  late DateTime selectedStartDate;
-  late DateTime selectedEndDate;
+  DateTime? selectedStartDate;
+  DateTime? selectedEndDate;
   final dobStartController = TextEditingController();
   final dobEndController = TextEditingController();
   final dobStartFocus = FocusNode();
@@ -187,6 +186,15 @@ class _CreateDepartmentScreenState extends State<CreateYearScreen> {
           child: InkWell(
             onTap: isLoading ? null : () {
               if (_formKey.currentState!.validate()) {
+                if (selectedStartDate == null || selectedEndDate == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Please select both start and end dates"),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                  return;
+                }
 
                 if (selectedDepartmentName == "Select Department" || selectedDepartmentName.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -203,8 +211,8 @@ class _CreateDepartmentScreenState extends State<CreateYearScreen> {
                   nameController,
                   descriptionController,
                   selectedDepartmentName,
-                  selectedStartDate,
-                  selectedEndDate,
+                  selectedStartDate!,
+                  selectedEndDate!,
                 );
               }
             },
@@ -375,6 +383,11 @@ Row(
       dobStartController,
       dobStartFocus,
       "Select Date",
+      onDateChanged: (date) {
+        setState(() {
+          selectedStartDate = date;
+        });
+      },
     ),),
     SizedBox(width: 50,),
     Expanded(child:  _buildDateField(
@@ -382,6 +395,11 @@ Row(
       dobEndController,
       dobEndFocus,
       "Select Date",
+      onDateChanged: (date) {
+        setState(() {
+          selectedEndDate = date;
+        });
+      },
     ),),
   ],
 ),
@@ -747,6 +765,9 @@ Row(
       TextEditingController controller,
       FocusNode focusNode,
       String hint,
+      {
+        required Function(DateTime) onDateChanged,
+      }
       ) {
     return AnimatedBuilder(
       animation: focusNode,
@@ -832,7 +853,9 @@ Row(
                     },
                   );
                   if (picked != null) {
-                    selectedDateOfBirth = picked;
+                    onDateChanged(picked);
+
+
                     controller.text =
                     '${picked.day}/${picked.month}/${picked.year}';
                   }

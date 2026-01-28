@@ -16,6 +16,7 @@ import 'features/draft/test_screen.dart';
 import 'features/screens/Courses_dashboard/view.dart';
 import 'features/screens/Create_user/View.dart';
 import 'features/screens/Verify_email/view.dart';
+import 'features/screens/add_course/Adding_view.dart';
 import 'features/screens/add_course/view.dart';
 import 'features/screens/celeberating cultures/view.dart';
 import 'features/screens/chat_bot/view.dart';
@@ -32,7 +33,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (kDebugMode && kIsWeb) {
     FlutterError.onError = (FlutterErrorDetails details) {
-      // Filter out the widget inspector error
       if (!details.toString().contains('toJsonMap') &&
           !details.toString().contains('_nodeToJson')) {
         FlutterError.presentError(details);
@@ -109,6 +109,7 @@ class _MyAppState extends State<MyApp> {
         // ActivateAccountScreen()
         // AdminProfileScreen()
         // CreateDepartmentScreen()
+        // AddCourseScreen()
 // SignUpScreen()
         _isInitialized ? VerifyScreen() : LoadingScreen(),
 //           GetUsersScreen()

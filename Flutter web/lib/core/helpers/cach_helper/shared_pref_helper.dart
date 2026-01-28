@@ -6,7 +6,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../features/screens/ActivateAccountScreen/user_model/data.dart';
 import '../../../features/screens/Create_user/User_model/model.dart';
-import '../../../features/screens/Create_user/View.dart';
 import '../../../features/screens/Verify_email/user_model/data.dart';
 import '../../../features/screens/login/view.dart';
 import '../../cons/api_helper_resources/api_resources.dart';
