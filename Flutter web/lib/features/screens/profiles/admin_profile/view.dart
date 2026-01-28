@@ -16,6 +16,7 @@ import '../../../../core/cons/Colors/app_colors.dart';
 import '../../../../core/helpers/logout_server/logout.dart';
 import '../../Announcement/view.dart';
 import '../../Create_user/View.dart';
+import '../../add_course/Adding_view.dart';
 import 'model/view.dart';
 
 class AdminProfileScreen extends StatefulWidget {
@@ -253,6 +254,21 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
                       builder: (context) =>  CreateYearPage(),
                     ),
                   );
+
+            },
+          ),
+          _buildMenuItem(
+            Icons.calendar_month,
+            Icons.calendar_month_outlined,
+            'Create New Course',
+            'Create New Course',
+                () {
+Navigator.pushReplacement(
+context,
+MaterialPageRoute(
+builder: (context) =>  CreateNewCoursePage(),
+),
+);
 
             },
           ),

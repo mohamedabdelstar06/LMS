@@ -16,6 +16,7 @@ import 'features/draft/test_screen.dart';
 import 'features/screens/Courses_dashboard/view.dart';
 import 'features/screens/Create_user/View.dart';
 import 'features/screens/Verify_email/view.dart';
+import 'features/screens/add_course/Adding_view.dart';
 import 'features/screens/add_course/view.dart';
 import 'features/screens/celeberating cultures/view.dart';
 import 'features/screens/chat_bot/view.dart';
@@ -108,6 +109,7 @@ class _MyAppState extends State<MyApp> {
         // ActivateAccountScreen()
         // AdminProfileScreen()
         // CreateDepartmentScreen()
+        // AddCourseScreen()
 // SignUpScreen()
         _isInitialized ? VerifyScreen() : LoadingScreen(),
 //           GetUsersScreen()
