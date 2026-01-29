@@ -36,6 +36,7 @@ class CreateNewCoursePage extends StatelessWidget {
     );
   }
 }
+
 class AddCourseScreen extends StatefulWidget {
   const AddCourseScreen({super.key});
 
@@ -49,7 +50,11 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
   PlatformFile? attachment;
   String selectedAttempts = "Unlimited Attempts";
   DateTime? selectedDate;
-  bool _isDropdownOpen = false;
+
+  // bool _isDropdownOpen = false;
+  String? selectedDepartmentId; // نخزن الـ ID مش بس الاسم
+  String? selectedYearId; // نخزن الـ ID برضه
+  List<YearModel> availableYears = [];
 
   final nameController = TextEditingController();
   final descriptionController = TextEditingController();
@@ -65,10 +70,6 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
   String selectedYearName = "Select Year";
   bool isYearExpanded = false;
 
-
-
-
-
   void showSuccessSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -79,10 +80,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
           tween: Tween(begin: 0, end: 1),
           duration: const Duration(milliseconds: 400),
           builder: (context, value, child) {
-            return Transform.scale(
-              scale: value,
-              child: child,
-            );
+            return Transform.scale(scale: value, child: child);
           },
           child: Container(
             padding: const EdgeInsets.all(16),
@@ -90,10 +88,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
               color: Colors.green.shade600,
               borderRadius: BorderRadius.circular(14),
               boxShadow: const [
-                BoxShadow(
-                  color: Colors.black26,
-                  blurRadius: 10,
-                )
+                BoxShadow(color: Colors.black26, blurRadius: 10),
               ],
             ),
             child: Row(
@@ -114,7 +109,6 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
       ),
     );
   }
-
 
   Future<void> pickImage() async {
     final img = await ImagePickerWeb.getImageAsBytes();
@@ -140,8 +134,6 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
     }
   }
 
-
-
   Widget uploadBox({
     required String title,
     required VoidCallback onTap,
@@ -160,75 +152,70 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
           borderRadius: BorderRadius.circular(16),
           color: Colors.white,
           border: Border.all(color: Colors.blue.shade200),
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 10,
-            )
-          ],
+          boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 10)],
         ),
         child: image != null
             ? ClipRRect(
-          borderRadius: BorderRadius.circular(16),
-          child: Image.memory(
-            image,
-            fit: BoxFit.cover,
-            width: double.infinity,
-            height: double.infinity,
-          ),
-        )
+                borderRadius: BorderRadius.circular(16),
+                child: Image.memory(
+                  image,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  height: double.infinity,
+                ),
+              )
             : video != null
             ? Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.videocam,
-                size: 40, color: Colors.blue),
-            const SizedBox(height: 8),
-            const Text(
-              "Video uploaded",
-              style: TextStyle(fontSize: 14),
-            ),
-          ],
-        )
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.videocam, size: 40, color: Colors.blue),
+                  const SizedBox(height: 8),
+                  const Text("Video uploaded", style: TextStyle(fontSize: 14)),
+                ],
+              )
             : file != null
             ? Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.insert_drive_file,
-                size: 40, color: Colors.blue),
-            const SizedBox(height: 8),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Text(
-                file.name,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ],
-        )
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.insert_drive_file, size: 40, color: Colors.blue),
+                  const SizedBox(height: 8),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Text(
+                      file.name,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+              )
             : Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 38, color: Colors.blue),
-            const SizedBox(height: 8),
-            Text(
-              "Upload $title",
-              style: const TextStyle(fontSize: 14),
-            ),
-          ],
-        ),
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(icon, size: 38, color: Colors.blue),
+                  const SizedBox(height: 8),
+                  Text("Upload $title", style: const TextStyle(fontSize: 14)),
+                ],
+              ),
       ),
     );
   }
 
-
-
   String _getFormattedDate(DateTime date) {
     final months = [
-      "January", "February", "March", "April", "May", "June",
-      "July", "August", "September", "October", "November", "December"
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
     ];
     return "${date.day} ${months[date.month - 1]}, ${date.year}";
   }
@@ -310,14 +297,10 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
         backgroundColor: _getAttemptsColor(selectedAttempts),
         duration: const Duration(seconds: 2),
         behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
     );
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -335,30 +318,33 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
             end: Alignment.bottomRight,
           ),
         ),
-        child:
-        Row(
+        child: Row(
           children: [
             _buildSidebar(),
             BlocConsumer<CreateCourseCubit, CreateCourseState>(
               listener: (context, state) {
                 if (state is CreateCourseSuccess) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(state.message), backgroundColor: Colors.green),
+                    SnackBar(
+                      content: Text(state.message),
+                      backgroundColor: Colors.green,
+                    ),
                   );
                   _clearForm();
                 }
                 if (state is CreateCourseError) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(state.message), backgroundColor: Colors.red),
+                    SnackBar(
+                      content: Text(state.message),
+                      backgroundColor: Colors.red,
+                    ),
                   );
                 }
               },
               builder: (context, state) {
                 return SingleChildScrollView(
                   padding: const EdgeInsets.all(40),
-                  child: Center(
-                    child: _buildFormContainer(state),
-                  ),
+                  child: Center(child: _buildFormContainer(state)),
                 );
               },
             ),
@@ -367,6 +353,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
       ),
     );
   }
+
   void _clearForm() {
     nameController.clear();
     descriptionController.clear();
@@ -374,6 +361,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
 
     // setState(() => selectedImageBytes = null);
   }
+
   Widget _buildSidebar() {
     return Container(
       width: 250,
@@ -403,7 +391,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
             Icons.person,
             'Profile',
             'Profile',
-                () {
+            () {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
@@ -417,7 +405,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
             Icons.book,
             'My Courses',
             'My Courses',
-                () {
+            () {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
@@ -431,7 +419,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
             Icons.notifications_active_rounded,
             'Announcements',
             'Announcements',
-                () {
+            () {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
@@ -445,7 +433,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
             Icons.person_add_alt_1,
             'Create Users',
             'Create users',
-                () {
+            () {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
@@ -459,8 +447,8 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
             Icons.folder_copy_rounded,
             'Create Departments',
             'Create Departments',
-                () {
-Navigator.pushReplacement(
+            () {
+              Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                   builder: (context) => const CreateDepartmentPage(),
@@ -473,12 +461,10 @@ Navigator.pushReplacement(
             Icons.calendar_month_outlined,
             'Create Years',
             'Create Years',
-                () {
-Navigator.pushReplacement(
+            () {
+              Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => const CreateYearPage(),
-                ),
+                MaterialPageRoute(builder: (context) => const CreateYearPage()),
               );
             },
           ),
@@ -487,16 +473,14 @@ Navigator.pushReplacement(
             Icons.calendar_month_outlined,
             'Create New Course',
             'Create New Course',
-                () {
-
-            },
+            () {},
           ),
           _buildMenuItem(
             Icons.grade_outlined,
             Icons.grade,
             'Grades overview',
             'Grades overview',
-                () {},
+            () {},
           ),
           const Spacer(),
           _buildLogoutButton(),
@@ -505,13 +489,14 @@ Navigator.pushReplacement(
       ),
     );
   }
+
   Widget _buildMenuItem(
-      IconData outlinedIcon,
-      IconData filledIcon,
-      String title,
-      String value,
-      onTap,
-      ) {
+    IconData outlinedIcon,
+    IconData filledIcon,
+    String title,
+    String value,
+    onTap,
+  ) {
     final isSelected = selectedMenuItem == value;
     final isHovered = hoveredMenuItem == value;
 
@@ -580,6 +565,7 @@ Navigator.pushReplacement(
       ),
     );
   }
+
   Widget _buildLogoutButton() {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
@@ -644,13 +630,14 @@ Navigator.pushReplacement(
       ),
     );
   }
+
   Widget _buildDropdownField(
-      String displayValue,
-      List<GetDepartmentModel> departments,
-      bool isExpanded,
-      Function(GetDepartmentModel) onSelected,
-      Function() onToggle,
-      ) {
+    String displayValue,
+    List<GetDepartmentModel> departments,
+    bool isExpanded,
+    Function(GetDepartmentModel) onSelected,
+    Function() onToggle,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -661,7 +648,8 @@ Navigator.pushReplacement(
             fontWeight: FontWeight.bold,
             fontFamily: "inter",
             color: Colors.blue[900],
-          ),        ),
+          ),
+        ),
         const SizedBox(height: 8),
         MouseRegion(
           cursor: SystemMouseCursors.click,
@@ -674,7 +662,9 @@ Navigator.pushReplacement(
                 color: isExpanded ? Colors.white : const Color(0xFFF8FAFC),
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(
-                  color: isExpanded ? const Color(0xFF2563EB) : const Color(0xFFE2E8F0),
+                  color: isExpanded
+                      ? const Color(0xFF2563EB)
+                      : const Color(0xFFE2E8F0),
                   width: isExpanded ? 2 : 1,
                 ),
               ),
@@ -683,12 +673,30 @@ Navigator.pushReplacement(
                 children: [
                   Row(
                     children: [
-                      Icon(Icons.person_outline, color: isExpanded ? const Color(0xFF2563EB) : const Color(0xFF94A3B8), size: 20),
+                      Icon(
+                        Icons.person_outline,
+                        color: isExpanded
+                            ? const Color(0xFF2563EB)
+                            : const Color(0xFF94A3B8),
+                        size: 20,
+                      ),
                       const SizedBox(width: 12),
-                      Text(displayValue, style: const TextStyle(fontSize: 14, color: Color(0xFF1E293B), fontWeight: FontWeight.w500)),
+                      Text(
+                        displayValue,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Color(0xFF1E293B),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                     ],
                   ),
-                  Icon(isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: const Color(0xFF94A3B8)),
+                  Icon(
+                    isExpanded
+                        ? Icons.keyboard_arrow_up
+                        : Icons.keyboard_arrow_down,
+                    color: const Color(0xFF94A3B8),
+                  ),
                 ],
               ),
             ),
@@ -701,7 +709,12 @@ Navigator.pushReplacement(
               color: Colors.white,
               borderRadius: BorderRadius.circular(8),
               border: Border.all(color: const Color(0xFFE2E8F0)),
-              boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10)],
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 10,
+                ),
+              ],
             ),
             constraints: const BoxConstraints(maxHeight: 250),
             child: ListView.builder(
@@ -712,106 +725,27 @@ Navigator.pushReplacement(
                 return InkWell(
                   onTap: () => onSelected(department),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
                     child: Row(
                       children: [
                         Expanded(
                           child: Text(
                             "${department.name} (${department.headName})",
-                            style: const TextStyle(fontSize: 14, color: Color(0xFF1E293B)),
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Color(0xFF1E293B),
+                            ),
                           ),
                         ),
                         if (displayValue == department.name)
-                          const Icon(Icons.check, color: Color(0xFF2563EB), size: 18),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-      ],
-    );
-  }
-  Widget _buildSecondDropdownField(
-      String displayValue,
-      List<GetYearModel> years,
-      bool isExpanded,
-      Function(GetYearModel) onSelected,
-      Function() onToggle,
-      ) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "Year Name",
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            fontFamily: "inter",
-            color: Colors.blue[900],
-          ),        ),
-        const SizedBox(height: 8),
-        MouseRegion(
-          cursor: SystemMouseCursors.click,
-          child: GestureDetector(
-            onTap: onToggle,
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              decoration: BoxDecoration(
-                color: isExpanded ? Colors.white : const Color(0xFFF8FAFC),
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: isExpanded ? const Color(0xFF2563EB) : const Color(0xFFE2E8F0),
-                  width: isExpanded ? 2 : 1,
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Icon(Icons.person_outline, color: isExpanded ? const Color(0xFF2563EB) : const Color(0xFF94A3B8), size: 20),
-                      const SizedBox(width: 12),
-                      Text(displayValue, style: const TextStyle(fontSize: 14, color: Color(0xFF1E293B), fontWeight: FontWeight.w500)),
-                    ],
-                  ),
-                  Icon(isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: const Color(0xFF94A3B8)),
-                ],
-              ),
-            ),
-          ),
-        ),
-        if (isExpanded)
-          Container(
-            margin: const EdgeInsets.only(top: 4),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: const Color(0xFFE2E8F0)),
-              boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10)],
-            ),
-            constraints: const BoxConstraints(maxHeight: 250),
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: years.length,
-              itemBuilder: (context, index) {
-                final year = years[index];
-                return InkWell(
-                  onTap: () => onSelected(year),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            "${year.name} (${year.totalHours})",
-                            style: const TextStyle(fontSize: 14, color: Color(0xFF1E293B)),
+                          const Icon(
+                            Icons.check,
+                            color: Color(0xFF2563EB),
+                            size: 18,
                           ),
-                        ),
-                        if (displayValue == year.name)
-                          const Icon(Icons.check, color: Color(0xFF2563EB), size: 18),
                       ],
                     ),
                   ),
@@ -823,18 +757,158 @@ Navigator.pushReplacement(
     );
   }
 
-  Widget _buildFormContainer (CreateCourseState state)
-  {
+  Widget _buildSecondDropdownField(
+    String displayValue,
+    List<YearModel> years,
+    bool isExpanded,
+    Function(YearModel) onSelected,
+    Function() onToggle,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Year Name",
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            fontFamily: "inter",
+            color: Colors.blue[900],
+          ),
+        ),
+        const SizedBox(height: 8),
+        MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+            onTap: onToggle,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              decoration: BoxDecoration(
+                color: isExpanded ? Colors.white : const Color(0xFFF8FAFC),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                  color: isExpanded
+                      ? const Color(0xFF2563EB)
+                      : const Color(0xFFE2E8F0),
+                  width: isExpanded ? 2 : 1,
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.person_outline,
+                        color: isExpanded
+                            ? const Color(0xFF2563EB)
+                            : const Color(0xFF94A3B8),
+                        size: 20,
+                      ),
+                      const SizedBox(width: 12),
+                      Text(
+                        displayValue,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Color(0xFF1E293B),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Icon(
+                    isExpanded
+                        ? Icons.keyboard_arrow_up
+                        : Icons.keyboard_arrow_down,
+                    color: const Color(0xFF94A3B8),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        if (isExpanded)
+          Container(
+            margin: const EdgeInsets.only(top: 4),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: const Color(0xFFE2E8F0)),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 10,
+                ),
+              ],
+            ),
+            constraints: const BoxConstraints(maxHeight: 250),
+            child: years.isEmpty
+                ? Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: Center(
+                child: Text(
+                  "No years already created for this department",
+                  style: TextStyle(
+                    color: Colors.red[600],
+                    fontSize: 14,
+                    fontStyle: FontStyle.italic,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            )
+                : ListView.builder(
+              shrinkWrap: true,
+              itemCount: years.length,
+              itemBuilder: (context, index) {
+                final year = years[index];
+                return InkWell(
+                  onTap: () => onSelected(year),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            year.name,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Color(0xFF1E293B),
+                            ),
+                          ),
+                        ),
+                        if (displayValue == year.name)
+                          const Icon(
+                            Icons.check,
+                            color: Color(0xFF2563EB),
+                            size: 18,
+                          ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+      ],
+    );
+  }
+
+
+
+  Widget _buildFormContainer(CreateCourseState state) {
     return SingleChildScrollView(
-      child:  Container(
+      child: Container(
         width: 1100,
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
-          boxShadow: const [
-            BoxShadow(color: Colors.black12, blurRadius: 30),
-          ],
+          boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 30)],
         ),
         child: Form(
           key: _formKey,
@@ -852,20 +926,13 @@ Navigator.pushReplacement(
               ),
               const SizedBox(height: 8),
               TextField(
-
                 controller: nameController,
 
-
                 decoration: const InputDecoration(
-
-                  hintStyle: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 14,
-                  ),
+                  hintStyle: TextStyle(color: Colors.grey, fontSize: 14),
                   hintText: "Introduction to Marketing",
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(8)),
-
                   ),
                 ),
               ),
@@ -884,10 +951,7 @@ Navigator.pushReplacement(
                 controller: descriptionController,
                 decoration: const InputDecoration(
                   hintText: "Brief overview of what the course covers",
-                  hintStyle: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 14,
-                  ),
+                  hintStyle: TextStyle(color: Colors.grey, fontSize: 14),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(8)),
                   ),
@@ -908,10 +972,7 @@ Navigator.pushReplacement(
                 controller: creditHoursController,
                 decoration: const InputDecoration(
                   hintText: "Number of credit hours",
-                  hintStyle: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 14,
-                  ),
+                  hintStyle: TextStyle(color: Colors.grey, fontSize: 14),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(8)),
                   ),
@@ -923,58 +984,79 @@ Navigator.pushReplacement(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
-                    child: BlocProvider(
+                    child:
+                    BlocProvider(
                       create: (_) => DepartmentsCubitDrop()..fetchDepartments(),
-                      child: BlocBuilder<DepartmentsCubitDrop, DepartmentsStateDrop>(
-                        builder: (context, departmentState) {
-                          if (departmentState is DepartmentLoadingState) {
-                            return const Padding(
-                              padding: EdgeInsets.only(top: 30),
-                              child: Center(child: CircularProgressIndicator()),
-                            );
-                          }
+                      child:
+                          BlocBuilder<
+                            DepartmentsCubitDrop,
+                            DepartmentsStateDrop
+                          >(
+                            builder: (context, departmentState) {
+                              if (departmentState is DepartmentLoadingState) {
+                                return const Padding(
+                                  padding: EdgeInsets.only(top: 30),
+                                  child: Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                );
+                              }
 
-                          if (departmentState is DepartmentsErrorState) {
-                            return Padding(
-                              padding: const EdgeInsets.only(top: 30),
-                              child: Text("Error: ${departmentState.message}",
-                                  style: const TextStyle(color: Colors.red)),
-                            );
-                          }
+                              if (departmentState is DepartmentsErrorState) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(top: 30),
+                                  child: Text(
+                                    "Error: ${departmentState.message}",
+                                    style: const TextStyle(color: Colors.red),
+                                  ),
+                                );
+                              }
 
-                          if (departmentState is DepartmentLoadedState) {
-                            if (departmentState.departments.isEmpty) {
-                              return const Padding(
-                                padding: EdgeInsets.only(top: 30),
-                                child: Text("No departments found"),
-                              );
-                            }
+                              if (departmentState is DepartmentLoadedState) {
+                                if (departmentState.departments.isEmpty) {
+                                  return const Padding(
+                                    padding: EdgeInsets.only(top: 30),
+                                    child: Text("No departments found"),
+                                  );
+                                }
 
-                            List<GetDepartmentModel> departments = departmentState.departments.whereType<GetDepartmentModel>().toList();
+                                List<GetDepartmentModel> departments =
+                                    departmentState.departments
+                                        .whereType<GetDepartmentModel>()
+                                        .toList();
 
-                            return _buildDropdownField(
-                              selectedDepartmentName,
-                              departments,
-                              isDepartmentExpanded,
+                                return _buildDropdownField(
+                                  selectedDepartmentName,
+                                  departments,
+                                  isDepartmentExpanded,
                                   (chosenDep) {
-                                setState(() {
-                                  selectedDepartmentName = chosenDep.name;
-                                  isDepartmentExpanded = false;
-                                });
-                              },
-                                  () => setState(() => isDepartmentExpanded = !isDepartmentExpanded),
-                            );
-                          }
+                                    setState(() {
+                                      selectedDepartmentId = chosenDep.id
+                                          .toString();
+                                      availableYears = chosenDep.years;
+                                      selectedYearName = "Select Year";
+                                      selectedYearId = null;
+                                      selectedDepartmentName = chosenDep.name;
+                                      isDepartmentExpanded = false;
+                                    });
+                                  },
+                                  () => setState(
+                                    () => isDepartmentExpanded =
+                                        !isDepartmentExpanded,
+                                  ),
+                                );
+                              }
 
-                          return const SizedBox(height: 50);
-                        },
-                      ),
+                              return const SizedBox(height: 50);
+                            },
+                          ),
                     ),
                   ),
 
                   const SizedBox(width: 30),
                   Expanded(
-                    child: BlocProvider(
+                    child:
+                    BlocProvider(
                       create: (_) => YearsCubitDrop()..fetchYears(),
                       child: BlocBuilder<YearsCubitDrop, YearsStateDrop>(
                         builder: (context, yearState) {
@@ -988,8 +1070,10 @@ Navigator.pushReplacement(
                           if (yearState is YearsErrorState) {
                             return Padding(
                               padding: const EdgeInsets.only(top: 30),
-                              child: Text("Error: ${yearState.message}",
-                                  style: const TextStyle(color: Colors.red)),
+                              child: Text(
+                                "Error: ${yearState.message}",
+                                style: const TextStyle(color: Colors.red),
+                              ),
                             );
                           }
 
@@ -1001,19 +1085,26 @@ Navigator.pushReplacement(
                               );
                             }
 
-                            List<GetYearModel> years = yearState.years.whereType<GetYearModel>().toList();
+                            List<GetYearModel> years = yearState.years
+                                .whereType<GetYearModel>()
+                                .toList();
 
                             return _buildSecondDropdownField(
                               selectedYearName,
-                              years,
+                              availableYears,
+
                               isYearExpanded,
-                                  (chosenYear) {
+                              (chosenYear) {
                                 setState(() {
                                   selectedYearName = chosenYear.name;
+                                  selectedYearId = chosenYear.id.toString();
+
                                   isYearExpanded = false;
                                 });
                               },
-                                  () => setState(() => isYearExpanded = !isYearExpanded),
+                              () => setState(
+                                () => isYearExpanded = !isYearExpanded,
+                              ),
                             );
                           }
 
@@ -1461,99 +1552,101 @@ Navigator.pushReplacement(
                 ],
               ),
               const SizedBox(height: 32),
-              _buildActionButtons(state)
+              _buildActionButtons(state),
             ],
           ),
         ),
       ),
     );
   }
+
   Widget _buildActionButtons(CreateCourseState state) {
     bool isLoading = state is CreateCourseLoading;
     return Row(
       children: [
-
         Expanded(
           flex: 2,
           child: InkWell(
-            onTap: isLoading ? null : () {
-              if (_formKey.currentState!.validate()) {
+            onTap: isLoading
+                ? null
+                : () {
+                    if (_formKey.currentState!.validate()) {
+                      if (selectedDepartmentName == "Select Department" ||
+                          selectedDepartmentName.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Please select a department Name"),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                        return;
+                      }
+                      if (selectedYearName == "Select Year" ||
+                          selectedYearName.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Please select a year Name"),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                        return;
+                      }
 
-                if (selectedDepartmentName == "Select Department" || selectedDepartmentName.isEmpty) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Please select a department Name"),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
-                  return;
-                }
-                if (selectedYearName == "Select Year" || selectedYearName.isEmpty) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Please select a year Name"),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
-                  return;
-                }
+                      context.read<CreateCourseCubit>().createCourse(
+                        nameController,
+                        descriptionController,
 
-
-                context.read<CreateCourseCubit>().createCourse(
-                  nameController,
-                  descriptionController,
-                  selectedDepartmentName,
-                  selectedYearName,
-                  creditHoursController,
-                  coverImage,
-                );
-              }
-            },
+                        selectedDepartmentName,
+                        selectedYearName,
+                        creditHoursController,
+                        coverImage,
+                      );
+                    }
+                  },
             child: Container(
               height: 55,
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [
-                    Color(0xFF1849A9),
-                    Color(0xFF53B1FD),
-                  ],
+                  colors: [Color(0xFF1849A9), Color(0xFF53B1FD)],
                 ),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Center(
                 child: isLoading
                     ? const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                      ),
-                    ),
-                    SizedBox(width: 12),
-                    Text(
-                      "Creating Course...",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                )
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                Colors.white,
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 12),
+                          Text(
+                            "Creating Course...",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      )
                     : const Text(
-                  "Create Course",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                  ),
-                ),
+                        "Create Course",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        ),
+                      ),
               ),
             ),
           ),
