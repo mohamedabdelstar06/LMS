@@ -14,9 +14,13 @@ import 'package:lms/features/screens/profiles/student_profile/state_mangement/st
 
 import '../../../../core/cons/Colors/app_colors.dart';
 import '../../../../core/helpers/logout_server/logout.dart';
+import '../../../draft/test.dart';
+import '../../../draft/test_models.dart';
 import '../../Announcement/view.dart';
 import '../../Create_user/View.dart';
 import '../../add_course/Adding_view.dart';
+import '../../create_squadron/view.dart';
+import '../../get_users/view.dart';
 import 'model/view.dart';
 
 class AdminProfileScreen extends StatefulWidget {
@@ -173,7 +177,7 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
           ),
         ],
       ),
-      child: Column(
+      child: ListView(
         children: [
           const SizedBox(height: 40),
           _buildMenuItem(
@@ -258,17 +262,47 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
             },
           ),
           _buildMenuItem(
-            Icons.calendar_month,
-            Icons.calendar_month_outlined,
+            Icons.event_available,
+            Icons.event_note_outlined,
             'Create New Course',
             'Create New Course',
                 () {
-Navigator.pushReplacement(
-context,
-MaterialPageRoute(
-builder: (context) =>  CreateNewCoursePage(),
-),
-);
+    Navigator.pushReplacement(
+    context,
+    MaterialPageRoute(
+    builder: (context) =>  CreateNewCoursePage(),
+    ),
+    );
+
+            },
+          ),
+          _buildMenuItem(
+            Icons.supervised_user_circle_rounded,
+            Icons.supervised_user_circle_outlined,
+            'All Users',
+            'All Users',
+                () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>  GetUsersPage(),
+                ),
+              );
+
+            },
+          ),
+          _buildMenuItem(
+            Icons.airplanemode_active,
+            Icons.airplanemode_active_rounded,
+            'Create Squadrons',
+            'Create Squadrons',
+                () {
+    Navigator.pushReplacement(
+    context,
+    MaterialPageRoute(
+    builder: (context) =>  CreateSquadronsPage(),
+    ),
+    );
 
             },
           ),

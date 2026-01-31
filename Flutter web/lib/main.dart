@@ -39,7 +39,6 @@ void main() async {
       }
     };
   }
-  DioHelper.init();
 
   runApp(MyApp());
 }
