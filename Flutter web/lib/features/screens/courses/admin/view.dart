@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lms/core/widgets/app_bar.dart';
 import 'package:lms/features/screens/Create_user/View.dart';
+import 'package:lms/features/screens/get_squadron/get_all%20squadrons/view.dart';
 import 'package:lms/features/screens/get_users/view.dart';
 
 import '../../../../core/cons/Colors/app_colors.dart';
@@ -513,7 +514,7 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
       },
       child: GestureDetector(
         onTap: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => CreateUserScreen(),));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => GetSquadronPage(),));
 
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(

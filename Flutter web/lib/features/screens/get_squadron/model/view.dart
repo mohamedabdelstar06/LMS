@@ -28,6 +28,23 @@ class SquadronModel extends Equatable {
       'updatedAt': updatedAt.toIso8601String(),
     };
   }
+  SquadronModel copyWith({
+    int? id,
+    String? name,
+    String? description,
+    int? studentCount,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) {
+    return SquadronModel(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      studentCount: studentCount ?? this.studentCount,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
 
 
   factory SquadronModel.fromJson(Map<String, dynamic> json) {
