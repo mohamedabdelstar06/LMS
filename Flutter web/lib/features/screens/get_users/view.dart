@@ -19,6 +19,7 @@ import '../courses/admin/view.dart';
 import '../create_squadron/view.dart';
 import '../create_years/view.dart';
 import '../profiles/admin_profile/view.dart';
+import 'get_user_model/view.dart';
 
 
 class GetUsersPage extends StatelessWidget {

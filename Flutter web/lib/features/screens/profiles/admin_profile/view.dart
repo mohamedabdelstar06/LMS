@@ -14,13 +14,16 @@ import 'package:lms/features/screens/profiles/student_profile/state_mangement/st
 
 import '../../../../core/cons/Colors/app_colors.dart';
 import '../../../../core/helpers/logout_server/logout.dart';
+import '../../../draft/comments.dart';
 import '../../../draft/test.dart';
 import '../../../draft/test_models.dart';
 import '../../Announcement/view.dart';
 import '../../Create_user/View.dart';
 import '../../add_course/Adding_view.dart';
 import '../../create_squadron/view.dart';
+import '../../get_department/get_All_departments/view.dart';
 import '../../get_users/view.dart';
+import '../../get_years/get_All_years/view.dart';
 import 'model/view.dart';
 
 class AdminProfileScreen extends StatefulWidget {
@@ -33,9 +36,10 @@ class AdminProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<AdminProfileScreen> {
   Uint8List? _webImage;
   String selectedMenuItem = 'Profile';
-  bool isNextButtonHovered = false;
   String? hoveredMenuItem;
   bool isLogoutHovered = false;
+  bool isNextButtonHovered = false;
+
   bool isProfilePictureHovered = false;
   String selectedStartYear = "2020";
   String selectedEndYear = "2025";
@@ -277,6 +281,21 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
             },
           ),
           _buildMenuItem(
+            Icons.airplanemode_active,
+            Icons.airplanemode_active_rounded,
+            'Create Squadrons',
+            'Create Squadrons',
+                () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>  CreateSquadronsPage(),
+                ),
+              );
+
+            },
+          ),
+          _buildMenuItem(
             Icons.supervised_user_circle_rounded,
             Icons.supervised_user_circle_outlined,
             'All Users',
@@ -292,20 +311,36 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
             },
           ),
           _buildMenuItem(
-            Icons.airplanemode_active,
-            Icons.airplanemode_active_rounded,
-            'Create Squadrons',
-            'Create Squadrons',
+            Icons.school_outlined,
+            Icons.school,
+            'All Departments',
+            'All Departments',
                 () {
-    Navigator.pushReplacement(
-    context,
-    MaterialPageRoute(
-    builder: (context) =>  CreateSquadronsPage(),
-    ),
-    );
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>  DepartmentsScreen(),
+                ),
+              );
 
             },
           ),
+          _buildMenuItem(
+            Icons.school_outlined,
+            Icons.school,
+            'All Years',
+            'All Years',
+                () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>  YearsScreen(),
+                ),
+              );
+
+            },
+          ),
+
           _buildMenuItem(
             Icons.grade_outlined,
             Icons.grade,
