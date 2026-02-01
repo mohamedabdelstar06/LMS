@@ -1,6 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:lms/features/draft/test_models.dart';
 
+import '../get_user_model/view.dart';
+
 
 abstract class GetUsersState extends Equatable {
   const GetUsersState();

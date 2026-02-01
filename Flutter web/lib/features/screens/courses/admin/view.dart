@@ -10,6 +10,9 @@ import '../../../../core/cons/Colors/app_colors.dart';
 import '../../../../core/cons/context/navigation_key.dart';
 import '../../../../core/helpers/logout_server/logout.dart';
 import '../../../../generated/assets.dart';
+import '../../../draft/comments.dart';
+import '../../../draft/test.dart';
+import '../../get_department/get_All_departments/view.dart';
 import '../course_model/courses.dart';
 
 class AdminCourseScreen extends StatefulWidget {
@@ -655,7 +658,7 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                             /// TODO : ADJUST EDIT COURSE
                             InkWell(
                               onTap: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => GetUsersScreen(),));
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => DepartmentsScreen(),));
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(content: Text("data"),
                                   )

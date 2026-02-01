@@ -8,7 +8,9 @@ class ApiResources {
   static final verifyUserEmailEndPoint = "Auth/verify-account";
   static final activateUserEmailEndPoint = "Auth/activate-account";
   static final createDepartmentEndPoint = "Department/";
+  static final getDepartmentEndPoint = "Department";
   static final createYearEndPoint = "years";
+  static final getYearEndPoint = "years";
   static final createCourseEndPoint = "Course";
   static final squadronEndPoint = "Squadron";
 
