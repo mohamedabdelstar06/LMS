@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 //
 //
 // import 'package:dio/dio.dart';
@@ -941,4 +939,4 @@
 //     );
 //   }
 // }
->>>>>>> 6483a3f0a84d1fb9a706d41f4a7d6ff0a34ad97b
+
