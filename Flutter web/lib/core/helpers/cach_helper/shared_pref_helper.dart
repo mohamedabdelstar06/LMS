@@ -161,7 +161,7 @@ class PrefHelper {
     await prefs.setString("email", user.user!.email!);
  await prefs.setString("fullName", user.user!.fullName!.split(" ")[0]);
     // await prefs.setString("gender", user.user!.gender!);
-    // await prefs.setString("profileImageUrl", user.user!.profileImageUrl!);
+    await prefs.setString("profileImageUrl", user.user!.profileImageUrl!);
     await prefs.setString("role", user.user!.role!);
     await prefs.setString("message", user.message!);
   }
