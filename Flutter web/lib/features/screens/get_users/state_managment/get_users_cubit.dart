@@ -1,10 +1,8 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/src/widgets/editable_text.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lms/core/cons/api_helper_resources/api_resources.dart';
 import 'package:lms/core/helpers/cach_helper/shared_pref_helper.dart';
-import 'package:lms/features/draft/test_models.dart';
-import 'package:lms/features/draft/test_states.dart';
+
 
 import '../get_user_model/view.dart';
 import 'get_users_state.dart';
@@ -51,7 +49,7 @@ class GetUsersCubit extends Cubit<GetUsersState> {
         return;
       }
 
-      final usersResponse = UsersResponseModel.fromJson(response.data);
+      final usersResponse = AllUsersResponseModel.fromJson(response.data);
 
       if (state is GetUsersLoaded && page > 1) {
         final oldState = state as GetUsersLoaded;

@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:lms/features/draft/test_models.dart';
+import 'package:lms/features/draft/test_models.dart' hide GetUserModel, UsersResponseModel;
 
 import '../get_user_model/view.dart';
 
@@ -16,7 +16,7 @@ class GetUsersInitial extends GetUsersState {}
 class GetUsersLoading extends GetUsersState {}
 
 class GetUsersLoaded extends GetUsersState {
-  final UsersResponseModel usersResponse;
+  final AllUsersResponseModel usersResponse;
   final String searchQuery;
   final int currentPage;
   final int filterStatus;
@@ -33,7 +33,7 @@ class GetUsersLoaded extends GetUsersState {
   });
 
   GetUsersLoaded copyWith({
-    UsersResponseModel? usersResponse,
+    AllUsersResponseModel? usersResponse,
     String? searchQuery,
     int? currentPage,
     int? filterStatus,

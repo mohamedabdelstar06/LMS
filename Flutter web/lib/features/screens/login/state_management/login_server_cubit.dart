@@ -72,7 +72,7 @@ class LoginCubit extends Cubit<LoginState> {
         if (model.user!.role == "Student"){
           Navigator.pushReplacement(navigatorKey.currentContext!, MaterialPageRoute(builder: (context) =>  StudentCourseScreen() ,));
         }else if (model.user!.role == "Instructor"){
-          Navigator.pushReplacement(navigatorKey.currentContext!, MaterialPageRoute(builder: (context) =>  CourseGridScreen() ,));
+          Navigator.pushReplacement(navigatorKey.currentContext!, MaterialPageRoute(builder: (context) =>  TeacherCourseScreen() ,));
         } else {
           Navigator.pushReplacement(navigatorKey.currentContext!, MaterialPageRoute(builder: (context) =>  AdminCourseScreen() ,));
         }

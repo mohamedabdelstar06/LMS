@@ -1,4 +1,5 @@
 import '../../../draft/test_models.dart';
+import '../admin/model/model.dart';
 
 class CourseModel {
   final String imageUrl;

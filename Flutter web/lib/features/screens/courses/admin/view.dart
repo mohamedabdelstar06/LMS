@@ -7,6 +7,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lms/core/widgets/app_bar.dart';
 import 'package:lms/features/screens/Create_user/View.dart';
+import 'package:lms/features/screens/courses/admin/state_managment/cubit.dart';
+import 'package:lms/features/screens/courses/admin/state_managment/states.dart';
 import 'package:lms/features/screens/get_squadron/get_all%20squadrons/view.dart';
 import 'package:lms/features/screens/get_users/view.dart';
 
@@ -21,6 +23,7 @@ import '../../../draft/test_models.dart';
 import '../../../draft/test_states.dart';
 import '../../get_department/get_All_departments/view.dart';
 import '../course_model/courses.dart';
+import 'model/model.dart';
 
 class AdminCourseScreen extends StatefulWidget {
   const AdminCourseScreen({super.key});

@@ -12,6 +12,7 @@ class ApiResources {
   static final createYearEndPoint = "years";
   static final getYearEndPoint = "years";
   static final createCourseEndPoint = "Course";
+  static final getCourseEndPoint = "Course";
   static final squadronEndPoint = "Squadron";
 
 

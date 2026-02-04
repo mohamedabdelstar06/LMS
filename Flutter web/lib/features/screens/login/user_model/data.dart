@@ -122,7 +122,7 @@ class User {
   // String? gender;
   // String? city;
   // String? academicLevel;
-  // String? profileImageUrl;
+  String? profileImageUrl;
 
   User({
     this.id,
@@ -132,7 +132,7 @@ class User {
     // this.gender,
     // this.city,
     // this.academicLevel,
-    // this.profileImageUrl,
+    this.profileImageUrl,
   });
 
   User.fromJson(Map<String, dynamic> json) {
@@ -143,7 +143,7 @@ class User {
     // gender = json['gender'];
     // city = json['city'];
     // academicLevel = json['academicLevel'];
-    // profileImageUrl = json['profileImageUrl'];
+    profileImageUrl = json['profileImageUrl'];
   }
 
   Map<String, dynamic> toJson() {
@@ -155,7 +155,7 @@ class User {
       // 'gender': gender,
       // 'city': city,
       // 'academicLevel': academicLevel,
-      // 'profileImageUrl': profileImageUrl,
+      'profileImageUrl': profileImageUrl,
     };
   }
 }

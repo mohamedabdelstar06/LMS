@@ -1,4 +1,4 @@
-class UsersResponseModel {
+class AllUsersResponseModel {
   final List<GetUserModel> users;
   final int totalPages;
   final int pageNumber;
@@ -7,7 +7,7 @@ class UsersResponseModel {
   final bool hasPreviousPage;
   final int totalCount;
 
-  UsersResponseModel({
+  AllUsersResponseModel({
     required this.users,
     required this.totalPages,
     required this.pageNumber,
@@ -17,10 +17,10 @@ class UsersResponseModel {
     required this.totalCount,
   });
 
-  factory UsersResponseModel.fromJson(Map<String, dynamic> json) {
+  factory AllUsersResponseModel.fromJson(Map<String, dynamic> json) {
     final usersJson = json['users'];
 
-    return UsersResponseModel(
+    return AllUsersResponseModel(
       users: usersJson is List
           ? usersJson.map((e) => GetUserModel.fromJson(e)).toList()
           : [],
@@ -33,7 +33,7 @@ class UsersResponseModel {
     );
   }
 
-  UsersResponseModel copyWith({
+  AllUsersResponseModel copyWith({
     List<GetUserModel>? users,
     int? totalPages,
     int? pageNumber,
@@ -42,7 +42,7 @@ class UsersResponseModel {
     bool? hasPreviousPage,
     int? totalCount,
   }) {
-    return UsersResponseModel(
+    return AllUsersResponseModel(
       users: users ?? this.users,
       totalPages: totalPages ?? this.totalPages,
       pageNumber: pageNumber ?? this.pageNumber,
