@@ -4,10 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:lms/features/screens/courses/student/view.dart';
-import 'package:lms/features/screens/profiles/admin_profile/state_managment/cubit_d_profile.dart';
-import 'package:lms/features/screens/profiles/admin_profile/state_managment/state_d_profile.dart';
-import 'package:lms/features/screens/profiles/student_profile/state_mangement/cubit.dart';
-import 'package:lms/features/screens/profiles/student_profile/state_mangement/states.dart';
+
 import 'package:lms/features/screens/profiles/teacher_profile/state_managment/cubit_d_profile.dart';
 import 'package:lms/features/screens/profiles/teacher_profile/state_managment/state_d_profile.dart';
 

@@ -5,18 +5,14 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:lms/features/screens/Create_department/view.dart';
 import 'package:lms/features/screens/courses/admin/view.dart';
-import 'package:lms/features/screens/courses/student/view.dart';
 import 'package:lms/features/screens/create_years/view.dart';
 import 'package:lms/features/screens/profiles/admin_profile/state_managment/cubit_d_profile.dart';
 import 'package:lms/features/screens/profiles/admin_profile/state_managment/state_d_profile.dart';
-import 'package:lms/features/screens/profiles/student_profile/state_mangement/cubit.dart';
-import 'package:lms/features/screens/profiles/student_profile/state_mangement/states.dart';
+
 
 import '../../../../core/cons/Colors/app_colors.dart';
 import '../../../../core/helpers/logout_server/logout.dart';
-import '../../../draft/comments.dart';
-import '../../../draft/test.dart';
-import '../../../draft/test_models.dart';
+
 import '../../Announcement/view.dart';
 import '../../Create_user/View.dart';
 import '../../add_course/Adding_view.dart';

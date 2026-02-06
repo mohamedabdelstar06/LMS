@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import '../../../features/screens/login/view.dart';
+import '../../../features/screens/auth/login/view.dart';
 import '../../cons/Colors/app_colors.dart';
 import '../../cons/api_helper_resources/api_resources.dart';
 import '../../cons/context/navigation_key.dart';
@@ -94,7 +94,7 @@ class LogoutServer {
                       ),
                     ),
                     onPressed: () async {
-                      Navigator.of(context).pop(); // close confirm dialog
+                      Navigator.of(context).pop();
                       await _showLoadingAndHandleLogout(token);
 
                     },

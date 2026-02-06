@@ -1,13 +1,13 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:lms/features/screens/login/user_model/data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../features/screens/ActivateAccountScreen/user_model/data.dart';
 import '../../../features/screens/Create_user/User_model/model.dart';
-import '../../../features/screens/Verify_email/user_model/data.dart';
-import '../../../features/screens/login/view.dart';
+import '../../../features/screens/auth/ActivateAccountScreen/user_model/data.dart';
+import '../../../features/screens/auth/Verify_email/user_model/data.dart';
+import '../../../features/screens/auth/login/user_model/data.dart';
+import '../../../features/screens/auth/login/view.dart';
 import '../../cons/api_helper_resources/api_resources.dart';
 import '../../cons/context/navigation_key.dart';
 import 'package:dio/dio.dart';
@@ -234,23 +234,7 @@ class PrefHelper {
 
 
 
-// class TokenStorageHelper {
-//   static AndroidOptions _getAndroidOptions() => const AndroidOptions(
-//     encryptedSharedPreferences: true,
-//   );
-//
-//   static Future<void> saveTokenSecure(UserModel user) async {
-//     final storage = FlutterSecureStorage(aOptions: _getAndroidOptions());
-//     await storage.write(key: "tokenKey", value: user.token!);
-//   }
-//
-//   static Future<String?> getTokenSecure() async {
-//     final storage = FlutterSecureStorage(aOptions: _getAndroidOptions());
-//     String? token = await storage.read(key: "tokenKey");
-//     return token;
-//   }
-//
-// }
+
 
 class TokenStorageHelper {
   static AndroidOptions _getAndroidOptions() => const AndroidOptions(
@@ -334,12 +318,17 @@ class UserStorageHelper {
   }
 }
 
+
+
 class VerifyStorageHelper {
   static Future<void> saveVerifyData(UserStatusModel status) async {
     final prefs = await SharedPreferences.getInstance();
 
     await prefs.setBool("exists", status.exists);
     await prefs.setBool("isActivated", status.isActivated);
+    if (status.email != null && status.email!.isNotEmpty) {
+      await prefs.setString("email", status.email!);
+    }
   }
 
   static Future<UserStatusModel?> getVerifyData() async {
@@ -348,18 +337,24 @@ class VerifyStorageHelper {
     if (!prefs.containsKey("exists")) return null;
 
     return UserStatusModel(
+      email: prefs.getString("email"),
       exists: prefs.getBool("exists") ?? false,
       isActivated: prefs.getBool("isActivated") ?? false,
     );
+  }
+
+  static Future<String?> getSavedEmail() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString("email");
   }
 
   static Future<void> clearVerifyData() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove("exists");
     await prefs.remove("isActivated");
+    await prefs.remove("email");
   }
 }
-
 
 class ActivateUserPrefs {
   static Future<void> saveActivateUserData(

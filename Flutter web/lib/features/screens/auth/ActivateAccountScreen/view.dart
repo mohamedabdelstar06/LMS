@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lms/features/screens/ActivateAccountScreen/state_management/activate_server_cubit.dart';
-import 'package:lms/features/screens/ActivateAccountScreen/state_management/activate_state.dart';
-
-
-import '../../../core/cons/Colors/app_colors.dart';
-import '../../../generated/assets.dart';
-
+import 'package:lms/features/screens/auth/ActivateAccountScreen/state_management/activate_server_cubit.dart';
+import 'package:lms/features/screens/auth/ActivateAccountScreen/state_management/activate_state.dart';
+import '../../../../core/cons/Colors/app_colors.dart';
+import '../../../../core/helpers/cach_helper/shared_pref_helper.dart';
 
 class ActivateAccountScreen extends StatefulWidget {
   const ActivateAccountScreen({super.key});
@@ -28,11 +23,10 @@ class _SignUpScreenState extends State<ActivateAccountScreen> {
   final passwordController = TextEditingController();
   final confirmedPasswordController = TextEditingController();
 
-
   @override
   void initState() {
     super.initState();
-
+    _loadSavedEmail();
   }
 
   @override
@@ -43,13 +37,22 @@ class _SignUpScreenState extends State<ActivateAccountScreen> {
     super.dispose();
   }
 
+  Future<void> _loadSavedEmail() async {
+    final savedEmail = await VerifyStorageHelper.getSavedEmail();
+    if (savedEmail != null && savedEmail.isNotEmpty) {
+      setState(() {
+        usernameController.text = savedEmail;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => ActivateCubit(),
       child: Builder(
         builder: (context) {
-          final activate_Cubit = BlocProvider.of<ActivateCubit>(context);
+          final activateCubit = BlocProvider.of<ActivateCubit>(context);
           return Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -81,7 +84,7 @@ class _SignUpScreenState extends State<ActivateAccountScreen> {
                           Text(
                             "Set up your account 🔐",
                             style: TextStyle(
-                              color: Color(0xFF1E3A8A),
+                              color: Color(0xFF175cd3).withValues(alpha: 0.86),
                               fontSize: 32,
                               fontWeight: FontWeight.w700,
                               fontFamily: "inter",
@@ -124,6 +127,14 @@ class _SignUpScreenState extends State<ActivateAccountScreen> {
                             ),
                             SizedBox(height: 8),
                             TextFormField(
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: "inter",
+                                color: Colors.black87.withValues(alpha: 0.6),
+                              ),
+                              readOnly: true,
+                              enabled: false,
                               controller: usernameController,
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(
@@ -132,15 +143,9 @@ class _SignUpScreenState extends State<ActivateAccountScreen> {
                                 contentPadding: EdgeInsets.symmetric(
                                   horizontal: 16,
                                 ),
-                                hintText: "Enter your Email",
-                                hintStyle: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: "inter",
-                                  color: Color(0xFF08303D),
-                                ),
                               ),
                             ),
+
                             SizedBox(height: 16),
                             Text(
                               "Password",
@@ -235,55 +240,58 @@ class _SignUpScreenState extends State<ActivateAccountScreen> {
                             ),
                             SizedBox(height: 22),
 
-
                             BlocBuilder<ActivateCubit, ActivateState>(
-                              bloc: activate_Cubit,
+                              bloc: activateCubit,
                               builder: (context, state) {
-                                final isLoading = state is LoadingSActivateState;
+                                final isLoading =
+                                    state is LoadingSActivateState;
 
-                                return
-
-
-                                      InkWell(
-                                        onTap: isLoading ? null : () {
+                                return InkWell(
+                                  onTap: isLoading
+                                      ? null
+                                      : () {
                                           SystemSound.play(
                                             SystemSoundType.click,
                                           );
                                           context
                                               .read<ActivateCubit>()
                                               .postActivateData(
-                                            usernameController,
-                                            passwordController,
-                                            confirmedPasswordController,
-                                            context,
-                                          );
+                                                usernameController,
+                                                passwordController,
+                                                confirmedPasswordController,
+                                                context,
+                                              );
                                         },
-                                        child: Center(
-                                          child: Container(
-                                            width: 470,
-                                            height: 45,
-                                            decoration: BoxDecoration(
-                                              gradient: LinearGradient(
-                                                begin: Alignment.topLeft,
-                                                end: Alignment.bottomRight,
-                                                colors: [
-                                                  Color(0xFF1849A9),
-                                                  Color(0xFF53B1FD),
-                                                ],
-                                              ),
-                                              borderRadius: BorderRadius.circular(12),
-                                            ),
-                                            child: Center(
-                                              child: isLoading
-                                                  ? Row(
-                                                mainAxisAlignment: MainAxisAlignment.center,
+                                  child: Center(
+                                    child: Container(
+                                      width: 470,
+                                      height: 45,
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                          begin: Alignment.topLeft,
+                                          end: Alignment.bottomRight,
+                                          colors: [
+                                            Color(0xFF1849A9),
+                                            Color(0xFF53B1FD),
+                                          ],
+                                        ),
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: Center(
+                                        child: isLoading
+                                            ? Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
                                                 children: [
                                                   SizedBox(
                                                     width: 20,
                                                     height: 20,
                                                     child: CircularProgressIndicator(
                                                       strokeWidth: 2,
-                                                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                                      valueColor:
+                                                          AlwaysStoppedAnimation<
+                                                            Color
+                                                          >(Colors.white),
                                                     ),
                                                   ),
                                                   SizedBox(width: 10),
@@ -291,14 +299,15 @@ class _SignUpScreenState extends State<ActivateAccountScreen> {
                                                     "Activation Data...",
                                                     style: TextStyle(
                                                       fontSize: 16,
-                                                      fontWeight: FontWeight.w600,
+                                                      fontWeight:
+                                                          FontWeight.w600,
                                                       fontFamily: "inter",
                                                       color: Colors.white,
                                                     ),
                                                   ),
                                                 ],
                                               )
-                                                  : Text(
+                                            : Text(
                                                 "Activate Account",
                                                 style: TextStyle(
                                                   fontSize: 16,
@@ -307,14 +316,12 @@ class _SignUpScreenState extends State<ActivateAccountScreen> {
                                                   color: Colors.white,
                                                 ),
                                               ),
-                                            ),
-                                          ),
-                                        ),
+                                      ),
+                                    ),
+                                  ),
 
-                                      // const SizedBox(width: 16),
-
-
-                                      );
+                                  // const SizedBox(width: 16),
+                                );
                               },
                             ),
                           ],
@@ -331,4 +338,3 @@ class _SignUpScreenState extends State<ActivateAccountScreen> {
     );
   }
 }
-
