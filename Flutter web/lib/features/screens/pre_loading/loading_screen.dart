@@ -25,7 +25,6 @@ class LoadingScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // App Logo with enhanced styling
               TweenAnimationBuilder<double>(
                 duration: Duration(seconds: 3),
                 tween: Tween(begin: 0.0, end: 1.0),
@@ -105,7 +104,6 @@ class LoadingScreen extends StatelessWidget {
               ),
               SizedBox(height: 30),
               
-              // App Title
               Text(
                 "SKY Learn",
                 style: TextStyle(
@@ -117,7 +115,6 @@ class LoadingScreen extends StatelessWidget {
               ),
               SizedBox(height: 10),
               
-              // Subtitle
               Text(
                 "Loading your learning experience...",
                 style: TextStyle(
@@ -129,18 +126,15 @@ class LoadingScreen extends StatelessWidget {
               ),
               SizedBox(height: 40),
               
-              // Enhanced Circular Progress Indicator
               SizedBox(
                 width: 50,
                 height: 50,
                 child: Stack(
                   children: [
-                    // Outer ring
                     CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF53B1FD)),
                       strokeWidth: 4,
                     ),
-                    // Inner ring
                     Positioned.fill(
                       child: Padding(
                         padding: EdgeInsets.all(8),
@@ -155,7 +149,6 @@ class LoadingScreen extends StatelessWidget {
               ),
               SizedBox(height: 30),
               
-              // Feature icons
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
