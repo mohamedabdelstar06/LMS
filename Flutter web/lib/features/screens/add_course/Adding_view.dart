@@ -10,12 +10,12 @@ import 'package:lms/features/screens/get_years/model.dart';
 
 import '../../../core/cons/Colors/app_colors.dart';
 import '../../../core/helpers/logout_server/logout.dart';
-import '../../../core/widgets/app_bar.dart';
 import 'dart:html' as html;
 import 'dart:ui_web' as ui;
 
 import '../Announcement/view.dart';
 import '../Create_user/View.dart';
+import '../admin/admin_profile/view.dart';
 import '../courses/admin/view.dart';
 import '../create_years/view.dart';
 import '../get_department/model/model.dart';
@@ -23,7 +23,6 @@ import '../get_department/state_mangment/cubit.dart';
 import '../get_department/state_mangment/states.dart';
 import '../get_years/state_managment/cubit.dart';
 import '../get_years/state_managment/states.dart';
-import '../profiles/admin_profile/view.dart';
 
 class CreateNewCoursePage extends StatelessWidget {
   const CreateNewCoursePage({super.key});

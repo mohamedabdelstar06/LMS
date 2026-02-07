@@ -22,3 +22,10 @@ class TeacherProfileError extends TeacherProfileState {
   final String message;
   TeacherProfileError({required this.message});
 }
+
+class TeacherProfileUpdating extends TeacherProfileState {}
+
+class TeacherProfileUpdated extends TeacherProfileState {
+  final TeacherProfileUser profile;
+  TeacherProfileUpdated({required this.profile});
+}

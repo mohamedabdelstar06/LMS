@@ -198,7 +198,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../features/screens/profiles/admin_profile/view.dart';
+import '../../features/screens/admin/admin_profile/view.dart';
 import '../../generated/assets.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {

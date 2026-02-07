@@ -1,5 +1,4 @@
 
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,10 +13,10 @@ import '../Announcement/view.dart';
 import '../Create_department/view.dart';
 import '../Create_user/View.dart';
 import '../add_course/Adding_view.dart';
+import '../admin/admin_profile/view.dart';
 import '../courses/admin/view.dart';
 import '../create_squadron/view.dart';
 import '../create_years/view.dart';
-import '../profiles/admin_profile/view.dart';
 import 'get_user_model/view.dart';
 
 

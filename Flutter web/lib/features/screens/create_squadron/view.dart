@@ -14,6 +14,7 @@ import '../../../core/cons/api_helper_resources/api_resources.dart';
 import '../../../core/helpers/logout_server/logout.dart';
 import '../Announcement/view.dart';
 import '../Create_user/View.dart';
+import '../admin/admin_profile/view.dart';
 import '../courses/admin/view.dart';
 import '../create_years/view.dart';
 import '../get_department/model/model.dart';
@@ -21,7 +22,6 @@ import '../get_department/state_mangment/cubit.dart';
 import '../get_department/state_mangment/states.dart';
 
 import '../get_squadron/get_all squadrons/state_managment/cubit.dart';
-import '../profiles/admin_profile/view.dart';
 
 
 class CreateSquadronsPage extends StatelessWidget {

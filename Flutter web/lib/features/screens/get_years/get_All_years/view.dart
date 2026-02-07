@@ -1,15 +1,10 @@
 import 'dart:ui_web' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lms/features/draft/test_cubit.dart';
-import 'package:lms/features/draft/test_models.dart';
-import 'package:lms/features/draft/test_screen.dart';
-import 'package:lms/features/draft/test_states.dart';
+
 import 'dart:html' as html;
 import 'package:flutter/widgets.dart';
-import 'package:lms/features/screens/get_department/get_All_departments/state_managments/cubit.dart';
-import 'package:lms/features/screens/get_department/get_All_departments/state_managments/states.dart';
-import 'package:lms/features/screens/get_department/get_All_departments/update_view.dart';
+
 import 'package:lms/features/screens/get_years/get_All_years/state_mangement/cubit.dart';
 import 'package:lms/features/screens/get_years/get_All_years/state_mangement/states.dart';
 
@@ -19,12 +14,12 @@ import '../../Announcement/view.dart';
 import '../../Create_department/view.dart';
 import '../../Create_user/View.dart';
 import '../../add_course/Adding_view.dart';
+import '../../admin/admin_profile/view.dart';
 import '../../courses/admin/view.dart';
 import '../../create_squadron/view.dart';
 import '../../create_years/view.dart';
 import '../../get_department/get_All_departments/view.dart';
 import '../../get_users/view.dart';
-import '../../profiles/admin_profile/view.dart';
 import 'all_model/model.dart';
 
 
