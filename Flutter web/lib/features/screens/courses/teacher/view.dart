@@ -23,6 +23,7 @@ import '../../../draft/test_cubit.dart';
 import '../../../draft/test_models.dart';
 import '../../../draft/test_states.dart';
 import '../../get_department/get_All_departments/view.dart';
+import '../../instructor/teacher_profile/view.dart';
 import '../admin/model/model.dart';
 import '../course_model/courses.dart';
 
@@ -943,7 +944,8 @@ void _showUserMenu(BuildContext context) async {
   if (result == 'logout') {
     await LogoutServer.logout();
   } else if (result == 'profile') {
-    // TODO: Add profile action later
+    Navigator.push(context, MaterialPageRoute(builder: (context) => TeacherProfileScreen()));
+
   } else if (result == 'settings') {
     // TODO: Add settings action later
   }

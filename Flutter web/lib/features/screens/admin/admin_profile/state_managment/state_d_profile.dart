@@ -22,3 +22,11 @@ class AdminProfileError extends AdminProfileState {
   final String message;
   AdminProfileError({required this.message});
 }
+
+
+class AdminProfileUpdating extends AdminProfileState {}
+
+class AdminProfileUpdated extends AdminProfileState {
+  final AdminProfileUser profile;
+  AdminProfileUpdated({required this.profile});
+}

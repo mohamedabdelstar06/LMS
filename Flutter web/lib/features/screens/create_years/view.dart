@@ -6,11 +6,11 @@ import '../../../core/cons/Colors/app_colors.dart';
 import '../../../core/helpers/logout_server/logout.dart';
 import '../Announcement/view.dart';
 import '../Create_user/View.dart';
+import '../admin/admin_profile/view.dart';
 import '../courses/admin/view.dart';
 import '../get_department/model/model.dart';
 import '../get_department/state_mangment/cubit.dart';
 import '../get_department/state_mangment/states.dart';
-import '../profiles/admin_profile/view.dart';
 
 
 class CreateYearPage extends StatelessWidget {

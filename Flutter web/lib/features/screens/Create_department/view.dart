@@ -9,12 +9,12 @@ import '../../../core/cons/api_helper_resources/api_resources.dart';
 import '../../../core/helpers/logout_server/logout.dart';
 import '../Announcement/view.dart';
 import '../Create_user/View.dart';
+import '../admin/admin_profile/view.dart';
 import '../courses/admin/view.dart';
 import '../create_years/view.dart';
 import '../get_users/get_user_dropdown/model_dropdown/view.dart';
 import '../get_users/get_user_dropdown/state_managment/cubit.dart';
 import '../get_users/get_user_dropdown/state_managment/states.dart';
-import '../profiles/admin_profile/view.dart';
 import 'State_Mangment/create_dep_cubit.dart';
 import 'State_Mangment/create_dep_state.dart';
 
