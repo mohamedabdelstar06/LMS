@@ -4,22 +4,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'dart:html' as html;
 import 'package:flutter/widgets.dart';
+import 'package:lms/features/screens/admin/get_years/get_All_years/state_mangement/cubit.dart';
+import 'package:lms/features/screens/admin/get_years/get_All_years/state_mangement/states.dart';
 
-import 'package:lms/features/screens/get_years/get_All_years/state_mangement/cubit.dart';
-import 'package:lms/features/screens/get_years/get_All_years/state_mangement/states.dart';
 
-import '../../../../core/cons/Colors/app_colors.dart';
-import '../../../../core/helpers/logout_server/logout.dart';
-import '../../Announcement/view.dart';
-import '../../Create_department/view.dart';
-import '../../Create_user/View.dart';
-import '../../add_course/Adding_view.dart';
-import '../../admin/admin_profile/view.dart';
-import '../../courses/admin/view.dart';
-import '../../create_squadron/view.dart';
+import '../../../../../core/cons/Colors/app_colors.dart';
+import '../../../../../core/helpers/logout_server/logout.dart';
+import '../../../Announcement/view.dart';
+import '../../../Create_department/view.dart';
+import '../../../Create_user/View.dart';
+import '../../../add_course/Adding_view.dart';
+import '../../../courses/admin/view.dart';
+import '../../../create_squadron/view.dart';
+import '../../../get_department/get_All_departments/view.dart';
+import '../../../get_users/view.dart';
 import '../../create_years/view.dart';
-import '../../get_department/get_All_departments/view.dart';
-import '../../get_users/view.dart';
 import 'all_model/model.dart';
 
 
@@ -234,14 +233,7 @@ class _DepartmentsScreenState extends State<YearsScreen> {
             Icons.person,
             'Profile',
             'Profile',
-                () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AdminProfileScreen(),
-                ),
-              );
-            },
+                () {},
           ),
           _buildMenuItem(
             Icons.book_outlined,
@@ -333,6 +325,21 @@ class _DepartmentsScreenState extends State<YearsScreen> {
             },
           ),
           _buildMenuItem(
+            Icons.airplanemode_active,
+            Icons.airplanemode_active_rounded,
+            'Create Squadrons',
+            'Create Squadrons',
+                () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>  CreateSquadronsPage(),
+                ),
+              );
+
+            },
+          ),
+          _buildMenuItem(
             Icons.supervised_user_circle_rounded,
             Icons.supervised_user_circle_outlined,
             'All Users',
@@ -360,37 +367,24 @@ class _DepartmentsScreenState extends State<YearsScreen> {
                 ),
               );
 
-
-
             },
           ),
           _buildMenuItem(
-            Icons.school_outlined,
-            Icons.school,
+            Icons.auto_awesome_motion_rounded,
+            Icons.auto_awesome_motion_outlined,
             'All Years',
             'All Years',
-                () {
-
-
-
-
-            },
-          ),
-          _buildMenuItem(
-            Icons.airplanemode_active,
-            Icons.airplanemode_active_rounded,
-            'Create Squadrons',
-            'Create Squadrons',
                 () {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>  CreateSquadronsPage(),
+                  builder: (context) =>  YearsScreen(),
                 ),
               );
 
             },
           ),
+
           _buildMenuItem(
             Icons.grade_outlined,
             Icons.grade,
