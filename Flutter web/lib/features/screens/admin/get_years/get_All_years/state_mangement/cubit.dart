@@ -3,9 +3,9 @@ import 'package:dio/dio.dart';
 import 'package:lms/core/cons/api_helper_resources/api_resources.dart';
 import 'package:lms/features/draft/test_models.dart';
 import 'package:lms/features/draft/test_states.dart';
-import 'package:lms/features/screens/get_years/get_All_years/state_mangement/states.dart';
+import 'package:lms/features/screens/admin/get_years/get_All_years/state_mangement/states.dart';
 
-import '../../../../../core/helpers/cach_helper/shared_pref_helper.dart';
+import '../../../../../../core/helpers/cach_helper/shared_pref_helper.dart';
 import '../all_model/model.dart';
 
 

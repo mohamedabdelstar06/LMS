@@ -1,16 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lms/features/screens/create_years/state_management/years_cubit.dart';
-import 'package:lms/features/screens/create_years/state_management/years_states.dart';
-import '../../../core/cons/Colors/app_colors.dart';
-import '../../../core/helpers/logout_server/logout.dart';
-import '../Announcement/view.dart';
-import '../Create_user/View.dart';
-import '../admin/admin_profile/view.dart';
-import '../courses/admin/view.dart';
-import '../get_department/model/model.dart';
-import '../get_department/state_mangment/cubit.dart';
-import '../get_department/state_mangment/states.dart';
+import 'package:lms/features/screens/admin/create_years/state_management/years_cubit.dart';
+import 'package:lms/features/screens/admin/create_years/state_management/years_states.dart';
+import '../../../../core/cons/Colors/app_colors.dart';
+import '../../../../core/helpers/logout_server/logout.dart';
+import '../../Announcement/view.dart';
+import '../../Create_department/view.dart';
+import '../../Create_user/View.dart';
+import '../../add_course/Adding_view.dart';
+import '../../courses/admin/view.dart';
+import '../../create_squadron/view.dart';
+import '../../get_department/get_All_departments/view.dart';
+import '../../get_department/model/model.dart';
+import '../../get_department/state_mangment/cubit.dart';
+import '../../get_department/state_mangment/states.dart';
+import '../../get_users/view.dart';
+import '../admin_profile/view.dart';
+import '../get_years/get_All_years/view.dart';
+
 
 
 class CreateYearPage extends StatelessWidget {
@@ -107,28 +114,30 @@ class _CreateYearScreenState extends State<CreateYearScreen> {
         child: Row(
           children: [
             _buildSidebar(),
-            BlocConsumer<YearCubit, YearState>(
-              listener: (context, state) {
-                if (state is YearSuccess) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(state.message), backgroundColor: Colors.green),
+            Expanded(
+              child: BlocConsumer<YearCubit, YearState>(
+                listener: (context, state) {
+                  if (state is YearSuccess) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(state.message), backgroundColor: Colors.green),
+                    );
+                    _clearForm();
+                  }
+                  if (state is YearError) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(state.message), backgroundColor: Colors.red),
+                    );
+                  }
+                },
+                builder: (context, state) {
+                  return SingleChildScrollView(
+                    padding: const EdgeInsets.all(40),
+                    child: Center(
+                      child: _buildFormContainer(state),
+                    ),
                   );
-                  _clearForm();
-                }
-                if (state is YearError) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(state.message), backgroundColor: Colors.red),
-                  );
-                }
-              },
-              builder: (context, state) {
-                return SingleChildScrollView(
-                  padding: const EdgeInsets.all(40),
-                  child: Center(
-                    child: _buildFormContainer(state),
-                  ),
-                );
-              },
+                },
+              ),
             ),
           ],
         ),
@@ -142,6 +151,10 @@ class _CreateYearScreenState extends State<CreateYearScreen> {
     departmentNameController.clear();
 
     setState(() =>  selectedDepartmentName = "Select Department");
+    selectedStartDate = null;
+    selectedEndDate = null;
+    dobStartController.text = "";
+    dobEndController.text = "";
   }
 
   Widget _buildField(
@@ -383,7 +396,7 @@ Row(
         });
       },
     ),),
-    SizedBox(width: 50,),
+    SizedBox(width: 20,),
     Expanded(child:  _buildDateField(
       'End date',
       dobEndController,
@@ -504,7 +517,7 @@ Row(
     return Container(
       width: 250,
       margin: const EdgeInsetsGeometry.directional(
-        start: 30,
+        start: 40,
         end: 0,
         top: 50,
         bottom: 50,
@@ -521,7 +534,7 @@ Row(
           ),
         ],
       ),
-      child: Column(
+      child: ListView(
         children: [
           const SizedBox(height: 40),
           _buildMenuItem(
@@ -536,7 +549,7 @@ Row(
                   builder: (context) => const AdminProfileScreen(),
                 ),
               );
-            },
+                },
           ),
           _buildMenuItem(
             Icons.book_outlined,
@@ -564,6 +577,7 @@ Row(
                   builder: (context) => const AnnouncementScreen(),
                 ),
               );
+
             },
           ),
           _buildMenuItem(
@@ -578,6 +592,7 @@ Row(
                   builder: (context) => const CreateUserScreen(),
                 ),
               );
+
             },
           ),
           _buildMenuItem(
@@ -586,6 +601,12 @@ Row(
             'Create Departments',
             'Create Departments',
                 () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>  CreateDepartmentPage(),
+                ),
+              );
 
             },
           ),
@@ -595,9 +616,91 @@ Row(
             'Create Years',
             'Create Years',
                 () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>  CreateYearPage(),
+                ),
+              );
 
             },
           ),
+          _buildMenuItem(
+            Icons.event_available,
+            Icons.event_note_outlined,
+            'Create New Course',
+            'Create New Course',
+                () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>  CreateNewCoursePage(),
+                ),
+              );
+
+            },
+          ),
+          _buildMenuItem(
+            Icons.airplanemode_active,
+            Icons.airplanemode_active_rounded,
+            'Create Squadrons',
+            'Create Squadrons',
+                () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>  CreateSquadronsPage(),
+                ),
+              );
+
+            },
+          ),
+          _buildMenuItem(
+            Icons.supervised_user_circle_rounded,
+            Icons.supervised_user_circle_outlined,
+            'All Users',
+            'All Users',
+                () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>  GetUsersPage(),
+                ),
+              );
+
+            },
+          ),
+          _buildMenuItem(
+            Icons.school_outlined,
+            Icons.school,
+            'All Departments',
+            'All Departments',
+                () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>  DepartmentsScreen(),
+                ),
+              );
+
+            },
+          ),
+          _buildMenuItem(
+            Icons.auto_awesome_motion_rounded,
+            Icons.auto_awesome_motion_outlined,
+            'All Years',
+            'All Years',
+                () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>  YearsScreen(),
+                ),
+              );
+
+            },
+          ),
+
           _buildMenuItem(
             Icons.grade_outlined,
             Icons.grade,

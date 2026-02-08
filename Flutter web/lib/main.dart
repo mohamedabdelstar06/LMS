@@ -5,7 +5,6 @@ import 'package:lms/features/draft/test.dart';
 import 'package:lms/features/screens/Announcement/view.dart';
 import 'package:lms/features/screens/courses/admin/view.dart';
 import 'package:lms/features/screens/courses/teacher/view.dart';
-import 'package:lms/features/screens/create_years/view.dart';
 import 'package:lms/features/screens/hero_section/view.dart';
 import 'package:lms/features/screens/pre_loading/loading_screen.dart';
 import 'package:lms/core/services/app_initialization_service.dart';

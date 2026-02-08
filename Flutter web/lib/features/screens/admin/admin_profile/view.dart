@@ -23,10 +23,10 @@ import '../../Create_user/View.dart';
 import '../../add_course/Adding_view.dart';
 import '../../courses/admin/view.dart';
 import '../../create_squadron/view.dart';
-import '../../create_years/view.dart';
 import '../../get_department/get_All_departments/view.dart';
 import '../../get_users/view.dart';
-import '../../get_years/get_All_years/view.dart';
+import '../create_years/view.dart';
+import '../get_years/get_All_years/view.dart';
 import 'model/view.dart';
 import 'dart:html' as html;
 
@@ -411,8 +411,8 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
             },
           ),
           _buildMenuItem(
-            Icons.school_outlined,
-            Icons.school,
+            Icons.auto_awesome_motion_rounded,
+            Icons.auto_awesome_motion_outlined,
             'All Years',
             'All Years',
                 () {

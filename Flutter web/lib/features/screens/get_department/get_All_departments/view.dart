@@ -15,9 +15,9 @@ import '../../Create_department/view.dart';
 import '../../Create_user/View.dart';
 import '../../add_course/Adding_view.dart';
 import '../../admin/admin_profile/view.dart';
+import '../../admin/create_years/view.dart';
 import '../../courses/admin/view.dart';
 import '../../create_squadron/view.dart';
-import '../../create_years/view.dart';
 import '../../get_users/view.dart';
 
 import 'all_model/model.dart';
