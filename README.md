@@ -28,7 +28,7 @@
 <!-- Slide 4: Aviation Info -->
 <!-- Slide 4: 3D Programmer Image -->
 <div align="center">
-  <img src="https://i.imgur.com/2yaf2wb.png" alt="3D Programmer" width="300"/>
+  <img src="https://i.imgur.com/2yaf2wb.png](https://i.pinimg.com/originals/fb/c6/f3/fbc6f31bd3b84159470b973aca7e0f97.gif" alt="3D Programmer" width="300"/>
 </div>
 
 
