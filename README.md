@@ -89,35 +89,7 @@
 
 ---
 
-## 📊 GitHub Stats
 
-<div align="center">
-
-<!-- GitHub Stats -->
-<img src="https://github-readme-stats.vercel.app/api?username=MohamedMofeedHawas&show_icons=true" height="180"/>
-
-<!-- Top Languages -->
-<img src="https://github-readme-stats.vercel.app/api/top-langs/?username=MohamedMofeedHawas&layout=compact" height="180"/>
-
-</div>
-
-
-
----
-
-## 🐍 Snake Eating My Contributions
-
-<div align="center">
-
-<picture>
-  <!-- Dark mode -->
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Mohamed-Emad126/LMS/mofeed/github-contribution-grid-snake-dark.svg">
-  <!-- Light mode -->
-  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Mohamed-Emad126/LMS/mofeed/github-contribution-grid-snake.svg">
-  <img alt="github snake animation" src="https://raw.githubusercontent.com/Mohamed-Emad126/LMS/mofeed/github-contribution-grid-snake.svg">
-</picture>
-
-</div>
 
 
 ---
