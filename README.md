@@ -1,29 +1,30 @@
-<!-- ============================================ -->
-<!--        Mohamed Mofeed Hawas | README         -->
-<!-- ============================================ -->
-
 <div align="center">
 
-<!-- Header -->
-<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=180&section=header&text=Mohamed%20Mofeed%20Hawas&fontSize=42&fontColor=ffffff&animation=fadeIn&fontAlignY=35"/>
+<!-- ================= HEADER ================= -->
+<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=180&section=header&text=Mohamed%20Mofeed%20Hawas&fontSize=42&fontColor=ffffff&animation=fadeIn&fontAlignY=32&desc=Flutter%20Developer%20|%20Aviation%20Information%20Systems&descAlignY=52"/>
 
 <br/>
 
-<!-- Typing Animation (ONLY THESE MOVE) -->
-[![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&size=22&duration=3000&pause=1200&color=3B82F6&center=true&vCenter=true&width=600&lines=Student+at+Zagazig+National+University;Flutter+Developer)](https://git.io/typing-svg)
+<!-- ============== TYPING ANIMATION ============== -->
+[![Typing SVG](https://readme-typing-svg.demolab.com?
+font=Fira+Code
+&size=24
+&duration=2800
+&pause=900
+&color=3B82F6
+&center=true
+&vCenter=true
+&width=720
+&lines=Student+at+Zagazig+National+University+🎓;
+Flutter+Developer+using+Dart+%26+State+Management+📱;
+Aviation+Information+Systems+✈️;
+Code+Clean.+Fly+High.+🚀
+)](https://git.io/typing-svg)
 
 <br/><br/>
 
-<!-- Badges -->
-<img src="https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white"/>
-<img src="https://img.shields.io/badge/Dart-0175C2?style=for-the-badge&logo=dart&logoColor=white"/>
-<img src="https://img.shields.io/badge/Aviation-0A66C2?style=for-the-badge&logo=airplane&logoColor=white"/>
-<img src="https://img.shields.io/badge/State%20Management-BLoC-informational?style=for-the-badge"/>
-
-<br/><br/>
-
-<!-- Programmer Animation -->
-<img src="https://media.giphy.com/media/qgQUggAC3Pfv687qPC/giphy.gif" width="420"/>
+<!-- Programmer Image -->
+<img src="https://user-images.githubusercontent.com/74038190/238200839-6a1a3c0a-3c59-4a1a-9d9b-5c9cbd69d1c1.gif" width="420"/>
 
 </div>
 
@@ -35,52 +36,108 @@
 - 🎓 Student at **Zagazig National University**
 - ✈️ Major: **Aviation Information Systems**
 - 📱 **Flutter Developer**
-- 🧠 Strong in **State Management (BLoC / Cubit)**
-- 🎯 Focused on **Clean Architecture & Scalable Apps**
+- 🧠 Strong in **State Management & Clean Architecture**
+- 💙 Passionate about combining **Aviation + Technology**
 
-> *“Clean code is like a safe flight — no surprises.”*
-
----
-
-## 🛠️ Technical Skills
-
-<div align="center">
-
-### 📱 Mobile Development
-<img src="https://skillicons.dev/icons?i=flutter,dart,firebase,androidstudio,vscode&theme=dark" />
-
-### 🧰 Tools
-<img src="https://skillicons.dev/icons?i=git,github,figma,postman&theme=dark" />
-
-</div>
+> ✨ *Programming is like aviation: precision, safety, and responsibility.*
 
 ---
 
 ## ✈️ Aviation Background
 
+- Understanding of **Aviation Systems**
+- Airport & Airline Information Systems
+- Aviation Data Management  
+- Interested in:
+  - 🛫 Flight Operations Systems
+  - 🏢 Airport Management Software
+  - 📱 Aviation Mobile Applications
+
+---
+
+## 🖥️ Aviation Info Display (Animated Showcase)
+
 <div align="center">
 
-| Subject | Description |
-|------|------------|
-| ✈️ Air Law | ICAO rules & aviation regulations |
-| 🛫 ATFM | Air Traffic Flow Management |
-| 🗺️ Navigation | Flight planning & charts |
-| 📡 Radio Nav | VOR, NDB, ILS, GPS |
-| 🛬 Aerodromes | Airport design & operations |
+<!-- Aviation Slider Animation -->
+<img src="https://user-images.githubusercontent.com/74038190/230708331-4e8c9d6f-7c8b-4a89-b4d1-3c27c7fbd9c4.gif" width="650"/>
+
+</div>
+
+<div align="center">
+
+### 🛫 Aviation Knowledge Highlights
+
+| ✈️ Topic | 📌 Description |
+|--------|----------------|
+| **Air Law** | ICAO regulations, aviation rules & safety standards |
+| **ATFM** | Air Traffic Flow Management & airspace control |
+| **Navigation** | Flight planning, air routes & charts |
+| **Radio Navigation** | VOR, NDB, ILS, GPS systems |
+| **Aerodromes** | Airport design, runways & lighting systems |
 
 </div>
 
 ---
 
-## 💡 Aviation + Code Mindset
+## 🛠️ Tech Stack
+
+<div align="center">
+
+<img src="https://skillicons.dev/icons?i=flutter,dart,firebase,git,github,figma,vscode&theme=dark" />
+
+</div>
+
+---
+
+## 📊 GitHub Stats
+
+<div align="center">
+
+<img height="180em" src="https://github-readme-stats.vercel.app/api?username=MohamedMofeedHawas&show_icons=true&theme=github_dark&hide_border=true"/>
+
+<img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=MohamedMofeedHawas&layout=compact&theme=github_dark&hide_border=true"/>
+
+</div>
+
+---
+
+## 🐍 Snake Eating My Contributions
+
+<div align="center">
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/MohamedMofeedHawas/MohamedMofeedHawas/output/github-contribution-grid-snake-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/MohamedMofeedHawas/MohamedMofeedHawas/output/github-contribution-grid-snake.svg">
+  <img alt="github snake animation" src="https://raw.githubusercontent.com/MohamedMofeedHawas/MohamedMofeedHawas/output/github-contribution-grid-snake.svg">
+</picture>
+
+</div>
+
+---
+
+## 📫 Contact Me
+
+<div align="center">
+
+[![Gmail](https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:mohamedznuav999@gmail.com)
+[![GitHub](https://img.shields.io/badge/GitHub-000000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/MohamedMofeedHawas)
+[![WhatsApp](https://img.shields.io/badge/WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://wa.me/201060157100)
+
+📱 **Phone:** 01060157100  
+🎓 **University:** Zagazig National University  
+✈️ **Major:** Aviation Information Systems  
+
+</div>
+
+---
+
+## 💡 Developer Philosophy
 
 ```dart
-// Aviation teaches precision
-if (altitude < minimumSafeAltitude) {
-  pullUp();
+// Aviation mindset in code
+if (systemSafety < requiredStandard) {
+  abortMission(); // Safety first
 }
 
-// Clean code = safe flight
-void writeCleanCode() {
-  print("Every line matters.");
-}
+// Clean code = safe flight ✈️
