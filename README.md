@@ -1,65 +1,78 @@
 <!-- Header Animation -->
-![Hi, I'm Mohamed Mofeed](https://capsule-render.vercel.app/api?type=waving&color=0:6366F1,100:22D3EE&height=200&section=header&text=Mohamed%20Mofeed&fontSize=40&fontColor=ffffff&animation=fadeIn)
+![header](https://capsule-render.vercel.app/api?type=waving&color=0:0EA5E9,100:6366F1&height=200&section=header&text=Mohamed%20Mofeed&fontSize=40&fontColor=ffffff&animation=fadeIn)
 
 <p align="center">
-  <img src="https://readme-typing-svg.demolab.com/?lines=Flutter+Developer;Aviation+Information+System+Student;State+Management+Enthusiast;Clean+Architecture+Lover&center=true&width=600&height=45">
+  <img src="https://readme-typing-svg.demolab.com/?lines=Flutter+Developer;Aviation+Information+System+Student;State+Management+Specialist;Future+Aviation+Tech+Engineer&center=true&width=650&height=45">
 </p>
 
 <p align="center">
-  <img src="https://komarev.com/ghpvc/?username=MohamedMofeed&label=Profile%20Views&color=6366F1&style=plastic" />
+  <img src="https://komarev.com/ghpvc/?username=MohamedMofeed&label=Profile%20Views&color=0EA5E9&style=plastic" />
   <img src="https://img.shields.io/github/followers/MohamedMofeed?label=Followers&style=plastic" />
   <img src="https://img.shields.io/github/stars/MohamedMofeed?label=Stars&style=plastic" />
 </p>
 
 ---
 
-## 👋 About Me
+## 👨‍✈️ About Me
 
-- 🎓 **Student at Zagazig National University**
-- ✈️ **Major:** Aviation Information Systems
-- 📱 **Flutter Developer** (Dart)
-- 🧠 Strong focus on **State Management** & **Clean Code**
-- 🚀 Passionate about building **scalable & animated UI**
+- 👋 Hi, I'm **Mohamed Mofeed**
+- 🎓 Student at **Zagazig National University**
+- ✈️ Major: **Aviation Information Systems**
+- 📱 **Flutter Developer (Dart)**
+- 🧠 Strong in **State Management & Clean Architecture**
+- 🚀 Passionate about merging **Aviation + Mobile Technology**
 
 ---
 
-## 🔥 What I Do
+## ✈️ Aviation Background
 
-- Flutter Mobile Apps (Android / iOS)
+- Understanding of **Aviation Systems**
+- Airport & Airline Information Systems
+- Aviation Data Management
+- Interested in:
+  - Flight Operations Systems
+  - Airport Management Software
+  - Aviation Mobile Applications
+
+<p align="center">
+  <img src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" width="350"/>
+</p>
+
+---
+
+## 💙 Flutter Skills
+
+- Dart Programming
+- Flutter UI (Material & Cupertino)
 - State Management:
   - Bloc / Cubit
   - Provider
-- REST APIs Integration
+- REST API Integration
 - Clean Architecture
-- Reusable Components
-- Animations & Micro-interactions
+- Reusable Widgets
+- Animations & Transitions
 
 ---
 
-## 🛠 Tech Stack
-
-### 💙 Flutter & Dart
-<p>
-  <img src="https://skillicons.dev/icons?i=flutter,dart" />
-</p>
-
-### ⚙ Tools & Platforms
-<p>
-  <img src="https://skillicons.dev/icons?i=git,github,vscode,postman" />
-</p>
-
----
-
-## ✨ Flutter Animations I Love
+## ✨ Animations I Use
 
 - AnimatedContainer
 - AnimatedSwitcher
-- Hero Animations
-- Lottie Animations
+- Hero Animation
 - Custom Page Transitions
+- Lottie Animations
+- Micro-interactions for UX
 
 <p align="center">
-  <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbWNwcmR2a3dwd3Y2c2M1NjV6bWw3a3R5c2ZtZ2Y2c3N6bXR5bGQzYyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/coxQHKASG60HrHtvkt/giphy.gif" width="300"/>
+  <img src="https://media.giphy.com/media/26tn33aiTi1jkl6H6/giphy.gif" width="300"/>
+</p>
+
+---
+
+## 🛠 Tools & Technologies
+
+<p>
+  <img src="https://skillicons.dev/icons?i=flutter,dart,git,github,vscode,postman" />
 </p>
 
 ---
@@ -76,24 +89,23 @@
 
 ---
 
-## 🐍 Watch Snake Eating My Contributions
+## 🐍 Watch Snake Eating My GitHub Contributions
 
 ![snake gif](https://github.com/MohamedMofeed/MohamedMofeed/blob/output/github-contribution-grid-snake.svg)
 
 ---
 
-## 🌐 Connect With Me
+## 📞 Contact Me
+
+- 📧 Email: **mohamedznuav999@gmail.com**
+- 📱 Phone / WhatsApp: **+20 10 6015 7100**
+- 💼 GitHub: https://github.com/MohamedMofeed
 
 <p align="center">
-  <a href="https://github.com/MohamedMofeed">
-    <img src="https://skillicons.dev/icons?i=github" />
-  </a>
-  <a href="https://linkedin.com">
-    <img src="https://skillicons.dev/icons?i=linkedin" />
-  </a>
+  <img src="https://media.giphy.com/media/3o7btPCcdNniyf0ArS/giphy.gif" width="200"/>
 </p>
 
 ---
 
 <!-- Footer Animation -->
-![Footer](https://capsule-render.vercel.app/api?type=waving&color=0:22D3EE,100:6366F1&height=120&section=footer)
+![footer](https://capsule-render.vercel.app/api?type=waving&color=0:6366F1,100:0EA5E9&height=120&section=footer)
