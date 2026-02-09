@@ -36,12 +36,6 @@
 
 
 
-<br/><br/>
-
-<!-- Programmer Image -->
-<img src="https://user-images.githubusercontent.com/74038190/238200839-6a1a3c0a-3c59-4a1a-9d9b-5c9cbd69d1c1.gif" width="420"/>
-
-</div>
 
 ---
 
