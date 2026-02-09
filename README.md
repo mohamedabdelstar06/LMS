@@ -1,317 +1,291 @@
+<!-- ============================================ -->
+<!-- ⚠️ غير YOUR_GITHUB_USERNAME باليوزرنيم بتاعك -->
+<!-- ⚠️ غير YOUR_EMAIL بالبريد الإلكتروني بتاعك -->
+<!-- ⚠️ غير YOUR_LINKEDIN باليوزرنيم LinkedIn بتاعك -->
+<!-- ============================================ -->
+
 <div align="center">
 
-<!-- ⚠️ غير 'YOUR_GITHUB_USERNAME' باليوزرنيم بتاعك على GitHub في كل الملف -->
+<!-- Header Animation -->
+<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20&height=180&section=header&text=Mohamed%20Mofeed%20Hawas&fontSize=42&fontColor=fff&animation=fadeIn&fontAlignY=32&desc=Flutter%20Developer%20|%20Aviation%20Systems%20Enthusiast&descAlignY=51&descSize=16"/>
 
-<!-- Animated Header -->
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:667eea,100:764ba2&height=300&section=header&text=Mohamed%20Mofeed%20Hawas&fontSize=50&fontColor=fff&animation=twinkling&fontAlignY=35&desc=Flutter%20Developer%20%7C%20Aviation%20Information%20Systems&descAlignY=55&descSize=20" />
+<br/>
 
-<!-- Typing SVG -->
-<a href="https://git.io/typing-svg"><img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=28&duration=3000&pause=1000&color=667EEA&center=true&vCenter=true&width=600&lines=Welcome+to+my+Aviation+Tech+Hub!+✈️;Flutter+Developer+%7C+Clean+Coder;Building+the+Future+of+Aviation;Sky+is+NOT+the+Limit!+🚀" alt="Typing SVG" /></a>
+<!-- Typing Animation -->
+[![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&size=22&duration=3000&pause=1000&color=3B82F6&center=true&vCenter=true&width=600&lines=Welcome+Aboard!+✈️;Flutter+Developer+%7C+Clean+Coder;Aviation+Information+Systems+Student;Building+Apps+That+Fly+High!+🚀)](https://git.io/typing-svg)
 
-<!-- Visitor Badge with Aviation Theme -->
-<p align="center">
-  <img src="https://komarev.com/ghpvc/?username=YOUR_GITHUB_USERNAME&label=Flight+Visitors&color=667eea&style=for-the-badge" alt="visitor count"/>
-  <img src="https://img.shields.io/badge/Status-Taking%20Off%20🛫-success?style=for-the-badge&logo=statuspage&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Altitude-Rising%20📈-blue?style=for-the-badge"/>
-</p>
+<br/>
+
+<!-- Badges -->
+<img src="https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white"/>
+<img src="https://img.shields.io/badge/Dart-0175C2?style=for-the-badge&logo=dart&logoColor=white"/>
+<img src="https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white"/>
+<img src="https://img.shields.io/badge/Aviation-0078D4?style=for-the-badge&logo=airplane&logoColor=white"/>
+
+<br/><br/>
+
+<!-- Animated GIF -->
+<img src="https://user-images.githubusercontent.com/74038190/229223263-cf2e4b07-2615-4f87-9c38-e37600f8381a.gif" width="400">
+
+</div>
 
 ---
 
-## 🛩️ **About Me - The Aviation Developer**
+## 👨‍💻 من أنا؟
+
+🎓 **طالب في جامعة الزقازيق القومية**  
+📚 **التخصص:** نظم معلومات الطيران (Aviation Information Systems)  
+💼 **المهنة:** Flutter Developer  
+✈️ **الشغف:** دمج التكنولوجيا مع عالم الطيران
+
+> *"البرمجة النظيفة مثل الطيران الآمن - كل تفصيلة مهمة!"*
+
+---
+
+## 🛠️ المهارات التقنية
+
+<div align="center">
+
+### 📱 تطوير التطبيقات
+<img src="https://skillicons.dev/icons?i=flutter,dart,firebase,androidstudio,vscode&theme=dark" />
+
+### 🎨 التصميم والأدوات
+<img src="https://skillicons.dev/icons?i=figma,git,github,postman&theme=dark" />
+
+</div>
+
+<br/>
+
+**🎯 التخصصات:**
+- ✅ Flutter & Dart
+- ✅ State Management (Cubit/Bloc)
+- ✅ Clean Architecture
+- ✅ RESTful APIs & Postman
+- ✅ UI/UX Design (Figma)
+- ✅ Git & GitHub
+- ✅ مهارات التواصل الممتازة
+
+---
+
+## ✈️ معرفتي في مجال الطيران
+
+<div align="center">
+
+| 📖 المادة | 📝 الوصف |
+|:---:|:---|
+| **✈️ Air Law** | قوانين الطيران الدولية والمحلية، معايير ICAO |
+| **🛫 ATFM** | إدارة تدفق الحركة الجوية وتنظيم المجال الجوي |
+| **🗺️ Navigation** | الملاحة الجوية وقراءة الخرائط والتخطيط للمسارات |
+| **📡 Radio Navigation** | أنظمة الملاحة اللاسلكية: VOR, NDB, ILS, GPS |
+| **🛬 Aerodromes** | تصميم المطارات والعمليات الأرضية وأنظمة الإضاءة |
+
+</div>
+
+### 💡 لماذا الطيران + البرمجة؟
 
 ```dart
-class MohamedMofeedHawas {
-  final String role = "Flutter Developer";
-  final String education = "Zagazig National University";
-  final String major = "Aviation Information Systems";
-  final String currentFocus = "Building Next-Gen Aviation Apps";
-  final String motto = "Code like you're flying - smooth, precise, and innovative!";
-  
-  List<String> aviationKnowledge = [
-    "✈️ Air Law - Understanding the legal framework of the skies",
-    "🗺️ Navigation - Plotting the perfect course",
-    "📡 Radio Navigation - Guiding aircraft with precision",
-    "🛬 Aerodromes - Mastering airport operations & infrastructure",
-    "🛫 ATFM (Air Traffic Flow Management) - Optimizing airspace efficiency",
-  ];
-  
-  Map<String, dynamic> getMyInfo() => {
-    "education": education,
-    "major": major,
-    "passion": "Combining Aviation & Technology",
-    "vision": "Transforming aviation through innovative software solutions"
-  };
+// الطيران يعلمك الدقة
+if (altitude < minimumSafeAltitude) {
+  pullUp(); // كل خط كود مهم!
+}
+
+// البرمجة النظيفة = رحلة آمنة
+void cleanCode() {
+  // واضح، منظم، آمن
+  print('Every line matters, every function counts!');
 }
 ```
 
----
-
-## ✈️ **Aviation Knowledge Base**
-
-<details>
-<summary><b>🎓 My Aviation Expertise (Click to Expand)</b></summary>
-
-### 📚 **Courses Completed:**
-
-| Subject | Description | Real-World Application |
-|---------|-------------|----------------------|
-| **✈️ Air Law** | International and national aviation regulations, ICAO standards, and safety protocols | Understanding legal frameworks for aviation software compliance |
-| **🛫 ATFM** | Air Traffic Flow Management - Strategic planning and tactical operations | Optimizing flight scheduling and airspace utilization algorithms |
-| **🗺️ Navigation** | Fundamental navigation principles, chart reading, route planning | Building navigation features in aviation applications |
-| **📡 Radio Navigation** | VOR, NDB, ILS, GPS navigation systems and procedures | Integrating real-time positioning in flight tracking apps |
-| **🛬 Aerodromes** | Airport design, operations, lighting systems, and ground services | Developing airport management and operations software |
-
-### 💡 **Why Aviation + Software = Perfect Combination?**
-
-> *"Aviation is not just about flying; it's about precision, safety, and innovation. 
-> Just like clean code - every line matters, every decision counts."*
-
-The aviation industry is rapidly digitalizing. From flight management systems to passenger apps, the future belongs to developers who understand both technology AND aviation. My unique background in Aviation Information Systems gives me the edge to build solutions that truly understand the industry's needs.
-
-</details>
+**🎯 حقائق مثيرة:**
+- الطائرة الحديثة بها أكثر من **100 مليون سطر برمجي**!
+- نظام GPS كان عسكرياً ثم أصبح أساس آلاف التطبيقات
+- صناعة الطيران متوقع توصل **1 تريليون دولار** بحلول 2030
 
 ---
 
-## 🚀 **Technical Arsenal**
+## 📊 إحصائيات GitHub
 
-<p align="center">
-  <img src="https://skillicons.dev/icons?i=flutter,dart,figma,vscode,git,github,postman&theme=dark&perline=7" />
-</p>
+<div align="center">
 
-### 💻 **Core Skills:**
+<!-- GitHub Stats Card -->
+<img height="180em" src="https://github-readme-stats.vercel.app/api?username=YOUR_GITHUB_USERNAME&show_icons=true&theme=github_dark&include_all_commits=true&count_private=true&hide_border=true&bg_color=0d1117&title_color=3b82f6&icon_color=3b82f6&text_color=c9d1d9"/>
 
-```yaml
-Mobile_Development:
-  - Framework: Flutter 💙
-  - Language: Dart 🎯
-  - State_Management: Cubit/Bloc 🔄
-  - API_Testing: Postman 📮
-  
-Design_&_UI/UX:
-  - Tool: Figma 🎨
-  - Principle: Clean & Intuitive Interfaces
-  
-Best_Practices:
-  - Clean_Code_Architecture: ✅
-  - SOLID_Principles: ✅
-  - Design_Patterns: ✅
-  - Version_Control: Git & GitHub ✅
+<!-- Top Languages -->
+<img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=MohamedMofeedHawas&layout=compact&theme=github_dark&hide_border=true&bg_color=0d1117&title_color=3b82f6&text_color=c9d1d9"/>
 
-Soft_Skills:
-  - Communication: Excellent 🗣️
-  - Problem_Solving: Advanced 🧩
-  - Team_Collaboration: Strong 🤝
-  - Time_Management: Efficient ⏰
-```
+<br/><br/>
 
----
+<!-- Streak Stats -->
+<img src="https://streak-stats.demolab.com/?user=MohamedMofeedHawas&theme=github-dark-blue&hide_border=true&background=0d1117&ring=3b82f6&fire=3b82f6&currStreakLabel=3b82f6"/>
 
-## 📊 **GitHub Flight Statistics**
-
-<!-- ⚠️ غير 'YOUR_GITHUB_USERNAME' باليوزرنيم الحقيقي بتاعك -->
-
-<p align="center">
-  <img height="180em" src="https://github-readme-stats.vercel.app/api?username=YOUR_GITHUB_USERNAME&show_icons=true&theme=tokyonight&include_all_commits=true&count_private=true&border_radius=10&bg_color=0D1117&title_color=667eea&icon_color=764ba2&text_color=c9d1d9"/>
-  <img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=YOUR_GITHUB_USERNAME&layout=compact&langs_count=8&theme=tokyonight&border_radius=10&bg_color=0D1117&title_color=667eea&text_color=c9d1d9"/>
-</p>
-
-<p align="center">
-  <img src="https://github-readme-streak-stats.herokuapp.com/?user=YOUR_GITHUB_USERNAME&theme=tokyonight&border_radius=10&background=0D1117&ring=667eea&fire=764ba2&currStreakLabel=764ba2" alt="GitHub Streak" />
-</p>
+<br/><br/>
 
 <!-- Activity Graph -->
-<p align="center">
-  <img src="https://github-readme-activity-graph.vercel.app/graph?username=YOUR_GITHUB_USERNAME&theme=tokyo-night&bg_color=0D1117&color=667eea&line=764ba2&point=c9d1d9&area=true&hide_border=true" alt="Contribution Graph"/>
-</p>
+<img src="https://github-readme-activity-graph.vercel.app/graph?username=MohamedMofeedHawas&bg_color=0d1117&color=3b82f6&line=3b82f6&point=ffffff&area=true&hide_border=true"/>
+
+</div>
 
 ---
 
-## 🏆 **GitHub Trophies**
+## 🏆 إنجازات GitHub
 
-<p align="center">
-  <img src="https://github-profile-trophy.vercel.app/?username=YOUR_GITHUB_USERNAME&theme=tokyonight&no-frame=true&no-bg=true&margin-w=4&row=2&column=4" />
-</p>
+<div align="center">
+
+<img src="https://github-profile-trophy.vercel.app/?username=MohamedMofeedHawas&theme=darkhub&no-frame=true&no-bg=true&column=7&margin-w=10&margin-h=10"/>
+
+</div>
 
 ---
 
-## 💼 **What I'm Building**
+## 📂 مشاريعي المميزة
+
+<div align="center">
+
+<!-- يمكنك إضافة مشاريعك هنا -->
+
+```
+🚀 قريباً...
+📱 تطبيقات Flutter احترافية
+✈️ مشاريع مرتبطة بالطيران
+💡 حلول مبتكرة
+```
+
+</div>
+
+---
+
+## 📫 تواصل معي
+
+<div align="center">
+
+<!-- ⚠️ غير YOUR_EMAIL و YOUR_LINKEDIN -->
+
+[![Gmail](https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:mohamedznuav999@gmail.com)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/YOUR_LINKEDIN)
+[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/MohamedMofeedHawas)
+[![WhatsApp](https://img.shields.io/badge/WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://wa.me/201060157100)
+
+<br/>
+
+📧 **Email:** YOUR_EMAIL@gmail.com  
+📱 **Phone:** 01060157100  
+🎓 **University:** Zagazig National University  
+✈️ **Major:** Aviation Information Systems
+
+</div>
+
+---
+
+## 💭 فلسفتي في البرمجة
+
+<div align="center">
+
+```
+┌─────────────────────────────────────────────┐
+│                                             │
+│  "Code Clean, Fly High!"                   │
+│                                             │
+│  الكود النظيف = رحلة آمنة                  │
+│  كل سطر مهم، كل دالة لها هدف              │
+│  اختبر قبل الإقلاع!                        │
+│                                             │
+└─────────────────────────────────────────────┘
+```
+
+<img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="600">
+
+</div>
+
+---
+
+## 📈 نشاطي الأسبوعي
+
+<div align="center">
+
+<!--START_SECTION:waka-->
+```text
+Flutter      ████████████░░░░░   45%
+Dart         ███████░░░░░░░░░░   30%
+Figma        ███░░░░░░░░░░░░░░   12%
+Git          ██░░░░░░░░░░░░░░░    8%
+Other        █░░░░░░░░░░░░░░░░    5%
+```
+<!--END_SECTION:waka-->
+
+</div>
+
+---
+
+## 🎯 أهدافي
+
+<div align="center">
 
 <table>
 <tr>
-<td width="50%">
+<td align="center" width="50%">
 
-### 🎯 **Current Focus:**
-- 📱 Developing Flutter applications
-- 🧹 Mastering Clean Architecture
-- 🎨 Creating beautiful, intuitive UIs
-- ✈️ Building aviation-related solutions
-- 📚 Continuous learning & growth
+### 📅 الآن
+- 📱 تطوير تطبيقات Flutter
+- 🎨 تحسين مهارات UI/UX
+- 📚 دراسة Clean Architecture
+- ✈️ تطبيق مفاهيم الطيران في البرمجة
 
 </td>
-<td width="50%">
+<td align="center" width="50%">
 
-### 🔭 **Future Goals:**
-- 🚀 Launch production Flutter apps
-- 🌍 Contribute to open-source
-- 📖 Share knowledge through blogs
-- ✈️ Innovate in aviation tech
-- 🏅 Become a Flutter expert
+### 🔮 المستقبل
+- 🚀 إطلاق تطبيقات على المتاجر
+- 🌍 المساهمة في Open Source
+- 📖 مشاركة المعرفة
+- 🏆 أن أكون Flutter Expert
 
 </td>
 </tr>
 </table>
 
----
-
-## 📫 **Connect With Me - Let's Build Something Amazing!**
-
-<!-- ⚠️ غير البريد الإلكتروني ولينك LinkedIn بتوعك -->
-
-<p align="center">
-  <a href="mailto:YOUR_EMAIL@gmail.com">
-    <img src="https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt="Gmail"/>
-  </a>
-  <a href="https://linkedin.com/in/YOUR_LINKEDIN_USERNAME">
-    <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn"/>
-  </a>
-  <a href="https://github.com/YOUR_GITHUB_USERNAME">
-    <img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="GitHub"/>
-  </a>
-  <a href="tel:+201060157100">
-    <img src="https://img.shields.io/badge/Phone-01060157100-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" alt="Phone"/>
-  </a>
-</p>
-
-<p align="center">
-  <a href="mailto:YOUR_EMAIL@gmail.com">
-    <img src="https://img.shields.io/badge/📧%20Email-YOUR_EMAIL@gmail.com-blue?style=flat-square&labelColor=667eea"/>
-  </a>
-  <a href="tel:+201060157100">
-    <img src="https://img.shields.io/badge/📱%20Phone-01060157100-green?style=flat-square&labelColor=764ba2"/>
-  </a>
-</p>
-
----
-
-## 🎯 **My Development Philosophy**
-
-<div align="center">
-
-```mermaid
-graph LR
-    A[Clean Code] --> B[Scalable Apps]
-    B --> C[Great UX]
-    C --> D[Happy Users]
-    D --> E[Success]
-    
-    style A fill:#667eea,stroke:#764ba2,stroke-width:2px,color:#fff
-    style B fill:#764ba2,stroke:#667eea,stroke-width:2px,color:#fff
-    style C fill:#667eea,stroke:#764ba2,stroke-width:2px,color:#fff
-    style D fill:#764ba2,stroke:#667eea,stroke-width:2px,color:#fff
-    style E fill:#667eea,stroke:#764ba2,stroke-width:2px,color:#fff
-```
-
 </div>
 
 ---
 
-## 🌟 **Fun Facts About Aviation & Development**
+## 🐍 Snake Animation
 
-<details>
-<summary><b>✈️ Did You Know? (Click to Discover)</b></summary>
+<div align="center">
 
-### Aviation Facts That Inspire My Coding:
-
-1. **✈️ The Wright Brothers' First Flight (1903)** lasted only 12 seconds - but it changed the world forever!
-   - *Developer Lesson:* Small steps lead to revolutionary change. Every commit matters!
-
-2. **📡 GPS Technology** was originally developed for military aviation but now powers billions of apps!
-   - *Developer Lesson:* Innovation in one field transforms entire industries.
-
-3. **🛫 Air Traffic Control** manages over 100,000 flights daily worldwide with near-perfect safety records
-   - *Developer Lesson:* Robust systems handling massive scale = Clean architecture + proper state management!
-
-4. **🎯 Modern Aircraft** have millions of lines of code - an Airbus A380 has about 100 million!
-   - *Developer Lesson:* Complex systems require meticulous planning and clean code practices.
-
-5. **🚀 The Aviation Industry** is projected to reach $1 trillion by 2030
-   - *Developer Lesson:* Huge opportunities for tech-savvy aviation professionals!
-
-### Why Aviation Teaches Better Coding:
-
-- **Precision Matters:** In aviation, a single degree off course compounds over distance. In code, small bugs become major issues.
-- **Safety First:** Aviation's safety culture mirrors the importance of testing and validation in software.
-- **Continuous Learning:** Pilots undergo recurrent training; developers must keep learning new technologies.
-- **Teamwork:** Just like flight crews, developers must communicate clearly and collaborate effectively.
-
-</details>
-
----
-
-## 🐍 **Watch My Contribution Snake**
-
-<!-- ⚠️ لو عاوز الـ snake animation تشتغل، لازم تعمل GitHub Action في الريبو بتاعك -->
-<!-- الطريقة: https://github.com/Platane/snk -->
-
+<!-- Snake eating contributions -->
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/MohamedMofeedHawas/MohamedMofeedHawas/output/github-snake-dark.svg" />
-  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/MohamedMofeedHawas/MohamedMofeedHawas/output/github-snake.svg" />
-  <img alt="github-snake" src="https://raw.githubusercontent.com/MohamedMofeedHawas/MohamedMofeedHawas/output/github-snake.svg" />
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/MohamedMofeedHawas/MohamedMofeedHawas/output/github-contribution-grid-snake-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/MohamedMofeedHawas/MohamedMofeedHawas/output/github-contribution-grid-snake.svg">
+  <img alt="github contribution grid snake animation" src="https://raw.githubusercontent.com/MohamedMofeedHawas/MohamedMofeedHawas/output/github-contribution-grid-snake.svg">
 </picture>
 
----
-
-## 💭 **Quote That Drives Me**
-
-<p align="center">
-  <img src="https://quotes-github-readme.vercel.app/api?type=horizontal&theme=tokyonight&quote=The%20sky%20is%20not%20the%20limit%2C%20it%27s%20just%20the%20beginning.%20Code%20with%20passion%2C%20fly%20with%20purpose!&author=Mohamed%20Mofeed%20Hawas" />
-</p>
+</div>
 
 ---
 
-## 📈 **Weekly Development Breakdown**
-
-<!--START_SECTION:waka-->
-```text
-Flutter          12 hrs 30 mins  ███████████░░░░░░  45.2%
-Dart             8 hrs 15 mins   ███████░░░░░░░░░░  29.8%
-Figma            3 hrs 45 mins   ███░░░░░░░░░░░░░░  13.5%
-Git/GitHub       2 hrs 10 mins   ██░░░░░░░░░░░░░░░   7.8%
-Documentation    1 hr 5 mins     █░░░░░░░░░░░░░░░░   3.7%
-```
-<!--END_SECTION:waka-->
-
----
-
-## 🎨 **Profile Views Counter**
-
-<p align="center">
-  <img src="https://profile-counter.glitch.me/MohamedMofeedHawas/count.svg" alt="Visitor Count"/>
-</p>
-
----
+## 🔥 Profile Views
 
 <div align="center">
 
-### 🚀 **"Building the Future, One Line of Code at a Time"** 
+<img src="https://komarev.com/ghpvc/?username=MohamedMofeedHawas&label=زوار%20البروفايل&color=3b82f6&style=for-the-badge"/>
 
-### ✈️ **"Where Aviation Meets Innovation"**
+<br/><br/>
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:667eea,100:764ba2&height=120&section=footer" />
-
-<!-- Animated Footer -->
-<img src="https://raw.githubusercontent.com/Trilokia/Trilokia/379277808c61ef204768a61bbc5d25bc7798ccf1/bottom_header.svg" />
+<img src="https://img.shields.io/github/followers/MohamedMofeedHawas?label=Followers&style=social"/>
+<img src="https://img.shields.io/github/stars/MohamedMofeedHawas?label=Stars&style=social"/>
 
 </div>
 
 ---
 
-<p align="center">
-  <i>⭐️ From <a href="https://github.com/MohamedMofeedHawas">Mohamed Mofeed Hawas</a> - Let's connect and build something extraordinary! ✈️💻</i>
-</p>
+<div align="center">
 
-<!-- Social Media Stats -->
-<p align="center">
-  <img src="https://img.shields.io/github/followers/MohamedMofeedHawas?label=Followers&style=social" />
-  <img src="https://img.shields.io/github/stars/MohamedMofeedHawas?label=Stars&style=social" />
-</p>
+<!-- Footer Wave -->
+<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20&height=120&section=footer"/>
+
+### ⭐ من [Mohamed Mofeed Hawas](https://github.com/YOUR_GITHUB_USERNAME)
+
+**"Sky is NOT the limit, it's just the beginning!" 🚀✈️**
+
+<img src="https://user-images.githubusercontent.com/74038190/212284115-f47cd8ff-2ffb-4b04-b5bf-4d1c14c0247f.gif" width="500">
+
+</div>
