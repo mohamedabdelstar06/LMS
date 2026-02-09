@@ -7,19 +7,18 @@
 
 <!-- ============== TYPING ANIMATION ============== -->
 [![Typing SVG](https://readme-typing-svg.demolab.com?
-font=Fira+Code
-&size=24
-&duration=2800
-&pause=900
-&color=3B82F6
+font=JetBrains+Mono
+&size=22
+&pause=1000
+&color=2563EB
 &center=true
 &vCenter=true
-&width=720
-&lines=Student+at+Zagazig+National+University+🎓;
-Flutter+Developer+using+Dart+%26+State+Management+📱;
-Aviation+Information+Systems+✈️;
-Code+Clean.+Fly+High.+🚀
+&width=600
+&lines=Student+at+Zagazig+National+University;
+Flutter+Developer;
+Aviation+Systems+Enthusiast+✈️
 )](https://git.io/typing-svg)
+
 
 <br/><br/>
 
