@@ -1,11 +1,9 @@
 <div align="center">
 
-<!-- ================= HEADER ================= -->
 <img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=180&section=header&text=Mohamed%20Mofeed%20Hawas&fontSize=42&fontColor=ffffff&animation=fadeIn&fontAlignY=32&desc=Flutter%20Developer%20|%20Aviation%20Information%20Systems&descAlignY=52"/>
 
 <br/>
 
-<!-- ============== TYPING ANIMATION ============== -->
 ## 🎬 Animated Intro
 
 <div align="center">
@@ -25,10 +23,9 @@
 
 <br/>
 
-<!-- Slide 4: Aviation Info -->
-<!-- Slide 4: 3D Programmer Image -->
+
 <div align="center">
-  <img src="https://i.imgur.com/2yaf2wb.png](https://i.pinimg.com/originals/fb/c6/f3/fbc6f31bd3b84159470b973aca7e0f97.gif" alt="3D Programmer" width="300"/>
+  <img src="https://i.pinimg.com/originals/fb/c6/f3/fbc6f31bd3b84159470b973aca7e0f97.gif" alt="3D Programmer" width="300"/>
 </div>
 
 
