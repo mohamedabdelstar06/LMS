@@ -2,26 +2,19 @@
 
 <img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=180&section=header&text=Mohamed%20Mofeed%20Hawas&fontSize=42&fontColor=ffffff&animation=fadeIn&fontAlignY=32&desc=Flutter%20Developer%20|%20Aviation%20Information%20Systems&descAlignY=52"/>
 
-<br/>
+<p align="center">
+  <img src="https://readme-typing-svg.demolab.com/?lines=Flutter+Developer;Aviation+Information+System+Student;State+Management+Enthusiast;Clean+Architecture+Lover&center=true&width=600&height=45">
+</p>
 
-## 🎬 Animated Intro
+<p align="center">
+  <img src="https://komarev.com/ghpvc/?username=MohamedMofeed&label=Profile%20Views&color=6366F1&style=plastic" />
+  <img src="https://img.shields.io/github/followers/MohamedMofeed?label=Followers&style=plastic" />
+  <img src="https://img.shields.io/github/stars/MohamedMofeed?label=Stars&style=plastic" />
+</p>
 
-<div align="center">
 
-<!-- Slide 1: Name -->
-[![Typing SVG](https://readme-typing-svg.demolab.com?font=JetBrains+Mono&size=28&pause=1000&color=2563EB&center=true&vCenter=true&width=600&lines=Mohamed+Mofeed+Hawas)](https://git.io/typing-svg)
 
-<br/>
 
-<!-- Slide 2: Student at Zagazig -->
-[![Typing SVG](https://readme-typing-svg.demolab.com?font=JetBrains+Mono&size=22&pause=1000&color=2563EB&center=true&vCenter=true&width=600&lines=Student+at+Zagazig+National+University)](https://git.io/typing-svg)
-
-<br/>
-
-<!-- Slide 3: Flutter Developer -->
-[![Typing SVG](https://readme-typing-svg.demolab.com?font=JetBrains+Mono&size=22&pause=1000&color=2563EB&center=true&vCenter=true&width=600&lines=Flutter+Developer)](https://git.io/typing-svg)
-
-<br/>
 
 
 <div align="center">
