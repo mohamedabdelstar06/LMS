@@ -6,18 +6,30 @@
 <br/>
 
 <!-- ============== TYPING ANIMATION ============== -->
-[![Typing SVG](https://readme-typing-svg.demolab.com?
-font=JetBrains+Mono
-&size=22
-&pause=1000
-&color=2563EB
-&center=true
-&vCenter=true
-&width=600
-&lines=Student+at+Zagazig+National+University;
-Flutter+Developer;
-Aviation+Systems+Enthusiast+✈️
-)](https://git.io/typing-svg)
+## 🎬 Animated Intro
+
+<div align="center">
+
+<!-- Slide 1: Name -->
+[![Typing SVG](https://readme-typing-svg.demolab.com?font=JetBrains+Mono&size=28&pause=1000&color=2563EB&center=true&vCenter=true&width=600&lines=Mohamed+Mofeed+Hawas)](https://git.io/typing-svg)
+
+<br/>
+
+<!-- Slide 2: Student at Zagazig -->
+[![Typing SVG](https://readme-typing-svg.demolab.com?font=JetBrains+Mono&size=22&pause=1000&color=2563EB&center=true&vCenter=true&width=600&lines=Student+at+Zagazig+National+University)](https://git.io/typing-svg)
+
+<br/>
+
+<!-- Slide 3: Flutter Developer -->
+[![Typing SVG](https://readme-typing-svg.demolab.com?font=JetBrains+Mono&size=22&pause=1000&color=2563EB&center=true&vCenter=true&width=600&lines=Flutter+Developer)](https://git.io/typing-svg)
+
+<br/>
+
+<!-- Slide 4: Aviation Info -->
+[![Typing SVG](https://readme-typing-svg.demolab.com?font=JetBrains+Mono&size=20&pause=1000&color=2563EB&center=true&vCenter=true&width=600&lines=Aviation+Systems+Enthusiast;Airport+Management;Flight+Operations;Navigation+and+Radio+Systems)](https://git.io/typing-svg)
+
+</div>
+
 
 
 <br/><br/>
