@@ -1,5 +1,4 @@
 
-import 'package:lms/features/screens/get_department/model/model.dart';
 
 import '../model.dart';
 

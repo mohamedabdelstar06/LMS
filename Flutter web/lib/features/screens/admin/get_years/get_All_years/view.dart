@@ -558,11 +558,11 @@ import '../../../Create_user/View.dart';
 import '../../../add_course/Adding_view.dart';
 import '../../../courses/admin/view.dart';
 import '../../../create_squadron/view.dart';
-import '../../../get_department/get_All_departments/view.dart';
 import '../../../get_users/view.dart';
 import '../../admin_profile/view.dart';
 import '../../create_years/view.dart';
 import '../../edit_year/view.dart';
+import '../../get_department/get_All_departments/view.dart';
 import 'all_model/model.dart';
 
 String selectedMenuItem = 'All Years';
@@ -667,114 +667,96 @@ class _DepartmentsScreenState extends State<YearsScreen> {
                   children: [
                     _buildSidebar(),
                     Expanded(
-                      child: Column(
-                        children: [
-
-                          Expanded(
-                            child: Container(
-                              margin: const EdgeInsets.fromLTRB(20, 10, 20, 20),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(16),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.08),
-                                    blurRadius: 20,
-                                    offset: const Offset(0, 4),
-                                  ),
-                                ],
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(16),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.08),
+                                blurRadius: 20,
+                                offset: const Offset(0, 4),
                               ),
-                              child: Column(
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.all(24),
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFFF8FAFC),
-                                      borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(16),
-                                        topRight: Radius.circular(16),
-                                      ),
-                                      border: Border(
-                                        bottom: BorderSide(
-                                          color: const Color(0xFFE2E8F0),
-                                          width: 1,
-                                        ),
-                                      ),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Container(
-                                          padding: const EdgeInsets.all(12),
-                                          decoration: BoxDecoration(
-                                            color: const Color(0xFF2563EB)
-                                                .withOpacity(0.1),
-                                            borderRadius:
-                                            BorderRadius.circular(12),
-                                          ),
-                                          child: const Icon(
-                                            Icons.calendar_today,
-                                            color: Color(0xFF2563EB),
-                                            size: 24,
-                                          ),
-                                        ),
-                                        const SizedBox(width: 16),
-                                        const Column(
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              'Academic Years',
-                                              style: TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold,
-                                                color: Color(0xFF1E293B),
-                                              ),
-                                            ),
-                                            SizedBox(height: 4),
-                                            Text(
-                                              'Manage all academic years',
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                                color: Color(0xFF64748B),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const Spacer(),
-                                        Container(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 12,
-                                            vertical: 6,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            color: const Color(0xFFEFF6FF),
-                                            borderRadius: BorderRadius.circular(8),
-                                          ),
-                                          child: Text(
-                                            'Total Years = ${state.years.length} Years',
-                                            style: const TextStyle(
-                                              fontSize: 25,
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.green,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-
-                                  Expanded(
-                                    child: SingleChildScrollView(
-                                      padding: const EdgeInsets.all(24),
-                                      child: _buildModernTable(
-                                          context, state.years),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                            ],
                           ),
-                        ],
+                          child: Column(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(24),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFF8FAFC),
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(16),
+                                    topRight: Radius.circular(16),
+                                  ),
+                                  border: Border(
+                                    bottom: BorderSide(
+                                      color: const Color(0xFFE2E8F0),
+                                      width: 1,
+                                    ),
+                                  ),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(12),
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFF2563EB)
+                                            .withOpacity(0.1),
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: const Icon(
+                                        Icons.school,
+                                        color: Color(0xFF2563EB),
+                                        size: 24,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 16),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const Text(
+                                            'All Years',
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                              color: Color(0xFF1E293B),
+                                            ),
+                                          ),
+                                          const SizedBox(height: 4),
+                                          const Text(
+                                            'Manage all academic years',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              color: Color(0xFF64748B),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(width: 30),
+                                    _buildStatsHeader(state.years.length),
+                                  ],
+                                ),
+                              ),
+
+                              Expanded(
+                                child: Container(
+                                  padding: const EdgeInsets.all(24),
+                                  child: SingleChildScrollView(
+                                    child: _buildModernTable(
+                                        context, state.years),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ],
@@ -855,6 +837,68 @@ class _DepartmentsScreenState extends State<YearsScreen> {
               ),
               overflow: TextOverflow.ellipsis,
             ),
+          ),
+        ],
+      ),
+    );
+  }
+  Widget _buildStatsHeader(int count) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            const Color(0xFF2563EB),
+            const Color(0xFF3B82F6),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF2563EB).withOpacity(0.3),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.2),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: const Icon(
+              Icons.analytics_outlined,
+              color: Colors.white,
+              size: 20,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                'Total Years',
+                style: TextStyle(
+                  fontSize: 11,
+                  color: Colors.white70,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                count.toString(),
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ],
           ),
         ],
       ),

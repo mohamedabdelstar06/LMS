@@ -17,12 +17,8 @@ import '../../../../core/cons/context/navigation_key.dart';
 import '../../../../core/helpers/cach_helper/shared_pref_helper.dart';
 import '../../../../core/helpers/logout_server/logout.dart';
 import '../../../../generated/assets.dart';
-import '../../../draft/comments.dart';
-import '../../../draft/test.dart';
-import '../../../draft/test_cubit.dart';
-import '../../../draft/test_models.dart';
-import '../../../draft/test_states.dart';
-import '../../get_department/get_All_departments/view.dart';
+
+import '../../admin/get_department/get_All_departments/view.dart';
 import '../../instructor/teacher_profile/view.dart';
 import '../admin/model/model.dart';
 import '../course_model/courses.dart';

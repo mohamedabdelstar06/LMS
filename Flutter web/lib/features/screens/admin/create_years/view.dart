@@ -10,12 +10,13 @@ import '../../Create_user/View.dart';
 import '../../add_course/Adding_view.dart';
 import '../../courses/admin/view.dart';
 import '../../create_squadron/view.dart';
-import '../../get_department/get_All_departments/view.dart';
-import '../../get_department/model/model.dart';
-import '../../get_department/state_mangment/cubit.dart';
-import '../../get_department/state_mangment/states.dart';
+
 import '../../get_users/view.dart';
 import '../admin_profile/view.dart';
+import '../get_department/get_All_departments/view.dart';
+import '../get_department/model/model.dart';
+import '../get_department/state_mangment/cubit.dart';
+import '../get_department/state_mangment/states.dart';
 import '../get_years/get_All_years/view.dart';
 
 

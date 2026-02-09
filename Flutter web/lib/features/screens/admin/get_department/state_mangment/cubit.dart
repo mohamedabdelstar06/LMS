@@ -1,9 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lms/features/screens/get_department/state_mangment/states.dart';
-import 'package:lms/features/screens/get_department/model/model.dart';
+import 'package:lms/features/screens/admin/get_department/state_mangment/states.dart';
+
 
 import '../../../../../core/helpers/cach_helper/shared_pref_helper.dart';
+import '../model/model.dart';
 
 class DepartmentsCubitDrop extends Cubit<DepartmentsStateDrop> {
   DepartmentsCubitDrop() : super(DepartmentInitialState());
