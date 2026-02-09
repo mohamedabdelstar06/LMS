@@ -57,13 +57,14 @@
 <br/>
 
 **🎯 التخصصات:**
-- ✅ Flutter & Dart
-- ✅ State Management (Cubit/Bloc)
-- ✅ Clean Architecture
-- ✅ RESTful APIs & Postman
-- ✅ UI/UX Design (Figma)
-- ✅ Git & GitHub
-- ✅ مهارات التواصل الممتازة
+## 👨‍✈️ About Me
+
+- 👋 Hi, I'm **Mohamed Mofeed**
+- 🎓 Student at **Zagazig National University**
+- ✈️ Major: **Aviation Information Systems**
+- 📱 **Flutter Developer (Dart)**
+- 🧠 Strong in **State Management & Clean Architecture**
+- 🚀 Passionate about merging **Aviation + Mobile Technology**
 
 ---
 
