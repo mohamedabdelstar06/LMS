@@ -26,7 +26,11 @@
 <br/>
 
 <!-- Slide 4: Aviation Info -->
-[![Typing SVG](https://readme-typing-svg.demolab.com?font=JetBrains+Mono&size=20&pause=1000&color=2563EB&center=true&vCenter=true&width=600&lines=Aviation+Systems+Enthusiast;Airport+Management;Flight+Operations;Navigation+and+Radio+Systems)](https://git.io/typing-svg)
+<!-- Slide 4: 3D Programmer Image -->
+<div align="center">
+  <img src="https://i.imgur.com/2yaf2wb.png" alt="3D Programmer" width="300"/>
+</div>
+
 
 </div>
 
