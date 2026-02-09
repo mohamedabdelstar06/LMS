@@ -107,12 +107,15 @@ Code+Clean.+Fly+High.+🚀
 <div align="center">
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/MohamedMofeedHawas/MohamedMofeedHawas/output/github-contribution-grid-snake-dark.svg">
-  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/MohamedMofeedHawas/MohamedMofeedHawas/output/github-contribution-grid-snake.svg">
-  <img alt="github snake animation" src="https://raw.githubusercontent.com/MohamedMofeedHawas/MohamedMofeedHawas/output/github-contribution-grid-snake.svg">
+  <!-- Dark mode -->
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Mohamed-Emad126/LMS/mofeed/github-contribution-grid-snake-dark.svg">
+  <!-- Light mode -->
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Mohamed-Emad126/LMS/mofeed/github-contribution-grid-snake.svg">
+  <img alt="github snake animation" src="https://raw.githubusercontent.com/Mohamed-Emad126/LMS/mofeed/github-contribution-grid-snake.svg">
 </picture>
 
 </div>
+
 
 ---
 
@@ -124,9 +127,7 @@ Code+Clean.+Fly+High.+🚀
 [![GitHub](https://img.shields.io/badge/GitHub-000000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/MohamedMofeedHawas)
 [![WhatsApp](https://img.shields.io/badge/WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://wa.me/201060157100)
 
-📱 **Phone:** 01060157100  
-🎓 **University:** Zagazig National University  
-✈️ **Major:** Aviation Information Systems  
+
 
 </div>
 
