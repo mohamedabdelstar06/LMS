@@ -1,5 +1,7 @@
 <div align="center">
 
+<!-- ⚠️ غير 'YOUR_GITHUB_USERNAME' باليوزرنيم بتاعك على GitHub في كل الملف -->
+
 <!-- Animated Header -->
 <img src="https://capsule-render.vercel.app/api?type=waving&color=0:667eea,100:764ba2&height=300&section=header&text=Mohamed%20Mofeed%20Hawas&fontSize=50&fontColor=fff&animation=twinkling&fontAlignY=35&desc=Flutter%20Developer%20%7C%20Aviation%20Information%20Systems&descAlignY=55&descSize=20" />
 
@@ -8,7 +10,7 @@
 
 <!-- Visitor Badge with Aviation Theme -->
 <p align="center">
-  <img src="https://komarev.com/ghpvc/?username=mohamedmofeed&label=Flight+Visitors&color=667eea&style=for-the-badge" alt="visitor count"/>
+  <img src="https://komarev.com/ghpvc/?username=YOUR_GITHUB_USERNAME&label=Flight+Visitors&color=667eea&style=for-the-badge" alt="visitor count"/>
   <img src="https://img.shields.io/badge/Status-Taking%20Off%20🛫-success?style=for-the-badge&logo=statuspage&logoColor=white"/>
   <img src="https://img.shields.io/badge/Altitude-Rising%20📈-blue?style=for-the-badge"/>
 </p>
@@ -106,18 +108,20 @@ Soft_Skills:
 
 ## 📊 **GitHub Flight Statistics**
 
+<!-- ⚠️ غير 'YOUR_GITHUB_USERNAME' باليوزرنيم الحقيقي بتاعك -->
+
 <p align="center">
-  <img height="180em" src="https://github-readme-stats.vercel.app/api?username=mohamedmofeed&show_icons=true&theme=tokyonight&include_all_commits=true&count_private=true&border_radius=10&bg_color=0D1117&title_color=667eea&icon_color=764ba2&text_color=c9d1d9"/>
-  <img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=mohamedmofeed&layout=compact&langs_count=8&theme=tokyonight&border_radius=10&bg_color=0D1117&title_color=667eea&text_color=c9d1d9"/>
+  <img height="180em" src="https://github-readme-stats.vercel.app/api?username=YOUR_GITHUB_USERNAME&show_icons=true&theme=tokyonight&include_all_commits=true&count_private=true&border_radius=10&bg_color=0D1117&title_color=667eea&icon_color=764ba2&text_color=c9d1d9"/>
+  <img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=YOUR_GITHUB_USERNAME&layout=compact&langs_count=8&theme=tokyonight&border_radius=10&bg_color=0D1117&title_color=667eea&text_color=c9d1d9"/>
 </p>
 
 <p align="center">
-  <img src="https://github-readme-streak-stats.herokuapp.com/?user=mohamedmofeed&theme=tokyonight&border_radius=10&background=0D1117&ring=667eea&fire=764ba2&currStreakLabel=764ba2" alt="GitHub Streak" />
+  <img src="https://github-readme-streak-stats.herokuapp.com/?user=YOUR_GITHUB_USERNAME&theme=tokyonight&border_radius=10&background=0D1117&ring=667eea&fire=764ba2&currStreakLabel=764ba2" alt="GitHub Streak" />
 </p>
 
 <!-- Activity Graph -->
 <p align="center">
-  <img src="https://github-readme-activity-graph.vercel.app/graph?username=mohamedmofeed&theme=tokyo-night&bg_color=0D1117&color=667eea&line=764ba2&point=c9d1d9&area=true&hide_border=true" alt="Contribution Graph"/>
+  <img src="https://github-readme-activity-graph.vercel.app/graph?username=YOUR_GITHUB_USERNAME&theme=tokyo-night&bg_color=0D1117&color=667eea&line=764ba2&point=c9d1d9&area=true&hide_border=true" alt="Contribution Graph"/>
 </p>
 
 ---
@@ -125,7 +129,7 @@ Soft_Skills:
 ## 🏆 **GitHub Trophies**
 
 <p align="center">
-  <img src="https://github-profile-trophy.vercel.app/?username=mohamedmofeed&theme=tokyonight&no-frame=true&no-bg=true&margin-w=4&row=2&column=4" />
+  <img src="https://github-profile-trophy.vercel.app/?username=YOUR_GITHUB_USERNAME&theme=tokyonight&no-frame=true&no-bg=true&margin-w=4&row=2&column=4" />
 </p>
 
 ---
@@ -161,14 +165,16 @@ Soft_Skills:
 
 ## 📫 **Connect With Me - Let's Build Something Amazing!**
 
+<!-- ⚠️ غير البريد الإلكتروني ولينك LinkedIn بتوعك -->
+
 <p align="center">
-  <a href="mailto:mohamedmofeedhawas@gmail.com">
+  <a href="mailto:YOUR_EMAIL@gmail.com">
     <img src="https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt="Gmail"/>
   </a>
-  <a href="https://linkedin.com/in/mohamedmofeedhawas">
+  <a href="https://linkedin.com/in/YOUR_LINKEDIN_USERNAME">
     <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn"/>
   </a>
-  <a href="https://github.com/mohamedmofeed">
+  <a href="https://github.com/YOUR_GITHUB_USERNAME">
     <img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="GitHub"/>
   </a>
   <a href="tel:+201060157100">
@@ -177,8 +183,8 @@ Soft_Skills:
 </p>
 
 <p align="center">
-  <a href="mailto:mohamedmofeedhawas@gmail.com">
-    <img src="https://img.shields.io/badge/📧%20Email-mohamedmofeedhawas@gmail.com-blue?style=flat-square&labelColor=667eea"/>
+  <a href="mailto:YOUR_EMAIL@gmail.com">
+    <img src="https://img.shields.io/badge/📧%20Email-YOUR_EMAIL@gmail.com-blue?style=flat-square&labelColor=667eea"/>
   </a>
   <a href="tel:+201060157100">
     <img src="https://img.shields.io/badge/📱%20Phone-01060157100-green?style=flat-square&labelColor=764ba2"/>
@@ -244,10 +250,13 @@ graph LR
 
 ## 🐍 **Watch My Contribution Snake**
 
+<!-- ⚠️ لو عاوز الـ snake animation تشتغل، لازم تعمل GitHub Action في الريبو بتاعك -->
+<!-- الطريقة: https://github.com/Platane/snk -->
+
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/mohamedmofeed/mohamedmofeed/output/github-snake-dark.svg" />
-  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/mohamedmofeed/mohamedmofeed/output/github-snake.svg" />
-  <img alt="github-snake" src="https://raw.githubusercontent.com/mohamedmofeed/mohamedmofeed/output/github-snake.svg" />
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/MohamedMofeedHawas/MohamedMofeedHawas/output/github-snake-dark.svg" />
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/MohamedMofeedHawas/MohamedMofeedHawas/output/github-snake.svg" />
+  <img alt="github-snake" src="https://raw.githubusercontent.com/MohamedMofeedHawas/MohamedMofeedHawas/output/github-snake.svg" />
 </picture>
 
 ---
@@ -277,7 +286,7 @@ Documentation    1 hr 5 mins     █░░░░░░░░░░░░░░�
 ## 🎨 **Profile Views Counter**
 
 <p align="center">
-  <img src="https://profile-counter.glitch.me/mohamedmofeed/count.svg" alt="Visitor Count"/>
+  <img src="https://profile-counter.glitch.me/MohamedMofeedHawas/count.svg" alt="Visitor Count"/>
 </p>
 
 ---
@@ -298,11 +307,11 @@ Documentation    1 hr 5 mins     █░░░░░░░░░░░░░░�
 ---
 
 <p align="center">
-  <i>⭐️ From <a href="https://github.com/mohamedmofeed">Mohamed Mofeed Hawas</a> - Let's connect and build something extraordinary! ✈️💻</i>
+  <i>⭐️ From <a href="https://github.com/MohamedMofeedHawas">Mohamed Mofeed Hawas</a> - Let's connect and build something extraordinary! ✈️💻</i>
 </p>
 
 <!-- Social Media Stats -->
 <p align="center">
-  <img src="https://img.shields.io/github/followers/mohamedmofeed?label=Followers&style=social" />
-  <img src="https://img.shields.io/github/stars/mohamedmofeed?label=Stars&style=social" />
+  <img src="https://img.shields.io/github/followers/MohamedMofeedHawas?label=Followers&style=social" />
+  <img src="https://img.shields.io/github/stars/MohamedMofeedHawas?label=Stars&style=social" />
 </p>
