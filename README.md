@@ -83,7 +83,7 @@
 
 <div align="center">
 
-<img src="https://skillicons.dev/icons?i=flutter,dart,firebase,git,github,figma,vscode&theme=dark" />
+<img src="https://skillicons.dev/icons?i=flutter,dart,firebase,git,github,figma,vscode,androidstudio&theme=dark" />
 
 </div>
 
