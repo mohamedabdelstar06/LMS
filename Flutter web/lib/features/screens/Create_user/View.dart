@@ -13,12 +13,13 @@ import '../Create_department/view.dart';
 import '../add_course/Adding_view.dart';
 import '../admin/admin_profile/view.dart';
 import '../admin/create_years/view.dart';
+import '../admin/get_department/model/model.dart';
+import '../admin/get_department/state_mangment/cubit.dart';
+import '../admin/get_department/state_mangment/states.dart';
 import '../admin/get_years/state_managment/cubit.dart';
 import '../admin/get_years/state_managment/states.dart';
 import '../courses/admin/view.dart';
-import '../get_department/model/model.dart';
-import '../get_department/state_mangment/cubit.dart';
-import '../get_department/state_mangment/states.dart';
+
 import '../get_squadron/model/view.dart';
 import '../get_squadron/state_mangment/cubit.dart';
 import '../get_squadron/state_mangment/states.dart';

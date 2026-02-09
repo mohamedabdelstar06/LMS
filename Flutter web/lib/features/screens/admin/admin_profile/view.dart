@@ -8,24 +8,23 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:lms/features/screens/admin/admin_profile/state_managment/cubit_d_profile.dart';
 import 'package:lms/features/screens/admin/admin_profile/state_managment/state_d_profile.dart';
-import 'package:lms/features/screens/courses/student/view.dart';
-import 'package:lms/features/screens/instructor/teacher_profile/state_managment/cubit_d_profile.dart';
-import 'package:lms/features/screens/instructor/teacher_profile/state_managment/state_d_profile.dart';
+
 
 
 
 import '../../../../core/cons/Colors/app_colors.dart';
 import '../../../../core/helpers/logout_server/logout.dart';
 import '../../../../generated/assets.dart';
+import '../../../draft/test_screen.dart';
 import '../../Announcement/view.dart';
 import '../../Create_department/view.dart';
 import '../../Create_user/View.dart';
 import '../../add_course/Adding_view.dart';
 import '../../courses/admin/view.dart';
 import '../../create_squadron/view.dart';
-import '../../get_department/get_All_departments/view.dart';
 import '../../get_users/view.dart';
 import '../create_years/view.dart';
+import '../get_department/get_All_departments/view.dart';
 import '../get_years/get_All_years/view.dart';
 import 'model/view.dart';
 import 'dart:html' as html;
@@ -274,7 +273,12 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
             Icons.person,
             'Profile',
             'Profile',
-                () {},
+                () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ImportStudentsScreen()));
+                },
           ),
           _buildMenuItem(
             Icons.book_outlined,

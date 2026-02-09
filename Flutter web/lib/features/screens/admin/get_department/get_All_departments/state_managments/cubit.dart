@@ -1,9 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:lms/core/cons/api_helper_resources/api_resources.dart';
+import 'package:lms/features/screens/admin/get_department/get_All_departments/state_managments/states.dart';
 
-import 'package:lms/features/screens/get_department/get_All_departments/state_managments/states.dart';
-import '../../../../../core/helpers/cach_helper/shared_pref_helper.dart';
+import '../../../../../../core/helpers/cach_helper/shared_pref_helper.dart';
 import '../all_model/model.dart';
 
 
@@ -45,7 +45,12 @@ class DepartmentsCubit extends Cubit<DepartmentsState> {
     try {
       final token = await TokenStorageHelper.getTokenSecure();
 
-      await dio.delete(
+      if (token == null || token.isEmpty) {
+        emit(const DeleteDepartmentError("Unauthorized: No token provided"));
+        return;
+      }
+
+      final response = await dio.delete(
         "${ApiResources.getDepartmentEndPoint}/$id",
         options: Options(
           headers: {
@@ -54,10 +59,28 @@ class DepartmentsCubit extends Cubit<DepartmentsState> {
         ),
       );
 
-      emit(const DeleteDepartmentSuccess("Department deleted successfully"));
-      fetchDepartments();
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        emit(const DeleteDepartmentSuccess("Department deleted successfully"));
+        await fetchDepartments();
+      } else {
+        emit(DeleteDepartmentError("Failed to delete department. Status code: ${response.statusCode}"));
+      }
+    } on DioException catch (e) {
+      String errorMessage = "Failed to delete Department";
+
+      if (e.response != null) {
+        errorMessage = "Server error: ${e.response?.statusCode}";
+        if (e.response?.data is Map &&
+            e.response?.data['message'] != null) {
+          errorMessage = e.response?.data['message'];
+        }
+      } else {
+        errorMessage = "Network error: ${e.message}";
+      }
+
+      emit(DeleteDepartmentError(errorMessage));
     } catch (e) {
-      emit(DeleteDepartmentError(e.toString()));
+      emit(DeleteDepartmentError("Unexpected error: ${e.toString()}"));
     }
   }
   Future<void> updateDepartment({

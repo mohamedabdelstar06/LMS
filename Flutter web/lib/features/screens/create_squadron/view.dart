@@ -3,24 +3,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker_web/image_picker_web.dart';
 import 'package:lms/features/screens/create_squadron/state_managment/cubit.dart';
 import 'package:lms/features/screens/create_squadron/state_managment/states.dart';
 
 
 import '../../../core/cons/Colors/app_colors.dart';
-import '../../../core/cons/api_helper_resources/api_resources.dart';
 import '../../../core/helpers/logout_server/logout.dart';
 import '../Announcement/view.dart';
 import '../Create_user/View.dart';
 import '../admin/admin_profile/view.dart';
 import '../admin/create_years/view.dart';
 import '../courses/admin/view.dart';
-import '../get_department/model/model.dart';
-import '../get_department/state_mangment/cubit.dart';
-import '../get_department/state_mangment/states.dart';
 
-import '../get_squadron/get_all squadrons/state_managment/cubit.dart';
+
 
 
 class CreateSquadronsPage extends StatelessWidget {
