@@ -93,11 +93,14 @@
 
 <div align="center">
 
-<img height="180em" src="https://github-readme-stats.vercel.app/api?username=MohamedMofeedHawas&show_icons=true&theme=github_dark&hide_border=true"/>
+<!-- GitHub Stats -->
+<img src="https://github-readme-stats.vercel.app/api?username=MohamedMofeedHawas&show_icons=true" height="180"/>
 
-<img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=MohamedMofeedHawas&layout=compact&theme=github_dark&hide_border=true"/>
+<!-- Top Languages -->
+<img src="https://github-readme-stats.vercel.app/api/top-langs/?username=MohamedMofeedHawas&layout=compact" height="180"/>
 
 </div>
+
 
 ---
 
