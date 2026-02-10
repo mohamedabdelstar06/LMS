@@ -1,16 +1,17 @@
 <div align="center">
 
 <img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=180&section=header&text=Mohamed%20Mofeed%20Hawas&fontSize=42&fontColor=ffffff&animation=fadeIn&fontAlignY=32&desc=Flutter%20Developer%20|%20Aviation%20Information%20Systems&descAlignY=52"/>
+<div align="center">
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=28&duration=4000&pause=1000&color=00D9FF&center=true&vCenter=true&repeat=true&width=600&lines=Hi+%F0%9F%91%8B%2C+I'm+Mohamed+Mofeed;Flutter+Developer+%F0%9F%9A%80;Building+Beautiful+Mobile+Apps+%F0%9F%93%B1;Aviation+Information+System+Student" alt="Typing SVG" />
+</div
+
+
 
 <p align="center">
-  <img src="https://readme-typing-svg.demolab.com/?lines=Flutter+Developer;Aviation+Information+System+Student;State+Management+Enthusiast;Clean+Architecture+Lover&center=true&width=600&height=45">
+  <img src="https://komarev.com/ghpvc/?username=MohamedMofeedHawas&label=Profile%20Views&color=0e75b6&style=flat" alt="profile views" />
+  <img src="https://img.shields.io/github/followers/MohamedMofeedHawas?label=Followers&style=social" alt="followers" />
 </p>
 
-<p align="center">
-  <img src="https://komarev.com/ghpvc/?username=MohamedMofeed&label=Profile%20Views&color=6366F1&style=plastic" />
-  <img src="https://img.shields.io/github/followers/MohamedMofeed?label=Followers&style=plastic" />
-  <img src="https://img.shields.io/github/stars/MohamedMofeed?label=Stars&style=plastic" />
-</p>
 
 
 
@@ -27,11 +28,17 @@
 
 
 
+
+
+
+
 ---
 
 ## 👨‍💻 About Me
 
-- 👋 Hi, I'm **Mohamed Mofeed Hawas**
+- 🔭 Currently working on mobile app development projects
+- 🌱 Learning advanced Flutter patterns and state management
+- 💼 Open to collaboration on Flutter projects
 - 🎓 Student at **Zagazig National University**
 - ✈️ Major: **Aviation Information Systems**
 - 📱 **Flutter Developer**
@@ -107,9 +114,20 @@
 </div>
 
 ---
+## 📊 GitHub Statistics
+<div align="center">
 
-## 💡 Developer Philosophy
 
+![GitHub Streak](https://github-readme-streak-stats.herokuapp.com/?user=MohamedMofeedHawas&theme=radical&hide_border=false)
+
+
+---
+
+## 🐍 Contribution Snake
+
+![Snake animation](https://raw.githubusercontent.com/MohamedMofeedHawas/MohamedMofeedHawas/output/github-snake-dark.svg)
+
+---
 ```dart
 // Aviation mindset in code
 if (systemSafety < requiredStandard) {
