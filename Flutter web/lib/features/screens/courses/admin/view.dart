@@ -10,10 +10,8 @@ import 'package:lms/features/screens/Create_user/View.dart';
 import 'package:lms/features/screens/courses/admin/state_managment/cubit.dart';
 import 'package:lms/features/screens/courses/admin/state_managment/states.dart';
 import 'package:lms/features/screens/get_squadron/get_all%20squadrons/view.dart';
-import 'package:lms/features/screens/get_users/view.dart';
 
 import '../../../../core/cons/Colors/app_colors.dart';
-import '../../../../core/cons/context/navigation_key.dart';
 import '../../../../core/helpers/logout_server/logout.dart';
 import '../../../../generated/assets.dart';
 
@@ -534,7 +532,6 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                   child: SizedBox(
                     width: 304,
                     height: 86,
-                    // padding: EdgeInsets.all(12),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -632,6 +629,7 @@ Row(
   }
 
 }
+
 class WebImage extends StatelessWidget {
   final String url;
   final double width;

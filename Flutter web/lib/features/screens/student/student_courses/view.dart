@@ -1,12 +1,20 @@
+import 'dart:ui_web' as ui;
+import 'dart:html' as html;
+
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lms/features/screens/student/student_courses/state_managment/cubit.dart';
+import 'package:lms/features/screens/student/student_courses/state_managment/states.dart';
 
 import '../../../../core/cons/Colors/app_colors.dart';
 import '../../../../core/helpers/cach_helper/shared_pref_helper.dart';
 import '../../../../core/helpers/logout_server/logout.dart';
 import '../../../../generated/assets.dart';
+import '../../courses/course_model/courses.dart';
 import '../../student/student_profile/view.dart';
-import '../course_model/courses.dart';
+import 'model/view.dart';
 
 class StudentCourseScreen extends StatefulWidget {
   const StudentCourseScreen({super.key});
@@ -99,7 +107,9 @@ void loadImageProfile() async {
     final isLargeScreen = screenWidth > 1200;
     final isMediumScreen = screenWidth > 800;
 
-    return Container(
+    return BlocProvider(
+  create: (context) => GetCourseStudentCubit()..getCourses(),
+  child: Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
@@ -113,252 +123,268 @@ void loadImageProfile() async {
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        body: SafeArea(
-          child: Column(
-            children: [
-              Container(
-                width: double.infinity,
-                constraints: BoxConstraints(
-                  maxWidth: isLargeScreen
-                      ? 1400
-                      : (isMediumScreen ? 1000 : double.infinity),
-                ),
-                margin: EdgeInsets.symmetric(
-                  horizontal: isLargeScreen ? 40 : (isMediumScreen ? 20 : 16),
-                  vertical: 20,
-                ),
-                padding: EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Color(0xffE3F6FF),
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.05),
-                      blurRadius: 20,
-                      spreadRadius: 0,
-                      offset: Offset(0, 10),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: isLargeScreen ? 2 : 1,
-                      child: Container(
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: Color(0xffF8FAFC),
-                          borderRadius: BorderRadius.circular(15),
-                          border: Border.all(
-                            color: Color(0xffE2E8F0),
-                            width: 1,
-                          ),
+        body: BlocBuilder<GetCourseStudentCubit, GetCourseStudentState>(
+  builder: (context, state) {
+    if (state is GetCourseStudentLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (state is GetCourseStudentError) {
+      return Center(child: Text(state.message));
+    }
+    if (state is GetCourseStudentSuccess) {
+      return SafeArea(
+        child: Column(
+          children: [
+            Container(
+              width: double.infinity,
+              constraints: BoxConstraints(
+                maxWidth: isLargeScreen
+                    ? 1400
+                    : (isMediumScreen ? 1000 : double.infinity),
+              ),
+              margin: EdgeInsets.symmetric(
+                horizontal: isLargeScreen ? 40 : (isMediumScreen ? 20 : 16),
+                vertical: 20,
+              ),
+              padding: EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Color(0xffE3F6FF),
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.05),
+                    blurRadius: 20,
+                    spreadRadius: 0,
+                    offset: Offset(0, 10),
+                  ),
+                ],
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: isLargeScreen ? 2 : 1,
+                    child: Container(
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Color(0xffF8FAFC),
+                        borderRadius: BorderRadius.circular(15),
+                        border: Border.all(
+                          color: Color(0xffE2E8F0),
+                          width: 1,
                         ),
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(
-                              horizontal: 20,
-                              vertical: 15,
-                            ),
-                            hintText: "Search courses...",
-                            hintStyle: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              fontFamily: "inter",
-                              color: Color(0xFF64748B),
-                            ),
-                            prefixIcon: Padding(
-                              padding: EdgeInsets.all(12),
-                              child: SvgPicture.asset(
-                                Assets.courseSearchIcon,
-                                width: 20,
-                                height: 20,
-                                colorFilter: ColorFilter.mode(
-                                  Color(0xFF64748B),
-                                  BlendMode.srcIn,
-                                ),
+                      ),
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 15,
+                          ),
+                          hintText: "Search courses...",
+                          hintStyle: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            fontFamily: "inter",
+                            color: Color(0xFF64748B),
+                          ),
+                          prefixIcon: Padding(
+                            padding: EdgeInsets.all(12),
+                            child: SvgPicture.asset(
+                              Assets.courseSearchIcon,
+                              width: 20,
+                              height: 20,
+                              colorFilter: ColorFilter.mode(
+                                Color(0xFF64748B),
+                                BlendMode.srcIn,
                               ),
                             ),
                           ),
                         ),
                       ),
                     ),
-                    SizedBox(width: 20),
+                  ),
+                  SizedBox(width: 20),
 
-                    Row(
-                      children: [
-                        _buildNotificationButton(
-                          icon: Assets.iconsMessageIcon,
-                          onPressed: () {},
-                        ),
-                        SizedBox(width: 12),
-                        _buildNotificationButton(
-                          icon: Assets.iconsBellIcon,
-                          onPressed: () {},
-                        ),
-                        SizedBox(width: 20),
-                        _buildUserProfile(context),
-                      ],
-                    ),
-                  ],
-                ),
+                  Row(
+                    children: [
+                      _buildNotificationButton(
+                        icon: Assets.iconsMessageIcon,
+                        onPressed: () {},
+                      ),
+                      SizedBox(width: 12),
+                      _buildNotificationButton(
+                        icon: Assets.iconsBellIcon,
+                        onPressed: () {},
+                      ),
+                      SizedBox(width: 20),
+                      _buildUserProfile(context),
+                    ],
+                  ),
+                ],
               ),
+            ),
 
-              Expanded(
-                child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  child: Container(
-                    width: double.infinity,
-                    constraints: BoxConstraints(
-                      maxWidth: isLargeScreen
-                          ? 1400
-                          : (isMediumScreen ? 1000 : double.infinity),
-                    ),
-                    margin: EdgeInsets.symmetric(
-                      horizontal: isLargeScreen
-                          ? 40
-                          : (isMediumScreen ? 20 : 16),
-                    ),
-                    child: Column(
-                      children: [
-                        Container(
-                          width: double.infinity,
-                          padding: EdgeInsets.all(24),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.9),
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.05),
-                                blurRadius: 20,
-                                spreadRadius: 0,
-                                offset: Offset(0, 10),
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Text(
-                                              "Welcome Back",
-                                              style: TextStyle(
-                                                                                        color: Color(0xff175CD3),
+            Expanded(
+              child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: Container(
+                  width: double.infinity,
+                  constraints: BoxConstraints(
+                    maxWidth: isLargeScreen
+                        ? 1400
+                        : (isMediumScreen ? 1000 : double.infinity),
+                  ),
+                  margin: EdgeInsets.symmetric(
+                    horizontal: isLargeScreen
+                        ? 40
+                        : (isMediumScreen ? 20 : 16),
+                  ),
+                  child: Column(
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.all(24),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.9),
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.05),
+                              blurRadius: 20,
+                              spreadRadius: 0,
+                              offset: Offset(0, 10),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text(
+                                            "Welcome Back",
+                                            style: TextStyle(
+                                              color: Color(0xff175CD3),
 
-                                                fontSize: isLargeScreen
-                                                    ? 36
-                                                    : 28,
-                                                fontWeight: FontWeight.w700,
-                                                fontFamily: "inter",
-                                              ),
+                                              fontSize: isLargeScreen
+                                                  ? 36
+                                                  : 28,
+                                              fontWeight: FontWeight.w700,
+                                              fontFamily: "inter",
                                             ),
-                                            SizedBox(width: 8),
-                                            Image.asset(
-                                              Assets.iconsHand,
-                                              width: isLargeScreen ? 32 : 24,
-                                              height: isLargeScreen ? 32 : 24,
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(height: 8),
-                                        Text(
-                                          "Start your learning journey now — your next big achievement starts here!",
-                                          style: TextStyle(
-                                            fontSize: isLargeScreen ? 16 : 14,
-                                            fontWeight: FontWeight.w400,
-                                            fontFamily: "inter",
-                                            color: Color(0xFF64748B),
                                           ),
+                                          SizedBox(width: 8),
+                                          Image.asset(
+                                            Assets.iconsHand,
+                                            width: isLargeScreen ? 32 : 24,
+                                            height: isLargeScreen ? 32 : 24,
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(height: 8),
+                                      Text(
+                                        "Start your learning journey now — your next big achievement starts here!",
+                                        style: TextStyle(
+                                          fontSize: isLargeScreen ? 16 : 14,
+                                          fontWeight: FontWeight.w400,
+                                          fontFamily: "inter",
+                                          color: Color(0xFF64748B),
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                            ],
-                          ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-                        SizedBox(height: 30),
+                      ),
+                      SizedBox(height: 30),
 
-                        Container(
-                          width: double.infinity,
-                          padding: EdgeInsets.all(24),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withValues(alpha: 0.15),
-                                blurRadius: 20,
-                                spreadRadius: 0,
-                                offset: Offset(0, 8),
-                              ),
-                            ],
-                          ),
-                          child: LayoutBuilder(
-                            builder: (context, constraints) {
-                              int crossAxisCount;
-                              double childAspectRatio;
-
-                              if (constraints.maxWidth > 1200) {
-                                crossAxisCount = 4;
-                                childAspectRatio = 1.18;
-                              } else if (constraints.maxWidth > 900) {
-                                crossAxisCount = 3;
-                                childAspectRatio = 1.14;
-                              } else if (constraints.maxWidth > 600) {
-                                crossAxisCount = 2;
-                                childAspectRatio = 1.14;
-                              } else {
-                                crossAxisCount = 1;
-                                childAspectRatio = 1.5;
-                              }
-
-                              return GridView.builder(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                addAutomaticKeepAlives: false,
-                                addRepaintBoundaries: true,
-                                addSemanticIndexes: false,
-                                cacheExtent: 0,
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: crossAxisCount,
-                                      crossAxisSpacing: 20,
-                                      mainAxisSpacing: 20,
-                                      childAspectRatio: childAspectRatio,
-                                    ),
-                                itemCount: courses.length,
-                                itemBuilder: (context, index) {
-                                  return _buildCourseCard(
-                                    courses[index],
-                                    index,
-                                  );
-                                },
-                              );
-                            },
-                          ),
+                      Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.all(24),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withValues(alpha: 0.15),
+                              blurRadius: 20,
+                              spreadRadius: 0,
+                              offset: Offset(0, 8),
+                            ),
+                          ],
                         ),
-                        SizedBox(height: 40),
-                      ],
-                    ),
+                        child: LayoutBuilder(
+                          builder: (context, constraints) {
+                            int crossAxisCount;
+                            double childAspectRatio;
+
+                            if (constraints.maxWidth > 1200) {
+                              crossAxisCount = 4;
+                              childAspectRatio = 1.18;
+                            } else if (constraints.maxWidth > 900) {
+                              crossAxisCount = 3;
+                              childAspectRatio = 1.14;
+                            } else if (constraints.maxWidth > 600) {
+                              crossAxisCount = 2;
+                              childAspectRatio = 1.14;
+                            } else {
+                              crossAxisCount = 1;
+                              childAspectRatio = 1.5;
+                            }
+
+                            return GridView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              addAutomaticKeepAlives: false,
+                              addRepaintBoundaries: true,
+                              addSemanticIndexes: false,
+                              cacheExtent: 0,
+                              gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: crossAxisCount,
+                                crossAxisSpacing: 20,
+                                mainAxisSpacing: 20,
+                                childAspectRatio: childAspectRatio,
+                              ),
+                              itemCount: state.courses.length,
+                              itemBuilder: (context, index) {
+                                final course = state.courses[index];
+
+                                return _buildCourseCard(
+                                  course,
+                                  index,
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                      SizedBox(height: 40),
+                    ],
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
+      );
+    }
+    return const SizedBox();
+  }),
       ),
-    );
+    ),
+);
   }
 
   Widget _buildNotificationButton({
@@ -443,17 +469,21 @@ void loadImageProfile() async {
     );
   }
 
-  Widget _buildCourseCard(dynamic course, int index) {
-    return _CourseCardWidget(course: course, index: index);
+  Widget _buildCourseCard(CourseEnrollmentModel course, int index) {
+    return _CourseCardWidget(
+      courseModel: course,
+      index: index,
+
+    );
   }
 }
 
 class _CourseCardWidget extends StatefulWidget {
-  final dynamic course;
+  final CourseEnrollmentModel courseModel;
   final int index;
 
   const _CourseCardWidget({
-    required this.course,
+    required this.courseModel,
     required this.index,
   });
 
@@ -482,7 +512,7 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
         onTap: () {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text("📘 Selected: ${widget.course.title}"),
+              content: Text("📘 Selected: ${widget.courseModel.courseTitle}"),
                   backgroundColor: Color(0xFF175CD3),
                   behavior: SnackBarBehavior.floating,
                   shape: RoundedRectangleBorder(
@@ -555,27 +585,24 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                           bottomLeft: Radius.circular(16),
                           bottomRight: Radius.circular(16),
                         ),
-                         child: Image.asset(
-                           widget.course.imageUrl,
-                          fit: BoxFit.cover,
-                          width: 304,
-                          height: 164,
-                          cacheWidth: 304,
-                          cacheHeight: 164,
-                          isAntiAlias: true,
-                          filterQuality: FilterQuality.medium,
-                          errorBuilder: (context, error, stackTrace) {
-                            return Container(
-                              width: 304,
-                              height: 164,
-                              color: Color(0xffF1F5F9),
-                              child: Icon(
-                                Icons.image_not_supported,
-                                color: Color(0xFF94A3B8),
-                                size: 40,
-                              ),
-                            );
-                          },
+                        child:    ClipRRect(
+                          borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(16),
+                          ),
+                          child: widget.courseModel.imageUrl != null && widget.courseModel.imageUrl.isNotEmpty
+                              ? IgnorePointer(
+                            child: WebImage(
+                              url: buildImageUrl(widget.courseModel.imageUrl),
+                              width: double.infinity,
+                              height: 120,
+                            ),
+                          )
+                              : const SizedBox(
+                            height: 120,
+                            child: Center(
+                              child: Icon(Icons.image_not_supported),
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -584,13 +611,12 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                       child: SizedBox(
                         width: 304,
                         height: 86,
-                        // padding: EdgeInsets.all(12),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SizedBox(height: 6),
                              Text(
-                               widget.course.title,
+                               widget.courseModel.courseTitle,
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w700,
@@ -602,7 +628,7 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                             ),
                             SizedBox(height: 3),
                              Text(
-                               widget.course.subTitle,
+                               widget.courseModel.courseDescription,
                               style: TextStyle(
                                 fontSize: 11,
                                 fontWeight: FontWeight.w400,
@@ -622,7 +648,7 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                                 ),
                                 Spacer(),
                                  Text(
-                                   "${widget.course.rate} Complete",
+                                   "${widget.courseModel.creditHours} Hours",
                                   style: TextStyle(
                                     fontSize: 11,
                                     fontWeight: FontWeight.w500,
@@ -725,5 +751,46 @@ Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Stude
   } else if (result == 'profile') {
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => StudentProfileScreen(),));
 
+  }
+}
+class WebImage extends StatelessWidget {
+  final String url;
+  final double width;
+  final double height;
+
+  WebImage({
+    super.key,
+    required this.url,
+    required this.width,
+    required this.height,
+  }) {
+    _register();
+  }
+
+  static final Set<String> _registeredViews = {};
+
+  void _register() {
+    if (_registeredViews.contains(url)) return;
+
+    ui.platformViewRegistry.registerViewFactory(url, (int _) {
+      final img = html.ImageElement()
+        ..src = url
+        ..style.width = '100%'
+        ..style.height = '100%'
+        ..style.objectFit = 'cover';
+
+      return img;
+    });
+
+    _registeredViews.add(url);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: width,
+      height: height,
+      child: HtmlElementView(viewType: url),
+    );
   }
 }
