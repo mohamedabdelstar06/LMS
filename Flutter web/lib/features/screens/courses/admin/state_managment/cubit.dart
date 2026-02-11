@@ -1,6 +1,6 @@
-import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
+
 import 'package:lms/features/draft/test_models.dart';
 import 'package:lms/features/draft/test_states.dart';
 import 'package:lms/features/screens/courses/admin/state_managment/states.dart';
@@ -10,6 +10,8 @@ import '../model/model.dart';
 
 class GetCourseCubit extends Cubit<GetCourseState> {
   GetCourseCubit() : super(GetCourseInitial());
+
+  final Dio dio = Dio();
 
   Future<void> getCourses() async {
     emit(GetCourseLoading());
@@ -21,16 +23,18 @@ class GetCourseCubit extends Cubit<GetCourseState> {
         return;
       }
 
-      final response = await http.get(
-        Uri.parse("${ApiResources.apiUrl}${ApiResources.getCourseEndPoint}"),
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Content-Type': 'application/json',
-        },
+      final response = await dio.get(
+        "${ApiResources.apiUrl}${ApiResources.getCourseEndPoint}",
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'application/json',
+          },
+        ),
       );
 
       if (response.statusCode == 200) {
-        final List data = json.decode(response.body);
+        final List data = response.data;
 
         final List<GetCourseModel> courses = data
             .map<GetCourseModel>((e) => GetCourseModel.fromJson(e))
@@ -42,9 +46,14 @@ class GetCourseCubit extends Cubit<GetCourseState> {
       } else {
         emit(GetCourseError("Failed to load courses"));
       }
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 401) {
+        emit(GetCourseError("Unauthorized. Please login again."));
+      } else {
+        emit(GetCourseError(e.message ?? "Something went wrong"));
+      }
     } catch (e) {
       emit(GetCourseError(e.toString()));
     }
   }
 }
-

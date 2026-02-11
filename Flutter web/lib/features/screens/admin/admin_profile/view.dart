@@ -9,9 +9,6 @@ import 'package:flutter/foundation.dart';
 import 'package:lms/features/screens/admin/admin_profile/state_managment/cubit_d_profile.dart';
 import 'package:lms/features/screens/admin/admin_profile/state_managment/state_d_profile.dart';
 
-
-
-
 import '../../../../core/cons/Colors/app_colors.dart';
 import '../../../../core/helpers/logout_server/logout.dart';
 import '../../../../generated/assets.dart';
@@ -26,9 +23,9 @@ import '../../get_users/view.dart';
 import '../create_years/view.dart';
 import '../get_department/get_All_departments/view.dart';
 import '../get_years/get_All_years/view.dart';
+import '../import_file/view.dart';
 import 'model/view.dart';
 import 'dart:html' as html;
-
 
 class WebImage extends StatelessWidget {
   final String url;
@@ -97,9 +94,7 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
   File? _selectedImage;
   final ImagePicker _imagePicker = ImagePicker();
 
-
   List<String> yearsList = [for (int y = 1980; y <= 2060; y++) y.toString()];
-
 
   final FocusNode fullNameFocus = FocusNode();
   final FocusNode emailFocus = FocusNode();
@@ -111,10 +106,8 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
   final TextEditingController nationalIdController = TextEditingController();
   final TextEditingController dobController = TextEditingController();
 
-
   String selectedCity = 'Select City';
   bool isCityExpanded = false;
-
 
   final List<String> cities = [
     'Cairo',
@@ -149,7 +142,6 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
 
   @override
   void dispose() {
-
     fullNameController.dispose();
     emailController.dispose();
     nationalIdController.dispose();
@@ -161,16 +153,14 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
     super.dispose();
   }
 
-
   bool _isInitialized = false;
 
   void _initControllers(User user) {
     if (_isInitialized) return;
 
-    fullNameController.text = user.fullName ;
-    emailController.text = user.email ;
-    nationalIdController.text = user.nationalId ;
-
+    fullNameController.text = user.fullName;
+    emailController.text = user.email;
+    nationalIdController.text = user.nationalId;
 
     if (user.dateOfBirth != null && user.dateOfBirth!.isNotEmpty) {
       try {
@@ -273,19 +263,14 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
             Icons.person,
             'Profile',
             'Profile',
-                () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const ImportStudentsScreen()));
-                },
+            () {},
           ),
           _buildMenuItem(
             Icons.book_outlined,
             Icons.book,
             'My Courses',
             'My Courses',
-                () {
+            () {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
@@ -299,14 +284,13 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
             Icons.notifications_active_rounded,
             'Announcements',
             'Announcements',
-                () {
+            () {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                   builder: (context) => const AnnouncementScreen(),
                 ),
               );
-
             },
           ),
           _buildMenuItem(
@@ -314,14 +298,13 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
             Icons.person_add_alt_1,
             'Create Users',
             'Create users',
-                () {
+            () {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                   builder: (context) => const CreateUserScreen(),
                 ),
               );
-
             },
           ),
           _buildMenuItem(
@@ -329,14 +312,11 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
             Icons.folder_copy_rounded,
             'Create Departments',
             'Create Departments',
-                () {
+            () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(
-                  builder: (context) =>  CreateDepartmentPage(),
-                ),
+                MaterialPageRoute(builder: (context) => CreateDepartmentPage()),
               );
-
             },
           ),
           _buildMenuItem(
@@ -344,14 +324,11 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
             Icons.calendar_month_outlined,
             'Create Years',
             'Create Years',
-                () {
+            () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(
-                  builder: (context) =>  CreateYearPage(),
-                ),
+                MaterialPageRoute(builder: (context) => CreateYearPage()),
               );
-
             },
           ),
           _buildMenuItem(
@@ -359,14 +336,11 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
             Icons.event_note_outlined,
             'Create New Course',
             'Create New Course',
-                () {
+            () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(
-                  builder: (context) =>  CreateNewCoursePage(),
-                ),
+                MaterialPageRoute(builder: (context) => CreateNewCoursePage()),
               );
-
             },
           ),
           _buildMenuItem(
@@ -374,14 +348,11 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
             Icons.airplanemode_active_rounded,
             'Create Squadrons',
             'Create Squadrons',
-                () {
+            () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(
-                  builder: (context) =>  CreateSquadronsPage(),
-                ),
+                MaterialPageRoute(builder: (context) => CreateSquadronsPage()),
               );
-
             },
           ),
           _buildMenuItem(
@@ -389,14 +360,11 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
             Icons.supervised_user_circle_outlined,
             'All Users',
             'All Users',
-                () {
+            () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(
-                  builder: (context) =>  GetUsersPage(),
-                ),
+                MaterialPageRoute(builder: (context) => GetUsersPage()),
               );
-
             },
           ),
           _buildMenuItem(
@@ -404,14 +372,11 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
             Icons.school,
             'All Departments',
             'All Departments',
-                () {
+            () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(
-                  builder: (context) =>  DepartmentsScreen(),
-                ),
+                MaterialPageRoute(builder: (context) => DepartmentsScreen()),
               );
-
             },
           ),
           _buildMenuItem(
@@ -419,14 +384,24 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
             Icons.auto_awesome_motion_outlined,
             'All Years',
             'All Years',
-                () {
+            () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(
-                  builder: (context) =>  YearsScreen(),
-                ),
+                MaterialPageRoute(builder: (context) => YearsScreen()),
               );
+            },
+          ),
 
+          _buildMenuItem(
+            Icons.file_open_outlined,
+            Icons.file_open,
+            'Import users File',
+            'Import users File',
+            () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => ImportStudentsScreen()),
+              );
             },
           ),
 
@@ -435,7 +410,7 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
             Icons.grade,
             'Grades overview',
             'Grades overview',
-                () {},
+            () {},
           ),
           const Spacer(),
           _buildLogoutButton(),
@@ -446,12 +421,12 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
   }
 
   Widget _buildMenuItem(
-      IconData outlinedIcon,
-      IconData filledIcon,
-      String title,
-      String value,
-      onTap,
-      ) {
+    IconData outlinedIcon,
+    IconData filledIcon,
+    String title,
+    String value,
+    onTap,
+  ) {
     final isSelected = selectedMenuItem == value;
     final isHovered = hoveredMenuItem == value;
 
@@ -666,13 +641,13 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
                   selectedCity,
                   cities,
                   isCityExpanded,
-                      (value) {
+                  (value) {
                     setState(() {
                       selectedCity = value;
                       isCityExpanded = false;
                     });
                   },
-                      () {
+                  () {
                     setState(() {
                       isCityExpanded = !isCityExpanded;
                     });
@@ -689,7 +664,6 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
       ),
     );
   }
-
 
   Widget _buildProfilePicture({String? userImageUrl}) {
     return Center(
@@ -820,31 +794,31 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
       return kIsWeb
           ? WebImage(url: buildImageUrl(userImageUrl), width: 100, height: 100)
           : Image.network(
-        buildImageUrl(userImageUrl),
-        width: 100,
-        height: 100,
-        fit: BoxFit.cover,
-        errorBuilder: (context, error, stackTrace) {
-          print("Error loading image: $error");
-          return Image.asset(
-            Assets.logo,
-            width: 100,
-            height: 100,
-            fit: BoxFit.cover,
-          );
-        },
-        loadingBuilder: (context, child, loadingProgress) {
-          if (loadingProgress == null) return child;
-          return Center(
-            child: CircularProgressIndicator(
-              value: loadingProgress.expectedTotalBytes != null
-                  ? loadingProgress.cumulativeBytesLoaded /
-                  loadingProgress.expectedTotalBytes!
-                  : null,
-            ),
-          );
-        },
-      );
+              buildImageUrl(userImageUrl),
+              width: 100,
+              height: 100,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                print("Error loading image: $error");
+                return Image.asset(
+                  Assets.logo,
+                  width: 100,
+                  height: 100,
+                  fit: BoxFit.cover,
+                );
+              },
+              loadingBuilder: (context, child, loadingProgress) {
+                if (loadingProgress == null) return child;
+                return Center(
+                  child: CircularProgressIndicator(
+                    value: loadingProgress.expectedTotalBytes != null
+                        ? loadingProgress.cumulativeBytesLoaded /
+                              loadingProgress.expectedTotalBytes!
+                        : null,
+                  ),
+                );
+              },
+            );
     }
 
     return Image.asset(Assets.logo, width: 100, height: 100, fit: BoxFit.cover);
@@ -853,6 +827,7 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
   Future<void> _pickImage() async {
     await _pickImageFromSource(ImageSource.gallery);
   }
+
   Future<void> _pickImageFromSource(ImageSource source) async {
     try {
       final XFile? pickedFile = await _imagePicker.pickImage(
@@ -877,6 +852,7 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
       _showErrorSnackbar('Failed to pick image. Please try again.');
     }
   }
+
   void _showSuccessSnackbar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -914,13 +890,13 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
   }
 
   Widget _buildTextField(
-      bool isEnabled,
-      String label,
-      TextEditingController controller,
-      IconData icon,
-      String hint,
-      bool isReadOnly,
-      ) {
+    bool isEnabled,
+    String label,
+    TextEditingController controller,
+    IconData icon,
+    String hint,
+    bool isReadOnly,
+  ) {
     return StatefulBuilder(
       builder: (context, setFieldState) {
         return Column(
@@ -970,14 +946,12 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
     );
   }
 
-
-
   Widget _buildDateField(
-      String label,
-      TextEditingController controller,
-      FocusNode focusNode,
-      String hint,
-      ) {
+    String label,
+    TextEditingController controller,
+    FocusNode focusNode,
+    String hint,
+  ) {
     return AnimatedBuilder(
       animation: focusNode,
       builder: (context, child) {
@@ -1007,12 +981,12 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
                 ),
                 boxShadow: isFocused
                     ? [
-                  BoxShadow(
-                    color: const Color(0xFF2563EB).withOpacity(0.1),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ]
+                        BoxShadow(
+                          color: const Color(0xFF2563EB).withOpacity(0.1),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ]
                     : [],
               ),
               child: TextField(
@@ -1066,14 +1040,15 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
       },
     );
   }
+
   Widget _buildDropdownField(
-      String label,
-      String value,
-      List<String> options,
-      bool isExpanded,
-      Function(String) onSelected,
-      Function() onToggle,
-      ) {
+    String label,
+    String value,
+    List<String> options,
+    bool isExpanded,
+    Function(String) onSelected,
+    Function() onToggle,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -1104,12 +1079,12 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
                 ),
                 boxShadow: isExpanded
                     ? [
-                  BoxShadow(
-                    color: const Color(0xFF2563EB).withOpacity(0.1),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ]
+                        BoxShadow(
+                          color: const Color(0xFF2563EB).withOpacity(0.1),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ]
                     : [],
               ),
               child: Row(
@@ -1239,27 +1214,26 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
           onTap: isLoading
               ? null
               : () async {
-            MultipartFile? image;
+                  MultipartFile? image;
 
-            if (kIsWeb && _webImage != null) {
-              image = MultipartFile.fromBytes(
-                _webImage!,
-                filename: 'profile_image.jpg',
-              );
-            } else if (!kIsWeb && _selectedImage != null) {
-              image = await MultipartFile.fromFile(
-                _selectedImage!.path,
-                filename: _selectedImage!.path.split('/').last,
-              );
-            }
+                  if (kIsWeb && _webImage != null) {
+                    image = MultipartFile.fromBytes(
+                      _webImage!,
+                      filename: 'profile_image.jpg',
+                    );
+                  } else if (!kIsWeb && _selectedImage != null) {
+                    image = await MultipartFile.fromFile(
+                      _selectedImage!.path,
+                      filename: _selectedImage!.path.split('/').last,
+                    );
+                  }
 
-            context.read<AdminProfileCubit>().updateProfile(
-              city: selectedCity,
-              dateOfBirth: selectedDate,
-              photo: image,
-            );
-
-          },
+                  context.read<AdminProfileCubit>().updateProfile(
+                    city: selectedCity,
+                    dateOfBirth: selectedDate,
+                    photo: image,
+                  );
+                },
           child: Center(
             child: Container(
               width: 470,
@@ -1268,62 +1242,54 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [
-                    Color(0xFF1849A9),
-                    Color(0xFF53B1FD),
-                  ],
+                  colors: [Color(0xFF1849A9), Color(0xFF53B1FD)],
                 ),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Center(
                 child: isLoading
                     ? Row(
-                  mainAxisAlignment:
-                  MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        valueColor:
-                        AlwaysStoppedAnimation<
-                            Color
-                        >(Colors.white),
-                      ),
-                    ),
-                    SizedBox(width: 10),
-                    Text(
-                      "Saving...",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight:
-                        FontWeight.w600,
-                        fontFamily: "inter",
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                )
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                Colors.white,
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                            "Saving...",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: "inter",
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      )
                     : Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            "Save Changes",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: "inter",
+                              color: Colors.white,
+                            ),
+                          ),
+                          SizedBox(width: 8),
 
-                    Text(
-                      "Save Changes",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: "inter",
-                        color: Colors.white,
+                          Icon(Icons.save, color: Colors.white, size: 20),
+                        ],
                       ),
-                    ),
-                    SizedBox(width: 8),
-
-
-                    Icon(Icons.save, color: Colors.white, size: 20),
-                  ],
-                ),
               ),
             ),
           ),
@@ -1331,7 +1297,6 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
       },
     );
   }
-
 }
 
 class DateRangeSelector extends StatelessWidget {
@@ -1377,15 +1342,13 @@ class DateRangeSelector extends StatelessWidget {
         items: years
             .map(
               (y) => DropdownMenuItem(
-            value: y,
-            child: Text(y, style: const TextStyle(fontSize: 15)),
-          ),
-        )
+                value: y,
+                child: Text(y, style: const TextStyle(fontSize: 15)),
+              ),
+            )
             .toList(),
         onChanged: (value) {},
       ),
     );
   }
 }
-
-
