@@ -625,6 +625,8 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                   BlocListener<GetUsersCubit, GetUsersState>(
                     listener: (context, state) {
                       if (state is UpdateUsersSuccess) {
+                        context.read<GetUsersCubit>().fetchUsers();
+
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Row(

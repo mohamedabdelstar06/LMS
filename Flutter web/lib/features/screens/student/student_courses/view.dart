@@ -12,9 +12,16 @@ import '../../../../core/cons/Colors/app_colors.dart';
 import '../../../../core/helpers/cach_helper/shared_pref_helper.dart';
 import '../../../../core/helpers/logout_server/logout.dart';
 import '../../../../generated/assets.dart';
-import '../../courses/course_model/courses.dart';
 import '../../student/student_profile/view.dart';
 import 'model/view.dart';
+
+String buildProfileImageUrl(String? image) {
+  if (image == null || image.isEmpty) return '';
+  if (image.startsWith('https')) return image;
+  return "https://skylearn.runasp.net$image";
+}
+
+
 
 class StudentCourseScreen extends StatefulWidget {
   const StudentCourseScreen({super.key});
@@ -26,6 +33,10 @@ class StudentCourseScreen extends StatefulWidget {
 class _CourseScreenState extends State<StudentCourseScreen> {
   bool _isLoading = true;
   Map<String, dynamic> userData = {};
+
+
+
+
 
 
 
@@ -287,6 +298,15 @@ void loadImageProfile() async {
                                             width: isLargeScreen ? 32 : 24,
                                             height: isLargeScreen ? 32 : 24,
                                           ),
+                                          const Spacer(),
+                                          SizedBox(
+                                            width: isLargeScreen ? 260 : 220,
+
+                                            child: _buildCoursesCounter(
+                                              count: state.courses.length,
+                                              isLargeScreen: isLargeScreen,
+                                            ),
+                                          ),
                                         ],
                                       ),
                                       SizedBox(height: 8),
@@ -371,6 +391,7 @@ void loadImageProfile() async {
                         ),
                       ),
                       SizedBox(height: 40),
+
                     ],
                   ),
                 ),
@@ -385,6 +406,58 @@ void loadImageProfile() async {
       ),
     ),
 );
+  }
+  Widget _buildCoursesCounter({
+    required int count,
+    required bool isLargeScreen,
+  }) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [
+            Color(0xFF175CD3),
+            Color(0xFF4F8DFD),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.15),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            "Total Courses = ",
+            style: TextStyle(
+              fontSize: isLargeScreen ? 16 : 14,
+              fontWeight: FontWeight.w500,
+              color: Colors.white.withValues(alpha: 0.9),
+              fontFamily: "inter",
+            ),
+          ),
+          const SizedBox(width: 4),
+          Text(
+            "$count",
+            style: TextStyle(
+              fontSize: isLargeScreen ? 36 : 28,
+              fontWeight: FontWeight.w700,
+              color: Colors.white,
+              fontFamily: "inter",
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildNotificationButton({
@@ -426,6 +499,73 @@ void loadImageProfile() async {
     );
   }
 
+
+
+  Widget webProfileAvatar({
+    required String? imageUrl,
+    double radius = 16,
+    bool isOnline = true,
+  }) {
+    final size = radius * 2;
+    return Stack(
+      children: [
+        ClipOval(
+          child: SizedBox(
+            width: size,
+            height: size,
+            child: imageUrl != null && imageUrl.isNotEmpty
+                ? WebImage(
+              url: imageUrl,
+              width: size,
+              height: size,
+            )
+                : avatarPlaceholder(size),
+          ),
+        ),
+        onlineIndicator(isOnline: isOnline, size: radius / 2),
+      ],
+    );
+  }
+
+
+  Widget avatarPlaceholder(double size) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.grey.shade200,
+      ),
+      child: Center(
+        child: CircularProgressIndicator(
+          strokeWidth: 2,
+          color: Color(0xFF175CD3),
+        ),
+      ),
+    );
+  }
+  Widget onlineIndicator({bool isOnline = true, double size = 10}) {
+    return Positioned(
+      bottom: 0,
+      right: 0,
+      child: Container(
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: isOnline ? Colors.green : Colors.grey,
+          border: Border.all(
+            color: Colors.white,
+            width: 2,
+          ),
+        ),
+      ),
+    );
+  }
+
+
+
+
   Widget _buildUserProfile(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -437,14 +577,13 @@ void loadImageProfile() async {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          CircleAvatar(
+          webProfileAvatar(
+            imageUrl: buildProfileImageUrl(userData["profileImageUrl"]),
             radius: 16,
-
-            ///TODO
-
-
-            backgroundImage: NetworkImage( userData["profileImageUrl"]  ?? Assets.logo),
+            isOnline: true,
+            //   userData["profileImageUrl"]
           ),
+
           SizedBox(width: 8),
           Text(
               userData["fullName"] ?? "User",
@@ -748,9 +887,6 @@ Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Stude
 
   } else if (result == 'settings') {
     // TODO: Add settings action later
-  } else if (result == 'profile') {
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => StudentProfileScreen(),));
-
   }
 }
 class WebImage extends StatelessWidget {
