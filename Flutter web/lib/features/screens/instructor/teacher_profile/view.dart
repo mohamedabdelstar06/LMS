@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
-import 'package:lms/features/screens/courses/student/view.dart';
 import 'package:lms/features/screens/instructor/teacher_profile/state_managment/cubit_d_profile.dart';
 import 'package:lms/features/screens/instructor/teacher_profile/state_managment/state_d_profile.dart';
 
@@ -16,6 +15,7 @@ import '../../../../core/cons/Colors/app_colors.dart';
 import '../../../../core/helpers/logout_server/logout.dart';
 import '../../../../generated/assets.dart';
 import '../../Announcement/view.dart';
+import '../../student/student_courses/view.dart';
 import 'model/view.dart';
 import 'dart:html' as html;
 

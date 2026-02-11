@@ -14,8 +14,6 @@ class ApiResources {
   static final createCourseEndPoint = "Course";
   static final getCourseEndPoint = "Course";
   static final squadronEndPoint = "Squadron";
-  static const String importStudentsEndPoint = 'admin/import/students';
-
-
-
+  static final importStudentsEndPoint = 'admin/import/students';
+  static final getCourseStudentEndPoint = "Enrollment/my-courses";
 }

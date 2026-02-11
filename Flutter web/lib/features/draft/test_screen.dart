@@ -111,7 +111,7 @@ class _ImportStudentsScreenState extends State<ImportStudentsScreen> {
           ),
           const SizedBox(height: 8),
           const Text(
-            'Select a CSV file containing student information',
+            'Select a CSV file containing student_courses information',
             style: TextStyle(
               fontSize: 14,
               color: Color(0xFF64748B),

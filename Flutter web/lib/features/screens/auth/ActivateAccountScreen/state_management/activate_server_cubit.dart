@@ -6,8 +6,8 @@ import '../../../../../core/cons/api_helper_resources/api_resources.dart';
 import '../../../../../core/cons/context/navigation_key.dart';
 import '../../../../../core/helpers/cach_helper/shared_pref_helper.dart';
 import '../../../courses/admin/view.dart';
-import '../../../courses/student/view.dart';
 import '../../../courses/teacher/view.dart';
+import '../../../student/student_courses/view.dart';
 import '../user_model/data.dart';
 import 'activate_state.dart';
 

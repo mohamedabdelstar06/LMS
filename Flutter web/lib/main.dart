@@ -16,7 +16,6 @@ import 'features/screens/add_course/view.dart';
 import 'features/screens/auth/Verify_email/view.dart';
 import 'features/screens/celeberating cultures/view.dart';
 import 'features/screens/chat_bot/view.dart';
-import 'features/screens/courses/student/view.dart';
 import 'features/screens/get_users/state_managment/get_users_cubit.dart';
 import 'features/screens/get_users/view.dart';
 

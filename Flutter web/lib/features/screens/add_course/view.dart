@@ -533,7 +533,7 @@ class FeatureCardsRow extends StatelessWidget {
               ),
             ),
             title: 'Track Progress',
-            description: 'Monitor student performance and completion rates',
+            description: 'Monitor student_courses performance and completion rates',
           ),
         ),
       ],
