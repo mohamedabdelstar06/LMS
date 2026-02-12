@@ -16,7 +16,7 @@
 // import '../../../add_course/Adding_view.dart';
 // import '../../../courses/admin/view.dart';
 // import '../../../create_squadron/view.dart';
-// import '../../../get_department/get_All_departments/view.dart';
+// import '../../../get_department/get_All_courses/view.dart';
 // import '../../../get_users/view.dart';
 // import '../../create_years/view.dart';
 // import 'all_model/model.dart';

@@ -1,23 +1,29 @@
 
 
+import '../../../../../generated/assets.dart';
+
 class UserModel {
-  String? message;
-  String? token;
-  String? expiresIn;
-  User? user;
+  String message;
+  String token;
+  String expiresIn;
+  User user;
 
   UserModel({
-    this.message,
-    this.token,
-    this.expiresIn,
-    this.user,
+    required this.message,
+    required this.token,
+    required this.expiresIn,
+    required this.user,
   });
 
-  UserModel.fromJson(Map<String, dynamic> json) {
-    message = json['message'];
-    token = json['token'];
-    expiresIn = json['expiresIn'];
-    user = json['user'] != null ? User.fromJson(json['user']) : null;
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+    return UserModel(
+      message: json['message'] ?? '',
+      token: json['token'] ?? '',
+      expiresIn: json['expiresIn'] ?? '',
+      user: json['user'] != null
+          ? User.fromJson(json['user'])
+          : User.empty(),
+    );
   }
 
   Map<String, dynamic> toJson() {
@@ -25,41 +31,44 @@ class UserModel {
       'message': message,
       'token': token,
       'expiresIn': expiresIn,
-      'user': user?.toJson(),
+      'user': user.toJson(),
     };
   }
 }
 
 class User {
-  int? id;
-  String? fullName;
-  String? email;
-  String? role;
-  // String? gender;
-  // String? city;
-  // String? academicLevel;
-  String? profileImageUrl;
+  int id;
+  String fullName;
+  String email;
+  String role;
+  String gender;
+  String city;
+  String profileImageUrl;
 
   User({
-    this.id,
-    this.fullName,
-    this.email,
-    this.role,
-    // this.gender,
-    // this.city,
-    // this.academicLevel,
-    this.profileImageUrl,
+    required this.id,
+    required this.fullName,
+    required this.email,
+    required this.role,
+    required this.gender,
+    required this.city,
+    required this.profileImageUrl,
   });
 
-  User.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    fullName = json['fullName'];
-    email = json['email'];
-    role = json['role'];
-    // gender = json['gender'];
-    // city = json['city'];
-    // academicLevel = json['academicLevel'];
-    profileImageUrl = json['profileImageUrl'];
+  factory User.fromJson(Map<String, dynamic> json) {
+    String? profileUrl = json['profileImageUrl'];
+
+    return User(
+      id: json['id'] ?? 0,
+      fullName: json['fullName'] ?? '',
+      email: json['email'] ?? '',
+      role: json['role'] ?? '',
+      gender: json['gender'] ?? '',
+      city: json['city'] ?? '',
+      profileImageUrl: (profileUrl == null || profileUrl.isEmpty || profileUrl == 'null')
+          ? Assets.logo
+          : profileUrl,
+    );
   }
 
   Map<String, dynamic> toJson() {
@@ -68,10 +77,21 @@ class User {
       'fullName': fullName,
       'email': email,
       'role': role,
-      // 'gender': gender,
-      // 'city': city,
-      // 'academicLevel': academicLevel,
+      'gender': gender,
+      'city': city,
       'profileImageUrl': profileImageUrl,
     };
+  }
+
+  factory User.empty() {
+    return User(
+      id: 0,
+      fullName: '',
+      email: '',
+      role: '',
+      gender: '',
+      city: '',
+      profileImageUrl: '',
+    );
   }
 }

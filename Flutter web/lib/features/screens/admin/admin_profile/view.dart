@@ -263,7 +263,9 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
             Icons.person,
             'Profile',
             'Profile',
-            () {},
+            () {
+
+            },
           ),
           _buildMenuItem(
             Icons.book_outlined,
@@ -328,6 +330,19 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => CreateYearPage()),
+              );
+            },
+          ),
+
+          _buildMenuItem(
+            Icons.calendar_month,
+            Icons.calendar_month_outlined,
+            'Add Enrollment',
+            'Add Enrollment',
+                () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => EnrollmentPage()),
               );
             },
           ),

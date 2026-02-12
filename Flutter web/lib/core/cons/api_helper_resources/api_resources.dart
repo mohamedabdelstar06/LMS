@@ -16,4 +16,6 @@ class ApiResources {
   static final squadronEndPoint = "Squadron";
   static final importStudentsEndPoint = 'admin/import/students';
   static final getCourseStudentEndPoint = "Enrollment/my-courses";
+  static final addEnrollmentEndPoint = "Enrollment";
+
 }

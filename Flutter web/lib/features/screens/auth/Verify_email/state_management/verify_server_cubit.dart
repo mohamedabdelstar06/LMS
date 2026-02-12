@@ -20,9 +20,9 @@ class VerifyCubit extends Cubit<VerifyState> {
       return "Email is required";
     }
 
-    if (!email.endsWith("@gmail.com")) {
-      return "Please enter a valid Gmail address";
-    }
+    // if (!email.endsWith("@gmail.com")) {
+    //   return "Please enter a valid Gmail address";
+    // }
 
     return null;
   }

@@ -158,7 +158,7 @@
 // import '../screens/courses/admin/view.dart';
 // import '../screens/create_squadron/view.dart';
 // import '../screens/create_years/view.dart';
-// import '../screens/get_department/get_All_departments/state_managments/cubit.dart';
+// import '../screens/get_department/get_All_courses/state_managments/cubit.dart';
 // import '../screens/get_users/view.dart';
 // import '../screens/profiles/admin_profile/view.dart';
 //
