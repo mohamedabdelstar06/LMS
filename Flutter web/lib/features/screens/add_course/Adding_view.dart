@@ -52,9 +52,8 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
   String selectedAttempts = "Unlimited Attempts";
   DateTime? selectedDate;
 
-  // bool _isDropdownOpen = false;
-  String? selectedDepartmentId; // نخزن الـ ID مش بس الاسم
-  String? selectedYearId; // نخزن الـ ID برضه
+  String? selectedDepartmentId;
+  String? selectedYearId;
   List<YearModel> availableYears = [];
 
   final nameController = TextEditingController();
