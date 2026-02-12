@@ -20,6 +20,7 @@ import '../../add_course/Adding_view.dart';
 import '../../courses/admin/view.dart';
 import '../../create_squadron/view.dart';
 import '../../get_users/view.dart';
+import '../Enrollment_course/view.dart';
 import '../create_years/view.dart';
 import '../get_department/get_All_departments/view.dart';
 import '../get_years/get_All_years/view.dart';
@@ -263,7 +264,9 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
             Icons.person,
             'Profile',
             'Profile',
-            () {},
+            () {
+
+            },
           ),
           _buildMenuItem(
             Icons.book_outlined,
@@ -328,6 +331,19 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => CreateYearPage()),
+              );
+            },
+          ),
+
+          _buildMenuItem(
+            Icons.calendar_month,
+            Icons.calendar_month_outlined,
+            'Add Enrollment',
+            'Add Enrollment',
+                () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => EnrollmentPage()),
               );
             },
           ),
