@@ -197,7 +197,6 @@
 // }
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:lms/core/widgets/profile_view.dart';
 
 import '../../features/screens/admin/admin_profile/view.dart';
 import '../../generated/assets.dart';

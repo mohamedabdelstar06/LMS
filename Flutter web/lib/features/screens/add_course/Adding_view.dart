@@ -10,7 +10,6 @@ import 'package:lms/features/screens/add_course/state_managment/states.dart';
 import '../../../core/cons/Colors/app_colors.dart';
 import '../../../core/helpers/logout_server/logout.dart';
 
-import '../../../core/widgets/profile_view.dart';
 import '../Announcement/view.dart';
 import '../Create_user/View.dart';
 import '../admin/admin_profile/view.dart';

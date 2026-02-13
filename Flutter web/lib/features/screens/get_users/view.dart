@@ -9,7 +9,6 @@ import 'package:lms/features/screens/get_users/view_updating%20user.dart';
 import '../../../core/cons/Colors/app_colors.dart';
 import '../../../core/helpers/logout_server/logout.dart';
 
-import '../../../core/widgets/profile_view.dart';
 import '../Announcement/view.dart';
 import '../Create_department/view.dart';
 import '../Create_user/View.dart';

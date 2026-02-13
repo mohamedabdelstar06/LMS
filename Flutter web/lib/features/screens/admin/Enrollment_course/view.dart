@@ -7,7 +7,6 @@ import 'package:lms/features/screens/admin/get_All_courses/state_mangment/cubit.
 import 'package:lms/features/screens/get_users/get_user_dropdown/model_dropdown/view.dart';
 import '../../../../core/cons/Colors/app_colors.dart';
 import '../../../../core/helpers/logout_server/logout.dart';
-import '../../../../core/widgets/profile_view.dart';
 import '../../Announcement/view.dart';
 import '../../Create_user/View.dart';
 import '../../add_course/Adding_view.dart';
