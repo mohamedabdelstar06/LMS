@@ -154,11 +154,11 @@
 // import '../screens/Announcement/view.dart';
 // import '../screens/Create_department/view.dart';
 // import '../screens/Create_user/View.dart';
-// import '../screens/add_course/Adding_view.dart';
+// import '../screens/create_course/Adding_view.dart';
 // import '../screens/courses/admin/view.dart';
 // import '../screens/create_squadron/view.dart';
 // import '../screens/create_years/view.dart';
-// import '../screens/get_department/get_All_courses/state_managments/cubit.dart';
+// import '../screens/get_department/get_all_courses/state_managments/cubit.dart';
 // import '../screens/get_users/view.dart';
 // import '../screens/profiles/admin_profile/view.dart';
 //

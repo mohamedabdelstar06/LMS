@@ -1,5 +1,4 @@
 import 'dart:ui_web' as ui;
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,23 +7,22 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:lms/features/screens/admin/admin_profile/state_managment/cubit_d_profile.dart';
 import 'package:lms/features/screens/admin/admin_profile/state_managment/state_d_profile.dart';
-import 'package:lms/features/screens/admin/get_squadron/get_all%20squadrons/view.dart';
-
 import '../../../../core/cons/Colors/app_colors.dart';
 import '../../../../core/helpers/logout_server/logout.dart';
 import '../../../../generated/assets.dart';
 import '../../Announcement/view.dart';
-import '../../Create_department/view.dart';
-import '../../Create_user/View.dart';
-import '../../add_course/Adding_view.dart';
-import '../../courses/admin/view.dart';
-import '../../create_squadron/view.dart';
-import '../../get_users/view.dart';
-import '../Enrollment_course/view.dart';
-import '../create_years/view.dart';
-import '../get_department/get_All_departments/view.dart';
-import '../get_years/get_All_years/view.dart';
-import '../import_file/view.dart';
+import '../courses/Enrollment_course/view.dart';
+import '../courses/create_course/Adding_view.dart';
+import '../courses/home_courses/view.dart';
+import '../department/create_department/view.dart';
+import '../department/get_department/get_All_departments/view.dart';
+import '../squadron/create_squadron/view.dart';
+import '../squadron/get_squadron/get_all squadrons/view.dart';
+import '../user_file/import_file/view.dart';
+import '../users/create_user/View.dart';
+import '../users/get_users/view.dart';
+import '../year/create_year/view.dart';
+import '../year/get_year/get_All_years/view.dart';
 import 'model/view.dart';
 import 'package:web/web.dart' as html;
 
@@ -264,9 +262,7 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
             Icons.person,
             'Profile',
             'Profile',
-            () {
-
-            },
+            () {},
           ),
           _buildMenuItem(
             Icons.book_outlined,
@@ -340,7 +336,7 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
             Icons.calendar_month_outlined,
             'Add Enrollment',
             'Add Enrollment',
-                () {
+            () {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => EnrollmentPage()),
@@ -388,7 +384,7 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
             Icons.supervised_user_circle_outlined,
             'All Squadrons',
             'All Squadrons',
-                () {
+            () {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => GetSquadronPage()),
@@ -1330,7 +1326,7 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
 class DateRangeSelector extends StatelessWidget {
   final List<String> years = [for (int y = 1980; y <= 2030; y++) y.toString()];
 
-   DateRangeSelector({super.key});
+  DateRangeSelector({super.key});
 
   @override
   Widget build(BuildContext context) {

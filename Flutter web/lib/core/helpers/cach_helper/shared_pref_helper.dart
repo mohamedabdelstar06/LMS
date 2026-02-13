@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../features/screens/Create_user/User_model/model.dart';
+import '../../../features/screens/admin/users/create_user/User_model/model.dart';
 import '../../../features/screens/auth/ActivateAccountScreen/user_model/data.dart';
 import '../../../features/screens/auth/Verify_email/user_model/data.dart';
 import '../../../features/screens/auth/login/user_model/data.dart';

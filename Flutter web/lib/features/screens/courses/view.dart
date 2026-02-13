@@ -4,7 +4,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../core/cons/Colors/app_colors.dart';
 import '../../../core/helpers/logout_server/logout.dart';
-import 'course_model/courses.dart';
+import '../admin/courses/get_All_courses/model/model.dart';
+
+List<GetCourseModel> courses = [
+
+];
+
 
 class CourseScreen extends StatefulWidget {
   const CourseScreen({super.key});
@@ -36,7 +41,7 @@ class _CourseScreenState extends State<CourseScreen> {
     final screenHeight = MediaQuery.of(context).size.height;
     final isLargeScreen = screenWidth > 1200;
     final isMediumScreen = screenWidth > 800;
-    
+
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -266,7 +271,7 @@ class _CourseScreenState extends State<CourseScreen> {
               ),
 
 
-      
+
     );
   }
 
@@ -422,7 +427,7 @@ class _CourseScreenState extends State<CourseScreen> {
                         ),
                       ),
                     ),
-                    
+
                     // Course Content - Fixed height
                     Expanded(
                       child: SizedBox(
