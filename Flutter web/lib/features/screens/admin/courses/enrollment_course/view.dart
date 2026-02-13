@@ -1,31 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lms/core/cons/Colors/app_colors.dart';
+import 'package:lms/core/helpers/logout_server/logout.dart';
+import 'package:lms/features/screens/Announcement/view.dart';
+import 'package:lms/features/screens/admin/admin_profile/view.dart';
 import 'package:lms/features/screens/admin/courses/Enrollment_course/state_mangment/cubits.dart';
 import 'package:lms/features/screens/admin/courses/Enrollment_course/state_mangment/states.dart';
-
-import '../../../../../core/cons/Colors/app_colors.dart';
-import '../../../../../core/helpers/logout_server/logout.dart';
-import '../../../Announcement/view.dart';
-import '../../admin_profile/view.dart';
-import '../../department/create_department/view.dart';
-import '../../department/get_department/get_All_departments/view.dart';
-import '../../squadron/create_squadron/view.dart';
-import '../../user_file/import_file/view.dart';
-import '../../users/create_user/View.dart';
-import '../../users/get_users/get_user_dropdown/model_dropdown/view.dart';
-import '../../users/get_users/get_user_dropdown/state_managment/cubit.dart';
-import '../../users/get_users/get_user_dropdown/state_managment/states.dart';
-import '../../users/get_users/view.dart';
-import '../../year/create_year/view.dart';
-import '../../year/get_year/get_All_years/view.dart';
-import '../create_course/Adding_view.dart';
-import '../get_All_courses/model/model.dart';
-import '../get_All_courses/state_mangment/cubit.dart';
-import '../home_courses/state_managment/states.dart';
-import '../home_courses/view.dart';
-
-
-
+import 'package:lms/features/screens/admin/courses/create_course/Adding_view.dart';
+import 'package:lms/features/screens/admin/courses/get_All_courses/state_mangment/cubit.dart';
+import 'package:lms/features/screens/admin/courses/home_courses/model/model.dart';
+import 'package:lms/features/screens/admin/courses/home_courses/state_managment/states.dart';
+import 'package:lms/features/screens/admin/courses/home_courses/view.dart';
+import 'package:lms/features/screens/admin/department/create_department/view.dart';
+import 'package:lms/features/screens/admin/department/get_department/get_All_departments/view.dart';
+import 'package:lms/features/screens/admin/squadron/create_squadron/view.dart';
+import 'package:lms/features/screens/admin/user_file/import_file/view.dart';
+import 'package:lms/features/screens/admin/users/create_user/View.dart';
+import 'package:lms/features/screens/admin/users/get_users/get_user_dropdown/model_dropdown/view.dart';
+import 'package:lms/features/screens/admin/users/get_users/get_user_dropdown/state_managment/cubit.dart';
+import 'package:lms/features/screens/admin/users/get_users/get_user_dropdown/state_managment/states.dart';
+import 'package:lms/features/screens/admin/users/get_users/view.dart';
+import 'package:lms/features/screens/admin/year/create_year/view.dart';
+import 'package:lms/features/screens/admin/year/get_year/get_All_years/view.dart';
 
 
 class EnrollmentPage extends StatelessWidget {
@@ -35,7 +31,7 @@ class EnrollmentPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => EnrollmentCubit(),
-      child: const   EnrollmentScreen(),
+      child: const EnrollmentScreen(),
     );
   }
 }
@@ -48,10 +44,8 @@ class EnrollmentScreen extends StatefulWidget {
 }
 
 class _AddEnrollmentState extends State<EnrollmentScreen> {
-
   int? selectedUserId;
   int? selectedCourseId;
-
 
   final _formKey = GlobalKey<FormState>();
   bool isUsersExpanded = false;
@@ -60,18 +54,49 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
   String selectedUserName = "Select user";
   String selectedCourseName = "Select Course";
 
-
   String selectedMenuItem = 'Add Enrollment';
   String? hoveredMenuItem;
   bool isLogoutHovered = false;
 
-
- 
-
-
-
-
-
+  // void showSuccessSnackBar(String message) {
+  //   ScaffoldMessenger.of(context).showSnackBar(
+  //     SnackBar(
+  //       behavior: SnackBarBehavior.floating,
+  //       backgroundColor: Colors.transparent,
+  //       elevation: 0,
+  //       content: TweenAnimationBuilder<double>(
+  //         tween: Tween(begin: 0, end: 1),
+  //         duration: const Duration(milliseconds: 400),
+  //         builder: (context, value, child) {
+  //           return Transform.scale(scale: value, child: child);
+  //         },
+  //         child: Container(
+  //           padding: const EdgeInsets.all(16),
+  //           decoration: BoxDecoration(
+  //             color: Colors.green.shade600,
+  //             borderRadius: BorderRadius.circular(14),
+  //             boxShadow: const [
+  //               BoxShadow(color: Colors.black26, blurRadius: 10),
+  //             ],
+  //           ),
+  //           child: Row(
+  //             children: const [
+  //               Icon(Icons.check_circle, color: Colors.white),
+  //               SizedBox(width: 12),
+  //               Expanded(
+  //                 child: Text(
+  //                   "Upload completed successfully",
+  //                   style: TextStyle(color: Colors.white, fontSize: 15),
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       ),
+  //       duration: const Duration(seconds: 2),
+  //     ),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -131,10 +156,7 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
     });
   }
 
-
-
   // setState(() => selectedImageBytes = null);
-
 
   Widget _buildSidebar() {
     return Container(
@@ -165,11 +187,13 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
             Icons.person,
             'Profile',
             'Profile',
-                () {
+            () {
               Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const AdminProfileScreen()));
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const AdminProfileScreen(),
+                ),
+              );
             },
           ),
           _buildMenuItem(
@@ -177,7 +201,7 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
             Icons.book,
             'My Courses',
             'My Courses',
-                () {
+            () {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
@@ -191,7 +215,7 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
             Icons.notifications_active_rounded,
             'Announcements',
             'Announcements',
-                () {
+            () {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
@@ -205,7 +229,7 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
             Icons.person_add_alt_1,
             'Create Users',
             'Create users',
-                () {
+            () {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
@@ -219,7 +243,7 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
             Icons.folder_copy_rounded,
             'Create Departments',
             'Create Departments',
-                () {
+            () {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => CreateDepartmentPage()),
@@ -231,7 +255,7 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
             Icons.calendar_month_outlined,
             'Create Years',
             'Create Years',
-                () {
+            () {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => CreateYearPage()),
@@ -243,16 +267,14 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
             Icons.calendar_month_outlined,
             'Add Enrollment',
             'Add Enrollment',
-                () {
-
-            },
+            () {},
           ),
           _buildMenuItem(
             Icons.event_available,
             Icons.event_note_outlined,
             'Create New Course',
             'Create New Course',
-                () {
+            () {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => CreateNewCoursePage()),
@@ -264,7 +286,7 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
             Icons.airplanemode_active_rounded,
             'Create Squadrons',
             'Create Squadrons',
-                () {
+            () {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => CreateSquadronsPage()),
@@ -276,7 +298,7 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
             Icons.supervised_user_circle_outlined,
             'All Users',
             'All Users',
-                () {
+            () {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => GetUsersPage()),
@@ -288,7 +310,7 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
             Icons.school,
             'All Departments',
             'All Departments',
-                () {
+            () {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => DepartmentsScreen()),
@@ -300,7 +322,7 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
             Icons.auto_awesome_motion_outlined,
             'All Years',
             'All Years',
-                () {
+            () {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => YearsScreen()),
@@ -313,7 +335,7 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
             Icons.file_open,
             'Import users File',
             'Import users File',
-                () {
+            () {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => ImportStudentsScreen()),
@@ -326,7 +348,7 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
             Icons.grade,
             'Grades overview',
             'Grades overview',
-                () {},
+            () {},
           ),
           const Spacer(),
           _buildLogoutButton(),
@@ -337,12 +359,12 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
   }
 
   Widget _buildMenuItem(
-      IconData outlinedIcon,
-      IconData filledIcon,
-      String title,
-      String value,
-      onTap,
-      ) {
+    IconData outlinedIcon,
+    IconData filledIcon,
+    String title,
+    String value,
+    onTap,
+  ) {
     final isSelected = selectedMenuItem == value;
     final isHovered = hoveredMenuItem == value;
 
@@ -478,12 +500,12 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
   }
 
   Widget _buildDropdownField(
-      String displayValue,
-      List<UserLiteModel> users,
-      bool isExpanded,
-      Function(UserLiteModel) onSelected,
-      Function() onToggle,
-      ) {
+    String displayValue,
+    List<UserLiteModel> users,
+    bool isExpanded,
+    Function(UserLiteModel) onSelected,
+    Function() onToggle,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -604,12 +626,12 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
   }
 
   Widget _buildSecondDropdownField(
-      String displayValue,
-      List<GetCourseModel> courses,
-      bool isExpanded,
-      Function(GetCourseModel) onSelected,
-      Function() onToggle,
-      ) {
+    String displayValue,
+    List<GetCourseModel> courses,
+    bool isExpanded,
+    Function(GetCourseModel) onSelected,
+    Function() onToggle,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -691,60 +713,58 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
             constraints: const BoxConstraints(maxHeight: 250),
             child: courses.isEmpty
                 ? Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: Center(
-                child: Text(
-                  "No courses already created ",
-                  style: TextStyle(
-                    color: Colors.red[600],
-                    fontSize: 14,
-                    fontStyle: FontStyle.italic,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            )
-                : ListView.builder(
-              shrinkWrap: true,
-              itemCount: courses.length,
-              itemBuilder: (context, index) {
-                final course = courses[index];
-                return InkWell(
-                  onTap: () => onSelected(course),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: Center(
+                      child: Text(
+                        "No courses already created ",
+                        style: TextStyle(
+                          color: Colors.red[600],
+                          fontSize: 14,
+                          fontStyle: FontStyle.italic,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            course.title,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: Color(0xFF1E293B),
-                            ),
+                  )
+                : ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: courses.length,
+                    itemBuilder: (context, index) {
+                      final course = courses[index];
+                      return InkWell(
+                        onTap: () => onSelected(course),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 12,
+                          ),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  course.title,
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    color: Color(0xFF1E293B),
+                                  ),
+                                ),
+                              ),
+                              if (displayValue == course.title)
+                                const Icon(
+                                  Icons.check,
+                                  color: Color(0xFF2563EB),
+                                  size: 18,
+                                ),
+                            ],
                           ),
                         ),
-                        if (displayValue == course.title)
-                          const Icon(
-                            Icons.check,
-                            color: Color(0xFF2563EB),
-                            size: 18,
-                          ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
           ),
       ],
     );
   }
-
-
 
   Widget _buildFormContainer(EnrollmentState state) {
     return SingleChildScrollView(
@@ -762,27 +782,18 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
-                    child:
-                    BlocProvider(
+                    child: BlocProvider(
                       create: (_) => UsersCubitDrop()..fetchStudents(),
-                      child:
-                      BlocBuilder<
-                          UsersCubitDrop,
-                          UsersStateDrop
-                      >(
+                      child: BlocBuilder<UsersCubitDrop, UsersStateDrop>(
                         builder: (context, UsersStateDrop) {
                           if (UsersStateDrop is UsersLoadingState) {
                             return const Padding(
                               padding: EdgeInsets.only(top: 30),
-                              child: Center(
-                                child: CircularProgressIndicator(),
-                              ),
+                              child: Center(child: CircularProgressIndicator()),
                             );
                           }
 
@@ -804,13 +815,15 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
                               );
                             }
 
-                            List<UserLiteModel> users = UsersStateDrop.users.whereType<UserLiteModel>().toList();
+                            List<UserLiteModel> users = UsersStateDrop.users
+                                .whereType<UserLiteModel>()
+                                .toList();
 
                             return _buildDropdownField(
                               selectedUserName,
                               users,
                               isUsersExpanded,
-                                  (chosenUser) {
+                              (chosenUser) {
                                 setState(() {
                                   selectedUserId = chosenUser.id;
 
@@ -818,9 +831,8 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
                                   isUsersExpanded = false;
                                 });
                               },
-                                  () => setState(
-                                    () => isUsersExpanded =
-                                !isUsersExpanded,
+                              () => setState(
+                                () => isUsersExpanded = !isUsersExpanded,
                               ),
                             );
                           }
@@ -833,8 +845,7 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
 
                   const SizedBox(width: 30),
                   Expanded(
-                    child:
-                    BlocProvider(
+                    child: BlocProvider(
                       create: (_) => GetCourseCubit()..getCourses(),
                       child: BlocBuilder<GetCourseCubit, GetCourseState>(
                         builder: (context, courseState) {
@@ -871,7 +882,7 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
                               selectedCourseName,
                               courses,
                               isCourseExpanded,
-                                  (chosenCourse) {
+                              (chosenCourse) {
                                 setState(() {
                                   selectedCourseName = chosenCourse.title;
                                   selectedCourseId = chosenCourse.id;
@@ -879,8 +890,8 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
                                   isCourseExpanded = false;
                                 });
                               },
-                                  () => setState(
-                                    () => isCourseExpanded = !isCourseExpanded,
+                              () => setState(
+                                () => isCourseExpanded = !isCourseExpanded,
                               ),
                             );
                           }
@@ -894,20 +905,19 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
               ),
               const SizedBox(height: 16),
 
-
               _buildActionButtons(state),
 
               const SizedBox(height: 24),
 
               BlocConsumer<EnrollmentCubit, EnrollmentState>(
                 listenWhen: (previous, current) =>
-                current is EnrollmentActionSuccess ||
+                    current is EnrollmentActionSuccess ||
                     current is EnrollmentError,
                 listener: (context, state) {
                   if (state is EnrollmentActionSuccess) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(state.message)),
-                    );
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(SnackBar(content: Text(state.message)));
                   }
 
                   if (state is EnrollmentError) {
@@ -920,8 +930,7 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
                   }
                 },
                 buildWhen: (previous, current) =>
-                current is EnrollmentLoaded ||
-                    current is EnrollmentLoading,
+                    current is EnrollmentLoaded || current is EnrollmentLoading,
                 builder: (context, state) {
                   if (state is EnrollmentLoading) {
                     return const Center(child: CircularProgressIndicator());
@@ -941,7 +950,9 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
                         final enrollment = state.enrollments[index];
 
                         return ListTile(
-                          key: ValueKey("${enrollment.userId}-${enrollment.courseId}"),
+                          key: ValueKey(
+                            "${enrollment.userId}-${enrollment.courseId}",
+                          ),
                           title: Text(enrollment.userName),
                           subtitle: Text(enrollment.courseName),
                           trailing: IconButton(
@@ -960,9 +971,7 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
 
                   return const SizedBox();
                 },
-              )
-
-
+              ),
             ],
           ),
         ),
@@ -980,39 +989,36 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
             onTap: isLoading
                 ? null
                 : () {
-              if (_formKey.currentState!.validate()) {
-                if (selectedUserName == "Select User" ||
-                    selectedUserName.isEmpty) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Please select a user Name"),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
-                  return;
-                }
-                if (selectedCourseName == "Select course" ||
-                    selectedCourseName.isEmpty) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Please select a course Name"),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
-                  return;
-                }
+                    if (_formKey.currentState!.validate()) {
+                      if (selectedUserName == "Select User" ||
+                          selectedUserName.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Please select a user Name"),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                        return;
+                      }
+                      if (selectedCourseName == "Select course" ||
+                          selectedCourseName.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Please select a course Name"),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                        return;
+                      }
 
-                context.read<EnrollmentCubit>().createEnrollment(
-
-                  studentId: selectedUserId!,
-                  courseId: selectedCourseId!,
-                  userName: selectedUserName,
-                  courseName:  selectedCourseName,
-
-
-                );
-              }
-            },
+                      context.read<EnrollmentCubit>().createEnrollment(
+                        studentId: selectedUserId!,
+                        courseId: selectedCourseId!,
+                        userName: selectedUserName,
+                        courseName: selectedCourseName,
+                      );
+                    }
+                  },
             child: Container(
               height: 55,
               decoration: BoxDecoration(
@@ -1026,37 +1032,37 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
               child: Center(
                 child: isLoading
                     ? const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                          Colors.white,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                Colors.white,
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 12),
+                          Text(
+                            "Adding Enrollment...",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      )
+                    : const Text(
+                        "Add Enrollment",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
                         ),
                       ),
-                    ),
-                    SizedBox(width: 12),
-                    Text(
-                      "Adding Enrollment...",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                )
-                    : const Text(
-                  "Add Enrollment",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                  ),
-                ),
               ),
             ),
           ),
