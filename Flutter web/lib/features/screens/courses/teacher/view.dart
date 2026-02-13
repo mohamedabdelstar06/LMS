@@ -5,20 +5,16 @@ import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:lms/core/widgets/app_bar.dart';
-import 'package:lms/features/screens/Create_user/View.dart';
 import 'package:lms/features/screens/courses/admin/state_managment/cubit.dart';
 import 'package:lms/features/screens/courses/admin/state_managment/states.dart';
-import 'package:lms/features/screens/get_squadron/get_all%20squadrons/view.dart';
-import 'package:lms/features/screens/get_users/view.dart';
 
 import '../../../../core/cons/Colors/app_colors.dart';
-import '../../../../core/cons/context/navigation_key.dart';
 import '../../../../core/helpers/cach_helper/shared_pref_helper.dart';
 import '../../../../core/helpers/logout_server/logout.dart';
 import '../../../../generated/assets.dart';
 
 import '../../admin/get_department/get_All_departments/view.dart';
+import '../../admin/get_squadron/get_all squadrons/view.dart';
 import '../../instructor/teacher_profile/view.dart';
 import '../admin/model/model.dart';
 import '../course_model/courses.dart';
@@ -590,7 +586,7 @@ class _CourseCardWidget extends StatefulWidget {
   final int index;
   final ValueChanged<int> onDelete;
 
-  _CourseCardWidget({
+  const _CourseCardWidget({
     required this.index,
     required this.onDelete, required this.courseModel,
   });
@@ -618,11 +614,7 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
       },
       child: GestureDetector(
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => GetSquadronPage()),
-          );
-
+       ///todo:
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text("📘 Selected: ${widget.courseModel.title}"),
@@ -705,7 +697,7 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                       borderRadius: const BorderRadius.vertical(
                         top: Radius.circular(16),
                       ),
-                      child: widget.courseModel.imageUrl != null && widget.courseModel.imageUrl.isNotEmpty
+                      child: widget.courseModel.imageUrl.isNotEmpty
                           ? IgnorePointer(
                         child: WebImage(
                           url: buildImageUrl(widget.courseModel.imageUrl),

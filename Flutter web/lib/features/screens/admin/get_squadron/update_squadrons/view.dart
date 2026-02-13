@@ -1,73 +1,63 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lms/features/screens/admin/create_years/state_management/years_cubit.dart';
-import 'package:lms/features/screens/admin/create_years/state_management/years_states.dart';
-import '../../../../core/cons/Colors/app_colors.dart';
-import '../../../../core/helpers/logout_server/logout.dart';
-import '../../../../core/widgets/profile_view.dart';
-import '../../Announcement/view.dart';
-import '../../Create_department/view.dart';
-import '../../Create_user/View.dart';
-import '../../add_course/Adding_view.dart';
-import '../../courses/admin/view.dart';
-import '../../create_squadron/view.dart';
 
-import '../../get_users/view.dart';
-import '../admin_profile/view.dart';
-import '../get_department/get_All_departments/view.dart';
-import '../get_department/model/model.dart';
-import '../get_department/state_mangment/cubit.dart';
-import '../get_department/state_mangment/states.dart';
-import '../get_years/get_All_years/view.dart';
+import '../../../../../core/cons/Colors/app_colors.dart';
+
+import '../../../../../core/helpers/logout_server/logout.dart';
+import '../../../Announcement/view.dart';
+import '../../../Create_department/view.dart';
+import '../../../Create_user/View.dart';
+import '../../../add_course/Adding_view.dart';
+import '../../../courses/admin/view.dart';
+import '../../../create_squadron/view.dart';
+import '../../../get_users/view.dart';
+import '../../Enrollment_course/view.dart';
+import '../../admin_profile/view.dart';
+import '../../create_years/view.dart';
+import '../../get_department/get_All_departments/view.dart';
+import '../../get_years/get_All_years/view.dart';
+import '../../import_file/view.dart';
+import '../get_all squadrons/state_managment/cubit.dart';
+import '../get_all squadrons/state_managment/states.dart';
+import '../get_all squadrons/view.dart';
 
 
 
-class CreateYearPage extends StatelessWidget {
-  const CreateYearPage({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => YearCubit(),
-      child: const CreateYearScreen(),
-    );
-  }
-}
-
-class CreateYearScreen extends StatefulWidget {
-  const CreateYearScreen({super.key});
+class EditSquadronScreen extends StatefulWidget {
+  final int squadronId;
+  const EditSquadronScreen({super.key, required this.squadronId});
 
   @override
-  State<CreateYearScreen> createState() => _CreateYearScreenState();
+  State<EditSquadronScreen> createState() => _EditSquadronScreenState();
 }
 
-class _CreateYearScreenState extends State<CreateYearScreen> {
-  final nameController = TextEditingController();
-  final descriptionController = TextEditingController();
-  final departmentNameController = TextEditingController();
+class _EditSquadronScreenState extends State<EditSquadronScreen> {
   final _formKey = GlobalKey<FormState>();
-  bool isDepartmentExpanded = false;
+  late TextEditingController nameController;
+  late TextEditingController descriptionController;
 
-  String selectedMenuItem = 'Create Years';
+
+  String selectedMenuItem = 'Edit Squadrons';
   String? hoveredMenuItem;
   bool isLogoutHovered = false;
-  String selectedDepartmentName = "Select Department";
-  DateTime? selectedStartDate;
-  DateTime? selectedEndDate;
-  final dobStartController = TextEditingController();
-  final dobEndController = TextEditingController();
-  final dobStartFocus = FocusNode();
-  final dobEndFocus = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    nameController = TextEditingController();
+    descriptionController = TextEditingController();
+
+    context.read<AllSquadronCubit>()
+        .fetchSquadronById(widget.squadronId);
+  }
 
   @override
   void dispose() {
     nameController.dispose();
     descriptionController.dispose();
-    departmentNameController.dispose();
-    dobStartController.dispose();
-    dobEndController.dispose();
-    dobStartFocus.dispose();
-    dobEndFocus.dispose();
+
 
     super.dispose();
   }
@@ -116,30 +106,46 @@ class _CreateYearScreenState extends State<CreateYearScreen> {
         child: Row(
           children: [
             _buildSidebar(),
-            Expanded(
-              child: BlocConsumer<YearCubit, YearState>(
-                listener: (context, state) {
-                  if (state is YearSuccess) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(state.message), backgroundColor: Colors.green),
-                    );
-                    _clearForm();
-                  }
-                  if (state is YearError) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(state.message), backgroundColor: Colors.red),
-                    );
-                  }
-                },
-                builder: (context, state) {
+            BlocConsumer<AllSquadronCubit, AllSquadronState>(
+              listener: (context, state) {
+                if (state is UpdateSquadronSuccess) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(state.message), backgroundColor: Colors.green),
+                  );
+                  _clearForm();
+                }
+                if (state is UpdateSquadronError) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(state.message), backgroundColor: Colors.red),
+                  );
+                }
+              },
+              builder: (context, state) {
+                if (state is GetSquadronByIdLoading ||
+                    state is UpdateSquadronLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                if (state is GetSquadronByIdLoaded) {
+                  final squadron = state.squadron;
+
+                  nameController.text = squadron.name;
+                  descriptionController.text = squadron.description;
+
                   return SingleChildScrollView(
                     padding: const EdgeInsets.all(40),
                     child: Center(
                       child: _buildFormContainer(state),
                     ),
-                  );
+                  );}
+
+
+                if (state is AllSquadronError) {
+                  return Center(child: Text(state.message));
+                }
+
+                return const SizedBox();
                 },
-              ),
             ),
           ],
         ),
@@ -150,13 +156,7 @@ class _CreateYearScreenState extends State<CreateYearScreen> {
   void _clearForm() {
     nameController.clear();
     descriptionController.clear();
-    departmentNameController.clear();
 
-    setState(() =>  selectedDepartmentName = "Select Department");
-    selectedStartDate = null;
-    selectedEndDate = null;
-    dobStartController.text = "";
-    dobEndController.text = "";
   }
 
   Widget _buildField(
@@ -185,8 +185,9 @@ class _CreateYearScreenState extends State<CreateYearScreen> {
   }
 
 
-  Widget _buildActionButtons(YearState state) {
-    bool isLoading = state is YearLoading;
+  Widget _buildActionButtons(GetSquadronByIdLoaded state) {
+    bool isLoading = state is GetSquadronByIdLoading;
+    final squadron = state.squadron;
     return Row(
       children: [
 
@@ -194,37 +195,17 @@ class _CreateYearScreenState extends State<CreateYearScreen> {
           flex: 2,
           child: InkWell(
             onTap: isLoading ? null : () {
-              if (_formKey.currentState!.validate()) {
-                if (selectedStartDate == null || selectedEndDate == null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Please select both start and end dates"),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
-                  return;
-                }
+              final updated = squadron.copyWith(
+                            name: nameController.text,
+                            description: descriptionController.text,
+                          );
 
-                if (selectedDepartmentName == "Select Department" || selectedDepartmentName.isEmpty) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Please select a department name"),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
-                  return;
-                }
+                          context
+                              .read<AllSquadronCubit>()
+                              .updateSquadron(updated);
+                          setState(() {});
+              },
 
-
-                context.read<YearCubit>().createYear(
-                  nameController,
-                  descriptionController,
-                  selectedDepartmentName,
-                  selectedStartDate!,
-                  selectedEndDate!,
-                );
-              }
-            },
             child: Container(
               height: 55,
               decoration: BoxDecoration(
@@ -253,7 +234,7 @@ class _CreateYearScreenState extends State<CreateYearScreen> {
                     ),
                     SizedBox(width: 12),
                     Text(
-                      "Creating Year...",
+                      "Updating Squadron...",
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -263,7 +244,7 @@ class _CreateYearScreenState extends State<CreateYearScreen> {
                   ],
                 )
                     : const Text(
-                  "Create Year",
+                  "Update Squadron",
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
@@ -277,7 +258,7 @@ class _CreateYearScreenState extends State<CreateYearScreen> {
       ],
     );
   }
-  Widget _buildFormContainer(YearState state) {
+  Widget _buildFormContainer(GetSquadronByIdLoaded state) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
       child: TweenAnimationBuilder(
@@ -293,6 +274,7 @@ class _CreateYearScreenState extends State<CreateYearScreen> {
           );
         },
         child: Container(
+          width: 1100,
           constraints: const BoxConstraints(maxWidth: 1124),
           padding: const EdgeInsets.all(40),
           decoration: BoxDecoration(
@@ -312,7 +294,7 @@ class _CreateYearScreenState extends State<CreateYearScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  "Create Year",
+                  "Edit Squadron",
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
@@ -326,94 +308,17 @@ class _CreateYearScreenState extends State<CreateYearScreen> {
                   children: [
                     Expanded(
                       child: _buildField(
-                        "Year Name",
+                        "Squadron Name",
                         nameController,
                       ),
                     ),
                     const SizedBox(width: 20),
-                    Expanded(
-                      child: BlocProvider(
-                        create: (_) => DepartmentsCubitDrop()..fetchDepartments(),
-                        child: BlocBuilder<DepartmentsCubitDrop, DepartmentsStateDrop>(
-                          builder: (context, departmentState) {
-                            if (departmentState is DepartmentLoadingState) {
-                              return const Padding(
-                                padding: EdgeInsets.only(top: 30),
-                                child: Center(child: CircularProgressIndicator()),
-                              );
-                            }
 
-                            if (departmentState is DepartmentsErrorState) {
-                              return Padding(
-                                padding: const EdgeInsets.only(top: 30),
-                                child: Text("Error: ${departmentState.message}",
-                                    style: const TextStyle(color: Colors.red)),
-                              );
-                            }
-
-                            if (departmentState is DepartmentLoadedState) {
-                              if (departmentState.departments.isEmpty) {
-                                return const Padding(
-                                  padding: EdgeInsets.only(top: 30),
-                                  child: Text("No departments found"),
-                                );
-                              }
-
-                              List<GetDepartmentModel> departments = departmentState.departments.whereType<GetDepartmentModel>().toList();
-
-                              return _buildDropdownField(
-                                selectedDepartmentName,
-                                departments,
-                                isDepartmentExpanded,
-                                    (chosenUser) {
-                                  setState(() {
-                                    selectedDepartmentName = chosenUser.name;
-                                    isDepartmentExpanded = false;
-                                  });
-                                },
-                                    () => setState(() => isDepartmentExpanded = !isDepartmentExpanded),
-                              );
-                            }
-
-                            return const SizedBox(height: 50);
-                          },
-                        ),
-                      ),
-                    ),
                   ],
                 ),
 
                 const SizedBox(height: 24),
 
-Row(
-  children: [
-    Expanded(child:  _buildDateField(
-      'Start Date',
-      dobStartController,
-      dobStartFocus,
-      "Select Date",
-      onDateChanged: (date) {
-        setState(() {
-          selectedStartDate = date;
-        });
-      },
-    ),),
-    SizedBox(width: 20,),
-    Expanded(child:  _buildDateField(
-      'End date',
-      dobEndController,
-      dobEndFocus,
-      "Select Date",
-      onDateChanged: (date) {
-        setState(() {
-          selectedEndDate = date;
-        });
-      },
-    ),),
-  ],
-),
-
-                const SizedBox(height: 24),
 
                 _buildField(
                   "Description",
@@ -430,91 +335,7 @@ Row(
       ),
     );
   }
-  Widget _buildDropdownField(
-      String displayValue,
-      List<GetDepartmentModel> departments,
-      bool isExpanded,
-      Function(GetDepartmentModel) onSelected,
-      Function() onToggle,
-      ) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          "Department Name",
-          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Color(0xFF2563EB)),
-        ),
-        const SizedBox(height: 8),
-        MouseRegion(
-          cursor: SystemMouseCursors.click,
-          child: GestureDetector(
-            onTap: onToggle,
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              decoration: BoxDecoration(
-                color: isExpanded ? Colors.white : const Color(0xFFF8FAFC),
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: isExpanded ? const Color(0xFF2563EB) : const Color(0xFFE2E8F0),
-                  width: isExpanded ? 2 : 1,
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Icon(Icons.person_outline, color: isExpanded ? const Color(0xFF2563EB) : const Color(0xFF94A3B8), size: 20),
-                      const SizedBox(width: 12),
-                      Text(displayValue, style: const TextStyle(fontSize: 14, color: Color(0xFF1E293B), fontWeight: FontWeight.w500)),
-                    ],
-                  ),
-                  Icon(isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: const Color(0xFF94A3B8)),
-                ],
-              ),
-            ),
-          ),
-        ),
-        if (isExpanded)
-          Container(
-            margin: const EdgeInsets.only(top: 4),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: const Color(0xFFE2E8F0)),
-              boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10)],
-            ),
-            constraints: const BoxConstraints(maxHeight: 250),
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: departments.length,
-              itemBuilder: (context, index) {
-                final department = departments[index];
-                return InkWell(
-                  onTap: () => onSelected(department),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            "${department.name} (${department.headName})",
-                            style: const TextStyle(fontSize: 14, color: Color(0xFF1E293B)),
-                          ),
-                        ),
-                        if (displayValue == department.name)
-                          const Icon(Icons.check, color: Color(0xFF2563EB), size: 18),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-      ],
-    );
-  }
+
   Widget _buildSidebar() {
     return Container(
       width: 250,
@@ -545,13 +366,13 @@ Row(
             'Profile',
             'Profile',
                 () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AdminProfileScreen(),
-                ),
-              );
-                },
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AdminProfileScreen(),
+                    ),
+                  );
+            },
           ),
           _buildMenuItem(
             Icons.book_outlined,
@@ -579,7 +400,6 @@ Row(
                   builder: (context) => const AnnouncementScreen(),
                 ),
               );
-
             },
           ),
           _buildMenuItem(
@@ -594,7 +414,6 @@ Row(
                   builder: (context) => const CreateUserScreen(),
                 ),
               );
-
             },
           ),
           _buildMenuItem(
@@ -605,11 +424,8 @@ Row(
                 () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(
-                  builder: (context) =>  CreateDepartmentPage(),
-                ),
+                MaterialPageRoute(builder: (context) => CreateDepartmentPage()),
               );
-
             },
           ),
           _buildMenuItem(
@@ -620,11 +436,21 @@ Row(
                 () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(
-                  builder: (context) =>  CreateYearPage(),
-                ),
+                MaterialPageRoute(builder: (context) => CreateYearPage()),
               );
+            },
+          ),
 
+          _buildMenuItem(
+            Icons.calendar_month,
+            Icons.calendar_month_outlined,
+            'Add Enrollment',
+            'Add Enrollment',
+                () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => EnrollmentPage()),
+              );
             },
           ),
           _buildMenuItem(
@@ -635,11 +461,8 @@ Row(
                 () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(
-                  builder: (context) =>  CreateNewCoursePage(),
-                ),
+                MaterialPageRoute(builder: (context) => CreateNewCoursePage()),
               );
-
             },
           ),
           _buildMenuItem(
@@ -650,11 +473,29 @@ Row(
                 () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(
-                  builder: (context) =>  CreateSquadronsPage(),
-                ),
+                MaterialPageRoute(builder: (context) => CreateSquadronsPage()),
               );
+            },
+          ),
+          _buildMenuItem(
+            Icons.airplanemode_active,
+            Icons.airplanemode_active_rounded,
+            'Edit Squadrons',
+            'Edit Squadrons',
+                () {
 
+            },
+          ),
+          _buildMenuItem(
+            Icons.supervised_user_circle_rounded,
+            Icons.supervised_user_circle_outlined,
+            'All Squadrons',
+            'All Squadrons',
+                () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => GetSquadronPage()),
+              );
             },
           ),
           _buildMenuItem(
@@ -665,13 +506,11 @@ Row(
                 () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(
-                  builder: (context) =>  GetUsersPage(),
-                ),
+                MaterialPageRoute(builder: (context) => GetUsersPage()),
               );
-
             },
           ),
+
           _buildMenuItem(
             Icons.school_outlined,
             Icons.school,
@@ -680,11 +519,8 @@ Row(
                 () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(
-                  builder: (context) =>  DepartmentsScreen(),
-                ),
+                MaterialPageRoute(builder: (context) => DepartmentsScreen()),
               );
-
             },
           ),
           _buildMenuItem(
@@ -695,11 +531,21 @@ Row(
                 () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(
-                  builder: (context) =>  YearsScreen(),
-                ),
+                MaterialPageRoute(builder: (context) => YearsScreen()),
               );
+            },
+          ),
 
+          _buildMenuItem(
+            Icons.file_open_outlined,
+            Icons.file_open,
+            'Import users File',
+            'Import users File',
+                () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => ImportStudentsScreen()),
+              );
             },
           ),
 
@@ -859,113 +705,7 @@ Row(
     );
   }
 
-  Widget _buildDateField(
-      String label,
-      TextEditingController controller,
-      FocusNode focusNode,
-      String hint,
-      {
-        required Function(DateTime) onDateChanged,
-      }
-      ) {
-    return AnimatedBuilder(
-      animation: focusNode,
-      builder: (context, child) {
-        final isFocused = focusNode.hasFocus;
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              label,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: Color(0xFF2563EB),
-              ),
-            ),
-            const SizedBox(height: 8),
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              decoration: BoxDecoration(
-                color: isFocused ? Colors.white : const Color(0xFFF8FAFC),
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: isFocused
-                      ? const Color(0xFF2563EB)
-                      : const Color(0xFFE2E8F0),
-                  width: isFocused ? 2 : 1,
-                ),
-                boxShadow: isFocused
-                    ? [
-                  BoxShadow(
-                    color: const Color(0xFF2563EB).withOpacity(0.1),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ]
-                    : [],
-              ),
-              child: TextField(
-                controller: controller,
-                focusNode: focusNode,
-                readOnly: true,
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: Color(0xFF1E293B),
-                  fontWeight: FontWeight.w500,
-                ),
-                decoration: InputDecoration(
-                  hintText: hint,
-                  prefixIcon: const Icon(
-                    Icons.calendar_today,
-                    color: Color(0xFF94A3B8),
-                    size: 20,
-                  ),
-                  suffixIcon: const Icon(
-                    Icons.arrow_drop_down,
-                    color: Color(0xFF94A3B8),
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide.none,
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 12,
-                  ),
-                ),
-                onTap: () async {
-                  final DateTime? picked = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime(1975, 9, 1),
-                    firstDate: DateTime(1900),
-                    lastDate: DateTime.now(),
-                    builder: (context, child) {
-                      return Theme(
-                        data: Theme.of(context).copyWith(
-                          colorScheme: const ColorScheme.light(
-                            primary: Color(0xFF2563EB),
-                          ),
-                        ),
-                        child: child!,
-                      );
-                    },
-                  );
-                  if (picked != null) {
-                    onDateChanged(picked);
 
-
-                    controller.text =
-                    '${picked.day}/${picked.month}/${picked.year}';
-                  }
-                },
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
 
 }
 

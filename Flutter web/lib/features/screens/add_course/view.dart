@@ -211,7 +211,7 @@ class CourseListSection extends StatefulWidget {
 
 class _CourseListSectionState extends State<CourseListSection> {
   final Color primaryColor = const Color(0xFF3B82F6);
-  List<Course> _courses = [];
+  final List<Course> _courses = [];
   final List<Color> courseColors = [
     const Color(0xFFFACC15),
     const Color(0xFF10B981),

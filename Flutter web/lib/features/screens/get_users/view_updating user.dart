@@ -17,14 +17,12 @@ import 'package:lms/features/screens/get_users/state_managment/get_users_state.d
 import '../admin/get_department/model/model.dart';
 import '../admin/get_department/state_mangment/cubit.dart';
 import '../admin/get_department/state_mangment/states.dart';
+import '../admin/get_squadron/model/view.dart';
+import '../admin/get_squadron/state_mangment/cubit.dart';
+import '../admin/get_squadron/state_mangment/states.dart';
 import '../admin/get_years/state_managment/cubit.dart';
 import '../admin/get_years/state_managment/states.dart';
 import 'get_user_model/view.dart';
-
-
-import '../get_squadron/model/view.dart';
-import '../get_squadron/state_mangment/cubit.dart';
-import '../get_squadron/state_mangment/states.dart';
 
 
 
@@ -158,6 +156,7 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
     });
   }
 
+  @override
   void initState() {
     super.initState();
     context.read<GetUsersCubit>().getUserById(widget.userId);
@@ -269,10 +268,10 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
 
                     if (user.role == 'Student') {
                       selectedDepartmentId = user.academicInfo?.department?.id
-                          ?.toString();
-                      selectedYearId = user.academicInfo?.year?.id?.toString();
+                          .toString();
+                      selectedYearId = user.academicInfo?.year?.id.toString();
                       selectedSquadronId = user.academicInfo?.squadron?.id
-                          ?.toString();
+                          .toString();
 
                       selectedDepartmentName =
                           user.academicInfo?.department?.name ??
@@ -1816,95 +1815,13 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
     );
   }
 
-  // Widget _buildCreateButton() {
-  //   return MouseRegion(
-  //     cursor: SystemMouseCursors.click,
-  //     onEnter: (_) => setState(() => isNextButtonHovered = true),
-  //     onExit: (_) => setState(() => isNextButtonHovered = false),
-  //     child: GestureDetector(
-  //       onTap: () {
-  //         ScaffoldMessenger.of(context).showSnackBar(
-  //           SnackBar(
-  //             content: const Row(
-  //               children: [
-  //                 Icon(Icons.check_circle, color: Colors.white),
-  //                 SizedBox(width: 12),
-  //                 Text('Profile updated successfully!'),
-  //               ],
-  //             ),
-  //             backgroundColor: const Color(0xFF10B981),
-  //             behavior: SnackBarBehavior.floating,
-  //             shape: RoundedRectangleBorder(
-  //               borderRadius: BorderRadius.circular(8),
-  //             ),
-  //           ),
-  //         );
-  //       },
-  //       child: AnimatedContainer(
-  //         duration: const Duration(milliseconds: 200),
-  //         width: double.infinity,
-  //         padding: const EdgeInsets.symmetric(vertical: 14),
-  //         decoration: BoxDecoration(
-  //           gradient: LinearGradient(
-  //             colors: isNextButtonHovered
-  //                 ? [const Color(0xFF1D4ED8), const Color(0xFF2563EB)]
-  //                 : [const Color(0xFF2563EB), const Color(0xFF3B82F6)],
-  //           ),
-  //           borderRadius: BorderRadius.circular(8),
-  //           boxShadow: isNextButtonHovered
-  //               ? [
-  //                   BoxShadow(
-  //                     color: const Color(0xFF2563EB).withOpacity(0.4),
-  //                     blurRadius: 16,
-  //                     offset: const Offset(0, 6),
-  //                     spreadRadius: 2,
-  //                   ),
-  //                 ]
-  //               : [
-  //                   BoxShadow(
-  //                     color: const Color(0xFF2563EB).withOpacity(0.2),
-  //                     blurRadius: 8,
-  //                     offset: const Offset(0, 2),
-  //                   ),
-  //                 ],
-  //         ),
-  //         child: Center(
-  //           child: Row(
-  //             mainAxisSize: MainAxisSize.min,
-  //             children: [
-  //               const Text(
-  //                 'Create',
-  //                 style: TextStyle(
-  //                   color: Colors.white,
-  //                   fontSize: 16,
-  //                   fontWeight: FontWeight.w600,
-  //                 ),
-  //               ),
-  //               const SizedBox(width: 8),
-  //               AnimatedContainer(
-  //                 duration: const Duration(milliseconds: 200),
-  //                 transform: Matrix4.translationValues(
-  //                   isNextButtonHovered ? 4 : 0,
-  //                   0,
-  //                   0,
-  //                 ),
-  //                 child: const Icon(
-  //                   Icons.arrow_forward,
-  //                   color: Colors.white,
-  //                   size: 18,
-  //                 ),
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
+
 }
 
 class DateRangeSelector extends StatelessWidget {
   final List<String> years = [for (int y = 1980; y <= 2030; y++) y.toString()];
+
+   DateRangeSelector({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -1940,7 +1857,7 @@ class DateRangeSelector extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
       ),
       child: DropdownButtonFormField<String>(
-        value: initialValue,
+        initialValue: initialValue,
         icon: const Icon(Icons.keyboard_arrow_down_rounded, size: 20),
         decoration: const InputDecoration(border: InputBorder.none),
         items: years
@@ -1997,7 +1914,7 @@ class _ActiveSwitchRowState extends State<ToggleButtonActiveOrDeactive> {
               }
             });
           },
-          activeColor: Colors.white,
+          activeThumbColor: Colors.white,
           activeTrackColor: Colors.green,
           inactiveThumbColor: Colors.white,
           inactiveTrackColor: Colors.grey.shade400,

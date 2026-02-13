@@ -1,11 +1,105 @@
+// import 'package:flutter/material.dart';
+// import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:lms/features/screens/admin/get_squadron/get_all%20squadrons/state_managment/cubit.dart';
+// import 'package:lms/features/screens/admin/get_squadron/get_all%20squadrons/state_managment/states.dart';
+//
+// import '../update_squadrons/view.dart';
+//
+// class GetSquadronPage extends StatelessWidget {
+//   const GetSquadronPage({super.key});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return
+//       BlocProvider(
+//         create: (context) => AllSquadronCubit(
+//         )..fetchSquadrons(),
+//         child: const SquadronListScreen(),
+//       );
+//   }
+// }
+//
+// class SquadronListScreen extends StatelessWidget {
+//   const SquadronListScreen({super.key});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(title: const Text('Squadrons')),
+//       body: BlocBuilder<AllSquadronCubit, AllSquadronState>(
+//         builder: (context, state) {
+//           if (state is AllSquadronLoading) {
+//             return const Center(child: CircularProgressIndicator());
+//           }
+//
+//           if (state is AllSquadronLoaded) {
+//             return ListView.builder(
+//               itemCount: state.squadrons.length,
+//               itemBuilder: (context, index) {
+//                 final squadron = state.squadrons[index];
+//
+//                 return Card(
+//                   margin: const EdgeInsets.all(8),
+//                   child: ListTile(
+//                     title: Text(squadron.name),
+//                     subtitle: Text(
+//                       'Students Count: ${squadron.studentCount}',
+//                     ),
+//                     trailing: Row(
+//                       mainAxisSize: MainAxisSize.min,
+//                       children: [
+//                         IconButton(
+//                           icon: const Icon(Icons.edit, color: Colors.blue),
+//                           onPressed: () {
+//                             Navigator.push(
+//                               context,
+//                               MaterialPageRoute(
+//                                 builder: (_) => BlocProvider.value(
+//                                   value: context.read<AllSquadronCubit>(),
+//                                   child: EditSquadronScreen(
+//                                     squadronId: squadron.id,
+//                                   ),
+//                                 ),
+//                               ),
+//                             );
+//                           },
+//                         ),
+//
+//                         IconButton(
+//                           icon: const Icon(Icons.delete, color: Colors.red),
+//                           onPressed: () {
+//                             context
+//                                 .read<AllSquadronCubit>()
+//                                 .deleteSquadron(squadron.id);
+//                           },
+//                         ),
+//                       ],
+//                     ),
+//                   ),
+//                 );
+//               },
+//             );
+//           }
+//
+//           if (state is AllSquadronError) {
+//             return Center(child: Text(state.message));
+//           }
+//
+//           return const SizedBox();
+//         },
+//       ),
+//     );
+//   }
+// }
 import 'dart:ui_web' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lms/features/screens/admin/admin_profile/view.dart';
 
 import 'dart:html' as html;
-import 'package:lms/features/screens/admin/get_department/get_All_departments/state_managments/cubit.dart';
-import 'package:lms/features/screens/admin/get_department/get_All_departments/state_managments/states.dart';
-import 'package:lms/features/screens/admin/get_department/get_All_departments/update_view.dart';
+
+import 'package:lms/features/screens/admin/get_squadron/get_all%20squadrons/state_managment/cubit.dart';
+import 'package:lms/features/screens/admin/get_squadron/get_all%20squadrons/state_managment/states.dart';
 
 
 import '../../../../../core/cons/Colors/app_colors.dart';
@@ -19,28 +113,32 @@ import '../../../add_course/Adding_view.dart';
 import '../../../courses/admin/view.dart';
 import '../../../create_squadron/view.dart';
 import '../../../get_users/view.dart';
+import '../../Enrollment_course/view.dart';
 import '../../create_years/view.dart';
+import '../../get_department/get_All_departments/view.dart';
 import '../../get_years/get_All_years/view.dart';
-import 'all_model/model.dart';
+import '../../import_file/view.dart';
+import '../model/view.dart';
+import '../update_squadrons/view.dart';
 
-String selectedMenuItem = 'All Departments';
+String selectedMenuItem = 'All Squadrons';
 String? hoveredMenuItem;
 bool isLogoutHovered = false;
 
-class DepartmentsScreen extends StatefulWidget {
-  const DepartmentsScreen({super.key});
+class GetSquadronPage extends StatefulWidget {
+  const GetSquadronPage({super.key});
 
   @override
-  State<DepartmentsScreen> createState() => _DepartmentsScreenState();
+  State<GetSquadronPage> createState() => _SquadronsScreenState();
 }
 
-class _DepartmentsScreenState extends State<DepartmentsScreen> {
+class _SquadronsScreenState extends State<GetSquadronPage> {
   int? hoveredRowIndex;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => DepartmentsCubit()..fetchDepartments(),
+      create: (_) => AllSquadronCubit()..fetchSquadrons(),
       child: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -56,31 +154,31 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
         child: Scaffold(
           backgroundColor: Colors.transparent,
 
-          body: BlocConsumer<DepartmentsCubit, DepartmentsState>(
+          body: BlocConsumer<AllSquadronCubit, AllSquadronState>(
             listener: (context, state) {
 
-              if (state is DeleteDepartmentSuccess) {
+              if (state is DeleteSquadronSuccess) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(state.message),
                     backgroundColor: Colors.green,
                   ),
                 );
-              } else if (state is DeleteDepartmentError) {
+              } else if (state is DeleteSquadronError) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(state.message),
                     backgroundColor: Colors.red,
                   ),
                 );
-              } else if (state is UpdateDepartmentSuccess) {
+              } else if (state is UpdateSquadronSuccess) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(state.message),
                     backgroundColor: Colors.green,
                   ),
                 );
-              } else if (state is UpdateDepartmentError) {
+              } else if (state is UpdateSquadronError) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(state.message),
@@ -91,16 +189,16 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
             },
 
             builder: (context, state) {
-              if (state is DepartmentsLoading ||
-                  state is DeleteDepartmentLoading ||
-                  state is UpdateDepartmentLoading) {
+              if (state is AllSquadronLoading ||
+                  state is DeleteSquadronLoading ||
+                  state is UpdateSquadronLoading) {
                 return const Center(
                   child: CircularProgressIndicator(color: Color(0xFF2563EB)),
                 );
               }
 
 
-              if (state is DepartmentsError) {
+              if (state is AllSquadronError) {
                 return Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -123,7 +221,7 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
                 );
               }
 
-              if (state is DepartmentsLoaded) {
+              if (state is AllSquadronLoaded) {
                 return Row(
                   children: [
                     _buildSidebar(),
@@ -182,7 +280,7 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
                                           const Text(
-                                            'All Departments',
+                                            'All squadrons',
                                             style: TextStyle(
                                               fontSize: 20,
                                               fontWeight: FontWeight.bold,
@@ -191,7 +289,7 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
                                           ),
                                           const SizedBox(height: 4),
                                           const Text(
-                                            'Manage all departments',
+                                            'Manage all Squadrons',
                                             style: TextStyle(
                                               fontSize: 14,
                                               color: Color(0xFF64748B),
@@ -201,7 +299,7 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
                                       ),
                                     ),
                                     const SizedBox(width: 30),
-                                    _buildStatsHeader(state.departments.length),
+                                    _buildStatsHeader(state.squadrons.length),
                                   ],
                                 ),
                               ),
@@ -211,7 +309,7 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
                                   padding: const EdgeInsets.all(24),
                                   child: SingleChildScrollView(
                                     child: _buildModernTable(
-                                        context, state.departments),
+                                        context, state.squadrons),
                                   ),
                                 ),
                               ),
@@ -272,7 +370,7 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               const Text(
-                'Total Departments',
+                'Total Squadrons',
                 style: TextStyle(
                   fontSize: 11,
                   color: Colors.white70,
@@ -296,7 +394,7 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
   }
 
   Widget _buildModernTable(
-      BuildContext context, List<GetAllDepartmentModel> departments) {
+      BuildContext context, List<SquadronModel> squadrons) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: ConstrainedBox(
@@ -306,10 +404,8 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
         child: Table(
           columnWidths: const {
             0: FixedColumnWidth(260),
-            1: FixedColumnWidth(210),
-            2: FixedColumnWidth(120),
+            1: FixedColumnWidth(180),
             3: FixedColumnWidth(300),
-            // 4: FixedColumnWidth(100),
             4: FixedColumnWidth(70),
           },
           children: [
@@ -321,16 +417,15 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
               children: [
                 _buildTableHeader('Name', Icons.badge),
 
-                _buildTableHeader('Head', Icons.person),
-                // _buildTableHeader('ID', Icons.tag),
-                _buildTableHeader('Image', Icons.image),
+                _buildTableHeader('Students Count', Icons.person),
+
                 _buildTableHeader('Description', Icons.description),
 
                 _buildTableHeader('Actions', Icons.settings),
               ],
             ),
 
-            ...departments.asMap().entries.map((entry) {
+            ...squadrons.asMap().entries.map((entry) {
               final index = entry.key;
               final dep = entry.value;
               return _buildModernTableRow(context, dep, index);
@@ -370,7 +465,7 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
   }
 
   TableRow _buildModernTableRow(
-      BuildContext context, GetAllDepartmentModel dep, int index) {
+      BuildContext context, SquadronModel squadron, int index) {
     final isHovered = hoveredRowIndex == index;
 
     return TableRow(
@@ -411,7 +506,7 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
                   const SizedBox(width: 12),
                   Flexible(
                     child: Text(
-                      dep.name,
+                      squadron.name,
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
@@ -453,7 +548,7 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
                   const SizedBox(width: 8),
                   Flexible(
                     child: Text(
-                      dep.headName,
+                      squadron.studentCount.toString(),
                       style: const TextStyle(
                         fontSize: 13,
                         color: Color(0xFF475569),
@@ -468,53 +563,7 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
           ),
         ),
 
-        _buildTableCell(
-          MouseRegion(
-            onEnter: (_) => setState(() => hoveredRowIndex = index),
-            onExit: (_) => setState(() => hoveredRowIndex = null),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: dep.imageUrl != null
-                  ? Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(
-                    color: const Color(0xFFE2E8F0),
-                    width: 2,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(6),
-                  child: WebImage(
-                    url: buildImageUrl(dep.imageUrl),
-                    width: 80,
-                    height: 60,
-                  ),
-                ),
-              )
-                  : Container(
-                width: 80,
-                height: 60,
-                decoration: BoxDecoration(
-                  color: const Color(0xFFF1F5F9),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Icon(
-                  Icons.image_not_supported,
-                  color: Color(0xFF94A3B8),
-                  size: 24,
-                ),
-              ),
-            ),
-          ),
-        ),
+
         _buildTableCell(
           MouseRegion(
             onEnter: (_) => setState(() => hoveredRowIndex = index),
@@ -522,7 +571,7 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               child: Text(
-                dep.description,
+                squadron.description,
                 style: const TextStyle(
                   fontSize: 13,
                   color: Color(0xFF64748B),
@@ -553,8 +602,9 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
                         context,
                         MaterialPageRoute(
                           builder: (_) => BlocProvider.value(
-                            value: context.read<DepartmentsCubit>(),
-                            child: UpdateDepartmentScreen(department: dep),
+                            value: context.read<AllSquadronCubit>(),
+                            child: EditSquadronScreen(
+                          squadronId: squadron.id),
                           ),
                         ),
                       );
@@ -566,7 +616,16 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
                     color: const Color(0xFFEF4444),
                     tooltip: 'Delete',
                     onPressed: () {
-                      _showDeleteDialog(context, dep.id);
+                      if (squadron.studentCount > 0) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('You cannot delete a year that has courses'),
+                            backgroundColor: Colors.redAccent,
+                          ),
+                        );
+                        return;
+                      }
+                      _showDeleteDialog(context, squadron.id);
                     },
                   ),
                 ],
@@ -613,18 +672,14 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
     );
   }
 
-  String buildImageUrl(String? imageUrl) {
-    if (imageUrl == null || imageUrl.isEmpty) return '';
-    String cleanUrl = imageUrl.startsWith('/') ? imageUrl.substring(1) : imageUrl;
-    return 'http://skylearn.runasp.net/$cleanUrl';
-  }
+
 
   void _showDeleteDialog(BuildContext context, int id) {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text("Delete Department"),
-        content: const Text("Are you sure you want to delete this Department?"),
+        title: const Text("Delete Squadron"),
+        content: const Text("Are you sure you want to delete this Squadron?"),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -633,7 +688,7 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
             onPressed: () {
-              context.read<DepartmentsCubit>().deleteDepartment(id);
+              context.read<AllSquadronCubit>().deleteSquadron(id);
               Navigator.pop(context);
             },
             child: const Text("Delete"),
@@ -672,7 +727,14 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
             Icons.person,
             'Profile',
             'Profile',
-                () {},
+                () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AdminProfileScreen(),
+                    ),
+                  );
+            },
           ),
           _buildMenuItem(
             Icons.book_outlined,
@@ -700,7 +762,6 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
                   builder: (context) => const AnnouncementScreen(),
                 ),
               );
-
             },
           ),
           _buildMenuItem(
@@ -715,7 +776,6 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
                   builder: (context) => const CreateUserScreen(),
                 ),
               );
-
             },
           ),
           _buildMenuItem(
@@ -726,11 +786,8 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
                 () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(
-                  builder: (context) =>  CreateDepartmentPage(),
-                ),
+                MaterialPageRoute(builder: (context) => CreateDepartmentPage()),
               );
-
             },
           ),
           _buildMenuItem(
@@ -741,11 +798,21 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
                 () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(
-                  builder: (context) =>  CreateYearPage(),
-                ),
+                MaterialPageRoute(builder: (context) => CreateYearPage()),
               );
+            },
+          ),
 
+          _buildMenuItem(
+            Icons.calendar_month,
+            Icons.calendar_month_outlined,
+            'Add Enrollment',
+            'Add Enrollment',
+                () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => EnrollmentPage()),
+              );
             },
           ),
           _buildMenuItem(
@@ -756,11 +823,8 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
                 () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(
-                  builder: (context) =>  CreateNewCoursePage(),
-                ),
+                MaterialPageRoute(builder: (context) => CreateNewCoursePage()),
               );
-
             },
           ),
           _buildMenuItem(
@@ -771,11 +835,8 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
                 () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(
-                  builder: (context) =>  CreateSquadronsPage(),
-                ),
+                MaterialPageRoute(builder: (context) => CreateSquadronsPage()),
               );
-
             },
           ),
           _buildMenuItem(
@@ -786,10 +847,16 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
                 () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(
-                  builder: (context) =>  GetUsersPage(),
-                ),
+                MaterialPageRoute(builder: (context) => GetUsersPage()),
               );
+            },
+          ),
+          _buildMenuItem(
+            Icons.supervised_user_circle_rounded,
+            Icons.supervised_user_circle_outlined,
+            'All Squadrons',
+            'All Squadrons',
+                () {
 
             },
           ),
@@ -799,8 +866,10 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
             'All Departments',
             'All Departments',
                 () {
-
-
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => DepartmentsScreen()),
+              );
             },
           ),
           _buildMenuItem(
@@ -811,11 +880,21 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
                 () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(
-                  builder: (context) =>  YearsScreen(),
-                ),
+                MaterialPageRoute(builder: (context) => YearsScreen()),
               );
+            },
+          ),
 
+          _buildMenuItem(
+            Icons.file_open_outlined,
+            Icons.file_open,
+            'Import users File',
+            'Import users File',
+                () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => ImportStudentsScreen()),
+              );
             },
           ),
 
@@ -976,36 +1055,3 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
   }
 }
 
-class WebImage extends StatelessWidget {
-  final String url;
-  final double width;
-  final double height;
-
-  const WebImage({
-    super.key,
-    required this.url,
-    required this.width,
-    required this.height,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final viewId = url;
-
-    ui.platformViewRegistry.registerViewFactory(viewId, (int _) {
-      final img = html.ImageElement()
-        ..src = url
-        ..style.width = '100%'
-        ..style.height = '100%'
-        ..style.objectFit = 'cover';
-
-      return img;
-    });
-
-    return SizedBox(
-      width: width,
-      height: height,
-      child: HtmlElementView(viewType: viewId),
-    );
-  }
-}

@@ -8,11 +8,11 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:lms/features/screens/admin/admin_profile/state_managment/cubit_d_profile.dart';
 import 'package:lms/features/screens/admin/admin_profile/state_managment/state_d_profile.dart';
+import 'package:lms/features/screens/admin/get_squadron/get_all%20squadrons/view.dart';
 
 import '../../../../core/cons/Colors/app_colors.dart';
 import '../../../../core/helpers/logout_server/logout.dart';
 import '../../../../generated/assets.dart';
-import '../../../draft/test_screen.dart';
 import '../../Announcement/view.dart';
 import '../../Create_department/view.dart';
 import '../../Create_user/View.dart';
@@ -26,7 +26,7 @@ import '../get_department/get_All_departments/view.dart';
 import '../get_years/get_All_years/view.dart';
 import '../import_file/view.dart';
 import 'model/view.dart';
-import 'dart:html' as html;
+import 'package:web/web.dart' as html;
 
 class WebImage extends StatelessWidget {
   final String url;
@@ -45,7 +45,7 @@ class WebImage extends StatelessWidget {
     final viewId = url;
 
     ui.platformViewRegistry.registerViewFactory(viewId, (int _) {
-      final img = html.ImageElement()
+      final img = html.HTMLImageElement()
         ..src = url
         ..style.width = '100%'
         ..style.height = '100%'
@@ -73,7 +73,7 @@ String buildImageUrl(String? imageUrl) {
 }
 
 class AdminProfileScreen extends StatefulWidget {
-  const AdminProfileScreen({Key? key}) : super(key: key);
+  const AdminProfileScreen({super.key});
 
   @override
   State<AdminProfileScreen> createState() => _ProfileScreenState();
@@ -380,6 +380,18 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => GetUsersPage()),
+              );
+            },
+          ),
+          _buildMenuItem(
+            Icons.supervised_user_circle_rounded,
+            Icons.supervised_user_circle_outlined,
+            'All Squadrons',
+            'All Squadrons',
+                () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => GetSquadronPage()),
               );
             },
           ),
@@ -1318,6 +1330,8 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
 class DateRangeSelector extends StatelessWidget {
   final List<String> years = [for (int y = 1980; y <= 2030; y++) y.toString()];
 
+   DateRangeSelector({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -1352,7 +1366,7 @@ class DateRangeSelector extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
       ),
       child: DropdownButtonFormField<String>(
-        value: initialValue,
+        initialValue: initialValue,
         icon: const Icon(Icons.keyboard_arrow_down_rounded, size: 20),
         decoration: const InputDecoration(border: InputBorder.none),
         items: years

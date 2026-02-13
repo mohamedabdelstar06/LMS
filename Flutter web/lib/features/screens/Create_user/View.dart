@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -7,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/cons/Colors/app_colors.dart';
 import '../../../core/helpers/logout_server/logout.dart';
+import '../../../core/widgets/profile_view.dart';
 import '../Announcement/view.dart';
 import '../Create_department/view.dart';
 import '../add_course/Adding_view.dart';
@@ -15,13 +15,14 @@ import '../admin/create_years/view.dart';
 import '../admin/get_department/model/model.dart';
 import '../admin/get_department/state_mangment/cubit.dart';
 import '../admin/get_department/state_mangment/states.dart';
+import '../admin/get_squadron/model/view.dart';
+import '../admin/get_squadron/state_mangment/cubit.dart';
+import '../admin/get_squadron/state_mangment/states.dart';
 import '../admin/get_years/state_managment/cubit.dart';
 import '../admin/get_years/state_managment/states.dart';
 import '../courses/admin/view.dart';
 
-import '../get_squadron/model/view.dart';
-import '../get_squadron/state_mangment/cubit.dart';
-import '../get_squadron/state_mangment/states.dart';
+
 
 import 'State_managment/Create_user_cubit.dart';
 import 'State_managment/Create_user_state.dart';
@@ -80,7 +81,7 @@ final List<Map<String, dynamic>> roles = [
 ];
 
 class CreateUserScreen extends StatefulWidget {
-  const CreateUserScreen({Key? key}) : super(key: key);
+  const CreateUserScreen({super.key});
 
   @override
   State<CreateUserScreen> createState() => _ProfileScreenState();
@@ -2134,6 +2135,8 @@ class _ProfileScreenState extends State<CreateUserScreen> {
 class DateRangeSelector extends StatelessWidget {
   final List<String> years = [for (int y = 1980; y <= 2030; y++) y.toString()];
 
+   DateRangeSelector({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -2168,7 +2171,7 @@ class DateRangeSelector extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
       ),
       child: DropdownButtonFormField<String>(
-        value: initialValue,
+        initialValue: initialValue,
         icon: const Icon(Icons.keyboard_arrow_down_rounded, size: 20),
         decoration: const InputDecoration(border: InputBorder.none),
         items: years
@@ -2225,7 +2228,7 @@ class _ActiveSwitchRowState extends State<ToggleButtonActiveOrDeactive> {
               }
             });
           },
-          activeColor: Colors.white,
+          activeThumbColor: Colors.white,
           activeTrackColor: Colors.green,
           inactiveThumbColor: Colors.white,
           inactiveTrackColor: Colors.grey.shade400,

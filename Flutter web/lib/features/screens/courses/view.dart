@@ -392,7 +392,7 @@ class _CourseScreenState extends State<CourseScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Course Image - Fixed height
-                    Container(
+                    SizedBox(
                       width: 304,
                       height: 164,
                       child: ClipRRect(
@@ -425,7 +425,7 @@ class _CourseScreenState extends State<CourseScreen> {
                     
                     // Course Content - Fixed height
                     Expanded(
-                      child: Container(
+                      child: SizedBox(
                         width: 304,
                         height: 86,
                         // padding: EdgeInsets.all(12),

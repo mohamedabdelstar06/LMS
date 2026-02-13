@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../state_managment/get_users_cubit.dart';
 
 import '../state_managment/cubit.dart';
 import '../state_managment/states.dart';
@@ -53,7 +52,7 @@ class _AssignDepartmentHeadScreenState extends State<AssignDepartmentHeadScreen>
                     return const Center(child: Text("No admins or instructors found"));
                   }
                   return DropdownButtonFormField<String>(
-                    value: selectedUserId,
+                    initialValue: selectedUserId,
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: const Color(0xFFF8FAFC),

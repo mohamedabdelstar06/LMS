@@ -9,6 +9,7 @@ import 'package:lms/features/screens/get_users/view_updating%20user.dart';
 import '../../../core/cons/Colors/app_colors.dart';
 import '../../../core/helpers/logout_server/logout.dart';
 
+import '../../../core/widgets/profile_view.dart';
 import '../Announcement/view.dart';
 import '../Create_department/view.dart';
 import '../Create_user/View.dart';
@@ -270,7 +271,7 @@ class _GetUsersScreenState extends State<GetUsersScreen> {
                                       child: DataTable(
                                         headingRowHeight: 60,
                                         dataRowHeight: 70,
-                                        headingRowColor: MaterialStateProperty.all(const Color(0xFF1849A9)),
+                                        headingRowColor: WidgetStateProperty.all(const Color(0xFF1849A9)),
                                         border: TableBorder.all(
                                           color: Colors.grey.shade200,
                                           width: 1,

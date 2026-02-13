@@ -1,25 +1,13 @@
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker_web/image_picker_web.dart';
-import 'package:lms/features/draft/test_cubit.dart';
-import 'package:lms/features/draft/test_states.dart';
 import 'package:lms/features/screens/Create_department/view.dart';
-import 'package:lms/features/screens/add_course/state_managment/cubit.dart';
-import 'package:lms/features/screens/add_course/state_managment/states.dart';
 import 'package:lms/features/screens/admin/Enrollment_course/state_mangment/cubits.dart';
 import 'package:lms/features/screens/admin/Enrollment_course/state_mangment/states.dart';
-import 'package:lms/features/screens/admin/admin_profile/model/view.dart';
 import 'package:lms/features/screens/admin/get_All_courses/state_mangment/cubit.dart';
 import 'package:lms/features/screens/get_users/get_user_dropdown/model_dropdown/view.dart';
-
 import '../../../../core/cons/Colors/app_colors.dart';
-
-import 'dart:html' as html;
-import 'dart:ui_web' as ui;
-
 import '../../../../core/helpers/logout_server/logout.dart';
+import '../../../../core/widgets/profile_view.dart';
 import '../../Announcement/view.dart';
 import '../../Create_user/View.dart';
 import '../../add_course/Adding_view.dart';
@@ -79,46 +67,7 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
   bool isLogoutHovered = false;
 
 
-  // void showSuccessSnackBar(String message) {
-  //   ScaffoldMessenger.of(context).showSnackBar(
-  //     SnackBar(
-  //       behavior: SnackBarBehavior.floating,
-  //       backgroundColor: Colors.transparent,
-  //       elevation: 0,
-  //       content: TweenAnimationBuilder<double>(
-  //         tween: Tween(begin: 0, end: 1),
-  //         duration: const Duration(milliseconds: 400),
-  //         builder: (context, value, child) {
-  //           return Transform.scale(scale: value, child: child);
-  //         },
-  //         child: Container(
-  //           padding: const EdgeInsets.all(16),
-  //           decoration: BoxDecoration(
-  //             color: Colors.green.shade600,
-  //             borderRadius: BorderRadius.circular(14),
-  //             boxShadow: const [
-  //               BoxShadow(color: Colors.black26, blurRadius: 10),
-  //             ],
-  //           ),
-  //           child: Row(
-  //             children: const [
-  //               Icon(Icons.check_circle, color: Colors.white),
-  //               SizedBox(width: 12),
-  //               Expanded(
-  //                 child: Text(
-  //                   "Upload completed successfully",
-  //                   style: TextStyle(color: Colors.white, fontSize: 15),
-  //                 ),
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //       ),
-  //       duration: const Duration(seconds: 2),
-  //     ),
-  //   );
-  // }
-
+ 
 
 
 

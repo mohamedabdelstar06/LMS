@@ -1,11 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:lms/features/screens/get_squadron/model/view.dart';
-import 'package:lms/features/screens/get_squadron/state_mangment/states.dart';
-
+import 'package:lms/features/screens/admin/get_squadron/state_mangment/states.dart';
+import '../../../../../core/cons/api_helper_resources/api_resources.dart';
 import '../../../../../core/helpers/cach_helper/shared_pref_helper.dart';
-import '../../../../core/cons/api_helper_resources/api_resources.dart';
+import '../model/view.dart';
+
 
 class SquadronsCubitDrop extends Cubit<GetSquadronsState> {
   SquadronsCubitDrop() : super(GetSquadronsInitial());

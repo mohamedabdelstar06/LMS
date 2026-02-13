@@ -45,3 +45,20 @@ class UpdateSquadronSuccess extends AllSquadronState {
   const UpdateSquadronSuccess(this.message);
 }
 
+class UpdateSquadronError extends AllSquadronState {
+  final String message;
+
+  const UpdateSquadronError(this.message);
+}
+class DeleteSquadronLoading extends AllSquadronState {}
+
+class DeleteSquadronSuccess extends AllSquadronState {
+  final String message;
+  const DeleteSquadronSuccess(this.message);
+}
+class DeleteSquadronError extends AllSquadronState {
+  final String message;
+  const DeleteSquadronError(this.message);
+}
+
+

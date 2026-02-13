@@ -541,17 +541,15 @@
 //     );
 //   }
 // }
-import 'dart:ui_web' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'dart:html' as html;
-import 'package:flutter/widgets.dart';
 import 'package:lms/features/screens/admin/get_years/get_All_years/state_mangement/cubit.dart';
 import 'package:lms/features/screens/admin/get_years/get_All_years/state_mangement/states.dart';
 
 import '../../../../../core/cons/Colors/app_colors.dart';
 import '../../../../../core/helpers/logout_server/logout.dart';
+import '../../../../../core/widgets/profile_view.dart';
 import '../../../Announcement/view.dart';
 import '../../../Create_department/view.dart';
 import '../../../Create_user/View.dart';
@@ -812,7 +810,7 @@ class _DepartmentsScreenState extends State<YearsScreen> {
               final index = entry.key;
               final year = entry.value;
               return _buildModernTableRow(context, year, index);
-            }).toList(),
+            }),
           ],
         ),
       ),
