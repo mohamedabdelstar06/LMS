@@ -6,8 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/cons/api_helper_resources/api_resources.dart';
 import '../../../../../core/cons/context/navigation_key.dart';
 import '../../../../../core/helpers/cach_helper/shared_pref_helper.dart';
-import '../../../courses/admin/view.dart';
-import '../../../courses/teacher/view.dart';
+import '../../../admin/courses/home_courses/view.dart';
+import '../../../instructor/home_courses/view.dart';
 import '../../../student/student_courses/view.dart';
 import '../user_model/data.dart';
 import 'login_state.dart';
@@ -97,14 +97,14 @@ class LoginCubit extends Cubit<LoginState> {
           isError: false,
         );
 
-        if (model.user?.role == "Student") {
+        if (model.user.role == "Student") {
           Navigator.pushReplacement(
             navigatorKey.currentContext!,
             MaterialPageRoute(
               builder: (_) => const StudentCourseScreen(),
             ),
           );
-        } else if (model.user?.role == "Instructor") {
+        } else if (model.user.role == "Instructor") {
           Navigator.pushReplacement(
             navigatorKey.currentContext!,
             MaterialPageRoute(

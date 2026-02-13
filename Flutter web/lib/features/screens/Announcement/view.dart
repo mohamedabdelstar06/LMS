@@ -196,6 +196,7 @@ class _CourseScreenState extends State<AnnouncementScreen> {
                   ],
                 ),
               ),
+              
 
               Expanded(
                 child: SingleChildScrollView(
@@ -311,6 +312,7 @@ class _CourseScreenState extends State<AnnouncementScreen> {
 
                           ),
                         ),
+
 
 
 

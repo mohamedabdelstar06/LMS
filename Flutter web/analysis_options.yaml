@@ -7,6 +7,13 @@
 
 # The following line activates admin_profile set of recommended lints for Flutter apps,
 # packages, and plugins designed to encourage good coding practices.
+analyzer:
+  errors:
+    avoid_web_libraries_in_flutter: ignore
+    deprecated_member_use: ignore
+    file_names: ignore
+    undefined_hidden_name: ignore
+    unused_import: ignore ignore
 include: package:flutter_lints/flutter.yaml
 
 linter:

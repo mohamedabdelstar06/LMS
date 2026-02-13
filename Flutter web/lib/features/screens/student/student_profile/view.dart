@@ -1252,6 +1252,8 @@ class _ProfileScreenState extends State<StudentProfileScreen> {
 class DateRangeSelector extends StatelessWidget {
   final List<String> years = [for (int y = 1980; y <= 2030; y++) y.toString()];
 
+   DateRangeSelector({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -1286,7 +1288,7 @@ class DateRangeSelector extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
       ),
       child: DropdownButtonFormField<String>(
-        value: initialValue,
+        initialValue: initialValue,
         icon: const Icon(Icons.keyboard_arrow_down_rounded, size: 20),
         decoration: const InputDecoration(border: InputBorder.none),
         items: years

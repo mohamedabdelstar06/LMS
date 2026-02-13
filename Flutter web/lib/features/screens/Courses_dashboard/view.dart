@@ -1250,7 +1250,7 @@ class _InteractiveCoursesCardState extends State<InteractiveCoursesCard> {
                 ),
               ),
             );
-          }).toList(),
+          }),
         ],
       ),
     );
@@ -1540,10 +1540,10 @@ class InteractivePerformanceCard extends StatelessWidget {
   final Function(String) onFilterChanged;
 
   const InteractivePerformanceCard({
-    Key? key,
+    super.key,
     required this.selectedFilter,
     required this.onFilterChanged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

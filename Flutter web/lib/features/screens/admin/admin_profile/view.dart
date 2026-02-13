@@ -1,5 +1,4 @@
 import 'dart:ui_web' as ui;
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,25 +7,24 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:lms/features/screens/admin/admin_profile/state_managment/cubit_d_profile.dart';
 import 'package:lms/features/screens/admin/admin_profile/state_managment/state_d_profile.dart';
-
 import '../../../../core/cons/Colors/app_colors.dart';
 import '../../../../core/helpers/logout_server/logout.dart';
 import '../../../../generated/assets.dart';
-import '../../../draft/test_screen.dart';
 import '../../Announcement/view.dart';
-import '../../Create_department/view.dart';
-import '../../Create_user/View.dart';
-import '../../add_course/Adding_view.dart';
-import '../../courses/admin/view.dart';
-import '../../create_squadron/view.dart';
-import '../../get_users/view.dart';
-import '../Enrollment_course/view.dart';
-import '../create_years/view.dart';
-import '../get_department/get_All_departments/view.dart';
-import '../get_years/get_All_years/view.dart';
-import '../import_file/view.dart';
+import '../courses/Enrollment_course/view.dart';
+import '../courses/create_course/Adding_view.dart';
+import '../courses/home_courses/view.dart';
+import '../department/create_department/view.dart';
+import '../department/get_department/get_All_departments/view.dart';
+import '../squadron/create_squadron/view.dart';
+import '../squadron/get_squadron/get_all squadrons/view.dart';
+import '../user_file/import_file/view.dart';
+import '../users/create_user/View.dart';
+import '../users/get_users/view.dart';
+import '../year/create_year/view.dart';
+import '../year/get_year/get_All_years/view.dart';
 import 'model/view.dart';
-import 'dart:html' as html;
+import 'package:web/web.dart' as html;
 
 class WebImage extends StatelessWidget {
   final String url;
@@ -45,7 +43,7 @@ class WebImage extends StatelessWidget {
     final viewId = url;
 
     ui.platformViewRegistry.registerViewFactory(viewId, (int _) {
-      final img = html.ImageElement()
+      final img = html.HTMLImageElement()
         ..src = url
         ..style.width = '100%'
         ..style.height = '100%'
@@ -73,7 +71,7 @@ String buildImageUrl(String? imageUrl) {
 }
 
 class AdminProfileScreen extends StatefulWidget {
-  const AdminProfileScreen({Key? key}) : super(key: key);
+  const AdminProfileScreen({super.key});
 
   @override
   State<AdminProfileScreen> createState() => _ProfileScreenState();
@@ -177,7 +175,9 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
     selectedCity = user.city ?? selectedCity;
 
     _isInitialized = true;
+    
   }
+
 
   String _formatDate(DateTime date) {
     return "${date.day.toString()}/"
@@ -264,9 +264,7 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
             Icons.person,
             'Profile',
             'Profile',
-            () {
-
-            },
+            () {},
           ),
           _buildMenuItem(
             Icons.book_outlined,
@@ -340,7 +338,7 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
             Icons.calendar_month_outlined,
             'Add Enrollment',
             'Add Enrollment',
-                () {
+            () {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => EnrollmentPage()),
@@ -380,6 +378,18 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => GetUsersPage()),
+              );
+            },
+          ),
+          _buildMenuItem(
+            Icons.supervised_user_circle_rounded,
+            Icons.supervised_user_circle_outlined,
+            'All Squadrons',
+            'All Squadrons',
+            () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => GetSquadronPage()),
               );
             },
           ),
@@ -1318,6 +1328,8 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
 class DateRangeSelector extends StatelessWidget {
   final List<String> years = [for (int y = 1980; y <= 2030; y++) y.toString()];
 
+  DateRangeSelector({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -1352,7 +1364,7 @@ class DateRangeSelector extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
       ),
       child: DropdownButtonFormField<String>(
-        value: initialValue,
+        initialValue: initialValue,
         icon: const Icon(Icons.keyboard_arrow_down_rounded, size: 20),
         decoration: const InputDecoration(border: InputBorder.none),
         items: years

@@ -728,7 +728,7 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                           borderRadius: const BorderRadius.vertical(
                             top: Radius.circular(16),
                           ),
-                          child: widget.courseModel.imageUrl != null && widget.courseModel.imageUrl.isNotEmpty
+                          child: widget.courseModel.imageUrl.isNotEmpty
                               ? IgnorePointer(
                             child: WebImage(
                               url: buildImageUrl(widget.courseModel.imageUrl),

@@ -4,7 +4,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../core/cons/Colors/app_colors.dart';
 import '../../../core/helpers/logout_server/logout.dart';
-import 'course_model/courses.dart';
+import '../admin/courses/get_All_courses/model/model.dart';
+
+List<GetCourseModel> courses = [
+
+];
+
 
 class CourseScreen extends StatefulWidget {
   const CourseScreen({super.key});
@@ -33,10 +38,11 @@ class _CourseScreenState extends State<CourseScreen> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    // ignore: unused_local_variable
     final screenHeight = MediaQuery.of(context).size.height;
     final isLargeScreen = screenWidth > 1200;
     final isMediumScreen = screenWidth > 800;
-    
+
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -266,7 +272,7 @@ class _CourseScreenState extends State<CourseScreen> {
               ),
 
 
-      
+
     );
   }
 
@@ -392,7 +398,7 @@ class _CourseScreenState extends State<CourseScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Course Image - Fixed height
-                    Container(
+                    SizedBox(
                       width: 304,
                       height: 164,
                       child: ClipRRect(
@@ -422,10 +428,10 @@ class _CourseScreenState extends State<CourseScreen> {
                         ),
                       ),
                     ),
-                    
+
                     // Course Content - Fixed height
                     Expanded(
-                      child: Container(
+                      child: SizedBox(
                         width: 304,
                         height: 86,
                         // padding: EdgeInsets.all(12),
