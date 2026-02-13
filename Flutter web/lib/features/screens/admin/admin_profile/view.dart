@@ -175,7 +175,9 @@ class _ProfileScreenState extends State<AdminProfileScreen> {
     selectedCity = user.city ?? selectedCity;
 
     _isInitialized = true;
+    
   }
+
 
   String _formatDate(DateTime date) {
     return "${date.day.toString()}/"

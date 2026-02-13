@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-
-import '../../../core/cons/Colors/app_colors.dart';
-import '../../../core/widgets/app_bar.dart';
-import '../../../generated/assets.dart';
+import 'package:lms/core/cons/Colors/app_colors.dart';
+import 'package:lms/core/widgets/app_bar.dart';
+import 'package:lms/generated/assets.dart';
 
 class HeroSectionScreen extends StatelessWidget {
   const HeroSectionScreen({super.key});

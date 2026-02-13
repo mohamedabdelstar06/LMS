@@ -43,6 +43,7 @@ class _EditYearScreenState extends State<EditYearScreen> {
   void _submitUpdate() {
     final name = _nameController.text.trim();
     final description = _descriptionController.text.trim();
+    // ignore: unused_local_variable
     final totalHours = int.tryParse(_totalHoursController.text.trim()) ?? 0;
 
     if (name.isEmpty || description.isEmpty) {

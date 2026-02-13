@@ -38,6 +38,7 @@ class _CourseScreenState extends State<CourseScreen> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    // ignore: unused_local_variable
     final screenHeight = MediaQuery.of(context).size.height;
     final isLargeScreen = screenWidth > 1200;
     final isMediumScreen = screenWidth > 800;

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:lms/features/screens/others/tapbar/activites/view.dart';
+import 'package:lms/features/screens/others/tapbar/course_tapbar_View/view.dart';
+import 'package:lms/features/screens/others/tapbar/grades/view.dart';
+import 'package:lms/features/screens/others/tapbar/participants/view.dart';
 
 import '../../../core/widgets/app_bar.dart';
-import '../tapbar/activites/view.dart';
-import '../tapbar/course_tapbar_View/view.dart';
-import '../tapbar/grades/view.dart';
-import '../tapbar/participants/view.dart';
+
 
 
 

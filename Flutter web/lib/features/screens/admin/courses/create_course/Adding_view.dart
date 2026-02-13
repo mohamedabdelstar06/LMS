@@ -1,3 +1,5 @@
+// ignore_for_file: unused_element
+
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
@@ -372,6 +374,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
+            // ignore: deprecated_member_use
             color: Colors.black.withOpacity(0.08),
             blurRadius: 20,
             offset: const Offset(0, 4),
@@ -1081,6 +1084,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                               );
                             }
 
+                            // ignore: unused_local_variable
                             List<GetYearModel> years = yearState.years
                                 .whereType<GetYearModel>()
                                 .toList();
