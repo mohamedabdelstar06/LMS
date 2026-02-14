@@ -68,32 +68,8 @@ class _MyAppState extends State<MyApp> {
         ),
         debugShowCheckedModeBanner: false,
         home:
-        // CelebratingScreen()
-        // CoursesManagementApp()
-        // LearnMateChat()
-        // LearnMateApp()
-        // DashboardPage()
-        // ProfileScreen()
-        // StudentProfileScreen()
-        // CoursesManagementApp()
-        // LearnMateChat()
-        // AdminCourseScreen()
-        // AnnouncementScreen()
-        // AttendanceChart()
-        // AdminCourseScreen()
-        // TeacherCourseScreen()
-        // StudentCourseScreen()
-        // HeroSectionScreen()
-        // UploadCoursePage()
-        // CreateUserScreen()
-        // ActivateAccountScreen()
-        // AdminProfileScreen()
-        // CreateDepartmentScreen()
-        // AddCourseScreen()
-// SignUpScreen()
-//       CreateYearPage()
+
         _isInitialized ? VerifyScreen() : LoadingScreen(),
-//           GetUsersScreen()
       ),
     );
   }
