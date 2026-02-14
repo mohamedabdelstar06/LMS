@@ -6,6 +6,9 @@ class AllUsersResponseModel {
   final bool hasNextPage;
   final bool hasPreviousPage;
   final int totalCount;
+  final int totalAdmins;
+  final int totalInstructors;
+  final int totalStudents;
 
   AllUsersResponseModel({
     required this.users,
@@ -14,7 +17,7 @@ class AllUsersResponseModel {
     required this.pageSize,
     required this.hasNextPage,
     required this.hasPreviousPage,
-    required this.totalCount,
+    required this.totalCount, required this.totalAdmins, required this.totalInstructors, required this.totalStudents,
   });
 
   factory AllUsersResponseModel.fromJson(Map<String, dynamic> json) {
@@ -29,7 +32,7 @@ class AllUsersResponseModel {
       pageSize: json['pageSize'] ?? 10,
       hasNextPage: json['hasNextPage'] ?? false,
       hasPreviousPage: json['hasPreviousPage'] ?? false,
-      totalCount: json['totalCount'] ?? 0,
+      totalCount: json['totalCount'] ?? 0, totalAdmins: json['totalAdmins'] ?? 0, totalInstructors: json['totalInstructors'] ?? 0, totalStudents: json['totalStudents'] ?? 0,
     );
   }
 
@@ -41,6 +44,9 @@ class AllUsersResponseModel {
     bool? hasNextPage,
     bool? hasPreviousPage,
     int? totalCount,
+    int? totalAdmins,
+    int? totalInstructors,
+    int? totalStudents,
   }) {
     return AllUsersResponseModel(
       users: users ?? this.users,
@@ -50,6 +56,7 @@ class AllUsersResponseModel {
       hasNextPage: hasNextPage ?? this.hasNextPage,
       hasPreviousPage: hasPreviousPage ?? this.hasPreviousPage,
       totalCount: totalCount ?? this.totalCount,
+      totalAdmins: totalAdmins ?? this.totalAdmins, totalInstructors: totalInstructors ?? this.totalInstructors, totalStudents: totalStudents ?? this.totalStudents,
     );
   }
 }
@@ -132,27 +139,24 @@ class AcademicInfoModel {
       department: json['department'] != null
           ? SimpleItemModel.fromJson(json['department'])
           : null,
-      year: json['year'] != null ? SimpleItemModel.fromJson(json['year']) : null,
-      squadron: json['squadron'] != null ? SimpleItemModel.fromJson(json['squadron']) : null,
+      year: json['year'] != null
+          ? SimpleItemModel.fromJson(json['year'])
+          : null,
+      squadron: json['squadron'] != null
+          ? SimpleItemModel.fromJson(json['squadron'])
+          : null,
       admissionYear: json['admissionYear'] as int?,
     );
   }
 }
 
-
 class SimpleItemModel {
   final int id;
   final String name;
 
-  SimpleItemModel({
-    required this.id,
-    required this.name,
-  });
+  SimpleItemModel({required this.id, required this.name});
 
   factory SimpleItemModel.fromJson(Map<String, dynamic> json) {
-    return SimpleItemModel(
-      id: json['id'] as int,
-      name: json['name'] as String,
-    );
+    return SimpleItemModel(id: json['id'] as int, name: json['name'] as String);
   }
 }

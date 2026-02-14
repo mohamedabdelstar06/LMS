@@ -132,11 +132,10 @@ class _GetUsersScreenState extends State<GetUsersScreen> {
                       BlocBuilder<GetUsersCubit, GetUsersState>(
                         builder: (context, state) {
                           if (state is GetUsersLoaded) {
-                            final users = state.usersResponse.users;
                             final totalUsers = state.usersResponse.totalCount;
-                            final totalAdmins = users.where((u) => u.role == 'Admin').length;
-                            final totalInstructors = users.where((u) => u.role == 'Instructor').length;
-                            final totalStudents = users.where((u) => u.role == 'Student').length;
+                            final totalAdmins = state.usersResponse.totalAdmins;
+                            final totalInstructors = state.usersResponse.totalInstructors;
+                            final totalStudents = state.usersResponse.totalStudents;
 
                             return Container(
                               padding: const EdgeInsets.all(16),
