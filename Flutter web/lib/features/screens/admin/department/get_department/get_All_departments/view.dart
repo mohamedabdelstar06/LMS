@@ -13,6 +13,7 @@ import '../../../courses/create_course/Adding_view.dart';
 import '../../../courses/home_courses/view.dart';
 import '../../../squadron/create_squadron/view.dart';
 import '../../../users/create_user/View.dart';
+import '../../../users/get_users/get_user_dropdown/state_managment/cubit.dart';
 import '../../../users/get_users/view.dart';
 import '../../../year/create_year/view.dart';
 import '../../../year/get_year/get_All_years/view.dart';
@@ -536,12 +537,20 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => BlocProvider.value(
-                            value: context.read<DepartmentsCubit>(),
-                            child: UpdateDepartmentScreen(department: dep),
+                          builder: (_) => MultiBlocProvider(
+                            providers: [
+                              BlocProvider(
+                                create: (_) => DepartmentsCubit()..fetchDepartmentById(dep.id),
+                              ),
+                              BlocProvider(
+                                create: (_) => UsersCubitDrop()..fetchAdminsAndInstructors(),
+                              ),
+                            ],
+                            child: UpdateDepartmentPage(departmentId: dep.id),
                           ),
                         ),
                       );
+
                     },
                   ),
                   const SizedBox(width: 4),

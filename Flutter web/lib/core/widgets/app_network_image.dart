@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 
 import 'app_network_image_stub.dart'
-    if (dart.library.html) 'app_network_image_web.dart' as impl;
+if (dart.library.html) 'app_network_image_web.dart' as impl;
 
 class AppNetworkImage extends StatelessWidget {
   final String? imageUrl;
   final double size;
   final double? width;
   final double? height;
+
+  /// 🔥 خلي الافتراضي rectangle بدل circle
   final BoxShape shape;
+
   final BorderRadius? borderRadius;
   final String? fallbackText;
   final Color? backgroundColor;
@@ -19,19 +22,21 @@ class AppNetworkImage extends StatelessWidget {
     this.size = 48,
     this.width,
     this.height,
-    this.shape = BoxShape.circle,
+    this.shape = BoxShape.rectangle, // ✅ changed
     this.borderRadius,
     this.fallbackText,
     this.backgroundColor,
   });
 
-  /// Resolves potentially relative URLs to full URLs.
   static String? resolveImageUrl(String? url, {String? baseUrl}) {
     if (url == null || url.isEmpty) return null;
+
     final base = baseUrl ?? 'https://skylearn.runasp.net';
+
     if (url.startsWith('http://') || url.startsWith('https://')) {
       return url;
     }
+
     final path = url.startsWith('/') ? url : '/$url';
     return '$base$path';
   }
@@ -47,14 +52,20 @@ class AppNetworkImage extends StatelessWidget {
       return _buildFallback(context);
     }
 
-    return impl.buildWebNetworkImage(
-      url: resolvedUrl,
-      width: _w,
-      height: _h,
-      shape: shape,
-      borderRadius: borderRadius,
-      fallbackText: fallbackText,
-      backgroundColor: backgroundColor,
+    return ClipRRect(
+      borderRadius: borderRadius ??
+          (shape == BoxShape.circle
+              ? BorderRadius.circular(_w / 2)
+              : BorderRadius.zero),
+      child: impl.buildWebNetworkImage(
+        url: resolvedUrl,
+        width: _w,
+        height: _h,
+        shape: shape,
+        borderRadius: borderRadius,
+        fallbackText: fallbackText,
+        backgroundColor: backgroundColor,
+      ),
     );
   }
 
@@ -63,15 +74,15 @@ class AppNetworkImage extends StatelessWidget {
       width: _w,
       height: _h,
       decoration: BoxDecoration(
-        shape: borderRadius != null ? BoxShape.rectangle : shape,
-        borderRadius: borderRadius,
+        shape: shape,
+        borderRadius: shape == BoxShape.rectangle ? borderRadius : null,
         color: backgroundColor ?? Colors.blue.shade100,
       ),
       child: Center(
         child: Text(
           _getFallbackChar(),
           style: TextStyle(
-            fontSize: (width ?? height ?? size) * 0.4,
+            fontSize: (_w < _h ? _w : _h) * 0.4,
             fontWeight: FontWeight.bold,
             color: Colors.blue.shade800,
           ),

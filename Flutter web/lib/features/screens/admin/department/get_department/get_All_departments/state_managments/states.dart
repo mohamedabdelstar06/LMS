@@ -53,3 +53,21 @@ class UpdateDepartmentError extends DepartmentsState {
   final String message;
   const UpdateDepartmentError(this.message);
 }
+
+class DepartmentByIdLoading extends DepartmentsState {}
+class DepartmentByIdLoaded extends DepartmentsState {
+  final GetAllDepartmentModel department;
+
+  const DepartmentByIdLoaded(this.department);
+
+  @override
+  List<Object?> get props => [department];
+}
+class DepartmentByIdError extends DepartmentsState {
+  final String message;
+  const DepartmentByIdError(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}
+

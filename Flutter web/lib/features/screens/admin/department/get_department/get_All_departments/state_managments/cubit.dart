@@ -82,37 +82,92 @@ class DepartmentsCubit extends Cubit<DepartmentsState> {
       emit(DeleteDepartmentError("Unexpected error: ${e.toString()}"));
     }
   }
-  Future<void> updateDepartment({
-    required int id,
-    required String name,
-    required String description,
-    required int headId,
-  }) async {
-    emit(UpdateDepartmentLoading());
+ 
+    Future<void> fetchDepartmentById(int id) async {
+    emit(DepartmentByIdLoading());
+
     try {
       final token = await TokenStorageHelper.getTokenSecure();
-      if (token == null) {
-        emit(const UpdateDepartmentError("Unauthorized"));
+      if (token == null || token.isEmpty) {
+        emit(DepartmentByIdError("Unauthorized: Please login again."));
         return;
       }
 
-      await dio.put(
-        "${ApiResources.getDepartmentEndPoint}/$id",
-        data: {
-          "name": name,
-          "description": description,
-          "headId": headId,
-        },
-        options: Options(headers: {
-          "Authorization": "Bearer $token",
-        }),
+      final dio = Dio();
+      final response = await dio.get(
+        "${ApiResources.apiUrl}${ApiResources.getDepartmentEndPoint}/$id",
+        options: Options(
+          headers: {
+            "Authorization": "Bearer $token",
+            "Content-Type": "application/json",
+          },
+        ),
       );
 
-      emit(const UpdateDepartmentSuccess("Department updated successfully"));
-      fetchDepartments();
-    } catch (e) {
-      emit(UpdateDepartmentError(e.toString()));
+      if (response.statusCode == 200) {
+        final department = GetAllDepartmentModel.fromJson(response.data);
+        emit(DepartmentByIdLoaded(department));
+      } else {
+        emit(
+          DepartmentByIdError(
+            "Failed to load department. Status: ${response.statusCode}",
+          ),
+        );
+      }
+    } on DioException catch (e) {
+      emit(
+        DepartmentByIdError(
+          e.response != null
+              ? "Server Error: ${e.response?.statusCode}"
+              : "Connection Error",
+        ),
+      );
     }
   }
+
+  Future<void> updateDepartment(GetAllDepartmentModel model) async {
+    emit(UpdateDepartmentLoading());
+
+    try {
+      final token = await TokenStorageHelper.getTokenSecure();
+      if (token == null || token.isEmpty) {
+        emit(DepartmentByIdError("Unauthorized: Please login again."));
+        return;
+      }
+
+      final dio = Dio();
+      final response = await dio.put(
+        "${ApiResources.apiUrl}${ApiResources.getDepartmentEndPoint}/${model.id}",
+        data: model.toJson(),
+        options: Options(
+          headers: {
+            "Authorization": "Bearer $token",
+            "Content-Type": "application/json",
+          },
+          validateStatus: (status) => status != null && status < 500,
+        ),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        emit(UpdateDepartmentSuccess("Department updated successfully"));
+        fetchDepartments();
+      } else {
+        emit(
+          DepartmentByIdError(
+            "Failed to update department. Status: ${response.statusCode}",
+          ),
+        );
+      }
+    } on DioException catch (e) {
+      emit(
+        DepartmentByIdError(
+          e.response != null
+              ? "Server Error: ${e.response?.statusCode}"
+              : "Connection Error",
+        ),
+      );
+    }
+  }
+
 }
 

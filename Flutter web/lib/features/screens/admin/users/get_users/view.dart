@@ -567,6 +567,7 @@ class _GetUsersScreenState extends State<GetUsersScreen> {
                 imageUrl: user.profileImageUrl,
                 size: 48,
                 fallbackText: user.fullName,
+                borderRadius: BorderRadius.circular(12),
               ),
             ),
           ),

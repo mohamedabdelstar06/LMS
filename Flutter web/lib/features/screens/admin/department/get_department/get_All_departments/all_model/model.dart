@@ -50,7 +50,32 @@ class GetAllDepartmentModel {
       // 'years': years.map((e) => e.toJson()).toList(),
     };
   }
+
+  GetAllDepartmentModel copyWith({
+    int? id,
+    String? name,
+    String? description,
+    String? imageUrl,
+    int? headId,
+    String? headName,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    // List<DepartmentYearModel>? years,
+  }) {
+    return GetAllDepartmentModel(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      imageUrl: imageUrl ?? this.imageUrl,
+      headId: headId ?? this.headId,
+      headName: headName ?? this.headName,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      // years: years ?? this.years,
+    );
+  }
 }
+
 class DepartmentYearModel {
   final int id;
   final String name;

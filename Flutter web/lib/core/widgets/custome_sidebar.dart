@@ -6,6 +6,7 @@ import 'package:lms/features/screens/admin/courses/Enrollment_course/view.dart';
 import 'package:lms/features/screens/admin/courses/create_course/Adding_view.dart';
 import 'package:lms/features/screens/admin/courses/home_courses/view.dart';
 import 'package:lms/features/screens/admin/department/create_department/view.dart';
+import 'package:lms/features/screens/admin/department/get_department/get_All_departments/update_view.dart';
 import 'package:lms/features/screens/admin/department/get_department/get_All_departments/view.dart';
 import 'package:lms/features/screens/admin/squadron/create_squadron/view.dart';
 import 'package:lms/features/screens/admin/user_file/import_file/view.dart';
@@ -92,6 +93,7 @@ class _CustomeSidebarState extends State<CustomeSidebar> {
             'Create Departments',
             () => _navigate(context, CreateDepartmentPage()),
           ),
+       
           _buildMenuItem(
             context,
             Icons.calendar_month,
