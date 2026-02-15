@@ -2,7 +2,6 @@ import 'package:equatable/equatable.dart';
 
 import '../get_user_model/view.dart';
 
-
 abstract class GetUsersState extends Equatable {
   const GetUsersState();
 
@@ -69,6 +68,7 @@ class GetUsersError extends GetUsersState {
   @override
   List<Object?> get props => [message];
 }
+
 class DeleteUserLoading extends GetUsersState {}
 
 class DeleteUserSuccess extends GetUsersState {
@@ -82,7 +82,9 @@ class DeleteUserError extends GetUsersState {
 
   const DeleteUserError(this.message);
 }
+
 class GetUsersLoadingMore extends GetUsersState {}
+
 class DeactivateUserLoading extends GetUsersState {}
 
 class DeactivateUserSuccess extends GetUsersState {

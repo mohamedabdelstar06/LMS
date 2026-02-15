@@ -12,7 +12,7 @@ backgroundColor: Color(
   0xfff6fbff
 ),
       body: ListView(
-        padding: EdgeInsetsGeometry.directional(top: 10,start: 10,end: 10),
+        padding: const EdgeInsetsDirectional.only(start: 10, top: 10, end: 10),
         children: const [
           CultureVideoContainer(),
           CustomCardScreen()

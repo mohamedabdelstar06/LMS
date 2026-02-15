@@ -1,6 +1,7 @@
 import 'dart:ui_web' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lms/core/widgets/app_network_image.dart';
 import 'package:lms/features/screens/admin/department/get_department/get_All_departments/state_managments/cubit.dart';
 import 'package:lms/features/screens/admin/department/get_department/get_All_departments/state_managments/states.dart';
 import 'package:lms/features/screens/admin/department/get_department/get_All_departments/update_view.dart';
@@ -469,8 +470,7 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
             onExit: (_) => setState(() => hoveredRowIndex = null),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: dep.imageUrl != null
-                  ? Container(
+              child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(
@@ -487,24 +487,13 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(6),
-                  child: WebImage(
-                    url: buildImageUrl(dep.imageUrl),
+                  child: AppNetworkImage(
+                    imageUrl: dep.imageUrl,
                     width: 80,
                     height: 60,
+                    borderRadius: BorderRadius.circular(6),
+                    fallbackText: dep.name,
                   ),
-                ),
-              )
-                  : Container(
-                width: 80,
-                height: 60,
-                decoration: BoxDecoration(
-                  color: const Color(0xFFF1F5F9),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Icon(
-                  Icons.image_not_supported,
-                  color: Color(0xFF94A3B8),
-                  size: 24,
                 ),
               ),
             ),
@@ -608,12 +597,6 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
     );
   }
 
-  String buildImageUrl(String? imageUrl) {
-    if (imageUrl == null || imageUrl.isEmpty) return '';
-    String cleanUrl = imageUrl.startsWith('/') ? imageUrl.substring(1) : imageUrl;
-    return 'http://skylearn.runasp.net/$cleanUrl';
-  }
-
   void _showDeleteDialog(BuildContext context, int id) {
     showDialog(
       context: context,
@@ -641,7 +624,7 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
   Widget _buildSidebar() {
     return Container(
       width: 250,
-      margin: const EdgeInsetsGeometry.directional(
+      margin: const EdgeInsetsDirectional.only(
         start: 40,
         end: 0,
         top: 50,

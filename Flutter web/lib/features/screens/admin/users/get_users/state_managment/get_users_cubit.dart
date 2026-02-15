@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lms/core/cons/api_helper_resources/api_resources.dart';
 import 'package:lms/core/helpers/cach_helper/shared_pref_helper.dart';
 
-
 import '../get_user_model/view.dart';
 import 'get_users_state.dart';
 
@@ -44,7 +43,8 @@ class GetUsersCubit extends Cubit<GetUsersState> {
       print('STATUS: ${response.statusCode}');
       // print('DATA: ${response.data}');
 
-      if (response.statusCode != 200 || response.data is! Map<String, dynamic>) {
+      if (response.statusCode != 200 ||
+          response.data is! Map<String, dynamic>) {
         emit(GetUsersError('Invalid response from server'));
         return;
       }
@@ -57,8 +57,9 @@ class GetUsersCubit extends Cubit<GetUsersState> {
         final mergedUsers = [
           ...oldState.usersResponse.users,
           ...usersResponse.users.where(
-                (newUser) => !oldState.usersResponse.users
-                .any((oldUser) => oldUser.id == newUser.id),
+            (newUser) => !oldState.usersResponse.users.any(
+              (oldUser) => oldUser.id == newUser.id,
+            ),
           ),
         ];
 
@@ -72,29 +73,35 @@ class GetUsersCubit extends Cubit<GetUsersState> {
           totalCount: usersResponse.totalCount,
         );
 
-        emit(GetUsersLoaded(
-          usersResponse: mergedResponse,
-          searchQuery: searchQuery,
-          currentPage: page,
-          filterStatus: filterStatus,
-          sortBy: sortBy,
-          order: order,
-        ));
+        emit(
+          GetUsersLoaded(
+            usersResponse: mergedResponse,
+            searchQuery: searchQuery,
+            currentPage: page,
+            filterStatus: filterStatus,
+            sortBy: sortBy,
+            order: order,
+          ),
+        );
       } else {
-        emit(GetUsersLoaded(
-          usersResponse: usersResponse,
-          searchQuery: searchQuery,
-          currentPage: page,
-          filterStatus: filterStatus,
-          sortBy: sortBy,
-          order: order,
-        ));
+        emit(
+          GetUsersLoaded(
+            usersResponse: usersResponse,
+            searchQuery: searchQuery,
+            currentPage: page,
+            filterStatus: filterStatus,
+            sortBy: sortBy,
+            order: order,
+          ),
+        );
       }
     } on DioException catch (e) {
       print('❌ DIO ERROR: ${e.response?.data}');
-      emit(GetUsersError(
-        e.response?.data.toString() ?? e.message ?? 'Network error',
-      ));
+      emit(
+        GetUsersError(
+          e.response?.data.toString() ?? e.message ?? 'Network error',
+        ),
+      );
     } catch (e, stack) {
       print('❌ UNEXPECTED ERROR');
       print(e);
@@ -102,6 +109,7 @@ class GetUsersCubit extends Cubit<GetUsersState> {
       emit(const GetUsersError('Unexpected error occurred'));
     }
   }
+
   Future<void> deactivateUser(int userId) async {
     emit(DeactivateUserLoading());
     try {
@@ -113,11 +121,7 @@ class GetUsersCubit extends Cubit<GetUsersState> {
       }
       final response = await dio.delete(
         '${ApiResources.apiUrl}${ApiResources.getUsersEndPoint}/$userId',
-        options: Options(
-          headers: {
-            'Authorization': 'Bearer $token',
-          },
-        ),
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
       );
 
       if (response.statusCode == 200) {
@@ -125,7 +129,11 @@ class GetUsersCubit extends Cubit<GetUsersState> {
         await fetchUsers();
       }
     } on DioException catch (e) {
-      emit(DeactivateUserError(e.response?.data['message'] ?? 'Failed to deactivate user'));
+      emit(
+        DeactivateUserError(
+          e.response?.data['message'] ?? 'Failed to deactivate user',
+        ),
+      );
     }
   }
 
@@ -197,6 +205,7 @@ class GetUsersCubit extends Cubit<GetUsersState> {
       order: currentState.order,
     );
   }
+
   Future<void> deleteUser(int userId) async {
     try {
       final token = await TokenStorageHelper.getTokenSecure();
@@ -212,12 +221,8 @@ class GetUsersCubit extends Cubit<GetUsersState> {
 
       final response = await dio.delete(
         '${ApiResources.apiUrl}${ApiResources.getUsersEndPoint}/$userId',
-        queryParameters: {
-          'hardDelete': true,
-        },
-        options: Options(
-          headers: {'Authorization': 'Bearer $token'},
-        ),
+        queryParameters: {'hardDelete': true},
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
       );
 
       if (response.statusCode == 200 || response.statusCode == 204) {
@@ -240,7 +245,8 @@ class GetUsersCubit extends Cubit<GetUsersState> {
         }
       }
     } on DioException catch (e) {
-      final errorMsg = e.response?.data?['message'] ??
+      final errorMsg =
+          e.response?.data?['message'] ??
           e.response?.data.toString() ??
           e.message ??
           'Connection error';
@@ -260,6 +266,7 @@ class GetUsersCubit extends Cubit<GetUsersState> {
       emit(DeleteUserError('Unexpected error: ${e.toString()}'));
     }
   }
+
   Future<void> getUserById(int userId) async {
     emit(GetUserByIdLoading());
 
@@ -270,8 +277,6 @@ class GetUsersCubit extends Cubit<GetUsersState> {
         emit(const GetUserByIdError("Unauthorized: Please login again."));
         return;
       }
-
-      final dio = Dio();
 
       final response = await dio.get(
         "${ApiResources.apiUrl}${ApiResources.getUsersEndPoint}/$userId",
@@ -296,17 +301,13 @@ class GetUsersCubit extends Cubit<GetUsersState> {
     } on DioException catch (e) {
       emit(
         GetUserByIdError(
-          e.response?.data?['message'] ??
-              e.message ??
-              "Connection error",
+          e.response?.data?['message'] ?? e.message ?? "Connection error",
         ),
       );
     } catch (e) {
       emit(GetUserByIdError("Unexpected error: $e"));
     }
   }
-
-
 
   Future<void> updateUser({
     required int userId,
@@ -333,29 +334,44 @@ class GetUsersCubit extends Cubit<GetUsersState> {
       );
 
       if (response.statusCode == 200 || response.statusCode == 204) {
-        emit(UpdateUsersSuccess(
-          "User updated successfully",
-          statusCode: response.statusCode,
-        ));
+        final currentState = state;
+        emit(
+          UpdateUsersSuccess(
+            "User updated successfully",
+            statusCode: response.statusCode,
+          ),
+        );
 
-        await fetchUsers();
+        if (currentState is GetUsersLoaded) {
+          await fetchUsers(
+            page: currentState.currentPage,
+            searchQuery: currentState.searchQuery,
+            filterStatus: currentState.filterStatus,
+            sortBy: currentState.sortBy,
+            order: currentState.order,
+          );
+        } else {
+          await fetchUsers();
+        }
       } else {
-        emit(UpdateUsersError(
-          "Failed to update user",
-          statusCode: response.statusCode,
-        ));
+        emit(
+          UpdateUsersError(
+            "Failed to update user",
+            statusCode: response.statusCode,
+          ),
+        );
       }
     } on DioException catch (e) {
-      emit(UpdateUsersError(
-        e.response?.data?['message'] ??
-            e.message ??
-            "Error while updating user",
-        statusCode: e.response?.statusCode,
-      ));
+      emit(
+        UpdateUsersError(
+          e.response?.data?['message'] ??
+              e.message ??
+              "Error while updating user",
+          statusCode: e.response?.statusCode,
+        ),
+      );
     } catch (e) {
       emit(UpdateUsersError("Unexpected error: $e"));
     }
   }
-
-
 }

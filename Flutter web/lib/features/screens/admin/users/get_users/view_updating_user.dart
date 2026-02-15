@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -17,16 +16,14 @@ import '../../squadron/get_squadron/state_mangment/cubit.dart';
 import '../../squadron/get_squadron/state_mangment/states.dart';
 import '../../year/get_year/state_managment/cubit.dart';
 import '../../year/get_year/state_managment/states.dart';
+import '../../../../../core/widgets/app_network_image.dart';
+import '../shared/user_form_role_dropdown.dart';
 import 'get_user_model/view.dart';
-
-
-
 
 Uint8List? _webImage;
 String selectedMenuItem = 'Create Users';
 String? hoveredMenuItem;
 String selectedGender = "gender";
-String selectedRole = "Select Role";
 String selectedCity = 'Select City';
 bool isLogoutHovered = false;
 bool isProfilePictureHovered = false;
@@ -64,15 +61,6 @@ final List<String> cities = [
   'Sharqia',
   'Daqahlia',
   'Gharbia',
-];
-final List<Map<String, dynamic>> roles = [
-  {
-    "name": "Admin",
-    "icon": Icons.admin_panel_settings,
-    "color": Colors.redAccent,
-  },
-  {"name": "Instructor", "icon": Icons.school, "color": Colors.orangeAccent},
-  {"name": "Student", "icon": Icons.person, "color": Colors.blueAccent},
 ];
 
 class UpdateUserScreen extends StatefulWidget {
@@ -122,44 +110,15 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
   final TextEditingController yearController = TextEditingController();
   final TextEditingController squadronController = TextEditingController();
   List<GetDepartmentModel> availableDepartments = [];
-
-  void _clearAllFields() {
-    fullNameController.clear();
-    emailController.clear();
-    nationalIdController.clear();
-    genderController.clear();
-    dobController.clear();
-
-    setState(() {
-      selectedDepartmentName = "Select Department";
-      selectedYearName = "Select Year";
-      selectedSquadronName = "Select Squadron";
-      selectedCity = 'Select City';
-      selectedRole = "Select Role";
-
-      selectedDepartmentId = null;
-      selectedYearId = null;
-      selectedSquadronId = null;
-
-      availableYears = [];
-
-      isDepartmentExpanded = false;
-      isYearExpanded = false;
-      isSquadronExpanded = false;
-      isCityExpanded = false;
-      isRoleExpanded = false;
-    });
-  }
+  GetUserModel? _loadedUser;
 
   @override
   void initState() {
     super.initState();
+    _loadedUser = widget.user;
     context.read<GetUsersCubit>().getUserById(widget.userId);
-
-    fullNameController = TextEditingController(
-      text: widget.user.fullName ?? '',
-    );
-    emailController = TextEditingController(text: widget.user.email ?? '');
+    fullNameController = TextEditingController(text: widget.user.fullName);
+    emailController = TextEditingController(text: widget.user.email);
     nationalIdController = TextEditingController(
       text: widget.user.nationalId ?? '',
     );
@@ -213,103 +172,135 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => GetUsersCubit(dio: Dio()),
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              MYColors.gradientColor_3,
-              MYColors.gradientColor_2.withValues(alpha: 0.25),
-              MYColors.gradientColor_3,
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            MYColors.gradientColor_3,
+            MYColors.gradientColor_2.withValues(alpha: 0.25),
+            MYColors.gradientColor_3,
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+
+      child: Scaffold(
+        appBar: AppBar(
+          title: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(Icons.arrow_back_ios),
           ),
         ),
 
-        child: Scaffold(
-          appBar: AppBar(
-            title: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
+        backgroundColor: Colors.transparent,
+        body: Row(
+          children: [
+            BlocConsumer<GetUsersCubit, GetUsersState>(
+              listener: (context, state) {
+                if (state is GetUserByIdSuccess) {
+                  _populateFormFromUser(state.user);
+                }
+                if (state is UpdateUsersSuccess) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(state.message),
+                      backgroundColor: Colors.green.shade600,
+                    ),
+                  );
+                  Navigator.pop(context);
+                }
+                if (state is UpdateUsersError) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(state.errorMessage),
+                      backgroundColor: Colors.redAccent,
+                    ),
+                  );
+                }
               },
-              icon: Icon(Icons.arrow_back_ios),
+              buildWhen: (previous, current) =>
+                  current is GetUserByIdLoading ||
+                  current is GetUserByIdSuccess ||
+                  current is GetUserByIdError ||
+                  current is UpdateUsersLoading,
+              builder: (context, state) {
+                if (state is UpdateUsersLoading) {
+                  return const Expanded(
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                }
+                if (state is GetUserByIdLoading && _loadedUser == null) {
+                  return const Expanded(
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                }
+                if (state is GetUserByIdError) {
+                  return Expanded(
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(state.message),
+                          const SizedBox(height: 16),
+                          TextButton(
+                            onPressed: () => context
+                                .read<GetUsersCubit>()
+                                .getUserById(widget.userId),
+                            child: const Text('Retry'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }
+                if (state is GetUserByIdSuccess) {
+                  return Expanded(child: _buildProfileContent(state.user));
+                }
+                if (_loadedUser != null) {
+                  return Expanded(child: _buildProfileContent(_loadedUser!));
+                }
+                return const Expanded(
+                  child: Center(child: CircularProgressIndicator()),
+                );
+              },
             ),
-          ),
-
-          backgroundColor: Colors.transparent,
-          body: Row(
-            children: [
-              BlocListener<GetUsersCubit, GetUsersState>(
-                listener: (context, state) {
-                  if (state is GetUserByIdSuccess) {
-                    final user = state.user;
-
-                    fullNameController.text = user.fullName ?? '';
-                    emailController.text = user.email ?? '';
-                    nationalIdController.text = user.nationalId ?? '';
-                    genderController.text = user.gender ?? '';
-
-                    selectedCity = user.city ?? '';
-                    selectedRole = user.role ?? '';
-
-                    if (user.dateOfBirth != null) {
-                      selectedDateOfBirth = DateTime.parse(user.dateOfBirth!);
-                      dobController.text = DateFormat(
-                        'yyyy-MM-dd',
-                      ).format(selectedDateOfBirth!);
-                    }
-
-                    if (user.role == 'Student') {
-                      selectedDepartmentId = user.academicInfo?.department?.id
-                          .toString();
-                      selectedYearId = user.academicInfo?.year?.id.toString();
-                      selectedSquadronId = user.academicInfo?.squadron?.id
-                          .toString();
-
-                      selectedDepartmentName =
-                          user.academicInfo?.department?.name ??
-                          "Select Department";
-                      selectedYearName =
-                          user.academicInfo?.year?.name ?? "Select Year";
-                      selectedSquadronName =
-                          user.academicInfo?.squadron?.name ??
-                          "Select Squadron";
-                    }
-
-                    setState(() {});
-                  }
-
-                  if (state is UpdateUsersSuccess) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(state.message),
-                        backgroundColor: Colors.green.shade600,
-                      ),
-                    );
-                    Navigator.pop(context);
-                  }
-
-                  if (state is UpdateUsersError) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(state.errorMessage),
-                        backgroundColor: Colors.redAccent,
-                      ),
-                    );
-                  }
-                },
-                child: Expanded(child: _buildProfileContent()),
-              ),
-            ],
-          ),
+          ],
         ),
       ),
     );
   }
 
-  Widget _buildProfileContent() {
+  void _populateFormFromUser(GetUserModel user) {
+    _loadedUser = user;
+    fullNameController.text = user.fullName;
+    emailController.text = user.email;
+    nationalIdController.text = user.nationalId ?? '';
+    genderController.text = user.gender ?? '';
+    selectedCity = user.city;
+    selectedRole = user.role;
+
+    if (user.dateOfBirth != null) {
+      selectedDateOfBirth = DateTime.parse(user.dateOfBirth!);
+      dobController.text = DateFormat('yyyy-MM-dd').format(selectedDateOfBirth!);
+    }
+
+    if (user.role == 'Student') {
+      selectedDepartmentId = user.academicInfo?.department?.id.toString();
+      selectedYearId = user.academicInfo?.year?.id.toString();
+      selectedSquadronId = user.academicInfo?.squadron?.id.toString();
+      selectedDepartmentName =
+          user.academicInfo?.department?.name ?? "Select Department";
+      selectedYearName = user.academicInfo?.year?.name ?? "Select Year";
+      selectedSquadronName =
+          user.academicInfo?.squadron?.name ?? "Select Squadron";
+    }
+    setState(() {});
+  }
+
+  Widget _buildProfileContent(GetUserModel user) {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -358,7 +349,7 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                     style: TextStyle(fontSize: 14, color: Color(0xFF64748B)),
                   ),
                   const SizedBox(height: 32),
-                  _buildProfilePicture(),
+                  _buildProfilePicture(user),
                   const SizedBox(height: 24),
                   _buildTextField(
                     'Full Name',
@@ -401,7 +392,7 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                   const SizedBox(height: 16),
                   _buildStringDropdownField(
                     'City',
-                    selectedCity!,
+                    selectedCity ?? 'Select City',
                     cities,
                     isCityExpanded,
                     (value) {
@@ -413,13 +404,28 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                     () => setState(() => isCityExpanded = !isCityExpanded),
                   ),
                   const SizedBox(height: 16),
-                  RoleDropdownField(),
+                  UserFormRoleDropdown(
+                    value: selectedRole ?? 'Select Role',
+                    onChanged: (role) {
+                      setState(() {
+                        selectedRole = role;
+                        if (role != 'Student') {
+                          selectedDepartmentId = null;
+                          selectedYearId = null;
+                          selectedSquadronId = null;
+                          selectedDepartmentName = 'Select Department';
+                          selectedYearName = 'Select Year';
+                          selectedSquadronName = 'Select Squadron';
+                          availableYears = [];
+                        }
+                      });
+                    },
+                  ),
                   const SizedBox(height: 16),
 
-                  BlocBuilder<DepartmentsCubitDrop, DepartmentsStateDrop>(
-                    builder: (context, departmentState) {
-                      final isReadOnly = selectedRole != 'Student';
-
+                  if (selectedRole == 'Student')
+                    BlocBuilder<DepartmentsCubitDrop, DepartmentsStateDrop>(
+                      builder: (context, departmentState) {
                       if (departmentState is DepartmentLoadingState) {
                         return const Padding(
                           padding: EdgeInsets.only(top: 16, bottom: 16),
@@ -452,11 +458,7 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
 
                         return Column(
                           children: [
-                            Opacity(
-                              opacity: isReadOnly ? 0.5 : 1.0,
-                              child: IgnorePointer(
-                                ignoring: isReadOnly,
-                                child: _buildDropdownField(
+                            _buildDropdownField(
                                   selectedDepartmentName,
                                   departments,
                                   isDepartmentExpanded,
@@ -476,8 +478,6 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                                         !isDepartmentExpanded,
                                   ),
                                 ),
-                              ),
-                            ),
                             const SizedBox(height: 16),
                           ],
                         );
@@ -486,43 +486,37 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                       return const SizedBox.shrink();
                     },
                   ),
-
-                  BlocBuilder<YearsCubitDrop, YearsStateDrop>(
-                    builder: (context, yearState) {
-                      final isReadOnly = selectedRole != 'Student';
-
-                      if (yearState is YearLoadingState) {
-                        return const Padding(
-                          padding: EdgeInsets.only(bottom: 16),
-                          child: Center(child: CircularProgressIndicator()),
-                        );
-                      }
-
-                      if (yearState is YearsErrorState) {
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 16),
-                          child: Text(
-                            "Error: ${yearState.message}",
-                            style: const TextStyle(color: Colors.red),
-                          ),
-                        );
-                      }
-
-                      if (yearState is YearLoadedState) {
-                        if (yearState.years.isEmpty) {
+                  if (selectedRole == 'Student')
+                    BlocBuilder<YearsCubitDrop, YearsStateDrop>(
+                      builder: (context, yearState) {
+                          if (yearState is YearLoadingState) {
                           return const Padding(
-                            padding: EdgeInsets.only(bottom: 16),
-                            child: Text("No years found"),
+                          padding: EdgeInsets.only(bottom: 16),
+                            child: Center(child: CircularProgressIndicator()),
                           );
                         }
 
-                        return Column(
-                          children: [
-                            Opacity(
-                              opacity: isReadOnly ? 0.5 : 1.0,
-                              child: IgnorePointer(
-                                ignoring: isReadOnly,
-                                child: _buildSecondDropdownField(
+                        if (yearState is YearsErrorState) {
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 16),
+                            child: Text(
+                              "Error: ${yearState.message}",
+                              style: const TextStyle(color: Colors.red),
+                            ),
+                          );
+                        }
+
+                        if (yearState is YearLoadedState) {
+                          if (yearState.years.isEmpty) {
+                            return const Padding(
+                              padding: EdgeInsets.only(bottom: 16),
+                              child: Text("No years found"),
+                            );
+                          }
+
+                          return Column(
+                            children: [
+                              _buildSecondDropdownField(
                                   selectedYearName,
                                   availableYears,
                                   isYearExpanded,
@@ -533,61 +527,54 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                                       isYearExpanded = false;
                                     });
                                   },
-                                  () => setState(
-                                    () => isYearExpanded = !isYearExpanded,
-                                  ),
+                                () => setState(
+                                  () => isYearExpanded = !isYearExpanded,
                                 ),
                               ),
-                            ),
-                            const SizedBox(height: 16),
-                          ],
-                        );
-                      }
-
-                      return const SizedBox.shrink();
-                    },
-                  ),
-
-                  BlocBuilder<SquadronsCubitDrop, GetSquadronsState>(
-                    builder: (context, squadronState) {
-                      final isReadOnly = selectedRole != 'Student';
-
-                      if (squadronState is GetSquadronsLoading) {
-                        return const Padding(
-                          padding: EdgeInsets.only(bottom: 16),
-                          child: Center(child: CircularProgressIndicator()),
-                        );
-                      }
-
-                      if (squadronState is GetSquadronsError) {
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 16),
-                          child: Text(
-                            "Error: ${squadronState.message}",
-                            style: const TextStyle(color: Colors.red),
-                          ),
-                        );
-                      }
-
-                      if (squadronState is GetSquadronsLoaded) {
-                        if (squadronState.squadrons.isEmpty) {
-                          return const Padding(
-                            padding: EdgeInsets.only(bottom: 16),
-                            child: Text("No Squadrons found"),
+                              const SizedBox(height: 16),
+                            ],
                           );
                         }
 
-                        List<SquadronModel> squadrons = squadronState.squadrons
-                            .whereType<SquadronModel>()
-                            .toList();
+                        return const SizedBox.shrink();
+                      },
+                    ),
+                  if (selectedRole == 'Student')
+                    BlocBuilder<SquadronsCubitDrop, GetSquadronsState>(
+                      builder: (context, squadronState) {
+                        if (squadronState is GetSquadronsLoading) {
+                          return const Padding(
+                            padding: EdgeInsets.only(bottom: 16),
+                            child: Center(child: CircularProgressIndicator()),
+                          );
+                        }
 
-                        return Column(
-                          children: [
-                            Opacity(
-                              opacity: isReadOnly ? 0.5 : 1.0,
-                              child: IgnorePointer(
-                                ignoring: isReadOnly,
-                                child: _buildThirdDropdownField(
+                        if (squadronState is GetSquadronsError) {
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 16),
+                            child: Text(
+                              "Error: ${squadronState.message}",
+                              style: const TextStyle(color: Colors.red),
+                            ),
+                          );
+                        }
+
+                        if (squadronState is GetSquadronsLoaded) {
+                          if (squadronState.squadrons.isEmpty) {
+                            return const Padding(
+                              padding: EdgeInsets.only(bottom: 16),
+                              child: Text("No Squadrons found"),
+                            );
+                          }
+
+                          List<SquadronModel> squadrons =
+                              squadronState.squadrons
+                                  .whereType<SquadronModel>()
+                                  .toList();
+
+                          return Column(
+                            children: [
+                              _buildThirdDropdownField(
                                   selectedSquadronName,
                                   squadrons,
                                   isSquadronExpanded,
@@ -600,99 +587,21 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                                       isSquadronExpanded = false;
                                     });
                                   },
-                                  () => setState(
-                                    () => isSquadronExpanded =
-                                        !isSquadronExpanded,
-                                  ),
+                                () => setState(
+                                  () =>
+                                      isSquadronExpanded = !isSquadronExpanded,
                                 ),
                               ),
-                            ),
-                            const SizedBox(height: 16),
-                          ],
-                        );
-                      }
+                              const SizedBox(height: 16),
+                            ],
+                          );
+                        }
 
-                      return const SizedBox.shrink();
-                    },
-                  ),
+                        return const SizedBox.shrink();
+                      },
+                    ),
 
-                  BlocListener<GetUsersCubit, GetUsersState>(
-                    listener: (context, state) {
-                      if (state is UpdateUsersSuccess) {
-                        context.read<GetUsersCubit>().fetchUsers();
-
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Row(
-                              children: [
-                                const Icon(
-                                  Icons.check_circle,
-                                  color: Colors.white,
-                                ),
-                                const SizedBox(width: 10),
-                                Expanded(
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        state.message,
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                      if (state.statusCode != null)
-                                        Text(
-                                          "Status Code: ${state.statusCode}",
-                                          style: const TextStyle(fontSize: 12),
-                                        ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                            backgroundColor: Colors.green.shade600,
-                            behavior: SnackBarBehavior.floating,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                        );
-
-                        _clearAllFields();
-
-                        Navigator.pop(context);
-                      }
-
-                      if (state is UpdateUsersError) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Row(
-                              children: [
-                                const Icon(
-                                  Icons.error_outline,
-                                  color: Colors.white,
-                                ),
-                                const SizedBox(width: 10),
-                                Expanded(
-                                  child: Text(
-                                    state.errorMessage,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            backgroundColor: Colors.redAccent,
-                          ),
-                        );
-                      }
-                    },
-                    child: BlocBuilder<GetUsersCubit, GetUsersState>(
+                  BlocBuilder<GetUsersCubit, GetUsersState>(
                       builder: (context, state) {
                         final isLoading = state is UpdateUsersLoading;
 
@@ -762,7 +671,6 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                         );
                       },
                     ),
-                  ),
                 ],
               ),
             ),
@@ -1162,7 +1070,7 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
     );
   }
 
-  Widget _buildProfilePicture() {
+  Widget _buildProfilePicture(GetUserModel user) {
     return Center(
       child: MouseRegion(
         cursor: SystemMouseCursors.click,
@@ -1187,29 +1095,27 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(
-                          0xFF2563EB,
-                        ).withOpacity(isProfilePictureHovered ? 0.3 : 0.1),
+                        color: const Color(0xFF2563EB).withOpacity(isProfilePictureHovered ? 0.3 : 0.1),
                         blurRadius: isProfilePictureHovered ? 20 : 10,
                         offset: const Offset(0, 4),
                       ),
                     ],
                   ),
-                  child: CircleAvatar(
-                    radius: 50,
-                    backgroundImage: kIsWeb
-                        ? (_webImage != null
-                              ? MemoryImage(_webImage!)
-                              : const AssetImage(
-                                      'assets/images/chatbot man.png',
-                                    )
-                                    as ImageProvider)
-                        : (_selectedImage != null
-                              ? FileImage(_selectedImage!)
-                              : const AssetImage(
-                                  'assets/images/chatbot man.png',
-                                )),
-                  ),
+                  child: kIsWeb && _webImage != null
+                      ? CircleAvatar(radius: 50, backgroundImage: MemoryImage(_webImage!))
+                      : (!kIsWeb && _selectedImage != null
+                            ? CircleAvatar(radius: 50, backgroundImage: FileImage(_selectedImage!))
+                            : ClipOval(
+                                child: SizedBox(
+                                  width: 100,
+                                  height: 100,
+                                  child: AppNetworkImage(
+                                    imageUrl: user.profileImageUrl,
+                                    size: 100,
+                                    fallbackText: user.fullName,
+                                  ),
+                                ),
+                              )),
                 ),
 
                 if (isProfilePictureHovered)
@@ -1809,14 +1715,12 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
       ],
     );
   }
-
-
 }
 
 class DateRangeSelector extends StatelessWidget {
   final List<String> years = [for (int y = 1980; y <= 2030; y++) y.toString()];
 
-   DateRangeSelector({super.key});
+  DateRangeSelector({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -1919,209 +1823,3 @@ class _ActiveSwitchRowState extends State<ToggleButtonActiveOrDeactive> {
   }
 }
 
-class RoleDropdownField extends StatefulWidget {
-  const RoleDropdownField({super.key});
-
-  @override
-  State<RoleDropdownField> createState() => _RoleDropdownFieldState();
-}
-
-class _RoleDropdownFieldState extends State<RoleDropdownField> {
-  @override
-  Widget build(BuildContext context) {
-    return _buildDropdownField(
-      'Role',
-      selectedRole,
-      roles,
-      isRoleExpanded,
-      (value) {
-        setState(() {
-          selectedRole = value["name"];
-          isRoleExpanded = false;
-
-          debugPrint("Selected Role: $selectedRole");
-        });
-      },
-      () {
-        setState(() {
-          isRoleExpanded = !isRoleExpanded;
-        });
-      },
-    );
-  }
-
-  Widget _buildDropdownField(
-    String label,
-    String value,
-    List<Map<String, dynamic>> options,
-    bool isExpanded,
-    Function(Map<String, dynamic>) onSelected,
-    Function() onToggle,
-  ) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            color: Color(0xFF2563EB),
-          ),
-        ),
-        const SizedBox(height: 8),
-        MouseRegion(
-          cursor: SystemMouseCursors.click,
-          child: GestureDetector(
-            onTap: onToggle,
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              decoration: BoxDecoration(
-                color: isExpanded ? Colors.white : const Color(0xFFF8FAFC),
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: isExpanded
-                      ? const Color(0xFF2563EB)
-                      : const Color(0xFFE2E8F0),
-                  width: isExpanded ? 2 : 1,
-                ),
-                boxShadow: isExpanded
-                    ? [
-                        BoxShadow(
-                          color: const Color(0xFF2563EB).withOpacity(0.1),
-                          blurRadius: 8,
-                          offset: const Offset(0, 2),
-                        ),
-                      ]
-                    : [],
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Icon(
-                        options.firstWhere(
-                          (role) => role["name"] == value,
-                          orElse: () => {
-                            "icon": Icons.person,
-                            "color": Colors.grey,
-                          },
-                        )["icon"],
-                        color: isExpanded
-                            ? const Color(0xFF2563EB)
-                            : options.firstWhere(
-                                (role) => role["name"] == value,
-                                orElse: () => {
-                                  "icon": Icons.person,
-                                  "color": Colors.grey,
-                                },
-                              )["color"],
-                        size: 20,
-                      ),
-                      const SizedBox(width: 12),
-                      Text(
-                        value,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: Color(0xFF1E293B),
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                  AnimatedRotation(
-                    duration: const Duration(milliseconds: 200),
-                    turns: isExpanded ? 0.5 : 0,
-                    child: Icon(
-                      Icons.keyboard_arrow_down,
-                      color: isExpanded
-                          ? const Color(0xFF2563EB)
-                          : const Color(0xFF94A3B8),
-                      size: 20,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        if (isExpanded)
-          Container(
-            margin: const EdgeInsets.only(top: 4),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: const Color(0xFFE2E8F0), width: 1),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            constraints: const BoxConstraints(maxHeight: 200),
-            child: ListView.builder(
-              shrinkWrap: true,
-              padding: const EdgeInsets.symmetric(vertical: 4),
-              itemCount: options.length,
-              itemBuilder: (context, index) {
-                final option = options[index];
-                final isSelected = option["name"] == value;
-                return MouseRegion(
-                  cursor: SystemMouseCursors.click,
-                  child: GestureDetector(
-                    onTap: () => onSelected(option),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
-                      ),
-                      color: isSelected
-                          ? option["color"].withOpacity(0.1)
-                          : Colors.transparent,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              CircleAvatar(
-                                radius: 12,
-                                backgroundColor: option["color"],
-                                child: Icon(
-                                  option["icon"],
-                                  color: Colors.white,
-                                  size: 14,
-                                ),
-                              ),
-                              const SizedBox(width: 10),
-                              Text(
-                                option["name"],
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: isSelected
-                                      ? option["color"]
-                                      : const Color(0xFF1E293B),
-                                  fontWeight: isSelected
-                                      ? FontWeight.w600
-                                      : FontWeight.w400,
-                                ),
-                              ),
-                            ],
-                          ),
-                          if (isSelected)
-                            Icon(Icons.check, color: option["color"], size: 18),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-      ],
-    );
-  }
-}

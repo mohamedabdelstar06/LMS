@@ -499,7 +499,7 @@ class _CreateDepartmentScreenState extends State<CreateDepartmentScreen> {
   Widget _buildSidebar() {
     return Container(
       width: 250,
-      margin: const EdgeInsetsGeometry.directional(
+      margin: const EdgeInsetsDirectional.only(
         start: 30,
         end: 0,
         top: 50,
