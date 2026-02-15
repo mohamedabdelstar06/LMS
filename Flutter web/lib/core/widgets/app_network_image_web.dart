@@ -3,8 +3,7 @@ import 'dart:ui_web' as ui;
 
 import 'package:flutter/material.dart';
 
-/// Web-specific image loading using HtmlElementView.
-/// Bypasses CORS/Canvas issues that occur with Flutter's Image.network on web.
+
 Widget buildWebNetworkImage({
   required String url,
   required double width,

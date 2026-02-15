@@ -3,9 +3,6 @@ import 'package:flutter/material.dart';
 import 'app_network_image_stub.dart'
     if (dart.library.html) 'app_network_image_web.dart' as impl;
 
-/// Global reusable network image with loading placeholder and error fallback.
-/// On web: uses HtmlElementView for reliable image loading (avoids CORS issues).
-/// On mobile: uses CachedNetworkImage.
 class AppNetworkImage extends StatelessWidget {
   final String? imageUrl;
   final double size;

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker_web/image_picker_web.dart';
+import 'package:lms/core/widgets/custome_sidebar.dart';
 import 'package:lms/features/screens/admin/courses/create_course/state_managment/cubit.dart';
 import 'package:lms/features/screens/admin/courses/create_course/state_managment/states.dart';
 import '../../../../../core/cons/Colors/app_colors.dart';
@@ -318,7 +319,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
         ),
         child: Row(
           children: [
-            _buildSidebar(),
+              CustomeSidebar(selectedMenuItem: selectedMenuItem),
             BlocConsumer<CreateCourseCubit, CreateCourseState>(
               listener: (context, state) {
                 if (state is CreateCourseSuccess) {

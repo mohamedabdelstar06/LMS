@@ -6,7 +6,7 @@ import 'package:lms/features/screens/admin/users/get_users/state_managment/get_u
 import 'package:lms/features/screens/admin/users/get_users/view_updating_user.dart';
 import '../../../../../core/cons/Colors/app_colors.dart';
 import '../../../../../core/widgets/admin_action_button.dart';
-import '../../../../../core/widgets/admin_sidebar.dart';
+import '../../../../../core/widgets/custome_sidebar.dart';
 import '../../../../../core/widgets/admin_table_header.dart';
 import '../../../../../core/widgets/app_network_image.dart';
 import 'get_user_model/view.dart';
@@ -131,7 +131,7 @@ class _GetUsersScreenState extends State<GetUsersScreen> {
           },
           child: Row(
             children: [
-              AdminSidebar(selectedMenuItem: selectedMenuItem),
+              CustomeSidebar(selectedMenuItem: selectedMenuItem),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
@@ -437,7 +437,7 @@ class _GetUsersScreenState extends State<GetUsersScreen> {
             1: FixedColumnWidth(120),
             2: FixedColumnWidth(180),
             3: FixedColumnWidth(230),
-            4: FixedColumnWidth(  115),
+            4: FixedColumnWidth(115),
             5: FixedColumnWidth(200),
             6: FixedColumnWidth(180),
             7: FixedColumnWidth(180),

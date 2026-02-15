@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// Header for admin list screens (Users, Squadrons, Departments, etc.).
-/// Matches the Squadrons screen styling.
 class AdminTableHeader extends StatelessWidget {
   final IconData icon;
   final String title;

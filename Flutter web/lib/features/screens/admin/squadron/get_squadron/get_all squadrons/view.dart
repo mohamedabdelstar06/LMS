@@ -1,23 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lms/features/screens/admin/admin_profile/view.dart';
 import 'package:lms/features/screens/admin/squadron/get_squadron/get_all%20squadrons/state_managment/cubit.dart';
 import 'package:lms/features/screens/admin/squadron/get_squadron/get_all%20squadrons/state_managment/states.dart';
+
 import '../../../../../../core/cons/Colors/app_colors.dart';
 import '../../../../../../core/widgets/admin_action_button.dart';
-import '../../../../../../core/widgets/admin_sidebar.dart';
-import '../../../../Announcement/view.dart';
-import '../../../courses/Enrollment_course/view.dart';
-import '../../../courses/create_course/Adding_view.dart';
-import '../../../courses/home_courses/view.dart';
-import '../../../department/create_department/view.dart';
-import '../../../department/get_department/get_All_departments/view.dart';
-import '../../../user_file/import_file/view.dart';
-import '../../../users/create_user/View.dart';
-import '../../../users/get_users/view.dart';
-import '../../../year/create_year/view.dart';
-import '../../../year/get_year/get_All_years/view.dart';
-import '../../create_squadron/view.dart';
+import '../../../../../../core/widgets/custome_sidebar.dart';
 import '../model/view.dart';
 import '../update_squadrons/view.dart';
 
@@ -54,7 +42,6 @@ class _SquadronsScreenState extends State<GetSquadronPage> {
 
           body: BlocConsumer<AllSquadronCubit, AllSquadronState>(
             listener: (context, state) {
-
               if (state is DeleteSquadronSuccess) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
@@ -95,7 +82,6 @@ class _SquadronsScreenState extends State<GetSquadronPage> {
                 );
               }
 
-
               if (state is AllSquadronError) {
                 return Center(
                   child: Column(
@@ -109,10 +95,7 @@ class _SquadronsScreenState extends State<GetSquadronPage> {
                       const SizedBox(height: 16),
                       Text(
                         state.message,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: Colors.red,
-                        ),
+                        style: const TextStyle(fontSize: 16, color: Colors.red),
                       ),
                     ],
                   ),
@@ -122,7 +105,7 @@ class _SquadronsScreenState extends State<GetSquadronPage> {
               if (state is AllSquadronLoaded) {
                 return Row(
                   children: [
-                    AdminSidebar(selectedMenuItem: selectedMenuItem),
+                    CustomeSidebar(selectedMenuItem: selectedMenuItem),
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
@@ -160,8 +143,9 @@ class _SquadronsScreenState extends State<GetSquadronPage> {
                                     Container(
                                       padding: const EdgeInsets.all(12),
                                       decoration: BoxDecoration(
-                                        color: const Color(0xFF2563EB)
-                                            .withOpacity(0.1),
+                                        color: const Color(
+                                          0xFF2563EB,
+                                        ).withOpacity(0.1),
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                       child: const Icon(
@@ -174,7 +158,7 @@ class _SquadronsScreenState extends State<GetSquadronPage> {
                                     Expanded(
                                       child: Column(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
                                           const Text(
@@ -207,7 +191,9 @@ class _SquadronsScreenState extends State<GetSquadronPage> {
                                   padding: const EdgeInsets.all(24),
                                   child: SingleChildScrollView(
                                     child: _buildModernTable(
-                                        context, state.squadrons),
+                                      context,
+                                      state.squadrons,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -233,10 +219,7 @@ class _SquadronsScreenState extends State<GetSquadronPage> {
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [
-            const Color(0xFF2563EB),
-            const Color(0xFF3B82F6),
-          ],
+          colors: [const Color(0xFF2563EB), const Color(0xFF3B82F6)],
         ),
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
@@ -292,7 +275,9 @@ class _SquadronsScreenState extends State<GetSquadronPage> {
   }
 
   Widget _buildModernTable(
-      BuildContext context, List<SquadronModel> squadrons) {
+    BuildContext context,
+    List<SquadronModel> squadrons,
+  ) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: ConstrainedBox(
@@ -339,11 +324,7 @@ class _SquadronsScreenState extends State<GetSquadronPage> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       child: Row(
         children: [
-          Icon(
-            icon,
-            size: 18,
-            color:  Colors.blue ,
-          ),
+          Icon(icon, size: 18, color: Colors.blue),
           const SizedBox(width: 8),
           Flexible(
             child: Text(
@@ -351,7 +332,7 @@ class _SquadronsScreenState extends State<GetSquadronPage> {
               style: const TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.w700,
-                color:  Colors.blue ,
+                color: Colors.blue,
                 letterSpacing: 0.5,
               ),
               overflow: TextOverflow.ellipsis,
@@ -363,7 +344,10 @@ class _SquadronsScreenState extends State<GetSquadronPage> {
   }
 
   TableRow _buildModernTableRow(
-      BuildContext context, SquadronModel squadron, int index) {
+    BuildContext context,
+    SquadronModel squadron,
+    int index,
+  ) {
     final isHovered = hoveredRowIndex == index;
 
     return TableRow(
@@ -374,10 +358,7 @@ class _SquadronsScreenState extends State<GetSquadronPage> {
             ? Colors.white
             : const Color(0xFFF8FAFC),
         border: Border(
-          bottom: BorderSide(
-            color: const Color(0xFFE2E8F0),
-            width: 1,
-          ),
+          bottom: BorderSide(color: const Color(0xFFE2E8F0), width: 1),
         ),
       ),
       children: [
@@ -419,10 +400,6 @@ class _SquadronsScreenState extends State<GetSquadronPage> {
           ),
         ),
 
-
-
-
-
         _buildTableCell(
           MouseRegion(
             onEnter: (_) => setState(() => hoveredRowIndex = index),
@@ -461,7 +438,6 @@ class _SquadronsScreenState extends State<GetSquadronPage> {
           ),
         ),
 
-
         _buildTableCell(
           MouseRegion(
             onEnter: (_) => setState(() => hoveredRowIndex = index),
@@ -470,10 +446,7 @@ class _SquadronsScreenState extends State<GetSquadronPage> {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               child: Text(
                 squadron.description,
-                style: const TextStyle(
-                  fontSize: 13,
-                  color: Color(0xFF64748B),
-                ),
+                style: const TextStyle(fontSize: 13, color: Color(0xFF64748B)),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -501,8 +474,7 @@ class _SquadronsScreenState extends State<GetSquadronPage> {
                         MaterialPageRoute(
                           builder: (_) => BlocProvider.value(
                             value: context.read<AllSquadronCubit>(),
-                            child: EditSquadronScreen(
-                          squadronId: squadron.id),
+                            child: EditSquadronScreen(squadronId: squadron.id),
                           ),
                         ),
                       );
@@ -517,7 +489,9 @@ class _SquadronsScreenState extends State<GetSquadronPage> {
                       if (squadron.studentCount > 0) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text('You cannot delete a year that has courses'),
+                            content: Text(
+                              'You cannot delete a year that has courses',
+                            ),
                             backgroundColor: Colors.redAccent,
                           ),
                         );
@@ -563,4 +537,3 @@ class _SquadronsScreenState extends State<GetSquadronPage> {
     );
   }
 }
-
