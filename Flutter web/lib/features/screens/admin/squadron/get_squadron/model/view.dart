@@ -58,7 +58,6 @@ class SquadronModel extends Equatable {
         updatedAt: DateTime.parse(json['updatedAt'] as String? ?? DateTime.now().toIso8601String()),
       );
     } catch (e) {
-      print('Error parsing SquadronModel: $e');
       return SquadronModel(
         id: 0,
         name: 'Unknown Squadron',

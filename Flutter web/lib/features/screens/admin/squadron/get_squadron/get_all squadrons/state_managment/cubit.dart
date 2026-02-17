@@ -41,7 +41,6 @@ class AllSquadronCubit extends Cubit<AllSquadronState> {
         emit(AllSquadronError("Failed to load departments. Status: ${response.statusCode}"));
       }
     } on DioException catch (e) {
-      print("Dio Error: ${e.message}");
       String errorMessage = "Failed to load departments";
       if (e.response != null) {
         errorMessage = "Server Error: ${e.response?.statusCode} - ${e.response?.statusMessage}";
@@ -52,7 +51,6 @@ class AllSquadronCubit extends Cubit<AllSquadronState> {
       }
       emit(AllSquadronError(errorMessage));
     } catch (e) {
-      print("Unexpected Error: $e");
       emit(AllSquadronError("An unexpected error occurred."));
     }
   }
@@ -89,7 +87,6 @@ class AllSquadronCubit extends Cubit<AllSquadronState> {
         );
       }
     } on DioException catch (e) {
-      print("Dio Error: ${e.message}");
 
       String errorMessage = "Failed to delete squadron";
 
@@ -105,7 +102,6 @@ class AllSquadronCubit extends Cubit<AllSquadronState> {
 
       emit(AllSquadronError(errorMessage));
     } catch (e) {
-      print("Unexpected Error: $e");
       emit(AllSquadronError("An unexpected error occurred."));
     }
   }
