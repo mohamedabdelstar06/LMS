@@ -41,7 +41,6 @@ class SquadronsCubitDrop extends Cubit<GetSquadronsState> {
         emit(GetSquadronsError("Failed to load squadrons. Status: ${response.statusCode}"));
       }
     } on DioException catch (e) {
-      print("Dio Error: ${e.message}");
       String errorMessage = "Failed to load squadrons";
       if (e.response != null) {
         errorMessage = "Server Error: ${e.response?.statusCode} - ${e.response?.statusMessage}";
@@ -52,7 +51,6 @@ class SquadronsCubitDrop extends Cubit<GetSquadronsState> {
       }
       emit(GetSquadronsError(errorMessage));
     } catch (e) {
-      print("Unexpected Error: $e");
       emit(GetSquadronsError("An unexpected error occurred."));
     }
   }

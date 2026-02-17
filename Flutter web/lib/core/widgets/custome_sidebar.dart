@@ -6,7 +6,6 @@ import 'package:lms/features/screens/admin/courses/Enrollment_course/view.dart';
 import 'package:lms/features/screens/admin/courses/create_course/Adding_view.dart';
 import 'package:lms/features/screens/admin/courses/home_courses/view.dart';
 import 'package:lms/features/screens/admin/department/create_department/view.dart';
-import 'package:lms/features/screens/admin/department/get_department/get_All_departments/update_view.dart';
 import 'package:lms/features/screens/admin/department/get_department/get_All_departments/view.dart';
 import 'package:lms/features/screens/admin/squadron/create_squadron/view.dart';
 import 'package:lms/features/screens/admin/user_file/import_file/view.dart';
@@ -14,6 +13,8 @@ import 'package:lms/features/screens/admin/users/create_user/View.dart';
 import 'package:lms/features/screens/admin/users/get_users/view.dart';
 import 'package:lms/features/screens/admin/year/create_year/view.dart';
 import 'package:lms/features/screens/admin/year/get_year/get_All_years/view.dart';
+
+import '../../features/screens/admin/squadron/get_squadron/get_all squadrons/view.dart';
 
 class CustomeSidebar extends StatefulWidget {
   final String selectedMenuItem;
@@ -50,131 +51,142 @@ class _CustomeSidebarState extends State<CustomeSidebar> {
           ),
         ],
       ),
-      child: ListView(
+      child: Column(
         children: [
           const SizedBox(height: 40),
-          _buildMenuItem(
-            context,
-            Icons.person_outline,
-            Icons.person,
-            'Profile',
-            'Profile',
-            () => _navigate(context, const AdminProfileScreen()),
+
+          Expanded(
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                _buildMenuItem(
+                  context,
+                  Icons.person_outline,
+                  Icons.person,
+                  'Profile',
+                  'Profile',
+                  () => _navigate(context, const AdminProfileScreen()),
+                ),
+                _buildMenuItem(
+                  context,
+                  Icons.book_outlined,
+                  Icons.book,
+                  'My Courses',
+                  'My Courses',
+                  () => _navigate(context, const AdminCourseScreen()),
+                ),
+                _buildMenuItem(
+                  context,
+                  Icons.notifications_active_outlined,
+                  Icons.notifications_active_rounded,
+                  'Announcements',
+                  'Announcements',
+                  () => _navigate(context, const AnnouncementScreen()),
+                ),
+                _buildMenuItem(
+                  context,
+                  Icons.person_add_alt_1_outlined,
+                  Icons.person_add_alt_1,
+                  'Create Users',
+                  'Create users',
+                  () => _navigate(context, const CreateUserScreen()),
+                ),
+                _buildMenuItem(
+                  context,
+                  Icons.folder_copy_outlined,
+                  Icons.folder_copy_rounded,
+                  'Create Departments',
+                  'Create Departments',
+                  () => _navigate(context, CreateDepartmentPage()),
+                ),
+                _buildMenuItem(
+                  context,
+                  Icons.calendar_month,
+                  Icons.calendar_month_outlined,
+                  'Create Years',
+                  'Create Years',
+                  () => _navigate(context, CreateYearPage()),
+                ),
+                _buildMenuItem(
+                  context,
+                  Icons.calendar_month,
+                  Icons.calendar_month_outlined,
+                  'Add Enrollment',
+                  'Add Enrollment',
+                  () => _navigate(context, EnrollmentPage()),
+                ),
+                _buildMenuItem(
+                  context,
+                  Icons.event_available,
+                  Icons.event_note_outlined,
+                  'Create New Course',
+                  'Create New Course',
+                  () => _navigate(context, CreateNewCoursePage()),
+                ),
+                _buildMenuItem(
+                  context,
+                  Icons.airplanemode_active,
+                  Icons.airplanemode_active_rounded,
+                  'Create Squadrons',
+                  'Create Squadrons',
+                  () => _navigate(context, CreateSquadronsPage()),
+                ),
+                _buildMenuItem(
+                  context,
+                  Icons.supervised_user_circle_rounded,
+                  Icons.supervised_user_circle_outlined,
+                  'All Squadrons',
+                  'All Squadrons',
+                      () => _navigate(context, GetSquadronPage()),
+                ),
+
+                _buildMenuItem(
+                  context,
+                  Icons.supervised_user_circle_rounded,
+                  Icons.supervised_user_circle_outlined,
+                  'All Users',
+                  'All Users',
+                  () => _navigate(context, GetUsersPage()),
+                ),
+
+                _buildMenuItem(
+                  context,
+                  Icons.school_outlined,
+                  Icons.school,
+                  'All Departments',
+                  'All Departments',
+                  () => _navigate(context, DepartmentsScreen()),
+                ),
+                _buildMenuItem(
+                  context,
+                  Icons.auto_awesome_motion_rounded,
+                  Icons.auto_awesome_motion_outlined,
+                  'All Years',
+                  'All Years',
+                  () => _navigate(context, YearsScreen()),
+                ),
+                _buildMenuItem(
+                  context,
+                  Icons.file_open_outlined,
+                  Icons.file_open,
+                  'Import users File',
+                  'Import users File',
+                  () => _navigate(context, ImportStudentsScreen()),
+                ),
+                _buildMenuItem(
+                  context,
+                  Icons.grade_outlined,
+                  Icons.grade,
+                  'Grades overview',
+                  'Grades overview',
+                  () {},
+                ),
+              ],
+            ),
           ),
-          _buildMenuItem(
-            context,
-            Icons.book_outlined,
-            Icons.book,
-            'My Courses',
-            'My Courses',
-            () => _navigate(context, const AdminCourseScreen()),
-          ),
-          _buildMenuItem(
-            context,
-            Icons.notifications_active_outlined,
-            Icons.notifications_active_rounded,
-            'Announcements',
-            'Announcements',
-            () => _navigate(context, const AnnouncementScreen()),
-          ),
-          _buildMenuItem(
-            context,
-            Icons.person_add_alt_1_outlined,
-            Icons.person_add_alt_1,
-            'Create Users',
-            'Create users',
-            () => _navigate(context, const CreateUserScreen()),
-          ),
-          _buildMenuItem(
-            context,
-            Icons.folder_copy_outlined,
-            Icons.folder_copy_rounded,
-            'Create Departments',
-            'Create Departments',
-            () => _navigate(context, CreateDepartmentPage()),
-          ),
-       
-          _buildMenuItem(
-            context,
-            Icons.calendar_month,
-            Icons.calendar_month_outlined,
-            'Create Years',
-            'Create Years',
-            () => _navigate(context, CreateYearPage()),
-          ),
-          _buildMenuItem(
-            context,
-            Icons.calendar_month,
-            Icons.calendar_month_outlined,
-            'Add Enrollment',
-            'Add Enrollment',
-            () => _navigate(context, EnrollmentPage()),
-          ),
-          _buildMenuItem(
-            context,
-            Icons.event_available,
-            Icons.event_note_outlined,
-            'Create New Course',
-            'Create New Course',
-            () => _navigate(context, CreateNewCoursePage()),
-          ),
-          _buildMenuItem(
-            context,
-            Icons.airplanemode_active,
-            Icons.airplanemode_active_rounded,
-            'Create Squadrons',
-            'Create Squadrons',
-            () => _navigate(context, CreateSquadronsPage()),
-          ),
-          _buildMenuItem(
-            context,
-            Icons.supervised_user_circle_rounded,
-            Icons.supervised_user_circle_outlined,
-            'All Users',
-            'All Users',
-            () => _navigate(context, GetUsersPage()),
-          ),
-          _buildMenuItem(
-            context,
-            Icons.supervised_user_circle_rounded,
-            Icons.supervised_user_circle_outlined,
-            'All Squadrons',
-            'All Squadrons',
-            () {},
-          ),
-          _buildMenuItem(
-            context,
-            Icons.school_outlined,
-            Icons.school,
-            'All Departments',
-            'All Departments',
-            () => _navigate(context, DepartmentsScreen()),
-          ),
-          _buildMenuItem(
-            context,
-            Icons.auto_awesome_motion_rounded,
-            Icons.auto_awesome_motion_outlined,
-            'All Years',
-            'All Years',
-            () => _navigate(context, YearsScreen()),
-          ),
-          _buildMenuItem(
-            context,
-            Icons.file_open_outlined,
-            Icons.file_open,
-            'Import users File',
-            'Import users File',
-            () => _navigate(context, ImportStudentsScreen()),
-          ),
-          _buildMenuItem(
-            context,
-            Icons.grade_outlined,
-            Icons.grade,
-            'Grades overview',
-            'Grades overview',
-            () {},
-          ),
-          const Spacer(),
+
+          // ✅ Logout ثابت في الأسفل
+          const Divider(height: 1, color: Color(0xFFE2E8F0)),
           _buildLogoutButton(context),
           const SizedBox(height: 20),
         ],
@@ -201,11 +213,11 @@ class _CustomeSidebarState extends State<CustomeSidebar> {
     final isHovered = _hoveredMenuItem == value;
 
     return MouseRegion(
-      cursor: SystemMouseCursors.click,
+      cursor: isSelected ? SystemMouseCursors.basic : SystemMouseCursors.click,
       onEnter: (_) => setState(() => _hoveredMenuItem = value),
       onExit: (_) => setState(() => _hoveredMenuItem = null),
       child: GestureDetector(
-        onTap: onTap,
+        onTap: isSelected ? null : onTap,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
@@ -230,9 +242,9 @@ class _CustomeSidebarState extends State<CustomeSidebar> {
                 isSelected ? filledIcon : outlinedIcon,
                 color: isSelected
                     ? Colors.white
-                    : (isHovered
-                          ? const Color(0xFF2563EB)
-                          : const Color(0xFF64748B)),
+                    : isHovered
+                    ? const Color(0xFF2563EB)
+                    : const Color(0xFF64748B),
                 size: 20,
               ),
               const SizedBox(width: 12),
@@ -241,7 +253,9 @@ class _CustomeSidebarState extends State<CustomeSidebar> {
                 style: TextStyle(
                   color: isSelected
                       ? Colors.white
-                      : (isHovered ? const Color(0xFF2563EB) : Colors.black87),
+                      : isHovered
+                      ? const Color(0xFF2563EB)
+                      : Colors.black87,
                   fontSize: 14,
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
                 ),
@@ -283,7 +297,7 @@ class _CustomeSidebarState extends State<CustomeSidebar> {
         },
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
-          margin: const EdgeInsets.symmetric(horizontal: 12),
+          margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           decoration: BoxDecoration(
             color: _isLogoutHovered
@@ -298,10 +312,10 @@ class _CustomeSidebarState extends State<CustomeSidebar> {
             ),
           ),
           child: Row(
-            children: [
-              Icon(Icons.logout, color: const Color(0xFFEF4444), size: 20),
-              const SizedBox(width: 12),
-              const Text(
+            children: const [
+              Icon(Icons.logout, color: Color(0xFFEF4444), size: 20),
+              SizedBox(width: 12),
+              Text(
                 'Logout',
                 style: TextStyle(
                   color: Color(0xFFEF4444),

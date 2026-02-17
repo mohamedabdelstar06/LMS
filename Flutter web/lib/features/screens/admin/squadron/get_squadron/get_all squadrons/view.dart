@@ -39,46 +39,52 @@ class _SquadronsScreenState extends State<GetSquadronPage> {
         ),
         child: Scaffold(
           backgroundColor: Colors.transparent,
-
           body: BlocConsumer<AllSquadronCubit, AllSquadronState>(
             listener: (context, state) {
               if (state is DeleteSquadronSuccess) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text(state.message),
+                    content: const Row(
+                      children: [
+                        Icon(Icons.check_circle, color: Colors.white),
+                        SizedBox(width: 12),
+                        Text('Squadron deleted successfully'),
+                      ],
+                    ),
                     backgroundColor: Colors.green,
+                    behavior: SnackBarBehavior.floating,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
                 );
               } else if (state is DeleteSquadronError) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text(state.message),
+                    content: Row(
+                      children: [
+                        const Icon(Icons.error_outline, color: Colors.white),
+                        const SizedBox(width: 12),
+                        Text(state.message),
+                      ],
+                    ),
                     backgroundColor: Colors.red,
+                    behavior: SnackBarBehavior.floating,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
                 );
-              } else if (state is UpdateSquadronSuccess) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(state.message),
-                    backgroundColor: Colors.green,
-                  ),
-                );
-              } else if (state is UpdateSquadronError) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(state.message),
-                    backgroundColor: Colors.red,
-                  ),
-                );
+
               }
             },
-
             builder: (context, state) {
               if (state is AllSquadronLoading ||
-                  state is DeleteSquadronLoading ||
-                  state is UpdateSquadronLoading) {
+                  state is UpdateSquadronLoading ||
+                  state is DeleteSquadronLoading
+                  ) {
                 return const Center(
-                  child: CircularProgressIndicator(color: Color(0xFF2563EB)),
+                  child: CircularProgressIndicator(),
                 );
               }
 
@@ -95,7 +101,10 @@ class _SquadronsScreenState extends State<GetSquadronPage> {
                       const SizedBox(height: 16),
                       Text(
                         state.message,
-                        style: const TextStyle(fontSize: 16, color: Colors.red),
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.red,
+                        ),
                       ),
                     ],
                   ),
@@ -131,9 +140,9 @@ class _SquadronsScreenState extends State<GetSquadronPage> {
                                     topLeft: Radius.circular(16),
                                     topRight: Radius.circular(16),
                                   ),
-                                  border: Border(
+                                  border: const Border(
                                     bottom: BorderSide(
-                                      color: const Color(0xFFE2E8F0),
+                                      color: Color(0xFFE2E8F0),
                                       width: 1,
                                     ),
                                   ),
@@ -149,7 +158,7 @@ class _SquadronsScreenState extends State<GetSquadronPage> {
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                       child: const Icon(
-                                        Icons.school,
+                                        Icons.airplanemode_active,
                                         color: Color(0xFF2563EB),
                                         size: 24,
                                       ),
@@ -158,19 +167,19 @@ class _SquadronsScreenState extends State<GetSquadronPage> {
                                     Expanded(
                                       child: Column(
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                         mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          const Text(
-                                            'All squadrons',
+                                        children: const [
+                                          Text(
+                                            'All Squadrons',
                                             style: TextStyle(
                                               fontSize: 20,
                                               fontWeight: FontWeight.bold,
                                               color: Color(0xFF1E293B),
                                             ),
                                           ),
-                                          const SizedBox(height: 4),
-                                          const Text(
+                                          SizedBox(height: 4),
+                                          Text(
                                             'Manage all Squadrons',
                                             style: TextStyle(
                                               fontSize: 14,
@@ -185,15 +194,23 @@ class _SquadronsScreenState extends State<GetSquadronPage> {
                                   ],
                                 ),
                               ),
-
                               Expanded(
-                                child: Container(
+                                child: SingleChildScrollView(
                                   padding: const EdgeInsets.all(24),
-                                  child: SingleChildScrollView(
-                                    child: _buildModernTable(
-                                      context,
-                                      state.squadrons,
-                                    ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                    children: [
+                                      _buildModernTable(
+                                        context,
+                                        state.squadrons,
+                                      ),
+                                      const SizedBox(height: 40),
+                                      _buildDangerZone(
+                                        context,
+                                        state.squadrons,
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
@@ -214,12 +231,519 @@ class _SquadronsScreenState extends State<GetSquadronPage> {
     );
   }
 
+
+
+  Widget _buildDangerZone(BuildContext context, List<SquadronModel> squadrons) {
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        border: Border.all(color: const Color(0xFFEF4444), width: 1.5),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            decoration: const BoxDecoration(
+              color: Color(0xFFFEF2F2),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(14),
+                topRight: Radius.circular(14),
+              ),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFEF4444).withOpacity(0.15),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Icon(
+                    Icons.warning_amber_rounded,
+                    color: Color(0xFFEF4444),
+                    size: 22,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                const Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Danger Zone',
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFEF4444),
+                      ),
+                    ),
+                    Text(
+                      'These actions are irreversible. Please proceed with caution.',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Color(0xFFB91C1C),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const Divider(height: 1, color: Color(0xFFEF4444)),
+          ListView.separated(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: squadrons.length,
+            separatorBuilder: (_, __) => const Divider(
+              height: 1,
+              color: Color(0xFFFFE4E4),
+              indent: 24,
+              endIndent: 24,
+            ),
+            itemBuilder: (context, index) {
+              final squadron = squadrons[index];
+              return _buildDangerZoneRow(context, squadron);
+            },
+          ),
+          const SizedBox(height: 8),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDangerZoneRow(BuildContext context, SquadronModel squadron) {
+    final hasStudents = squadron.studentCount > 0;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+      child: Row(
+        children: [
+
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: hasStudents
+                  ? Colors.grey.withOpacity(0.1)
+                  : const Color(
+                0xFF2563EB,
+              ).withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(
+              Icons.airplanemode_active,
+              size: 18,
+              color: hasStudents
+                  ? Colors.grey
+                  :   const Color(0xFF2563EB),
+            ),
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  squadron.name,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF1E293B),
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.people_outline,
+                      size: 13,
+                      color: hasStudents
+                          ? const Color(0xFFEF4444)
+                          : const Color(0xFF64748B),
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      hasStudents
+                          ? '${squadron.studentCount} student${squadron.studentCount > 1 ? 's' : ''} — cannot delete'
+                          : 'No students — safe to delete',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: hasStudents
+                            ? const Color(0xFFEF4444)
+                            : const Color(0xFF64748B),
+                        fontWeight: hasStudents
+                            ? FontWeight.w500
+                            : FontWeight.normal,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 16),
+          Tooltip(
+            message: hasStudents
+                ? 'Remove all students before deleting'
+                : 'Delete ${squadron.name}',
+            child: ElevatedButton.icon(
+              onPressed: hasStudents
+                  ? null
+                  : () => _showDangerDeleteDialog(context, squadron),
+              icon: const Icon(Icons.delete_forever, size: 16),
+              label: const Text('Delete'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFFEF4444),
+                foregroundColor: Colors.white,
+                disabledBackgroundColor: Colors.grey.shade200,
+                disabledForegroundColor: Colors.grey.shade400,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 10,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                elevation: 0,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showDangerDeleteDialog(BuildContext context, SquadronModel squadron) {
+    final TextEditingController confirmController = TextEditingController();
+    final String confirmText = squadron.name;
+    bool isConfirmed = false;
+    final cubit = context.read<AllSquadronCubit>();
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) {
+        return StatefulBuilder(
+          builder: (_, setDialogState) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              contentPadding: EdgeInsets.zero,
+              content: Container(
+                width: 480,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(24),
+                      decoration: const BoxDecoration(
+                        color: Color(0xFFFEF2F2),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(16),
+                          topRight: Radius.circular(16),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFEF4444).withOpacity(0.15),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.delete_forever,
+                              color: Color(0xFFEF4444),
+                              size: 28,
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Delete Squadron',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFFEF4444),
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                const Text(
+                                  'This action cannot be undone',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: Color(0xFFB91C1C),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.all(24),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFFF7ED),
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                color: const Color(0xFFFED7AA),
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  Icons.info_outline,
+                                  size: 16,
+                                  color: Color(0xFFD97706),
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    'You are about to permanently delete squadron"${squadron.name}". This will remove all associated data.',
+                                    style: const TextStyle(
+                                      fontSize: 13,
+                                      color: Color(0xFF92400E),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          const Text(
+                            'To confirm, type the squadron name below:',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Color(0xFF475569),
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 8,
+                            ),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFF8FAFC),
+                              borderRadius: BorderRadius.circular(6),
+                              border: Border.all(
+                                color: const Color(0xFFE2E8F0),
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  Icons.keyboard,
+                                  size: 14,
+                                  color: Color(0xFF64748B),
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  confirmText,
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFFEF4444),
+                                    fontFamily: 'monospace',
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          TextField(
+                            controller: confirmController,
+                            autofocus: true,
+                            decoration: InputDecoration(
+                              hintText: 'Type squadron name here...',
+                              hintStyle: const TextStyle(
+                                color: Color(0xFF94A3B8),
+                                fontSize: 14,
+                              ),
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 12,
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: const BorderSide(
+                                  color: Color(0xFFE2E8F0),
+                                ),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: const BorderSide(
+                                  color: Color(0xFFE2E8F0),
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: const BorderSide(
+                                  color: Color(0xFFEF4444),
+                                  width: 2,
+                                ),
+                              ),
+                              filled: true,
+                              fillColor: Colors.white,
+                              suffixIcon: isConfirmed
+                                  ? const Icon(
+                                Icons.check_circle,
+                                color: Colors.green,
+                              )
+                                  : null,
+                            ),
+                            onChanged: (value) {
+                              setDialogState(() {
+                                isConfirmed = value.trim() == confirmText;
+                              });
+                            },
+                          ),
+                          if (!isConfirmed &&
+                              confirmController.text.isNotEmpty)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 6),
+                              child: Row(
+                                children: const [
+                                  Icon(
+                                    Icons.close,
+                                    size: 14,
+                                    color: Color(0xFFEF4444),
+                                  ),
+                                  SizedBox(width: 4),
+                                  Text(
+                                    'Squadron name does not match',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Color(0xFFEF4444),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          if (isConfirmed)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 6),
+                              child: Row(
+                                children: const [
+                                  Icon(
+                                    Icons.check,
+                                    size: 14,
+                                    color: Colors.green,
+                                  ),
+                                  SizedBox(width: 4),
+                                  Text(
+                                    'Name confirmed — you can now delete',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.green,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: OutlinedButton(
+                              onPressed: () {
+                                confirmController.dispose();
+                                Navigator.pop(dialogContext);
+                              },
+                              style: OutlinedButton.styleFrom(
+                                foregroundColor: const Color(0xFF64748B),
+                                side: const BorderSide(
+                                  color: Color(0xFFE2E8F0),
+                                ),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 14,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                              child: const Text(
+                                'Cancel',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: ElevatedButton.icon(
+                              onPressed: isConfirmed
+                                  ? () {
+                                Navigator.pop(dialogContext);
+                                cubit.deleteSquadron(squadron.id);
+
+
+                              }
+                                  : null,
+                              icon: const Icon(
+                                Icons.delete_forever,
+                                size: 18,
+                              ),
+                              label: const Text(
+                                'Delete Forever',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFFEF4444),
+                                foregroundColor: Colors.white,
+                                disabledBackgroundColor: Colors.grey.shade200,
+                                disabledForegroundColor: Colors.grey.shade400,
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 14,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                elevation: 0,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+
   Widget _buildStatsHeader(int count) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [const Color(0xFF2563EB), const Color(0xFF3B82F6)],
+        gradient: const LinearGradient(
+          colors: [Color(0xFF2563EB), Color(0xFF3B82F6)],
         ),
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
@@ -260,11 +784,11 @@ class _SquadronsScreenState extends State<GetSquadronPage> {
               ),
               const SizedBox(height: 2),
               Text(
-                count.toString(),
+                '$count',
                 style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
                   color: Colors.white,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ],
@@ -275,9 +799,9 @@ class _SquadronsScreenState extends State<GetSquadronPage> {
   }
 
   Widget _buildModernTable(
-    BuildContext context,
-    List<SquadronModel> squadrons,
-  ) {
+      BuildContext context,
+      List<SquadronModel> squadrons,
+      ) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: ConstrainedBox(
@@ -287,9 +811,9 @@ class _SquadronsScreenState extends State<GetSquadronPage> {
         child: Table(
           columnWidths: const {
             0: FixedColumnWidth(260),
-            1: FixedColumnWidth(180),
-            3: FixedColumnWidth(300),
-            4: FixedColumnWidth(70),
+            1: FixedColumnWidth(220),
+            2: FixedColumnWidth(300),
+            3: FixedColumnWidth(80),
           },
           children: [
             TableRow(
@@ -299,19 +823,15 @@ class _SquadronsScreenState extends State<GetSquadronPage> {
               ),
               children: [
                 _buildTableHeader('Name', Icons.badge),
-
                 _buildTableHeader('Students Count', Icons.person),
-
                 _buildTableHeader('Description', Icons.description),
-
                 _buildTableHeader('Actions', Icons.settings),
               ],
             ),
-
             ...squadrons.asMap().entries.map((entry) {
               final index = entry.key;
-              final dep = entry.value;
-              return _buildModernTableRow(context, dep, index);
+              final squadron = entry.value;
+              return _buildModernTableRow(context, squadron, index);
             }),
           ],
         ),
@@ -323,6 +843,10 @@ class _SquadronsScreenState extends State<GetSquadronPage> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: title == "Actions"
+            ? MainAxisAlignment.center
+            : MainAxisAlignment.start,
         children: [
           Icon(icon, size: 18, color: Colors.blue),
           const SizedBox(width: 8),
@@ -344,10 +868,10 @@ class _SquadronsScreenState extends State<GetSquadronPage> {
   }
 
   TableRow _buildModernTableRow(
-    BuildContext context,
-    SquadronModel squadron,
-    int index,
-  ) {
+      BuildContext context,
+      SquadronModel squadron,
+      int index,
+      ) {
     final isHovered = hoveredRowIndex == index;
 
     return TableRow(
@@ -357,16 +881,17 @@ class _SquadronsScreenState extends State<GetSquadronPage> {
             : index.isEven
             ? Colors.white
             : const Color(0xFFF8FAFC),
-        border: Border(
-          bottom: BorderSide(color: const Color(0xFFE2E8F0), width: 1),
+        border: const Border(
+          bottom: BorderSide(color: Color(0xFFE2E8F0), width: 1),
         ),
       ),
       children: [
-        _buildTableCell(
-          MouseRegion(
+        TableCell(
+          verticalAlignment: TableCellVerticalAlignment.middle,
+          child: MouseRegion(
             onEnter: (_) => setState(() => hoveredRowIndex = index),
             onExit: (_) => setState(() => hoveredRowIndex = null),
-            child: Container(
+            child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               child: Row(
                 children: [
@@ -377,13 +902,13 @@ class _SquadronsScreenState extends State<GetSquadronPage> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: const Icon(
-                      Icons.school,
+                      Icons.airplanemode_active,
                       size: 16,
                       color: Color(0xFF2563EB),
                     ),
                   ),
                   const SizedBox(width: 12),
-                  Flexible(
+                  Expanded(
                     child: Text(
                       squadron.name,
                       style: const TextStyle(
@@ -399,72 +924,57 @@ class _SquadronsScreenState extends State<GetSquadronPage> {
             ),
           ),
         ),
-
-        _buildTableCell(
-          MouseRegion(
-            onEnter: (_) => setState(() => hoveredRowIndex = index),
-            onExit: (_) => setState(() => hoveredRowIndex = null),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-              child: Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(6),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF10B981).withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    child: const Icon(
-                      Icons.admin_panel_settings,
-                      size: 14,
-                      color: Color(0xFF10B981),
-                    ),
+        TableCell(
+          verticalAlignment: TableCellVerticalAlignment.middle,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF10B981).withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(6),
                   ),
-                  const SizedBox(width: 8),
-                  Flexible(
-                    child: Text(
-                      squadron.studentCount.toString(),
-                      style: const TextStyle(
-                        fontSize: 13,
-                        color: Color(0xFF475569),
-                        fontWeight: FontWeight.w500,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                  child: const Icon(
+                    Icons.people,
+                    size: 14,
+                    color: Color(0xFF10B981),
                   ),
-                ],
-              ),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  squadron.studentCount.toString(),
+                  style: const TextStyle(
+                    fontSize: 13,
+                    color: Color(0xFF475569),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
             ),
           ),
         ),
-
-        _buildTableCell(
-          MouseRegion(
-            onEnter: (_) => setState(() => hoveredRowIndex = index),
-            onExit: (_) => setState(() => hoveredRowIndex = null),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-              child: Text(
-                squadron.description,
-                style: const TextStyle(fontSize: 13, color: Color(0xFF64748B)),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
+        TableCell(
+          verticalAlignment: TableCellVerticalAlignment.middle,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            child: Text(
+              squadron.description,
+              style: const TextStyle(fontSize: 13, color: Color(0xFF64748B)),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
         ),
-
-        _buildTableCell(
-          MouseRegion(
-            onEnter: (_) => setState(() => hoveredRowIndex = index),
-            onExit: (_) => setState(() => hoveredRowIndex = null),
+        TableCell(
+          verticalAlignment: TableCellVerticalAlignment.middle,
+          child: Align(
+            alignment: Alignment.center,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  AdminActionButton(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+
+                 child:  AdminActionButton(
                     icon: Icons.edit,
                     color: const Color(0xFF2563EB),
                     tooltip: 'Edit',
@@ -474,66 +984,21 @@ class _SquadronsScreenState extends State<GetSquadronPage> {
                         MaterialPageRoute(
                           builder: (_) => BlocProvider.value(
                             value: context.read<AllSquadronCubit>(),
-                            child: EditSquadronScreen(squadronId: squadron.id),
+                            child: EditSquadronScreen(
+                              squadronId: squadron.id,
+                            ),
                           ),
                         ),
                       );
                     },
                   ),
-                  const SizedBox(width: 4),
-                  AdminActionButton(
-                    icon: Icons.delete,
-                    color: const Color(0xFFEF4444),
-                    tooltip: 'Delete',
-                    onPressed: () {
-                      if (squadron.studentCount > 0) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                              'You cannot delete a year that has courses',
-                            ),
-                            backgroundColor: Colors.redAccent,
-                          ),
-                        );
-                        return;
-                      }
-                      _showDeleteDialog(context, squadron.id);
-                    },
-                  ),
-                ],
-              ),
+
+
+
             ),
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildTableCell(Widget child) {
-    return child;
-  }
-
-  void _showDeleteDialog(BuildContext context, int id) {
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: const Text("Delete Squadron"),
-        content: const Text("Are you sure you want to delete this Squadron?"),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text("Cancel"),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            onPressed: () {
-              context.read<AllSquadronCubit>().deleteSquadron(id);
-              Navigator.pop(context);
-            },
-            child: const Text("Delete"),
-          ),
-        ],
-      ),
     );
   }
 }

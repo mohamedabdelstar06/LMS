@@ -5,14 +5,12 @@ import 'package:lms/features/screens/admin/squadron/create_squadron/state_managm
 
 import '../../../../../core/cons/Colors/app_colors.dart';
 import '../../../../../core/helpers/logout_server/logout.dart';
+import '../../../../../core/widgets/custome_sidebar.dart';
 import '../../../Announcement/view.dart';
 import '../../admin_profile/view.dart';
 import '../../courses/home_courses/view.dart';
 import '../../users/create_user/View.dart';
 import '../../year/create_year/view.dart';
-
-
-
 
 class CreateSquadronsPage extends StatelessWidget {
   const CreateSquadronsPage({super.key});
@@ -20,8 +18,7 @@ class CreateSquadronsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => SquadronCubit(
-      ),
+      create: (_) => SquadronCubit(),
       child: const CreateSquadronScreen(),
     );
   }
@@ -40,22 +37,14 @@ class _CreateDepartmentScreenState extends State<CreateSquadronScreen> {
   final _formKey = GlobalKey<FormState>();
 
   String selectedMenuItem = 'Create Squadrons';
-  String? hoveredMenuItem;
-  bool isLogoutHovered = false;
-
 
   @override
   void dispose() {
     nameController.dispose();
     descriptionController.dispose();
 
-
     super.dispose();
   }
-
-
-
-
 
   InputDecoration _inputStyle(String label) {
     return InputDecoration(
@@ -96,29 +85,36 @@ class _CreateDepartmentScreenState extends State<CreateSquadronScreen> {
         ),
         child: Row(
           children: [
-            _buildSidebar(),
-            BlocConsumer<SquadronCubit, SquadronState>(
-              listener: (context, state) {
-                if (state is SquadronSuccess) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(state.message), backgroundColor: Colors.green),
+            CustomeSidebar(selectedMenuItem: selectedMenuItem),
+
+            Expanded(
+              child: BlocConsumer<SquadronCubit, SquadronState>(
+                listener: (context, state) {
+                  if (state is SquadronSuccess) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(state.message),
+                        backgroundColor: Colors.green,
+                      ),
+                    );
+                    _clearForm();
+                  }
+                  if (state is SquadronError) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(state.message),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  }
+                },
+                builder: (context, state) {
+                  return SingleChildScrollView(
+                    padding: const EdgeInsets.all(40),
+                    child: Center(child: _buildFormContainer(state)),
                   );
-                  _clearForm();
-                }
-                if (state is SquadronError) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(state.message), backgroundColor: Colors.red),
-                  );
-                }
-              },
-              builder: (context, state) {
-                return SingleChildScrollView(
-                  padding: const EdgeInsets.all(40),
-                  child: Center(
-                    child: _buildFormContainer(state),
-                  ),
-                );
-              },
+                },
+              ),
             ),
           ],
         ),
@@ -129,21 +125,23 @@ class _CreateDepartmentScreenState extends State<CreateSquadronScreen> {
   void _clearForm() {
     nameController.clear();
     descriptionController.clear();
-
   }
 
   Widget _buildField(
-      String label,
-      TextEditingController nameController, {
-        int maxLines = 1,
-      }) {
+    String label,
+    TextEditingController nameController, {
+    int maxLines = 1,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
-          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Color(0xFF2563EB)),
-
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            color: Color(0xFF2563EB),
+          ),
         ),
         const SizedBox(height: 8),
         TextFormField(
@@ -157,74 +155,67 @@ class _CreateDepartmentScreenState extends State<CreateSquadronScreen> {
     );
   }
 
-
   Widget _buildActionButtons(SquadronState state) {
     bool isLoading = state is SquadronLoading;
     return Row(
       children: [
-
         Expanded(
           flex: 2,
           child: InkWell(
-            onTap: isLoading ? null : () {
-              if (_formKey.currentState!.validate()) {
-
-
-
-
-
-                context.read<SquadronCubit>().createSquadron(
-                  nameController,
-                  descriptionController,
-
-                );
-              }
-            },
+            onTap: isLoading
+                ? null
+                : () {
+                    if (_formKey.currentState!.validate()) {
+                      context.read<SquadronCubit>().createSquadron(
+                        nameController,
+                        descriptionController,
+                      );
+                    }
+                  },
             child: Container(
               height: 55,
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [
-                    Color(0xFF1849A9),
-                    Color(0xFF53B1FD),
-                  ],
+                  colors: [Color(0xFF1849A9), Color(0xFF53B1FD)],
                 ),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Center(
                 child: isLoading
                     ? const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                      ),
-                    ),
-                    SizedBox(width: 12),
-                    Text(
-                      "Creating Squadron...",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                )
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                Colors.white,
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 12),
+                          Text(
+                            "Creating Squadron...",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      )
                     : const Text(
-                  "Create Squadron",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                  ),
-                ),
+                        "Create Squadron",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        ),
+                      ),
               ),
             ),
           ),
@@ -232,6 +223,7 @@ class _CreateDepartmentScreenState extends State<CreateSquadronScreen> {
       ],
     );
   }
+
   Widget _buildFormContainer(SquadronState state) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
@@ -280,24 +272,15 @@ class _CreateDepartmentScreenState extends State<CreateSquadronScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
-                      child: _buildField(
-                        "Squadron Name",
-                        nameController,
-                      ),
+                      child: _buildField("Squadron Name", nameController),
                     ),
                     const SizedBox(width: 20),
-
                   ],
                 ),
 
                 const SizedBox(height: 24),
 
-
-                _buildField(
-                  "Description",
-                  descriptionController,
-                  maxLines: 4,
-                ),
+                _buildField("Description", descriptionController, maxLines: 4),
                 const SizedBox(height: 40),
 
                 _buildActionButtons(state),
@@ -308,276 +291,4 @@ class _CreateDepartmentScreenState extends State<CreateSquadronScreen> {
       ),
     );
   }
-
-  Widget _buildSidebar() {
-    return Container(
-      width: 250,
-      margin: const EdgeInsetsDirectional.only(
-        start: 30,
-        end: 0,
-        top: 50,
-        bottom: 50,
-      ),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 20,
-            offset: const Offset(0, 4),
-            spreadRadius: 2,
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          const SizedBox(height: 40),
-          _buildMenuItem(
-            Icons.person_outline,
-            Icons.person,
-            'Profile',
-            'Profile',
-                () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AdminProfileScreen(),
-                ),
-              );
-            },
-          ),
-          _buildMenuItem(
-            Icons.book_outlined,
-            Icons.book,
-            'My Courses',
-            'My Courses',
-                () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AdminCourseScreen(),
-                ),
-              );
-            },
-          ),
-          _buildMenuItem(
-            Icons.notifications_active_outlined,
-            Icons.notifications_active_rounded,
-            'Announcements',
-            'Announcements',
-                () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AnnouncementScreen(),
-                ),
-              );
-            },
-          ),
-          _buildMenuItem(
-            Icons.person_add_alt_1_outlined,
-            Icons.person_add_alt_1,
-            'Create Users',
-            'Create users',
-                () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const CreateUserScreen(),
-                ),
-              );
-            },
-          ),
-          _buildMenuItem(
-            Icons.folder_copy_outlined,
-            Icons.folder_copy_rounded,
-            'Create Departments',
-            'Create Departments',
-                () {
-
-            },
-          ),
-          _buildMenuItem(
-            Icons.calendar_month,
-            Icons.calendar_month_outlined,
-            'Create Years',
-            'Create Years',
-                () {
-Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const CreateYearPage(),
-                ),
-              );
-            },
-          ),
-          _buildMenuItem(
-            Icons.airplanemode_active,
-            Icons.airplanemode_active_rounded,
-            'Create Squadrons',
-            'Create Squadrons',
-                () {
-
-            },
-          ),
-          _buildMenuItem(
-            Icons.grade_outlined,
-            Icons.grade,
-            'Grades overview',
-            'Grades overview',
-                () {},
-          ),
-          const Spacer(),
-          _buildLogoutButton(),
-          const SizedBox(height: 20),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildLogoutButton() {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) => setState(() => isLogoutHovered = true),
-      onExit: (_) => setState(() => isLogoutHovered = false),
-      child: GestureDetector(
-        onTap: () {
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: const Text('Logout'),
-              content: const Text('Are you sure you want to logout?'),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text('Cancel'),
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-                    await LogoutServer.logout();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFEF4444),
-                  ),
-                  child: const Text('Logout'),
-                ),
-              ],
-            ),
-          );
-        },
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          margin: const EdgeInsets.symmetric(horizontal: 12),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          decoration: BoxDecoration(
-            color: isLogoutHovered
-                ? const Color(0xFFEF4444).withOpacity(0.1)
-                : Colors.transparent,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(
-              color: isLogoutHovered
-                  ? const Color(0xFFEF4444).withOpacity(0.3)
-                  : Colors.transparent,
-              width: 1,
-            ),
-          ),
-          child: Row(
-            children: [
-              Icon(Icons.logout, color: const Color(0xFFEF4444), size: 20),
-              const SizedBox(width: 12),
-              const Text(
-                'Logout',
-                style: TextStyle(
-                  color: Color(0xFFEF4444),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildMenuItem(
-      IconData outlinedIcon,
-      IconData filledIcon,
-      String title,
-      String value,
-      onTap,
-      ) {
-    final isSelected = selectedMenuItem == value;
-    final isHovered = hoveredMenuItem == value;
-
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) => setState(() => hoveredMenuItem = value),
-      onExit: (_) => setState(() => hoveredMenuItem = null),
-      child: GestureDetector(
-        onTap: () {
-          setState(() {
-            selectedMenuItem = value;
-          });
-        },
-        child: GestureDetector(
-          onTap: onTap,
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: BoxDecoration(
-              color: isSelected
-                  ? const Color(0xFF2563EB)
-                  : isHovered
-                  ? const Color(0xFF2563EB).withOpacity(0.1)
-                  : Colors.transparent,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(
-                color: isHovered && !isSelected
-                    ? const Color(0xFF2563EB).withOpacity(0.3)
-                    : Colors.transparent,
-                width: 1,
-              ),
-            ),
-            child: Row(
-              children: [
-                AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 200),
-                  child: Icon(
-                    isSelected ? filledIcon : outlinedIcon,
-                    key: ValueKey(isSelected),
-                    color: isSelected
-                        ? Colors.white
-                        : isHovered
-                        ? const Color(0xFF2563EB)
-                        : const Color(0xFF64748B),
-                    size: 20,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Text(
-                  title,
-                  style: TextStyle(
-                    color: isSelected
-                        ? Colors.white
-                        : isHovered
-                        ? const Color(0xFF2563EB)
-                        : Colors.black87,
-                    fontSize: 14,
-                    fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-
-
 }
-

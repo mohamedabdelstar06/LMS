@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import '../../get_squadron/model/view.dart'; // تأكد من المسار صح
+import '../../get_squadron/model/view.dart';
 
 abstract class GetSquadronsState extends Equatable {
   const GetSquadronsState();
