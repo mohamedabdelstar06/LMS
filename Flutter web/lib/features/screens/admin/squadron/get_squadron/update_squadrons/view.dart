@@ -100,7 +100,7 @@ class _EditSquadronScreenState extends State<EditSquadronScreen> {
               }
             },
             child: AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
+              duration: const Duration(milliseconds: 310),
               height: 55,
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
