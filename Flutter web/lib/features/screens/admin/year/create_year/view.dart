@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lms/core/widgets/custome_sidebar.dart';
 import 'package:lms/features/screens/admin/users/get_users/view.dart';
 import 'package:lms/features/screens/admin/year/create_year/state_management/years_cubit.dart';
 import 'package:lms/features/screens/admin/year/create_year/state_management/years_states.dart';
@@ -17,8 +18,6 @@ import '../../department/get_department/state_mangment/states.dart';
 import '../../squadron/create_squadron/view.dart';
 import '../../users/create_user/View.dart';
 import '../get_year/get_All_years/view.dart';
-
-
 
 class CreateYearPage extends StatelessWidget {
   const CreateYearPage({super.key});
@@ -70,10 +69,6 @@ class _CreateYearScreenState extends State<CreateYearScreen> {
     super.dispose();
   }
 
-
-
-
-
   InputDecoration _inputStyle(String label) {
     return InputDecoration(
       filled: true,
@@ -113,28 +108,32 @@ class _CreateYearScreenState extends State<CreateYearScreen> {
         ),
         child: Row(
           children: [
-            _buildSidebar(),
+            CustomeSidebar(selectedMenuItem: selectedMenuItem),
             Expanded(
               child: BlocConsumer<YearCubit, YearState>(
                 listener: (context, state) {
                   if (state is YearSuccess) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(state.message), backgroundColor: Colors.green),
+                      SnackBar(
+                        content: Text(state.message),
+                        backgroundColor: Colors.green,
+                      ),
                     );
                     _clearForm();
                   }
                   if (state is YearError) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(state.message), backgroundColor: Colors.red),
+                      SnackBar(
+                        content: Text(state.message),
+                        backgroundColor: Colors.red,
+                      ),
                     );
                   }
                 },
                 builder: (context, state) {
                   return SingleChildScrollView(
                     padding: const EdgeInsets.all(40),
-                    child: Center(
-                      child: _buildFormContainer(state),
-                    ),
+                    child: Center(child: _buildFormContainer(state)),
                   );
                 },
               ),
@@ -150,7 +149,7 @@ class _CreateYearScreenState extends State<CreateYearScreen> {
     descriptionController.clear();
     departmentNameController.clear();
 
-    setState(() =>  selectedDepartmentName = "Select Department");
+    setState(() => selectedDepartmentName = "Select Department");
     selectedStartDate = null;
     selectedEndDate = null;
     dobStartController.text = "";
@@ -158,17 +157,20 @@ class _CreateYearScreenState extends State<CreateYearScreen> {
   }
 
   Widget _buildField(
-      String label,
-      TextEditingController nameController, {
-        int maxLines = 1,
-      }) {
+    String label,
+    TextEditingController nameController, {
+    int maxLines = 1,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
-          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Color(0xFF2563EB)),
-
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            color: Color(0xFF2563EB),
+          ),
         ),
         const SizedBox(height: 8),
         TextFormField(
@@ -182,92 +184,94 @@ class _CreateYearScreenState extends State<CreateYearScreen> {
     );
   }
 
-
   Widget _buildActionButtons(YearState state) {
     bool isLoading = state is YearLoading;
     return Row(
       children: [
-
         Expanded(
           flex: 2,
           child: InkWell(
-            onTap: isLoading ? null : () {
-              if (_formKey.currentState!.validate()) {
-                if (selectedStartDate == null || selectedEndDate == null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Please select both start and end dates"),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
-                  return;
-                }
+            onTap: isLoading
+                ? null
+                : () {
+                    if (_formKey.currentState!.validate()) {
+                      if (selectedStartDate == null ||
+                          selectedEndDate == null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              "Please select both start and end dates",
+                            ),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                        return;
+                      }
 
-                if (selectedDepartmentName == "Select Department" || selectedDepartmentName.isEmpty) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Please select a department name"),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
-                  return;
-                }
+                      if (selectedDepartmentName == "Select Department" ||
+                          selectedDepartmentName.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Please select a department name"),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                        return;
+                      }
 
-
-                context.read<YearCubit>().createYear(
-                  nameController,
-                  descriptionController,
-                  selectedDepartmentName,
-                  selectedStartDate!,
-                  selectedEndDate!,
-                );
-              }
-            },
+                      context.read<YearCubit>().createYear(
+                        nameController,
+                        descriptionController,
+                        selectedDepartmentName,
+                        selectedStartDate!,
+                        selectedEndDate!,
+                      );
+                    }
+                  },
             child: Container(
               height: 55,
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [
-                    Color(0xFF1849A9),
-                    Color(0xFF53B1FD),
-                  ],
+                  colors: [Color(0xFF1849A9), Color(0xFF53B1FD)],
                 ),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Center(
                 child: isLoading
                     ? const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                      ),
-                    ),
-                    SizedBox(width: 12),
-                    Text(
-                      "Creating Year...",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                )
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                Colors.white,
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 12),
+                          Text(
+                            "Creating Year...",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      )
                     : const Text(
-                  "Create Year",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                  ),
-                ),
+                        "Create Year",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        ),
+                      ),
               ),
             ),
           ),
@@ -275,6 +279,7 @@ class _CreateYearScreenState extends State<CreateYearScreen> {
       ],
     );
   }
+
   Widget _buildFormContainer(YearState state) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
@@ -322,60 +327,71 @@ class _CreateYearScreenState extends State<CreateYearScreen> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: _buildField(
-                        "Year Name",
-                        nameController,
-                      ),
-                    ),
+                    Expanded(child: _buildField("Year Name", nameController)),
                     const SizedBox(width: 20),
                     Expanded(
                       child: BlocProvider(
-                        create: (_) => DepartmentsCubitDrop()..fetchDepartments(),
-                        child: BlocBuilder<DepartmentsCubitDrop, DepartmentsStateDrop>(
-                          builder: (context, departmentState) {
-                            if (departmentState is DepartmentLoadingState) {
-                              return const Padding(
-                                padding: EdgeInsets.only(top: 30),
-                                child: Center(child: CircularProgressIndicator()),
-                              );
-                            }
+                        create: (_) =>
+                            DepartmentsCubitDrop()..fetchDepartments(),
+                        child:
+                            BlocBuilder<
+                              DepartmentsCubitDrop,
+                              DepartmentsStateDrop
+                            >(
+                              builder: (context, departmentState) {
+                                if (departmentState is DepartmentLoadingState) {
+                                  return const Padding(
+                                    padding: EdgeInsets.only(top: 30),
+                                    child: Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  );
+                                }
 
-                            if (departmentState is DepartmentsErrorState) {
-                              return Padding(
-                                padding: const EdgeInsets.only(top: 30),
-                                child: Text("Error: ${departmentState.message}",
-                                    style: const TextStyle(color: Colors.red)),
-                              );
-                            }
+                                if (departmentState is DepartmentsErrorState) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(top: 30),
+                                    child: Text(
+                                      "Error: ${departmentState.message}",
+                                      style: const TextStyle(color: Colors.red),
+                                    ),
+                                  );
+                                }
 
-                            if (departmentState is DepartmentLoadedState) {
-                              if (departmentState.departments.isEmpty) {
-                                return const Padding(
-                                  padding: EdgeInsets.only(top: 30),
-                                  child: Text("No departments found"),
-                                );
-                              }
+                                if (departmentState is DepartmentLoadedState) {
+                                  if (departmentState.departments.isEmpty) {
+                                    return const Padding(
+                                      padding: EdgeInsets.only(top: 30),
+                                      child: Text("No departments found"),
+                                    );
+                                  }
 
-                              List<GetDepartmentModel> departments = departmentState.departments.whereType<GetDepartmentModel>().toList();
+                                  List<GetDepartmentModel> departments =
+                                      departmentState.departments
+                                          .whereType<GetDepartmentModel>()
+                                          .toList();
 
-                              return _buildDropdownField(
-                                selectedDepartmentName,
-                                departments,
-                                isDepartmentExpanded,
+                                  return _buildDropdownField(
+                                    selectedDepartmentName,
+                                    departments,
+                                    isDepartmentExpanded,
                                     (chosenUser) {
-                                  setState(() {
-                                    selectedDepartmentName = chosenUser.name;
-                                    isDepartmentExpanded = false;
-                                  });
-                                },
-                                    () => setState(() => isDepartmentExpanded = !isDepartmentExpanded),
-                              );
-                            }
+                                      setState(() {
+                                        selectedDepartmentName =
+                                            chosenUser.name;
+                                        isDepartmentExpanded = false;
+                                      });
+                                    },
+                                    () => setState(
+                                      () => isDepartmentExpanded =
+                                          !isDepartmentExpanded,
+                                    ),
+                                  );
+                                }
 
-                            return const SizedBox(height: 50);
-                          },
-                        ),
+                                return const SizedBox(height: 50);
+                              },
+                            ),
                       ),
                     ),
                   ],
@@ -383,41 +399,41 @@ class _CreateYearScreenState extends State<CreateYearScreen> {
 
                 const SizedBox(height: 24),
 
-Row(
-  children: [
-    Expanded(child:  _buildDateField(
-      'Start Date',
-      dobStartController,
-      dobStartFocus,
-      "Select Date",
-      onDateChanged: (date) {
-        setState(() {
-          selectedStartDate = date;
-        });
-      },
-    ),),
-    SizedBox(width: 20,),
-    Expanded(child:  _buildDateField(
-      'End date',
-      dobEndController,
-      dobEndFocus,
-      "Select Date",
-      onDateChanged: (date) {
-        setState(() {
-          selectedEndDate = date;
-        });
-      },
-    ),),
-  ],
-),
+                Row(
+                  children: [
+                    Expanded(
+                      child: _buildDateField(
+                        'Start Date',
+                        dobStartController,
+                        dobStartFocus,
+                        "Select Date",
+                        onDateChanged: (date) {
+                          setState(() {
+                            selectedStartDate = date;
+                          });
+                        },
+                      ),
+                    ),
+                    SizedBox(width: 20),
+                    Expanded(
+                      child: _buildDateField(
+                        'End date',
+                        dobEndController,
+                        dobEndFocus,
+                        "Select Date",
+                        onDateChanged: (date) {
+                          setState(() {
+                            selectedEndDate = date;
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                ),
 
                 const SizedBox(height: 24),
 
-                _buildField(
-                  "Description",
-                  descriptionController,
-                  maxLines: 4,
-                ),
+                _buildField("Description", descriptionController, maxLines: 4),
                 const SizedBox(height: 40),
 
                 _buildActionButtons(state),
@@ -428,19 +444,24 @@ Row(
       ),
     );
   }
+
   Widget _buildDropdownField(
-      String displayValue,
-      List<GetDepartmentModel> departments,
-      bool isExpanded,
-      Function(GetDepartmentModel) onSelected,
-      Function() onToggle,
-      ) {
+    String displayValue,
+    List<GetDepartmentModel> departments,
+    bool isExpanded,
+    Function(GetDepartmentModel) onSelected,
+    Function() onToggle,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
           "Department Name",
-          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Color(0xFF2563EB)),
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            color: Color(0xFF2563EB),
+          ),
         ),
         const SizedBox(height: 8),
         MouseRegion(
@@ -454,7 +475,9 @@ Row(
                 color: isExpanded ? Colors.white : const Color(0xFFF8FAFC),
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(
-                  color: isExpanded ? const Color(0xFF2563EB) : const Color(0xFFE2E8F0),
+                  color: isExpanded
+                      ? const Color(0xFF2563EB)
+                      : const Color(0xFFE2E8F0),
                   width: isExpanded ? 2 : 1,
                 ),
               ),
@@ -463,12 +486,30 @@ Row(
                 children: [
                   Row(
                     children: [
-                      Icon(Icons.person_outline, color: isExpanded ? const Color(0xFF2563EB) : const Color(0xFF94A3B8), size: 20),
+                      Icon(
+                        Icons.person_outline,
+                        color: isExpanded
+                            ? const Color(0xFF2563EB)
+                            : const Color(0xFF94A3B8),
+                        size: 20,
+                      ),
                       const SizedBox(width: 12),
-                      Text(displayValue, style: const TextStyle(fontSize: 14, color: Color(0xFF1E293B), fontWeight: FontWeight.w500)),
+                      Text(
+                        displayValue,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Color(0xFF1E293B),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                     ],
                   ),
-                  Icon(isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: const Color(0xFF94A3B8)),
+                  Icon(
+                    isExpanded
+                        ? Icons.keyboard_arrow_up
+                        : Icons.keyboard_arrow_down,
+                    color: const Color(0xFF94A3B8),
+                  ),
                 ],
               ),
             ),
@@ -481,7 +522,12 @@ Row(
               color: Colors.white,
               borderRadius: BorderRadius.circular(8),
               border: Border.all(color: const Color(0xFFE2E8F0)),
-              boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10)],
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 10,
+                ),
+              ],
             ),
             constraints: const BoxConstraints(maxHeight: 250),
             child: ListView.builder(
@@ -492,17 +538,27 @@ Row(
                 return InkWell(
                   onTap: () => onSelected(department),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
                     child: Row(
                       children: [
                         Expanded(
                           child: Text(
                             "${department.name} (${department.headName})",
-                            style: const TextStyle(fontSize: 14, color: Color(0xFF1E293B)),
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Color(0xFF1E293B),
+                            ),
                           ),
                         ),
                         if (displayValue == department.name)
-                          const Icon(Icons.check, color: Color(0xFF2563EB), size: 18),
+                          const Icon(
+                            Icons.check,
+                            color: Color(0xFF2563EB),
+                            size: 18,
+                          ),
                       ],
                     ),
                   ),
@@ -513,359 +569,14 @@ Row(
       ],
     );
   }
-  Widget _buildSidebar() {
-    return Container(
-      width: 250,
-      margin: const EdgeInsetsDirectional.only(
-        start: 40,
-        end: 0,
-        top: 50,
-        bottom: 50,
-      ),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 20,
-            offset: const Offset(0, 4),
-            spreadRadius: 2,
-          ),
-        ],
-      ),
-      child: ListView(
-        children: [
-          const SizedBox(height: 40),
-          _buildMenuItem(
-            Icons.person_outline,
-            Icons.person,
-            'Profile',
-            'Profile',
-                () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AdminProfileScreen(),
-                ),
-              );
-                },
-          ),
-          _buildMenuItem(
-            Icons.book_outlined,
-            Icons.book,
-            'My Courses',
-            'My Courses',
-                () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AdminCourseScreen(),
-                ),
-              );
-            },
-          ),
-          _buildMenuItem(
-            Icons.notifications_active_outlined,
-            Icons.notifications_active_rounded,
-            'Announcements',
-            'Announcements',
-                () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AnnouncementScreen(),
-                ),
-              );
-
-            },
-          ),
-          _buildMenuItem(
-            Icons.person_add_alt_1_outlined,
-            Icons.person_add_alt_1,
-            'Create Users',
-            'Create users',
-                () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const CreateUserScreen(),
-                ),
-              );
-
-            },
-          ),
-          _buildMenuItem(
-            Icons.folder_copy_outlined,
-            Icons.folder_copy_rounded,
-            'Create Departments',
-            'Create Departments',
-                () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>  CreateDepartmentPage(),
-                ),
-              );
-
-            },
-          ),
-          _buildMenuItem(
-            Icons.calendar_month,
-            Icons.calendar_month_outlined,
-            'Create Years',
-            'Create Years',
-                () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>  CreateYearPage(),
-                ),
-              );
-
-            },
-          ),
-          _buildMenuItem(
-            Icons.event_available,
-            Icons.event_note_outlined,
-            'Create New Course',
-            'Create New Course',
-                () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>  CreateNewCoursePage(),
-                ),
-              );
-
-            },
-          ),
-          _buildMenuItem(
-            Icons.airplanemode_active,
-            Icons.airplanemode_active_rounded,
-            'Create Squadrons',
-            'Create Squadrons',
-                () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>  CreateSquadronsPage(),
-                ),
-              );
-
-            },
-          ),
-          _buildMenuItem(
-            Icons.supervised_user_circle_rounded,
-            Icons.supervised_user_circle_outlined,
-            'All Users',
-            'All Users',
-                () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>  GetUsersPage(),
-                ),
-              );
-
-            },
-          ),
-          _buildMenuItem(
-            Icons.school_outlined,
-            Icons.school,
-            'All Departments',
-            'All Departments',
-                () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>  DepartmentsScreen(),
-                ),
-              );
-
-            },
-          ),
-          _buildMenuItem(
-            Icons.auto_awesome_motion_rounded,
-            Icons.auto_awesome_motion_outlined,
-            'All Years',
-            'All Years',
-                () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>  YearsScreen(),
-                ),
-              );
-
-            },
-          ),
-
-          _buildMenuItem(
-            Icons.grade_outlined,
-            Icons.grade,
-            'Grades overview',
-            'Grades overview',
-                () {},
-          ),
-          const Spacer(),
-          _buildLogoutButton(),
-          const SizedBox(height: 20),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildLogoutButton() {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) => setState(() => isLogoutHovered = true),
-      onExit: (_) => setState(() => isLogoutHovered = false),
-      child: GestureDetector(
-        onTap: () {
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: const Text('Logout'),
-              content: const Text('Are you sure you want to logout?'),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text('Cancel'),
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-                    await LogoutServer.logout();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFEF4444),
-                  ),
-                  child: const Text('Logout'),
-                ),
-              ],
-            ),
-          );
-        },
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          margin: const EdgeInsets.symmetric(horizontal: 12),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          decoration: BoxDecoration(
-            color: isLogoutHovered
-                ? const Color(0xFFEF4444).withOpacity(0.1)
-                : Colors.transparent,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(
-              color: isLogoutHovered
-                  ? const Color(0xFFEF4444).withOpacity(0.3)
-                  : Colors.transparent,
-              width: 1,
-            ),
-          ),
-          child: Row(
-            children: [
-              Icon(Icons.logout, color: const Color(0xFFEF4444), size: 20),
-              const SizedBox(width: 12),
-              const Text(
-                'Logout',
-                style: TextStyle(
-                  color: Color(0xFFEF4444),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildMenuItem(
-      IconData outlinedIcon,
-      IconData filledIcon,
-      String title,
-      String value,
-      onTap,
-      ) {
-    final isSelected = selectedMenuItem == value;
-    final isHovered = hoveredMenuItem == value;
-
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) => setState(() => hoveredMenuItem = value),
-      onExit: (_) => setState(() => hoveredMenuItem = null),
-      child: GestureDetector(
-        onTap: () {
-          setState(() {
-            selectedMenuItem = value;
-          });
-        },
-        child: GestureDetector(
-          onTap: onTap,
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: BoxDecoration(
-              color: isSelected
-                  ? const Color(0xFF2563EB)
-                  : isHovered
-                  ? const Color(0xFF2563EB).withOpacity(0.1)
-                  : Colors.transparent,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(
-                color: isHovered && !isSelected
-                    ? const Color(0xFF2563EB).withOpacity(0.3)
-                    : Colors.transparent,
-                width: 1,
-              ),
-            ),
-            child: Row(
-              children: [
-                AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 200),
-                  child: Icon(
-                    isSelected ? filledIcon : outlinedIcon,
-                    key: ValueKey(isSelected),
-                    color: isSelected
-                        ? Colors.white
-                        : isHovered
-                        ? const Color(0xFF2563EB)
-                        : const Color(0xFF64748B),
-                    size: 20,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Text(
-                  title,
-                  style: TextStyle(
-                    color: isSelected
-                        ? Colors.white
-                        : isHovered
-                        ? const Color(0xFF2563EB)
-                        : Colors.black87,
-                    fontSize: 14,
-                    fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 
   Widget _buildDateField(
-      String label,
-      TextEditingController controller,
-      FocusNode focusNode,
-      String hint,
-      {
-        required Function(DateTime) onDateChanged,
-      }
-      ) {
+    String label,
+    TextEditingController controller,
+    FocusNode focusNode,
+    String hint, {
+    required Function(DateTime) onDateChanged,
+  }) {
     return AnimatedBuilder(
       animation: focusNode,
       builder: (context, child) {
@@ -895,12 +606,12 @@ Row(
                 ),
                 boxShadow: isFocused
                     ? [
-                  BoxShadow(
-                    color: const Color(0xFF2563EB).withOpacity(0.1),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ]
+                        BoxShadow(
+                          color: const Color(0xFF2563EB).withOpacity(0.1),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ]
                     : [],
               ),
               child: TextField(
@@ -952,9 +663,8 @@ Row(
                   if (picked != null) {
                     onDateChanged(picked);
 
-
                     controller.text =
-                    '${picked.day}/${picked.month}/${picked.year}';
+                        '${picked.day}/${picked.month}/${picked.year}';
                   }
                 },
               ),
@@ -964,6 +674,4 @@ Row(
       },
     );
   }
-
 }
-

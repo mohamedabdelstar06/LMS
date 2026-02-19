@@ -109,6 +109,14 @@ class _CustomeSidebarState extends State<CustomeSidebar> {
                 ),
                 _buildMenuItem(
                   context,
+                  Icons.auto_awesome_motion_rounded,
+                  Icons.auto_awesome_motion_outlined,
+                  'All Years',
+                  'All Years',
+                      () => _navigate(context, YearsScreen()),
+                ),
+                _buildMenuItem(
+                  context,
                   Icons.calendar_month,
                   Icons.calendar_month_outlined,
                   'Add Enrollment',
@@ -157,14 +165,7 @@ class _CustomeSidebarState extends State<CustomeSidebar> {
                   'All Departments',
                   () => _navigate(context, DepartmentsScreen()),
                 ),
-                _buildMenuItem(
-                  context,
-                  Icons.auto_awesome_motion_rounded,
-                  Icons.auto_awesome_motion_outlined,
-                  'All Years',
-                  'All Years',
-                  () => _navigate(context, YearsScreen()),
-                ),
+
                 _buildMenuItem(
                   context,
                   Icons.file_open_outlined,
