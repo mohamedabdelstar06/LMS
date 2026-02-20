@@ -47,7 +47,6 @@ class _UpdateDepartmentPageState extends State<UpdateDepartmentPage> {
     descriptionController = TextEditingController();
     selectedImageBytes = null;
 
-    // Use Future.microtask to ensure the context is ready
 
   }
 
@@ -64,7 +63,7 @@ class _UpdateDepartmentPageState extends State<UpdateDepartmentPage> {
     nameController.text = department.name;
     descriptionController.text = department.description;
     selectedHeadName = department.headName;
-    selectedHeadId = department.headId; // Assuming you have headId in the model
+    // selectedHeadId = department.headId;
 
     _isInitialized = true;
   }
@@ -381,9 +380,9 @@ class _UpdateDepartmentPageState extends State<UpdateDepartmentPage> {
       final updated = department.copyWith(
         name: nameController.text,
         description: descriptionController.text,
-        imageUrl: selectedImageBytes != null ? "image_url_placeholder" : department.imageUrl, // Handle image upload
+        imageUrl: selectedImageBytes != null ? "image_url_placeholder" : department.imageUrl,
         headName: selectedHeadName,
-        headId: selectedHeadId, // Make sure to update the ID as well
+        headId: selectedHeadId,
       );
 
       context.read<DepartmentsCubit>().updateDepartment(updated);
@@ -431,10 +430,8 @@ class _UpdateDepartmentPageState extends State<UpdateDepartmentPage> {
                   Expanded(child: _buildField("Department Name", nameController)),
                   const SizedBox(width: 20),
                   Expanded(
-                    // --- CHANGE 2: Improved BlocBuilder for the dropdown ---
                     child: BlocBuilder<UsersCubitDrop, UsersStateDrop>(
                       builder: (context, userState) {
-                        // 1. Loading State
                         if (userState is UsersLoadingState) {
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -449,9 +446,7 @@ class _UpdateDepartmentPageState extends State<UpdateDepartmentPage> {
                             ],
                           );
                         }
-                        // 2. Loaded State (This is the desired state)
                         else if (userState is UsersLoadedState) {
-                          // Ensure the list is not empty, otherwise show a message
                           final usersToShow = userState.users.isEmpty
                               ? [UserLiteModel(fullName: "No users available", role: "System", id: -1)]
                               : userState.users;
@@ -460,7 +455,7 @@ class _UpdateDepartmentPageState extends State<UpdateDepartmentPage> {
                             usersToShow,
                             isHeadExpanded,
                             (user) {
-                              if (user.id != -1) { // Don't allow selection of placeholder
+                              if (user.id != -1) {
                                 setState(() {
                                   selectedHeadName = user.fullName;
                                   selectedHeadId = user.id;

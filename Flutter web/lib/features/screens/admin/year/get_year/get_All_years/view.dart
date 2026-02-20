@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lms/core/widgets/custome_sidebar.dart';
 
 import 'package:lms/features/screens/admin/year/get_year/get_All_years/state_mangement/cubit.dart';
 import 'package:lms/features/screens/admin/year/get_year/get_All_years/state_mangement/states.dart';
@@ -110,10 +110,7 @@ class _DepartmentsScreenState extends State<YearsScreen> {
                       const SizedBox(height: 16),
                       Text(
                         state.message,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          color: Colors.red,
-                        ),
+                        style: const TextStyle(fontSize: 18, color: Colors.red),
                       ),
                     ],
                   ),
@@ -123,7 +120,7 @@ class _DepartmentsScreenState extends State<YearsScreen> {
               if (state is YearsLoaded) {
                 return Row(
                   children: [
-                    _buildSidebar(),
+                    CustomeSidebar(selectedMenuItem: selectedMenuItem),
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
@@ -161,8 +158,9 @@ class _DepartmentsScreenState extends State<YearsScreen> {
                                     Container(
                                       padding: const EdgeInsets.all(12),
                                       decoration: BoxDecoration(
-                                        color: const Color(0xFF2563EB)
-                                            .withOpacity(0.1),
+                                        color: const Color(
+                                          0xFF2563EB,
+                                        ).withOpacity(0.1),
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                       child: const Icon(
@@ -175,7 +173,7 @@ class _DepartmentsScreenState extends State<YearsScreen> {
                                     Expanded(
                                       child: Column(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
                                           const Text(
@@ -207,8 +205,13 @@ class _DepartmentsScreenState extends State<YearsScreen> {
                                 child: Container(
                                   padding: const EdgeInsets.all(24),
                                   child: SingleChildScrollView(
-                                    child: _buildModernTable(
-                                        context, state.years),
+                                    child: Column(
+                                      children: [
+                                        _buildModernTable(context, state.years),
+                                        const SizedBox(height: 20),
+                                        _buildDangerZone(context, state.years),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
@@ -221,14 +224,12 @@ class _DepartmentsScreenState extends State<YearsScreen> {
                 );
               }
               return const SizedBox.shrink();
-
             },
           ),
         ),
       ),
     );
   }
-
 
   Widget _buildModernTable(BuildContext context, List<GetAllYearModel> years) {
     return SingleChildScrollView(
@@ -281,8 +282,10 @@ class _DepartmentsScreenState extends State<YearsScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Icon(icon, size: 18, color:  Colors.blue),
+          Icon(icon, size: 18, color: Colors.blue),
           const SizedBox(width: 8),
           Flexible(
             child: Text(
@@ -300,15 +303,13 @@ class _DepartmentsScreenState extends State<YearsScreen> {
       ),
     );
   }
+
   Widget _buildStatsHeader(int count) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [
-            const Color(0xFF2563EB),
-            const Color(0xFF3B82F6),
-          ],
+          colors: [const Color(0xFF2563EB), const Color(0xFF3B82F6)],
         ),
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
@@ -593,30 +594,20 @@ class _DepartmentsScreenState extends State<YearsScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => BlocProvider.value(
-                            value: context.read<AllYearsCubit>(),
+                          builder: (_) => MultiBlocProvider(
+                            providers: [
+                              BlocProvider.value(
+                                value: context.read<AllYearsCubit>(),
+                              ),
+                              BlocProvider(
+                                create: (context) =>
+                                    AllYearsCubit()..fetchYearById(year.id),
+                              ),
+                            ],
                             child: EditYearScreen(year: year),
                           ),
                         ),
                       );
-                    },
-                  ),
-                  const SizedBox(width: 4),
-                  _buildActionButton(
-                    icon: Icons.delete,
-                    color: const Color(0xFFEF4444),
-                    tooltip: 'Delete',
-                    onPressed: () {
-                      if (year.totalCourses > 0) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('You cannot delete a year that has courses'),
-                            backgroundColor: Colors.redAccent,
-                          ),
-                        );
-                        return;
-                      }
-                      _showDeleteDialog(context, year.id);
                     },
                   ),
                 ],
@@ -662,364 +653,493 @@ class _DepartmentsScreenState extends State<YearsScreen> {
     return "${date.day.toString().padLeft(2, '0')}-${date.month.toString().padLeft(2, '0')}-${date.year}";
   }
 
-  void _showDeleteDialog(BuildContext context, int id) {
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: const Text("Delete Year"),
-        content: const Text("Are you sure you want to delete this year?"),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text("Cancel"),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            onPressed: () {
-              context.read<AllYearsCubit>().deleteYear(id);
-              Navigator.pop(context);
-            },
-            child: const Text("Delete"),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSidebar() {
+  Widget _buildDangerZone(BuildContext context, List<GetAllYearModel> years) {
     return Container(
-      width: 250,
-      margin: const EdgeInsetsDirectional.only(
-        start: 40,
-        end: 0,
-        top: 50,
-        bottom: 50,
-      ),
+      width: double.infinity,
       decoration: BoxDecoration(
-        color: Colors.white,
+        border: Border.all(color: const Color(0xFFEF4444), width: 1.5),
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 20,
-            offset: const Offset(0, 4),
-            spreadRadius: 2,
-          ),
-        ],
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 40),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  _buildMenuItem(
-                    Icons.person_outline,
-                    Icons.person,
-                    'Profile',
-                    'Profile',
-                    () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const AdminProfileScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                  _buildMenuItem(
-                    Icons.book_outlined,
-                    Icons.book,
-                    'My Courses',
-                    'My Courses',
-                    () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const AdminCourseScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                  _buildMenuItem(
-                    Icons.notifications_active_outlined,
-                    Icons.notifications_active_rounded,
-                    'Announcements',
-                    'Announcements',
-                    () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const AnnouncementScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                  _buildMenuItem(
-                    Icons.person_add_alt_1_outlined,
-                    Icons.person_add_alt_1,
-                    'Create Users',
-                    'Create users',
-                    () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const CreateUserScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                  _buildMenuItem(
-                    Icons.folder_copy_outlined,
-                    Icons.folder_copy_rounded,
-                    'Create Departments',
-                    'Create Departments',
-                    () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CreateDepartmentPage(),
-                        ),
-                      );
-                    },
-                  ),
-                  _buildMenuItem(
-                    Icons.calendar_month,
-                    Icons.calendar_month_outlined,
-                    'Create Years',
-                    'Create Years',
-                    () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CreateYearPage(),
-                        ),
-                      );
-                    },
-                  ),
-                  _buildMenuItem(
-                    Icons.event_available,
-                    Icons.event_note_outlined,
-                    'Create New Course',
-                    'Create New Course',
-                    () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CreateNewCoursePage(),
-                        ),
-                      );
-                    },
-                  ),
-                  _buildMenuItem(
-                    Icons.airplanemode_active,
-                    Icons.airplanemode_active_rounded,
-                    'Create Squadrons',
-                    'Create Squadrons',
-                    () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CreateSquadronsPage(),
-                        ),
-                      );
-                    },
-                  ),
-                  _buildMenuItem(
-                    Icons.supervised_user_circle_rounded,
-                    Icons.supervised_user_circle_outlined,
-                    'All Users',
-                    'All Users',
-                    () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => GetUsersPage()),
-                      );
-                    },
-                  ),
-                  _buildMenuItem(
-                    Icons.school_outlined,
-                    Icons.school,
-                    'All Departments',
-                    'All Departments',
-                    () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DepartmentsScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                  _buildMenuItem(
-                    Icons.auto_awesome_motion_rounded,
-                    Icons.auto_awesome_motion_outlined,
-                    'All Years',
-                    'All Years',
-                    () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => YearsScreen()),
-                      );
-                    },
-                  ),
-                  _buildMenuItem(
-                    Icons.grade_outlined,
-                    Icons.grade,
-                    'Grades overview',
-                    'Grades overview',
-                    () {},
-                  ),
-                ],
-              ),
-            ),
-          ),
-          _buildLogoutButton(),
-          const SizedBox(height: 20),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildMenuItem(
-    IconData outlinedIcon,
-    IconData filledIcon,
-    String title,
-    String value,
-    onTap,
-  ) {
-    final isSelected = selectedMenuItem == value;
-    final isHovered = hoveredMenuItem == value;
-
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) => setState(() => hoveredMenuItem = value),
-      onExit: (_) => setState(() => hoveredMenuItem = null),
-      child: GestureDetector(
-        onTap: () {
-          setState(() {
-            selectedMenuItem = value;
-          });
-        },
-        child: GestureDetector(
-          onTap: onTap,
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: BoxDecoration(
-              color: isSelected
-                  ? const Color(0xFF2563EB)
-                  : isHovered
-                  ? const Color(0xFF2563EB).withOpacity(0.1)
-                  : Colors.transparent,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(
-                color: isHovered && !isSelected
-                    ? const Color(0xFF2563EB).withOpacity(0.3)
-                    : Colors.transparent,
-                width: 1,
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            decoration: const BoxDecoration(
+              color: Color(0xFFFEF2F2),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(14),
+                topRight: Radius.circular(14),
               ),
             ),
             child: Row(
               children: [
-                AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 200),
-                  child: Icon(
-                    isSelected ? filledIcon : outlinedIcon,
-                    key: ValueKey(isSelected),
-                    color: isSelected
-                        ? Colors.white
-                        : isHovered
-                        ? const Color(0xFF2563EB)
-                        : const Color(0xFF64748B),
-                    size: 20,
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFEF4444).withOpacity(0.15),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Icon(
+                    Icons.warning_amber_rounded,
+                    color: Color(0xFFEF4444),
+                    size: 22,
                   ),
                 ),
                 const SizedBox(width: 12),
-                Text(
-                  title,
-                  style: TextStyle(
-                    color: isSelected
-                        ? Colors.white
-                        : isHovered
-                        ? const Color(0xFF2563EB)
-                        : Colors.black87,
-                    fontSize: 14,
-                    fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
-                  ),
+                const Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Danger Zone',
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFEF4444),
+                      ),
+                    ),
+                    Text(
+                      'These actions are irreversible. Please proceed with caution.',
+                      style: TextStyle(fontSize: 12, color: Color(0xFFB91C1C)),
+                    ),
+                  ],
                 ),
               ],
             ),
           ),
-        ),
+          const Divider(height: 1, color: Color(0xFFEF4444)),
+          ListView.separated(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: years.length,
+            separatorBuilder: (_, __) => const Divider(
+              height: 1,
+              color: Color(0xFFFFE4E4),
+              indent: 24,
+              endIndent: 24,
+            ),
+            itemBuilder: (context, index) {
+              final year = years[index];
+              return _buildDangerZoneRow(context, year);
+            },
+          ),
+          const SizedBox(height: 8),
+        ],
       ),
     );
   }
 
-  Widget _buildLogoutButton() {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) => setState(() => isLogoutHovered = true),
-      onExit: (_) => setState(() => isLogoutHovered = false),
-      child: GestureDetector(
-        onTap: () {
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: const Text('Logout'),
-              content: const Text('Are you sure you want to logout?'),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text('Cancel'),
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-                    await LogoutServer.logout();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFEF4444),
+  Widget _buildDangerZoneRow(BuildContext context, GetAllYearModel year) {
+    final hasCourses = year.totalCourses > 0;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: hasCourses
+                  ? Colors.grey.withOpacity(0.1)
+                  : const Color(0xFF2563EB).withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(
+              Icons.calendar_month,
+              size: 18,
+              color: hasCourses ? Colors.grey : const Color(0xFF2563EB),
+            ),
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  year.name,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF1E293B),
                   ),
-                  child: const Text('Logout'),
+                ),
+                const SizedBox(height: 2),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.people_outline,
+                      size: 13,
+                      color: hasCourses
+                          ? const Color(0xFFEF4444)
+                          : const Color(0xFF64748B),
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      hasCourses
+                          ? '${year.totalCourses} course${year.totalCourses > 1 ? 's' : ''} — cannot delete'
+                          : 'No courses — safe to delete',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: hasCourses
+                            ? const Color(0xFFEF4444)
+                            : const Color(0xFF64748B),
+                        fontWeight: hasCourses
+                            ? FontWeight.w500
+                            : FontWeight.normal,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-          );
-        },
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          margin: const EdgeInsets.symmetric(horizontal: 12),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          decoration: BoxDecoration(
-            color: isLogoutHovered
-                ? const Color(0xFFEF4444).withOpacity(0.1)
-                : Colors.transparent,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(
-              color: isLogoutHovered
-                  ? const Color(0xFFEF4444).withOpacity(0.3)
-                  : Colors.transparent,
-              width: 1,
+          ),
+          const SizedBox(width: 16),
+          Tooltip(
+            message: hasCourses
+                ? 'Remove all courses before deleting'
+                : 'Delete ${year.name}',
+            child: ElevatedButton.icon(
+              onPressed: hasCourses
+                  ? null
+                  : () => _showDangerDeleteDialog(context, year),
+              icon: const Icon(Icons.delete_forever, size: 16),
+              label: const Text('Delete'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFFEF4444),
+                foregroundColor: Colors.white,
+                disabledBackgroundColor: Colors.grey.shade200,
+                disabledForegroundColor: Colors.grey.shade400,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 10,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                elevation: 0,
+              ),
             ),
           ),
-          child: Row(
-            children: [
-              Icon(Icons.logout, color: const Color(0xFFEF4444), size: 20),
-              const SizedBox(width: 12),
-              const Text(
-                'Logout',
-                style: TextStyle(
-                  color: Color(0xFFEF4444),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
+        ],
+      ),
+    );
+  }
+
+  void _showDangerDeleteDialog(BuildContext context, GetAllYearModel year) {
+    final TextEditingController confirmController = TextEditingController();
+    final String confirmText = year.name;
+    bool isConfirmed = false;
+    final cubit = context.read<AllYearsCubit>();
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) {
+        return StatefulBuilder(
+          builder: (_, setDialogState) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              contentPadding: EdgeInsets.zero,
+              content: Container(
+                width: 480,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(24),
+                      decoration: const BoxDecoration(
+                        color: Color(0xFFFEF2F2),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(16),
+                          topRight: Radius.circular(16),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFEF4444).withOpacity(0.15),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.delete_forever,
+                              color: Color(0xFFEF4444),
+                              size: 28,
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Delete Year',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFFEF4444),
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                const Text(
+                                  'This action cannot be undone',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: Color(0xFFB91C1C),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.all(24),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFFF7ED),
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                color: const Color(0xFFFED7AA),
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  Icons.info_outline,
+                                  size: 16,
+                                  color: Color(0xFFD97706),
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    'You are about to permanently delete year"${year.name}". This will remove all associated data.',
+                                    style: const TextStyle(
+                                      fontSize: 13,
+                                      color: Color(0xFF92400E),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          const Text(
+                            'To confirm, type the year name below:',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Color(0xFF475569),
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 8,
+                            ),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFF8FAFC),
+                              borderRadius: BorderRadius.circular(6),
+                              border: Border.all(
+                                color: const Color(0xFFE2E8F0),
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  Icons.keyboard,
+                                  size: 14,
+                                  color: Color(0xFF64748B),
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  confirmText,
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFFEF4444),
+                                    fontFamily: 'monospace',
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          TextField(
+                            controller: confirmController,
+                            autofocus: true,
+                            decoration: InputDecoration(
+                              hintText: 'Type year name here...',
+                              hintStyle: const TextStyle(
+                                color: Color(0xFF94A3B8),
+                                fontSize: 14,
+                              ),
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 12,
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: const BorderSide(
+                                  color: Color(0xFFE2E8F0),
+                                ),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: const BorderSide(
+                                  color: Color(0xFFE2E8F0),
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: const BorderSide(
+                                  color: Color(0xFFEF4444),
+                                  width: 2,
+                                ),
+                              ),
+                              filled: true,
+                              fillColor: Colors.white,
+                              suffixIcon: isConfirmed
+                                  ? const Icon(
+                                      Icons.check_circle,
+                                      color: Colors.green,
+                                    )
+                                  : null,
+                            ),
+                            onChanged: (value) {
+                              setDialogState(() {
+                                isConfirmed = value.trim() == confirmText;
+                              });
+                            },
+                          ),
+                          if (!isConfirmed && confirmController.text.isNotEmpty)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 6),
+                              child: Row(
+                                children: const [
+                                  Icon(
+                                    Icons.close,
+                                    size: 14,
+                                    color: Color(0xFFEF4444),
+                                  ),
+                                  SizedBox(width: 4),
+                                  Text(
+                                    'Year name does not match',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Color(0xFFEF4444),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          if (isConfirmed)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 6),
+                              child: Row(
+                                children: const [
+                                  Icon(
+                                    Icons.check,
+                                    size: 14,
+                                    color: Colors.green,
+                                  ),
+                                  SizedBox(width: 4),
+                                  Text(
+                                    'Name confirmed — you can now delete',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.green,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: OutlinedButton(
+                              onPressed: () {
+                                confirmController.dispose();
+                                Navigator.pop(dialogContext);
+                              },
+                              style: OutlinedButton.styleFrom(
+                                foregroundColor: const Color(0xFF64748B),
+                                side: const BorderSide(
+                                  color: Color(0xFFE2E8F0),
+                                ),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 14,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                              child: const Text(
+                                'Cancel',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: ElevatedButton.icon(
+                              onPressed: isConfirmed
+                                  ? () {
+                                      Navigator.pop(dialogContext);
+                                      cubit.deleteYear(year.id);
+                                    }
+                                  : null,
+                              icon: const Icon(Icons.delete_forever, size: 18),
+                              label: const Text(
+                                'Delete Forever',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFFEF4444),
+                                foregroundColor: Colors.white,
+                                disabledBackgroundColor: Colors.grey.shade200,
+                                disabledForegroundColor: Colors.grey.shade400,
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 14,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                elevation: 0,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
+            );
+          },
+        );
+      },
     );
   }
 }

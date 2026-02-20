@@ -1,19 +1,32 @@
+import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:lms/core/cons/api_helper_resources/api_resources.dart';
-
 import 'package:lms/features/screens/admin/year/get_year/get_All_years/state_mangement/states.dart';
-
 import '../../../../../../../core/helpers/cach_helper/shared_pref_helper.dart';
 import '../all_model/model.dart';
 
 class AllYearsCubit extends Cubit<AllYearsState> {
-  AllYearsCubit() : super(YearsInitial());
+  AllYearsCubit() : super(YearsInitial()) {
+    dio.interceptors.add(
+      LogInterceptor(
+        requestBody: true,
+        responseBody: true,
+      ),
+    );
+  }
 
   final Dio dio = Dio(
-    BaseOptions(baseUrl: ApiResources.apiUrl),
+    BaseOptions(
+      baseUrl: ApiResources.apiUrl,
+      receiveDataWhenStatusError: true,
+      validateStatus: (status) {
+        return status != null && status <= 500;
+      },
+    ),
   );
+
 
   Future<void> fetchYearss() async {
     emit(YearsLoading());
@@ -30,15 +43,23 @@ class AllYearsCubit extends Cubit<AllYearsState> {
         ),
       );
 
-      final years = (response.data as List)
-          .map((e) => GetAllYearModel.fromJson(e))
-          .toList();
+      if (response.statusCode == 200) {
+        final years = (response.data as List)
+            .map((e) => GetAllYearModel.fromJson(e))
+            .toList();
 
-      emit(YearsLoaded(years));
+        emit(YearsLoaded(years));
+      } else {
+        emit(YearsError(
+            "Failed to load years. Status Code: ${response.statusCode}"));
+      }
+    } on DioException catch (e) {
+      _handleDioError(e, emitYearsError: true);
     } catch (e) {
-      emit(YearsError(e.toString()));
+      emit(YearsError("Unexpected Error: ${e.toString()}"));
     }
   }
+
 
   Future<void> deleteYear(int id) async {
     emit(DeleteYearLoading());
@@ -64,24 +85,13 @@ class AllYearsCubit extends Cubit<AllYearsState> {
         emit(const DeleteYearSuccess("Year deleted successfully"));
         await fetchYearss();
       } else {
-        emit(DeleteYearError("Failed to delete year. Status code: ${response.statusCode}"));
+        emit(DeleteYearError(
+            "Failed to delete year. Status Code: ${response.statusCode}"));
       }
     } on DioException catch (e) {
-      String errorMessage = "Failed to delete year";
-
-      if (e.response != null) {
-        errorMessage = "Server error: ${e.response?.statusCode}";
-        if (e.response?.data is Map &&
-            e.response?.data['message'] != null) {
-          errorMessage = e.response?.data['message'];
-        }
-      } else {
-        errorMessage = "Network error: ${e.message}";
-      }
-
-      emit(DeleteYearError(errorMessage));
+      _handleDioError(e, emitDeleteError: true);
     } catch (e) {
-      emit(DeleteYearError("Unexpected error: ${e.toString()}"));
+      emit(DeleteYearError("Unexpected Error: ${e.toString()}"));
     }
   }
 
@@ -89,13 +99,23 @@ class AllYearsCubit extends Cubit<AllYearsState> {
     required int id,
     required String name,
     required String description,
-    required int headId,
+    required String departmentName,
+    required int departmentId,
+    required int totalHours,
+    required DateTime startDate,
+    required DateTime endDate,
   }) async {
     emit(UpdateYearLoading());
+
     try {
       final token = await TokenStorageHelper.getTokenSecure();
-      if (token == null) {
+
+      if (token == null || token.isEmpty) {
         emit(const UpdateYearError("Unauthorized"));
+        return;
+      }
+      if (departmentId == 0) {
+        emit(const UpdateYearError("Please select a valid department"));
         return;
       }
 
@@ -104,35 +124,102 @@ class AllYearsCubit extends Cubit<AllYearsState> {
         data: {
           "name": name,
           "description": description,
-          "headId": headId,
+          "departmentName": departmentName,
+          "startDate": startDate.toIso8601String(),
+          "endDate": endDate.toIso8601String(),
+          "totalHours": totalHours,
         },
-        options: Options(headers: {
-          "Authorization": "Bearer $token",
-        }),
+        options: Options(
+          headers: {
+            "Authorization": "Bearer $token",
+          },
+        ),
       );
 
       if (response.statusCode == 200) {
         emit(const UpdateYearSuccess("Year updated successfully"));
-        await fetchYearss();
+
+
+
+        unawaited(fetchYearss());
       } else {
-        emit(UpdateYearError("Failed to update year. Status code: ${response.statusCode}"));
+        emit(UpdateYearError(
+            "Failed to update year. Status Code: ${response.statusCode}"));
       }
     } on DioException catch (e) {
-      String errorMessage = "Failed to update year";
+      _handleDioError(e, emitUpdateError: true);
+    } catch (e) {
+      emit(UpdateYearError("Unexpected Error: ${e.toString()}"));
+    }
+  }
 
-      if (e.response != null) {
-        errorMessage = "Server error: ${e.response?.statusCode}";
-        if (e.response?.data is Map &&
-            e.response?.data['message'] != null) {
-          errorMessage = e.response?.data['message'];
-        }
-      } else {
-        errorMessage = "Network error: ${e.message}";
+
+
+  Future<void> fetchYearById(int id) async {
+    emit(YearByIdLoading());
+
+    try {
+      final token = await TokenStorageHelper.getTokenSecure();
+
+      if (token == null || token.isEmpty) {
+        emit(const YearByIdError("Unauthorized: Please login again."));
+        return;
       }
 
-      emit(UpdateYearError(errorMessage));
-    } catch (e) {
-      emit(UpdateYearError("Unexpected error: ${e.toString()}"));
+      final response = await dio.get(
+        "${ApiResources.getYearEndPoint}/$id",
+        options: Options(
+          headers: {
+            "Authorization": "Bearer $token",
+            "Content-Type": "application/json",
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        final year = GetAllYearModel.fromJson(response.data);
+        emit(YearByIdLoaded(year));
+      } else {
+        emit(YearByIdError(
+            "Failed to load year. Status Code: ${response.statusCode}"));
+      }
+    } on DioException catch (e) {
+      _handleDioError(e, emitYearByIdError: true);
     }
+  }
+
+
+  void _handleDioError(
+      DioException e, {
+        bool emitYearsError = false,
+        bool emitDeleteError = false,
+        bool emitUpdateError = false,
+        bool emitYearByIdError = false,
+      }) {
+    String errorMessage = "Something went wrong";
+    int? statusCode;
+
+    if (e.response != null) {
+      statusCode = e.response?.statusCode;
+
+      print("========= API ERROR =========");
+      print("STATUS CODE: $statusCode");
+      print("RESPONSE DATA: ${e.response?.data}");
+      print("=============================");
+
+      if (e.response?.data is Map &&
+          e.response?.data['message'] != null) {
+        errorMessage = e.response?.data['message'];
+      } else {
+        errorMessage = "Server Error: $statusCode";
+      }
+    } else {
+      errorMessage = "Network Error: ${e.message}";
+    }
+
+    if (emitYearsError) emit(YearsError(errorMessage));
+    if (emitDeleteError) emit(DeleteYearError(errorMessage));
+    if (emitUpdateError) emit(UpdateYearError(errorMessage));
+    if (emitYearByIdError) emit(YearByIdError(errorMessage));
   }
 }

@@ -25,7 +25,8 @@ class YearsLoaded extends AllYearsState {
 
 class YearsError extends AllYearsState {
   final String message;
-  const YearsError(this.message);
+  final int? statusCode;
+  const YearsError(this.message, {this.statusCode});
 
   @override
   List<Object?> get props => [message];
@@ -52,5 +53,24 @@ class UpdateYearSuccess extends AllYearsState {
 
 class UpdateYearError extends AllYearsState {
   final String message;
-  const UpdateYearError(this.message);
+  final int? statusCode;
+  const UpdateYearError(this.message, {this.statusCode});
+}
+
+class YearByIdLoading extends AllYearsState {}
+class YearByIdLoaded extends AllYearsState {
+  final GetAllYearModel year;
+
+  const YearByIdLoaded(this.year);
+
+  @override
+  List<Object?> get props => [year];
+}
+class YearByIdError extends AllYearsState {
+  final String message;
+  final int? statusCode;
+  const YearByIdError(this.message, {this.statusCode});
+
+  @override
+  List<Object?> get props => [message];
 }

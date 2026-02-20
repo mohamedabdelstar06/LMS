@@ -7,7 +7,7 @@ class GetAllDepartmentModel {
   final String headName;
   final DateTime createdAt;
   final DateTime updatedAt;
-  // final List<DepartmentYearModel> years;
+  final List<DepartmentYearModel> years;
 
   GetAllDepartmentModel({
     required this.id,
@@ -18,7 +18,7 @@ class GetAllDepartmentModel {
     required this.headName,
     required this.createdAt,
     required this.updatedAt,
-    // required this.years,
+    required this.years,
   });
 
   factory GetAllDepartmentModel.fromJson(Map<String, dynamic> json) {
@@ -31,9 +31,9 @@ class GetAllDepartmentModel {
       headName: json['headName'],
       createdAt: DateTime.parse(json['createdAt']),
       updatedAt: DateTime.parse(json['updatedAt']),
-      // years: (json['years'] as List<dynamic>)
-      //     .map((e) => DepartmentYearModel.fromJson(e))
-      //     .toList(),
+      years: (json['years'] as List<dynamic>)
+          .map((e) => DepartmentYearModel.fromJson(e))
+          .toList(),
     );
   }
 
@@ -47,7 +47,7 @@ class GetAllDepartmentModel {
       'headName': headName,
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
-      // 'years': years.map((e) => e.toJson()).toList(),
+      'years': years.map((e) => e.toJson()).toList(),
     };
   }
 
@@ -60,7 +60,7 @@ class GetAllDepartmentModel {
     String? headName,
     DateTime? createdAt,
     DateTime? updatedAt,
-    // List<DepartmentYearModel>? years,
+    List<DepartmentYearModel>? years,
   }) {
     return GetAllDepartmentModel(
       id: id ?? this.id,
@@ -71,7 +71,7 @@ class GetAllDepartmentModel {
       headName: headName ?? this.headName,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
-      // years: years ?? this.years,
+      years: years ?? this.years,
     );
   }
 }
