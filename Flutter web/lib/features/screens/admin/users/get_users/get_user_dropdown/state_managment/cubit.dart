@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lms/core/cons/api_helper_resources/api_resources.dart';
 import 'package:lms/core/helpers/cach_helper/shared_pref_helper.dart';
 import '../model_dropdown/view.dart';
-import 'states.dart' hide UsersState;
+import 'states.dart';
 
 class UsersCubitDrop extends Cubit<UsersStateDrop> {
   UsersCubitDrop() : super(UsersInitialState());
@@ -13,7 +13,7 @@ class UsersCubitDrop extends Cubit<UsersStateDrop> {
     try {
       final token = await TokenStorageHelper.getTokenSecure();
       if (token == null || token.isEmpty) {
-        emit(UsersErrorState("Unauthorized"));
+        emit(UsersErrorState('Unauthorized'));
         return;
       }
 
@@ -21,13 +21,13 @@ class UsersCubitDrop extends Cubit<UsersStateDrop> {
 
       final filteredUsers = allUsers
           .where((u) =>
-      u.role.toLowerCase() == "admin" ||
-          u.role.toLowerCase() == "instructor")
+      u.role.toLowerCase() == 'admin' ||
+          u.role.toLowerCase() == 'instructor')
           .toList();
 
       emit(UsersLoadedState(filteredUsers));
     } catch (e) {
-      emit(UsersErrorState("Failed to load users"));
+      emit(UsersErrorState('Failed to load users'));
     }
   }
 
@@ -36,19 +36,19 @@ class UsersCubitDrop extends Cubit<UsersStateDrop> {
     try {
       final token = await TokenStorageHelper.getTokenSecure();
       if (token == null || token.isEmpty) {
-        emit(UsersErrorState("Unauthorized"));
+        emit(UsersErrorState('Unauthorized'));
         return;
       }
 
       final allUsers = await _fetchAllUsers(token);
 
       final students = allUsers
-          .where((u) => u.role.toLowerCase() == "student")
+          .where((u) => u.role.toLowerCase() == 'student')
           .toList();
 
       emit(UsersLoadedState(students));
     } catch (e) {
-      emit(UsersErrorState("Failed to load users"));
+      emit(UsersErrorState('Failed to load users'));
     }
   }
 
@@ -59,18 +59,18 @@ class UsersCubitDrop extends Cubit<UsersStateDrop> {
 
     while (hasNext) {
       final response = await Dio().get(
-       "${ApiResources.apiUrl}${ApiResources.getUsersEndPoint}",
+       '${ApiResources.apiUrl}${ApiResources.getUsersEndPoint}',
         queryParameters: {
           'pageNumber': page,
           'pageSize': 100,
         },
         options: Options(
-          headers: {"Authorization": "Bearer $token"},
+          headers: {'Authorization': 'Bearer $token'},
         ),
       );
 
       if (response.statusCode != 200 || response.data['users'] == null) {
-        throw Exception("Failed to fetch users from server");
+        throw Exception('Failed to fetch users from server');
       }
 
       final List usersJson = response.data['users'];

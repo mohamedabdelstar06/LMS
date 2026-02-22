@@ -13,7 +13,7 @@ import 'features/screens/auth/Verify_email/view.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (kDebugMode && kIsWeb) {
-    FlutterError.onError = (FlutterErrorDetails details) {
+    FlutterError.onError = (details) {
       if (!details.toString().contains('toJsonMap') &&
           !details.toString().contains('_nodeToJson')) {
         FlutterError.presentError(details);
@@ -21,7 +21,9 @@ void main() async {
     };
   }
 
-  runApp(MyApp());
+
+
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -41,7 +43,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> _initializeApp() async {
-    await Future.delayed(Duration(milliseconds: 100));
+    await Future.delayed(const Duration(milliseconds: 100));
     
     await AppInitializationService.initializeApp();
     
@@ -57,19 +59,19 @@ class _MyAppState extends State<MyApp> {
         FocusManager.instance.primaryFocus?.unfocus();
       },
       child: MaterialApp(
-        scrollBehavior: const ScrollBehavior().copyWith(scrollbars: false),
+        scrollBehavior:  const ScrollBehavior().copyWith(scrollbars: false),
 
         navigatorKey: navigatorKey,
-        title: "SKY Learn",
+        title: 'SKY Learn',
         theme: ThemeData(
           useMaterial3: true,
           fontFamily: 'inter',
-          scaffoldBackgroundColor: Color(0xFFE0F2FE),
+          scaffoldBackgroundColor: const Color(0xFFE0F2FE),
         ),
         debugShowCheckedModeBanner: false,
         home:
 
-        _isInitialized ? VerifyScreen() : LoadingScreen(),
+        _isInitialized ? const VerifyScreen() : const LoadingScreen(),
       ),
     );
   }

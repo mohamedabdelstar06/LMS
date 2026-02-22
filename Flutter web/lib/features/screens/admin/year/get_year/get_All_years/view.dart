@@ -88,7 +88,7 @@ class _DepartmentsScreenState extends State<YearsScreen> {
               }
             },
 
-            builder: (BuildContext context, AllYearsState state) {
+            builder: (context, state) {
               if (state is YearsLoading ||
                   state is DeleteYearLoading ||
                   state is UpdateYearLoading) {
@@ -140,15 +140,15 @@ class _DepartmentsScreenState extends State<YearsScreen> {
                             children: [
                               Container(
                                 padding: const EdgeInsets.all(24),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFF8FAFC),
-                                  borderRadius: const BorderRadius.only(
+                                decoration: const BoxDecoration(
+                                  color: Color(0xFFF8FAFC),
+                                  borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(16),
                                     topRight: Radius.circular(16),
                                   ),
                                   border: Border(
                                     bottom: BorderSide(
-                                      color: const Color(0xFFE2E8F0),
+                                      color: Color(0xFFE2E8F0),
                                       width: 1,
                                     ),
                                   ),
@@ -170,13 +170,13 @@ class _DepartmentsScreenState extends State<YearsScreen> {
                                       ),
                                     ),
                                     const SizedBox(width: 16),
-                                    Expanded(
+                                    const Expanded(
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
-                                          const Text(
+                                          Text(
                                             'All Years',
                                             style: TextStyle(
                                               fontSize: 20,
@@ -184,8 +184,8 @@ class _DepartmentsScreenState extends State<YearsScreen> {
                                               color: Color(0xFF1E293B),
                                             ),
                                           ),
-                                          const SizedBox(height: 4),
-                                          const Text(
+                                          SizedBox(height: 4),
+                                          Text(
                                             'Manage all academic years',
                                             style: TextStyle(
                                               fontSize: 14,
@@ -308,8 +308,8 @@ class _DepartmentsScreenState extends State<YearsScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [const Color(0xFF2563EB), const Color(0xFF3B82F6)],
+        gradient: const LinearGradient(
+          colors: [Color(0xFF2563EB), Color(0xFF3B82F6)],
         ),
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
@@ -378,8 +378,8 @@ class _DepartmentsScreenState extends State<YearsScreen> {
             : index.isEven
             ? Colors.white
             : const Color(0xFFF8FAFC),
-        border: Border(
-          bottom: BorderSide(color: const Color(0xFFE2E8F0), width: 1),
+        border: const Border(
+          bottom: BorderSide(color: Color(0xFFE2E8F0), width: 1),
         ),
       ),
       children: [
@@ -876,11 +876,11 @@ class _DepartmentsScreenState extends State<YearsScreen> {
                             ),
                           ),
                           const SizedBox(width: 16),
-                          Expanded(
+                          const Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
+                                Text(
                                   'Delete Year',
                                   style: TextStyle(
                                     fontSize: 18,
@@ -888,8 +888,8 @@ class _DepartmentsScreenState extends State<YearsScreen> {
                                     color: Color(0xFFEF4444),
                                   ),
                                 ),
-                                const SizedBox(height: 4),
-                                const Text(
+                                SizedBox(height: 4),
+                                Text(
                                   'This action cannot be undone',
                                   style: TextStyle(
                                     fontSize: 13,
@@ -1028,10 +1028,10 @@ class _DepartmentsScreenState extends State<YearsScreen> {
                             },
                           ),
                           if (!isConfirmed && confirmController.text.isNotEmpty)
-                            Padding(
-                              padding: const EdgeInsets.only(top: 6),
+                            const Padding(
+                              padding: EdgeInsets.only(top: 6),
                               child: Row(
-                                children: const [
+                                children: [
                                   Icon(
                                     Icons.close,
                                     size: 14,
@@ -1049,10 +1049,10 @@ class _DepartmentsScreenState extends State<YearsScreen> {
                               ),
                             ),
                           if (isConfirmed)
-                            Padding(
-                              padding: const EdgeInsets.only(top: 6),
+                            const Padding(
+                              padding: EdgeInsets.only(top: 6),
                               child: Row(
-                                children: const [
+                                children: [
                                   Icon(
                                     Icons.check,
                                     size: 14,

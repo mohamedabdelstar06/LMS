@@ -5,8 +5,9 @@ import 'package:lms/core/widgets/custome_sidebar.dart';
 import 'package:lms/core/widgets/cutome_test_field.dart';
 import 'package:lms/core/widgets/dateDropDown.dart';
 import 'package:lms/core/widgets/profile_picture.dart';
-import 'package:lms/features/screens/admin/admin_profile/state_managment/cubit_d_profile.dart';
-import 'package:lms/features/screens/admin/admin_profile/state_managment/state_d_profile.dart';
+import 'package:lms/features/screens/admin/admin_profile/state_management/cubit_d_profile.dart';
+import 'package:lms/features/screens/admin/admin_profile/state_management/state_d_profile.dart';
+
 import '../../../../core/cons/Colors/app_colors.dart';
 import 'model/view.dart';
 
@@ -147,7 +148,7 @@ class _AdminProfileContentState extends State<_AdminProfileContent> {
                 child: BlocConsumer<AdminProfileCubit, AdminProfileState>(
                   listener: (context, state) {
                     if (state is AdminProfileLoaded) {
-                      _showSuccessSnackbar("Profile updated successfully!");
+                      _showSuccessSnackbar('Profile updated successfully!');
                       _profilePictureKey.currentState?.clearImage();
                     } else if (state is AdminProfileError) {
                       _showErrorSnackbar(state.message);
@@ -220,7 +221,6 @@ class _AdminProfileContentState extends State<_AdminProfileContent> {
           child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 40),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Text(
                   'Your Profile',
@@ -335,9 +335,9 @@ class _AdminProfileContentState extends State<_AdminProfileContent> {
         ),
         child: Center(
           child: isLoading
-              ? Row(
+              ? const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
+                  children: [
                     SizedBox(
                       width: 20,
                       height: 20,
@@ -358,9 +358,9 @@ class _AdminProfileContentState extends State<_AdminProfileContent> {
                     ),
                   ],
                 )
-              : Row(
+              : const Row(
                   mainAxisSize: MainAxisSize.min,
-                  children: const [
+                  children: [
                     Text(
                       "Save Changes",
                       style: TextStyle(

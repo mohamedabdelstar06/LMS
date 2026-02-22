@@ -33,6 +33,7 @@ dependencies:
   permission_handler:
   flutter_dropzone:
   web: ^1.1.1
+  dart_code_metrics:
 
 dev_dependencies:
   flutter_test:
