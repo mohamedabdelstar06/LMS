@@ -38,7 +38,7 @@ class AllYearsCubit extends Cubit<AllYearsState> {
         ApiResources.getYearEndPoint,
         options: Options(
           headers: {
-            "Authorization": "Bearer $token",
+            'Authorization': 'Bearer $token',
           },
         ),
       );
@@ -51,12 +51,12 @@ class AllYearsCubit extends Cubit<AllYearsState> {
         emit(YearsLoaded(years));
       } else {
         emit(YearsError(
-            "Failed to load years. Status Code: ${response.statusCode}"));
+            'Failed to load years. Status Code: ${response.statusCode}'));
       }
     } on DioException catch (e) {
       _handleDioError(e, emitYearsError: true);
     } catch (e) {
-      emit(YearsError("Unexpected Error: ${e.toString()}"));
+      emit(YearsError('Unexpected Error: ${e.toString()}'));
     }
   }
 
@@ -68,30 +68,30 @@ class AllYearsCubit extends Cubit<AllYearsState> {
       final token = await TokenStorageHelper.getTokenSecure();
 
       if (token == null || token.isEmpty) {
-        emit(const DeleteYearError("Unauthorized: No token provided"));
+        emit(const DeleteYearError('Unauthorized: No token provided'));
         return;
       }
 
       final response = await dio.delete(
-        "${ApiResources.getYearEndPoint}/$id",
+        '${ApiResources.getYearEndPoint}/$id',
         options: Options(
           headers: {
-            "Authorization": "Bearer $token",
+            'Authorization': 'Bearer $token',
           },
         ),
       );
 
       if (response.statusCode == 200 || response.statusCode == 204) {
-        emit(const DeleteYearSuccess("Year deleted successfully"));
+        emit(const DeleteYearSuccess('Year deleted successfully'));
         await fetchYearss();
       } else {
         emit(DeleteYearError(
-            "Failed to delete year. Status Code: ${response.statusCode}"));
+            'Failed to delete year. Status Code: ${response.statusCode}'));
       }
     } on DioException catch (e) {
       _handleDioError(e, emitDeleteError: true);
     } catch (e) {
-      emit(DeleteYearError("Unexpected Error: ${e.toString()}"));
+      emit(DeleteYearError('Unexpected Error: ${e.toString()}'));
     }
   }
 
@@ -111,45 +111,45 @@ class AllYearsCubit extends Cubit<AllYearsState> {
       final token = await TokenStorageHelper.getTokenSecure();
 
       if (token == null || token.isEmpty) {
-        emit(const UpdateYearError("Unauthorized"));
+        emit(const UpdateYearError('Unauthorized'));
         return;
       }
       if (departmentId == 0) {
-        emit(const UpdateYearError("Please select a valid department"));
+        emit(const UpdateYearError('Please select a valid department'));
         return;
       }
 
       final response = await dio.put(
-        "${ApiResources.getYearEndPoint}/$id",
+        '${ApiResources.getYearEndPoint}/$id',
         data: {
-          "name": name,
-          "description": description,
-          "departmentName": departmentName,
-          "startDate": startDate.toIso8601String(),
-          "endDate": endDate.toIso8601String(),
-          "totalHours": totalHours,
+          'name': name,
+          'description': description,
+          'departmentName': departmentName,
+          'startDate': startDate.toIso8601String(),
+          'endDate': endDate.toIso8601String(),
+          'totalHours': totalHours,
         },
         options: Options(
           headers: {
-            "Authorization": "Bearer $token",
+            'Authorization': 'Bearer $token',
           },
         ),
       );
 
       if (response.statusCode == 200) {
-        emit(const UpdateYearSuccess("Year updated successfully"));
+        emit(const UpdateYearSuccess('Year updated successfully'));
 
 
 
         unawaited(fetchYearss());
       } else {
         emit(UpdateYearError(
-            "Failed to update year. Status Code: ${response.statusCode}"));
+            'Failed to update year. Status Code: ${response.statusCode}'));
       }
     } on DioException catch (e) {
       _handleDioError(e, emitUpdateError: true);
     } catch (e) {
-      emit(UpdateYearError("Unexpected Error: ${e.toString()}"));
+      emit(UpdateYearError('Unexpected Error: ${e.toString()}'));
     }
   }
 
@@ -162,16 +162,16 @@ class AllYearsCubit extends Cubit<AllYearsState> {
       final token = await TokenStorageHelper.getTokenSecure();
 
       if (token == null || token.isEmpty) {
-        emit(const YearByIdError("Unauthorized: Please login again."));
+        emit(const YearByIdError('Unauthorized: Please login again.'));
         return;
       }
 
       final response = await dio.get(
-        "${ApiResources.getYearEndPoint}/$id",
+        '${ApiResources.getYearEndPoint}/$id',
         options: Options(
           headers: {
-            "Authorization": "Bearer $token",
-            "Content-Type": "application/json",
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'application/json',
           },
         ),
       );
@@ -181,7 +181,7 @@ class AllYearsCubit extends Cubit<AllYearsState> {
         emit(YearByIdLoaded(year));
       } else {
         emit(YearByIdError(
-            "Failed to load year. Status Code: ${response.statusCode}"));
+            'Failed to load year. Status Code: ${response.statusCode}'));
       }
     } on DioException catch (e) {
       _handleDioError(e, emitYearByIdError: true);
@@ -196,25 +196,25 @@ class AllYearsCubit extends Cubit<AllYearsState> {
         bool emitUpdateError = false,
         bool emitYearByIdError = false,
       }) {
-    String errorMessage = "Something went wrong";
+    String errorMessage = 'Something went wrong';
     int? statusCode;
 
     if (e.response != null) {
       statusCode = e.response?.statusCode;
 
-      print("========= API ERROR =========");
-      print("STATUS CODE: $statusCode");
-      print("RESPONSE DATA: ${e.response?.data}");
-      print("=============================");
+      print('========= API ERROR =========');
+      print('STATUS CODE: $statusCode');
+      print('RESPONSE DATA: ${e.response?.data}');
+      print('=============================');
 
       if (e.response?.data is Map &&
           e.response?.data['message'] != null) {
         errorMessage = e.response?.data['message'];
       } else {
-        errorMessage = "Server Error: $statusCode";
+        errorMessage = 'Server Error: $statusCode';
       }
     } else {
-      errorMessage = "Network Error: ${e.message}";
+      errorMessage = 'Network Error: ${e.message}';
     }
 
     if (emitYearsError) emit(YearsError(errorMessage));

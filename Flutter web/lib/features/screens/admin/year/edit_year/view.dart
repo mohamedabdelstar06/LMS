@@ -49,7 +49,7 @@ class _CreateYearScreenState extends State<UpdateYearScreen> {
   String selectedMenuItem = 'Create Years';
   String? hoveredMenuItem;
   bool isLogoutHovered = false;
-  String selectedDepartmentName = "Select Department";
+  String selectedDepartmentName = 'Select Department';
   int? selectedDepartmentId;
   late DateTime? selectedStartDate;
   late DateTime? selectedEndDate;
@@ -83,12 +83,12 @@ class _CreateYearScreenState extends State<UpdateYearScreen> {
 
     if (year.startDate != null) {
       dobStartController.text =
-      "${year.startDate!.day}/${year.startDate!.month}/${year.startDate!.year}";
+      '${year.startDate!.day}/${year.startDate!.month}/${year.startDate!.year}';
     }
 
     if (year.endDate != null) {
       dobEndController.text =
-      "${year.endDate!.day}/${year.endDate!.month}/${year.endDate!.year}";
+      '${year.endDate!.day}/${year.endDate!.month}/${year.endDate!.year}';
     }
 
     _isInitialized = true;
@@ -102,10 +102,10 @@ class _CreateYearScreenState extends State<UpdateYearScreen> {
     descriptionController = TextEditingController();
     selectedStartDate = null;
     selectedEndDate = null;
-    selectedDepartmentName = "Select Department";
+    selectedDepartmentName = 'Select Department';
     selectedDepartmentId = null;
-    dobStartController.text = "";
-    dobEndController.text = "";
+    dobStartController.text = '';
+    dobEndController.text = '';
   }
 
   InputDecoration _inputStyle(String label) {
@@ -242,11 +242,11 @@ class _CreateYearScreenState extends State<UpdateYearScreen> {
     nameController.clear();
     descriptionController.clear();
 
-    setState(() => selectedDepartmentName = "Select Department");
+    setState(() => selectedDepartmentName = 'Select Department');
     selectedStartDate = null;
     selectedEndDate = null;
-    dobStartController.text = "";
-    dobEndController.text = "";
+    dobStartController.text = '';
+    dobEndController.text = '';
   }
 
   Widget _buildField(
@@ -267,7 +267,7 @@ class _CreateYearScreenState extends State<UpdateYearScreen> {
         ),
         const SizedBox(height: 8),
         TextFormField(
-          validator: (v) => v!.isEmpty ? "Field Required" : null,
+          validator: (v) => v!.isEmpty ? 'Field Required' : null,
 
           controller: nameController,
           maxLines: maxLines,
@@ -295,7 +295,7 @@ class _CreateYearScreenState extends State<UpdateYearScreen> {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text(
-                              "Please select both start and end dates",
+                              'Please select both start and end dates',
                             ),
                             backgroundColor: Colors.red,
                           ),
@@ -317,18 +317,18 @@ class _CreateYearScreenState extends State<UpdateYearScreen> {
                       if (selectedDepartmentId == null) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text("Please select a valid department"),
+                            content: Text('Please select a valid department'),
                             backgroundColor: Colors.red,
                           ),
                         );
                         return;
                       }
 
-                      if (selectedDepartmentName == "Select Department" ||
+                      if (selectedDepartmentName == 'Select Department' ||
                           selectedDepartmentName.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text("Please select a department name"),
+                            content: Text('Please select a department name'),
                             backgroundColor: Colors.red,
                           ),
                         );
@@ -374,7 +374,7 @@ class _CreateYearScreenState extends State<UpdateYearScreen> {
                           ),
                           SizedBox(width: 12),
                           Text(
-                            "Updating Year...",
+                            'Updating Year...',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
@@ -384,7 +384,7 @@ class _CreateYearScreenState extends State<UpdateYearScreen> {
                         ],
                       )
                     : const Text(
-                        "Update Year",
+                        'Update Year',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
@@ -434,7 +434,7 @@ class _CreateYearScreenState extends State<UpdateYearScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  "Edit Year",
+                  'Edit Year',
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
@@ -446,7 +446,7 @@ class _CreateYearScreenState extends State<UpdateYearScreen> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(child: _buildField("Year Name", nameController)),
+                    Expanded(child: _buildField('Year Name', nameController)),
                     const SizedBox(width: 20),
                     Expanded(
                       child:
@@ -460,7 +460,7 @@ class _CreateYearScreenState extends State<UpdateYearScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     const Text(
-                                      "Department Name",
+                                      'Department Name',
                                       style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w600,
@@ -491,7 +491,7 @@ class _CreateYearScreenState extends State<UpdateYearScreen> {
                                     departmentState.departments.isEmpty
                                     ? [
                                         GetDepartmentModel(
-                                          name: "No departments available",
+                                          name: 'No departments available',
                                           id: -1,
                                           description: '',
                                           headId: 0,
@@ -522,14 +522,14 @@ class _CreateYearScreenState extends State<UpdateYearScreen> {
                               }
                               else if (departmentState is DepartmentsErrorState) {
                                 return _buildDropdownField(
-                                  "Error loading departments",
+                                  'Error loading departments',
                                   [
                                     GetDepartmentModel(
                                       name: state.year.name,
                                       id: state.year.id,
                                       description: state.year.description,
                                       headId: 0,
-                                      headName: "state.year.headName",
+                                      headName: 'state.year.headName',
                                       createdAt: DateTime.now(),
                                       updatedAt: DateTime.now(),
                                       years: [],
@@ -560,7 +560,7 @@ class _CreateYearScreenState extends State<UpdateYearScreen> {
                                       description: state.year.description,
                                       headId: 0,
 
-                                      headName: "state.year.headName",
+                                      headName: 'state.year.headName',
                                       createdAt: DateTime.now(),
                                       updatedAt: DateTime.now(),
                                       years: [],
@@ -592,7 +592,7 @@ class _CreateYearScreenState extends State<UpdateYearScreen> {
                         'Start Date',
                         dobStartController,
                         dobStartFocus,
-                        "Select Date",
+                        'Select Date',
                         onDateChanged: (date) {
                           setState(() {
                             selectedStartDate = date;
@@ -606,7 +606,7 @@ class _CreateYearScreenState extends State<UpdateYearScreen> {
                         'End date',
                         dobEndController,
                         dobEndFocus,
-                        "Select Date",
+                        'Select Date',
                         onDateChanged: (date) {
                           setState(() {
                             selectedEndDate = date;
@@ -619,7 +619,7 @@ class _CreateYearScreenState extends State<UpdateYearScreen> {
 
                 const SizedBox(height: 24),
 
-                _buildField("Description", descriptionController, maxLines: 4),
+                _buildField('Description', descriptionController, maxLines: 4),
                 const SizedBox(height: 40),
 
                 _buildActionButtons(state),
@@ -642,7 +642,7 @@ class _CreateYearScreenState extends State<UpdateYearScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          "Department Name",
+          'Department Name',
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w600,
@@ -732,7 +732,7 @@ class _CreateYearScreenState extends State<UpdateYearScreen> {
                       children: [
                         Expanded(
                           child: Text(
-                            "${department.name} (${department.headName})",
+                            '${department.name} (${department.headName})',
                             style: const TextStyle(
                               fontSize: 14,
                               color: Color(0xFF1E293B),

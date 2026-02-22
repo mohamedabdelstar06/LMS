@@ -222,7 +222,7 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                 }
               },
               buildWhen: (previous, current) =>
-                  current is GetUserByIdLoading ||
+              current is GetUserByIdLoading ||
                   current is GetUserByIdSuccess ||
                   current is GetUserByIdError ||
                   current is UpdateUsersLoading,
@@ -395,13 +395,13 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                     selectedCity ?? 'Select City',
                     cities,
                     isCityExpanded,
-                    (value) {
+                        (value) {
                       setState(() {
                         selectedCity = value;
                         isCityExpanded = false;
                       });
                     },
-                    () => setState(() => isCityExpanded = !isCityExpanded),
+                        () => setState(() => isCityExpanded = !isCityExpanded),
                   ),
                   const SizedBox(height: 16),
                   UserFormRoleDropdown(
@@ -426,72 +426,72 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                   if (selectedRole == 'Student')
                     BlocBuilder<DepartmentsCubitDrop, DepartmentsStateDrop>(
                       builder: (context, departmentState) {
-                      if (departmentState is DepartmentLoadingState) {
-                        return const Padding(
-                          padding: EdgeInsets.only(top: 16, bottom: 16),
-                          child: Center(child: CircularProgressIndicator()),
-                        );
-                      }
-
-                      if (departmentState is DepartmentsErrorState) {
-                        return Padding(
-                          padding: const EdgeInsets.only(top: 16, bottom: 16),
-                          child: Text(
-                            "Error: ${departmentState.message}",
-                            style: const TextStyle(color: Colors.red),
-                          ),
-                        );
-                      }
-
-                      if (departmentState is DepartmentLoadedState) {
-                        if (departmentState.departments.isEmpty) {
+                        if (departmentState is DepartmentLoadingState) {
                           return const Padding(
                             padding: EdgeInsets.only(top: 16, bottom: 16),
-                            child: Text("No departments found"),
+                            child: Center(child: CircularProgressIndicator()),
                           );
                         }
 
-                        List<GetDepartmentModel> departments = departmentState
-                            .departments
-                            .whereType<GetDepartmentModel>()
-                            .toList();
+                        if (departmentState is DepartmentsErrorState) {
+                          return Padding(
+                            padding: const EdgeInsets.only(top: 16, bottom: 16),
+                            child: Text(
+                              "Error: ${departmentState.message}",
+                              style: const TextStyle(color: Colors.red),
+                            ),
+                          );
+                        }
 
-                        return Column(
-                          children: [
-                            _buildDropdownField(
-                                  selectedDepartmentName,
-                                  departments,
-                                  isDepartmentExpanded,
-                                  (chosenDep) {
-                                    setState(() {
-                                      selectedDepartmentId = chosenDep.id
-                                          .toString();
-                                      availableYears = chosenDep.years;
-                                      selectedYearName = "Select Year";
-                                      selectedYearId = null;
-                                      selectedDepartmentName = chosenDep.name;
-                                      isDepartmentExpanded = false;
-                                    });
-                                  },
-                                  () => setState(
-                                    () => isDepartmentExpanded =
-                                        !isDepartmentExpanded,
-                                  ),
+                        if (departmentState is DepartmentLoadedState) {
+                          if (departmentState.departments.isEmpty) {
+                            return const Padding(
+                              padding: EdgeInsets.only(top: 16, bottom: 16),
+                              child: Text("No departments found"),
+                            );
+                          }
+
+                          List<GetDepartmentModel> departments = departmentState
+                              .departments
+                              .whereType<GetDepartmentModel>()
+                              .toList();
+
+                          return Column(
+                            children: [
+                              _buildDropdownField(
+                                selectedDepartmentName,
+                                departments,
+                                isDepartmentExpanded,
+                                    (chosenDep) {
+                                  setState(() {
+                                    selectedDepartmentId = chosenDep.id
+                                        .toString();
+                                    availableYears = chosenDep.years;
+                                    selectedYearName = "Select Year";
+                                    selectedYearId = null;
+                                    selectedDepartmentName = chosenDep.name;
+                                    isDepartmentExpanded = false;
+                                  });
+                                },
+                                    () => setState(
+                                      () => isDepartmentExpanded =
+                                  !isDepartmentExpanded,
                                 ),
-                            const SizedBox(height: 16),
-                          ],
-                        );
-                      }
+                              ),
+                              const SizedBox(height: 16),
+                            ],
+                          );
+                        }
 
-                      return const SizedBox.shrink();
-                    },
-                  ),
+                        return const SizedBox.shrink();
+                      },
+                    ),
                   if (selectedRole == 'Student')
                     BlocBuilder<YearsCubitDrop, YearsStateDrop>(
                       builder: (context, yearState) {
-                          if (yearState is YearLoadingState) {
+                        if (yearState is YearLoadingState) {
                           return const Padding(
-                          padding: EdgeInsets.only(bottom: 16),
+                            padding: EdgeInsets.only(bottom: 16),
                             child: Center(child: CircularProgressIndicator()),
                           );
                         }
@@ -517,18 +517,18 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                           return Column(
                             children: [
                               _buildSecondDropdownField(
-                                  selectedYearName,
-                                  availableYears,
-                                  isYearExpanded,
-                                  (chosenYear) {
-                                    setState(() {
-                                      selectedYearName = chosenYear.name;
-                                      selectedYearId = chosenYear.id.toString();
-                                      isYearExpanded = false;
-                                    });
-                                  },
-                                () => setState(
-                                  () => isYearExpanded = !isYearExpanded,
+                                selectedYearName,
+                                availableYears,
+                                isYearExpanded,
+                                    (chosenYear) {
+                                  setState(() {
+                                    selectedYearName = chosenYear.name;
+                                    selectedYearId = chosenYear.id.toString();
+                                    isYearExpanded = false;
+                                  });
+                                },
+                                    () => setState(
+                                      () => isYearExpanded = !isYearExpanded,
                                 ),
                               ),
                               const SizedBox(height: 16),
@@ -568,28 +568,28 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                           }
 
                           List<SquadronModel> squadrons =
-                              squadronState.squadrons
-                                  .whereType<SquadronModel>()
-                                  .toList();
+                          squadronState.squadrons
+                              .whereType<SquadronModel>()
+                              .toList();
 
                           return Column(
                             children: [
                               _buildThirdDropdownField(
-                                  selectedSquadronName,
-                                  squadrons,
-                                  isSquadronExpanded,
-                                  (chosenSquadron) {
-                                    setState(() {
-                                      selectedSquadronName =
-                                          chosenSquadron.name;
-                                      selectedSquadronId = chosenSquadron.id
-                                          .toString();
-                                      isSquadronExpanded = false;
-                                    });
-                                  },
-                                () => setState(
-                                  () =>
-                                      isSquadronExpanded = !isSquadronExpanded,
+                                selectedSquadronName,
+                                squadrons,
+                                isSquadronExpanded,
+                                    (chosenSquadron) {
+                                  setState(() {
+                                    selectedSquadronName =
+                                        chosenSquadron.name;
+                                    selectedSquadronId = chosenSquadron.id
+                                        .toString();
+                                    isSquadronExpanded = false;
+                                  });
+                                },
+                                    () => setState(
+                                      () =>
+                                  isSquadronExpanded = !isSquadronExpanded,
                                 ),
                               ),
                               const SizedBox(height: 16),
@@ -602,75 +602,75 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                     ),
 
                   BlocBuilder<GetUsersCubit, GetUsersState>(
-                      builder: (context, state) {
-                        final isLoading = state is UpdateUsersLoading;
+                    builder: (context, state) {
+                      final isLoading = state is UpdateUsersLoading;
 
-                        return InkWell(
-                          onTap: isLoading
-                              ? null
-                              : () {
-                                  if (dobController.text.isEmpty) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text(
-                                          "Please select date of birth",
-                                        ),
-                                      ),
-                                    );
-                                    return;
-                                  }
-
-                                  final userData = {
-                                    "email": emailController.text,
-                                    "fullName": fullNameController.text,
-                                    "nationalId": nationalIdController.text,
-                                    "gender": genderController.text,
-                                    "dateOfBirth": selectedDateOfBirth
-                                        ?.toIso8601String(),
-                                    "city": selectedCity,
-                                    "role": selectedRole,
-                                    if (selectedRole == 'Student')
-                                      "departmentId": selectedDepartmentId,
-                                    if (selectedRole == 'Student')
-                                      "yearId": selectedYearId,
-                                    if (selectedRole == 'Student')
-                                      "squadronId": selectedSquadronId,
-                                  };
-
-                                  context.read<GetUsersCubit>().updateUser(
-                                    userId: widget.userId,
-                                    userData: userData,
-                                  );
-                                },
-                          child: Container(
-                            width: 470,
-                            height: 45,
-                            decoration: const BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [Color(0xFF1849A9), Color(0xFF53B1FD)],
+                      return InkWell(
+                        onTap: isLoading
+                            ? null
+                            : () {
+                          if (dobController.text.isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                  "Please select date of birth",
+                                ),
                               ),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(12),
-                              ),
+                            );
+                            return;
+                          }
+
+                          final userData = {
+                            "email": emailController.text,
+                            "fullName": fullNameController.text,
+                            "nationalId": nationalIdController.text,
+                            "gender": genderController.text,
+                            "dateOfBirth": selectedDateOfBirth
+                                ?.toIso8601String(),
+                            "city": selectedCity,
+                            "role": selectedRole,
+                            if (selectedRole == 'Student')
+                              "departmentId": selectedDepartmentId,
+                            if (selectedRole == 'Student')
+                              "yearId": selectedYearId,
+                            if (selectedRole == 'Student')
+                              "squadronId": selectedSquadronId,
+                          };
+
+                          context.read<GetUsersCubit>().updateUser(
+                            userId: widget.userId,
+                            userData: userData,
+                          );
+                        },
+                        child: Container(
+                          width: 470,
+                          height: 45,
+                          decoration: const BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [Color(0xFF1849A9), Color(0xFF53B1FD)],
                             ),
-                            child: Center(
-                              child: isLoading
-                                  ? const CircularProgressIndicator(
-                                      color: Colors.white,
-                                    )
-                                  : const Text(
-                                      "Save Changes",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(12),
                             ),
                           ),
-                        );
-                      },
-                    ),
+                          child: Center(
+                            child: isLoading
+                                ? const CircularProgressIndicator(
+                              color: Colors.white,
+                            )
+                                : const Text(
+                              "Save Changes",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                 ],
               ),
             ),
@@ -681,12 +681,12 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
   }
 
   Widget _buildSecondDropdownField(
-    String displayValue,
-    List<YearModel> years,
-    bool isExpanded,
-    Function(YearModel) onSelected,
-    Function() onToggle,
-  ) {
+      String displayValue,
+      List<YearModel> years,
+      bool isExpanded,
+      Function(YearModel) onSelected,
+      Function() onToggle,
+      ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -767,66 +767,66 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
             constraints: const BoxConstraints(maxHeight: 250),
             child: years.isEmpty
                 ? Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 16.0),
-                    child: Center(
-                      child: Text(
-                        "No years already created for this department",
-                        style: TextStyle(
-                          color: Colors.red[600],
-                          fontSize: 14,
-                          fontStyle: FontStyle.italic,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  )
-                : ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: years.length,
-                    itemBuilder: (context, index) {
-                      final year = years[index];
-                      return InkWell(
-                        onTap: () => onSelected(year),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 12,
-                          ),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  year.name,
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    color: Color(0xFF1E293B),
-                                  ),
-                                ),
-                              ),
-                              if (displayValue == year.name)
-                                const Icon(
-                                  Icons.check,
-                                  color: Color(0xFF2563EB),
-                                  size: 18,
-                                ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: Center(
+                child: Text(
+                  "No years already created for this department",
+                  style: TextStyle(
+                    color: Colors.red[600],
+                    fontSize: 14,
+                    fontStyle: FontStyle.italic,
                   ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            )
+                : ListView.builder(
+              shrinkWrap: true,
+              itemCount: years.length,
+              itemBuilder: (context, index) {
+                final year = years[index];
+                return InkWell(
+                  onTap: () => onSelected(year),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            year.name,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Color(0xFF1E293B),
+                            ),
+                          ),
+                        ),
+                        if (displayValue == year.name)
+                          const Icon(
+                            Icons.check,
+                            color: Color(0xFF2563EB),
+                            size: 18,
+                          ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
           ),
       ],
     );
   }
 
   Widget _buildDropdownField(
-    String displayValue,
-    List<GetDepartmentModel> departments,
-    bool isExpanded,
-    Function(GetDepartmentModel) onSelected,
-    Function() onToggle,
-  ) {
+      String displayValue,
+      List<GetDepartmentModel> departments,
+      bool isExpanded,
+      Function(GetDepartmentModel) onSelected,
+      Function() onToggle,
+      ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -946,12 +946,12 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
   }
 
   Widget _buildThirdDropdownField(
-    String displayValue,
-    List<SquadronModel> squadrons,
-    bool isExpanded,
-    Function(SquadronModel) onSelected,
-    Function() onToggle,
-  ) {
+      String displayValue,
+      List<SquadronModel> squadrons,
+      bool isExpanded,
+      Function(SquadronModel) onSelected,
+      Function() onToggle,
+      ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -1104,18 +1104,18 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                   child: kIsWeb && _webImage != null
                       ? CircleAvatar(radius: 50, backgroundImage: MemoryImage(_webImage!))
                       : (!kIsWeb && _selectedImage != null
-                            ? CircleAvatar(radius: 50, backgroundImage: FileImage(_selectedImage!))
-                            : ClipOval(
-                                child: SizedBox(
-                                  width: 100,
-                                  height: 100,
-                                  child: AppNetworkImage(
-                                    imageUrl: user.profileImageUrl,
-                                    size: 100,
-                                    fallbackText: user.fullName,
-                                  ),
-                                ),
-                              )),
+                      ? CircleAvatar(radius: 50, backgroundImage: FileImage(_selectedImage!))
+                      : ClipOval(
+                    child: SizedBox(
+                      width: 100,
+                      height: 100,
+                      child: AppNetworkImage(
+                        imageUrl: user.profileImageUrl,
+                        size: 100,
+                        fallbackText: user.fullName,
+                      ),
+                    ),
+                  )),
                 ),
 
                 if (isProfilePictureHovered)
@@ -1320,12 +1320,12 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
   }
 
   Widget _buildTextField(
-    String label,
-    TextEditingController controller,
-    FocusNode focusNode,
-    IconData icon,
-    String hint,
-  ) {
+      String label,
+      TextEditingController controller,
+      FocusNode focusNode,
+      IconData icon,
+      String hint,
+      ) {
     return StatefulBuilder(
       builder: (context, setFieldState) {
         bool isHovered = false;
@@ -1382,23 +1382,23 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                       ),
                       boxShadow: isFocused
                           ? [
-                              BoxShadow(
-                                color: const Color(0xFF2563EB).withOpacity(0.2),
-                                blurRadius: 12,
-                                offset: const Offset(0, 4),
-                                spreadRadius: 1,
-                              ),
-                            ]
+                        BoxShadow(
+                          color: const Color(0xFF2563EB).withOpacity(0.2),
+                          blurRadius: 12,
+                          offset: const Offset(0, 4),
+                          spreadRadius: 1,
+                        ),
+                      ]
                           : isHovered
                           ? [
-                              BoxShadow(
-                                color: const Color(
-                                  0xFF2563EB,
-                                ).withOpacity(0.08),
-                                blurRadius: 8,
-                                offset: const Offset(0, 2),
-                              ),
-                            ]
+                        BoxShadow(
+                          color: const Color(
+                            0xFF2563EB,
+                          ).withOpacity(0.08),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ]
                           : [],
                     ),
                     child: TextField(
@@ -1429,16 +1429,16 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                         ),
                         suffixIcon: isActive
                             ? AnimatedOpacity(
-                                duration: const Duration(milliseconds: 200),
-                                opacity: isActive ? 1.0 : 0.0,
-                                child: Icon(
-                                  isFocused ? Icons.edit : Icons.touch_app,
-                                  color: const Color(
-                                    0xFF2563EB,
-                                  ).withOpacity(0.4),
-                                  size: 18,
-                                ),
-                              )
+                          duration: const Duration(milliseconds: 200),
+                          opacity: isActive ? 1.0 : 0.0,
+                          child: Icon(
+                            isFocused ? Icons.edit : Icons.touch_app,
+                            color: const Color(
+                              0xFF2563EB,
+                            ).withOpacity(0.4),
+                            size: 18,
+                          ),
+                        )
                             : null,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
@@ -1461,11 +1461,11 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
   }
 
   Widget _buildDateField(
-    String label,
-    TextEditingController controller,
-    FocusNode focusNode,
-    String hint,
-  ) {
+      String label,
+      TextEditingController controller,
+      FocusNode focusNode,
+      String hint,
+      ) {
     return AnimatedBuilder(
       animation: focusNode,
       builder: (context, child) {
@@ -1495,12 +1495,12 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                 ),
                 boxShadow: isFocused
                     ? [
-                        BoxShadow(
-                          color: const Color(0xFF2563EB).withOpacity(0.1),
-                          blurRadius: 8,
-                          offset: const Offset(0, 2),
-                        ),
-                      ]
+                  BoxShadow(
+                    color: const Color(0xFF2563EB).withOpacity(0.1),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ]
                     : [],
               ),
               child: TextField(
@@ -1552,7 +1552,7 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                   if (picked != null) {
                     selectedDateOfBirth = picked;
                     controller.text =
-                        '${picked.day}/${picked.month}/${picked.year}';
+                    '${picked.day}/${picked.month}/${picked.year}';
                   }
                 },
               ),
@@ -1564,13 +1564,13 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
   }
 
   Widget _buildStringDropdownField(
-    String label,
-    String value,
-    List<String> options,
-    bool isExpanded,
-    Function(String) onSelected,
-    Function() onToggle,
-  ) {
+      String label,
+      String value,
+      List<String> options,
+      bool isExpanded,
+      Function(String) onSelected,
+      Function() onToggle,
+      ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -1601,12 +1601,12 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                 ),
                 boxShadow: isExpanded
                     ? [
-                        BoxShadow(
-                          color: const Color(0xFF2563EB).withOpacity(0.1),
-                          blurRadius: 8,
-                          offset: const Offset(0, 2),
-                        ),
-                      ]
+                  BoxShadow(
+                    color: const Color(0xFF2563EB).withOpacity(0.1),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ]
                     : [],
               ),
               child: Row(
@@ -1762,10 +1762,10 @@ class DateRangeSelector extends StatelessWidget {
         items: years
             .map(
               (y) => DropdownMenuItem(
-                value: y,
-                child: Text(y, style: const TextStyle(fontSize: 15)),
-              ),
-            )
+            value: y,
+            child: Text(y, style: const TextStyle(fontSize: 15)),
+          ),
+        )
             .toList(),
         onChanged: (value) {},
       ),
@@ -1822,4 +1822,3 @@ class _ActiveSwitchRowState extends State<ToggleButtonActiveOrDeactive> {
     );
   }
 }
-
