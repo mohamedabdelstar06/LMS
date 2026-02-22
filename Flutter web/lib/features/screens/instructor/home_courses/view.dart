@@ -17,6 +17,12 @@ import '../../admin/courses/get_All_courses/state_mangment/cubit.dart';
 import '../../admin/courses/home_courses/state_managment/states.dart';
 import '../../admin/department/get_department/get_All_departments/view.dart';
 import '../../instructor/teacher_profile/view.dart';
+String buildProfileImageUrl(String? image) {
+  if (image == null || image.isEmpty) return '';
+  if (image.startsWith('https')) return image;
+  return 'https://skylearn.runasp.net$image';
+}
+
 
 List<GetCourseModel> courses = [
 
@@ -33,13 +39,20 @@ class TeacherCourseScreen extends StatefulWidget {
 
 class _CourseScreenState extends State<TeacherCourseScreen> {
   bool _isLoading = true;
+  Map<String, dynamic> userData = {};
+
 
   String? profileImageUrl;
   String? fullName;
-  Future<void> _loadProfileImage() async {
-    final imageUrl = await PrefHelper.getImageProfile();
+  void _loadProfileImage() async {
+    profileImageUrl = await PrefHelper.getImageProfile();
+    setState(() {});
+  }
+
+  Future<void> _loadUserData() async {
+    final data = await PrefHelper.getUserData();
     setState(() {
-      profileImageUrl = imageUrl;
+      userData = data;
     });
   }
   Future<void> _loadFullName() async {
@@ -49,11 +62,7 @@ class _CourseScreenState extends State<TeacherCourseScreen> {
     });
   }
 
-  // void loadImageProfile() async {
-  //   imageProfile = await PrefHelper.getImageProfile();
-  //   setState(() {});
-  // }
-  // List <CourseModel> allCourses = [];
+
   @override
   void initState() {
     super.initState();
@@ -68,6 +77,7 @@ class _CourseScreenState extends State<TeacherCourseScreen> {
 
     _loadProfileImage();
     _loadFullName();
+    _loadUserData();
   }
 
   @override
@@ -97,12 +107,12 @@ class _CourseScreenState extends State<TeacherCourseScreen> {
                 ),
                 SizedBox(height: 20),
                 Text(
-                  "Loading Courses...",
+                  'Loading Courses...',
                   style: TextStyle(
                     color: Colors.blue,
                     fontSize: 18,
                     fontWeight: FontWeight.w500,
-                    fontFamily: "inter",
+                    fontFamily: 'inter',
                   ),
                 ),
               ],
@@ -193,11 +203,11 @@ class _CourseScreenState extends State<TeacherCourseScreen> {
                                       horizontal: 20,
                                       vertical: 15,
                                     ),
-                                    hintText: "Search courses...",
+                                    hintText: 'Search courses...',
                                     hintStyle: const TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w400,
-                                      fontFamily: "inter",
+                                      fontFamily: 'inter',
                                       color: Color(0xFF64748B),
                                     ),
                                     prefixIcon: Padding(
@@ -289,7 +299,7 @@ class _CourseScreenState extends State<TeacherCourseScreen> {
                                                 Row(
                                                   children: [
                                                     Text(
-                                                      "Welcome Back",
+                                                      'Welcome Back',
                                                       style: TextStyle(
                                                         color: const Color(
                                                           0xff175CD3,
@@ -299,7 +309,7 @@ class _CourseScreenState extends State<TeacherCourseScreen> {
                                                             : 28,
                                                         fontWeight:
                                                         FontWeight.w700,
-                                                        fontFamily: "inter",
+                                                        fontFamily: 'inter',
                                                       ),
                                                     ),
                                                     const SizedBox(width: 8),
@@ -325,13 +335,13 @@ class _CourseScreenState extends State<TeacherCourseScreen> {
                                                 ),
                                                 const SizedBox(height: 8),
                                                 Text(
-                                                  "Manage your classes and track your students’ progress easily.",
+                                                  'Manage your classes and track your students’ progress easily.',
                                                   style: TextStyle(
                                                     fontSize: isLargeScreen
                                                         ? 16
                                                         : 14,
                                                     fontWeight: FontWeight.w400,
-                                                    fontFamily: "inter",
+                                                    fontFamily: 'inter',
                                                     color: const Color(0xFF64748B),
                                                   ),
                                                 ),
@@ -477,6 +487,67 @@ class _CourseScreenState extends State<TeacherCourseScreen> {
       },
     );
   }
+  Widget webProfileAvatar({
+    required String? imageUrl,
+    double radius = 16,
+    bool isOnline = true,
+  }) {
+    final size = radius * 2;
+    return Stack(
+      children: [
+        ClipOval(
+          child: SizedBox(
+            width: size,
+            height: size,
+            child: imageUrl != null && imageUrl.isNotEmpty
+                ? WebImage(
+              url: imageUrl,
+              width: size,
+              height: size,
+            )
+                : avatarPlaceholder(size),
+          ),
+        ),
+        onlineIndicator(isOnline: isOnline, size: radius / 2),
+      ],
+    );
+  }
+
+
+  Widget avatarPlaceholder(double size) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.grey.shade200,
+      ),
+      child: const Center(
+        child: CircularProgressIndicator(
+          strokeWidth: 2,
+          color: Color(0xFF175CD3),
+        ),
+      ),
+    );
+  }
+  Widget onlineIndicator({bool isOnline = true, double size = 10}) {
+    return Positioned(
+      bottom: 0,
+      right: 0,
+      child: Container(
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: isOnline ? Colors.green : Colors.grey,
+          border: Border.all(
+            color: Colors.white,
+            width: 2,
+          ),
+        ),
+      ),
+    );
+  }
   Widget _buildUserProfile(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -488,26 +559,26 @@ class _CourseScreenState extends State<TeacherCourseScreen> {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          CircleAvatar(
+          webProfileAvatar(
+            imageUrl: buildProfileImageUrl(userData['profileImageUrl']),
             radius: 16,
-            backgroundColor: Colors.grey[200],
-            backgroundImage: profileImageUrl != null && profileImageUrl!.isNotEmpty
-                ? NetworkImage(profileImageUrl!)
-                : const AssetImage(Assets.logo),
-          ),          const SizedBox(width: 8),
+            isOnline: true,
+            //   userData["profileImageUrl"]
+          ),
+
+          const SizedBox(width: 8),
           Text(
-            fullName ?? "User",
+            userData['fullName'] ?? 'User',
             style: const TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w600,
-              fontFamily: "inter",
+              fontFamily: 'inter',
               color: Color(0xFF1E293B),
             ),
           ),
           const SizedBox(width: 4),
           IconButton(
-            icon:
-            const Icon(
+            icon: const Icon(
               Icons.keyboard_arrow_down_outlined,
               color: Color(0xFF64748B),
               size: 20,
@@ -557,22 +628,22 @@ class _CourseScreenState extends State<TeacherCourseScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            "Total Courses = ",
+            'Total Courses = ',
             style: TextStyle(
               fontSize: isLargeScreen ? 16 : 14,
               fontWeight: FontWeight.w500,
               color: Colors.white.withValues(alpha: 0.9),
-              fontFamily: "inter",
+              fontFamily: 'inter',
             ),
           ),
           const SizedBox(width: 4),
           Text(
-            "$count",
+            '$count',
             style: TextStyle(
               fontSize: isLargeScreen ? 36 : 28,
               fontWeight: FontWeight.w700,
               color: Colors.white,
-              fontFamily: "inter",
+              fontFamily: 'inter',
             ),
           ),
         ],
@@ -621,7 +692,7 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
        ///todo:
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text("📘 Selected: ${widget.courseModel.title}"),
+              content: Text('📘 Selected: ${widget.courseModel.title}'),
               backgroundColor: const Color(0xFF175CD3),
               behavior: SnackBarBehavior.floating,
               shape: RoundedRectangleBorder(
@@ -734,7 +805,7 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                           style: const TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
-                            fontFamily: "inter",
+                            fontFamily: 'inter',
                             color: Color(0xFF175CD3),
                           ),
                           // maxLines: 2,
@@ -755,7 +826,7 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                                 style: const TextStyle(
                                   fontSize: 11,
                                   fontWeight: FontWeight.w400,
-                                  fontFamily: "inter",
+                                  fontFamily: 'inter',
                                   color: Color(0xFF64748B),
                                 ),
                                 maxLines: 1,
@@ -773,7 +844,7 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                                 );
                                 ScaffoldMessenger.of(
                                   context,
-                                ).showSnackBar(const SnackBar(content: Text("data")));
+                                ).showSnackBar(const SnackBar(content: Text('data')));
                               },
                               child: const CircleAvatar(
                                 radius: 14,
@@ -794,12 +865,12 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                         const SizedBox(height: 6),
                         Row(
                             children: [
-                              Text("Enrolled Students = ${widget.courseModel.enrolledStudentsCount}",style:
+                              Text('Enrolled Students = ${widget.courseModel.enrolledStudentsCount}',style:
                               const TextStyle(
                                 fontSize: 11,
                                 fontWeight: FontWeight.w400,
                                 color: Color(0xFF64748B),
-                                fontFamily: "inter",
+                                fontFamily: 'inter',
                               ),),
                             ]
                         )
@@ -893,7 +964,7 @@ void _showUserMenu(BuildContext context) async {
             Icon(Icons.person, color: Color(0xFF175CD3)),
             SizedBox(width: 8),
             Text(
-              "Profile",
+              'Profile',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
           ],
@@ -906,7 +977,7 @@ void _showUserMenu(BuildContext context) async {
             Icon(Icons.settings, color: Color(0xFF059669)),
             SizedBox(width: 8),
             Text(
-              "Settings",
+              'Settings',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
           ],
@@ -920,7 +991,7 @@ void _showUserMenu(BuildContext context) async {
             Icon(Icons.logout, color: Color(0xFFDC2626)),
             SizedBox(width: 8),
             Text(
-              "Logout",
+              'Logout',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,

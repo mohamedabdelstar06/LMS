@@ -18,7 +18,7 @@ import 'model/view.dart';
 String buildProfileImageUrl(String? image) {
   if (image == null || image.isEmpty) return '';
   if (image.startsWith('https')) return image;
-  return "https://skylearn.runasp.net$image";
+  return 'https://skylearn.runasp.net$image';
 }
 
 
@@ -57,7 +57,7 @@ void loadImageProfile() async {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(milliseconds: 500), () {
+    Future.delayed(const Duration(milliseconds: 500), () {
       if (mounted) {
         setState(() {
           _isLoading = false;
@@ -86,7 +86,7 @@ void loadImageProfile() async {
             end: Alignment.bottomRight,
           ),
         ),
-        child: Scaffold(
+        child: const Scaffold(
           backgroundColor: Colors.transparent,
           body: Center(
             child: Column(
@@ -98,12 +98,12 @@ void loadImageProfile() async {
                 ),
                 SizedBox(height: 20),
                 Text(
-                  "Loading Courses...",
+                  'Loading Courses...',
                   style: TextStyle(
                     color: Colors.blue,
                     fontSize: 18,
                     fontWeight: FontWeight.w500,
-                    fontFamily: "inter",
+                    fontFamily: 'inter',
                   ),
                 ),
               ],
@@ -158,16 +158,16 @@ void loadImageProfile() async {
                 horizontal: isLargeScreen ? 40 : (isMediumScreen ? 20 : 16),
                 vertical: 20,
               ),
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Color(0xffE3F6FF),
+                color: const Color(0xffE3F6FF),
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 20,
                     spreadRadius: 0,
-                    offset: Offset(0, 10),
+                    offset: const Offset(0, 10),
                   ),
                 ],
               ),
@@ -178,34 +178,34 @@ void loadImageProfile() async {
                     child: Container(
                       height: 50,
                       decoration: BoxDecoration(
-                        color: Color(0xffF8FAFC),
+                        color: const Color(0xffF8FAFC),
                         borderRadius: BorderRadius.circular(15),
                         border: Border.all(
-                          color: Color(0xffE2E8F0),
+                          color: const Color(0xffE2E8F0),
                           width: 1,
                         ),
                       ),
                       child: TextFormField(
                         decoration: InputDecoration(
                           border: InputBorder.none,
-                          contentPadding: EdgeInsets.symmetric(
+                          contentPadding: const EdgeInsets.symmetric(
                             horizontal: 20,
                             vertical: 15,
                           ),
-                          hintText: "Search courses...",
-                          hintStyle: TextStyle(
+                          hintText: 'Search courses...',
+                          hintStyle: const TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
-                            fontFamily: "inter",
+                            fontFamily: 'inter',
                             color: Color(0xFF64748B),
                           ),
                           prefixIcon: Padding(
-                            padding: EdgeInsets.all(12),
+                            padding: const EdgeInsets.all(12),
                             child: SvgPicture.asset(
                               Assets.courseSearchIcon,
                               width: 20,
                               height: 20,
-                              colorFilter: ColorFilter.mode(
+                              colorFilter: const ColorFilter.mode(
                                 Color(0xFF64748B),
                                 BlendMode.srcIn,
                               ),
@@ -215,7 +215,7 @@ void loadImageProfile() async {
                       ),
                     ),
                   ),
-                  SizedBox(width: 20),
+                  const SizedBox(width: 20),
 
                   Row(
                     children: [
@@ -223,12 +223,12 @@ void loadImageProfile() async {
                         icon: Assets.iconsMessageIcon,
                         onPressed: () {},
                       ),
-                      SizedBox(width: 12),
+                      const SizedBox(width: 12),
                       _buildNotificationButton(
                         icon: Assets.iconsBellIcon,
                         onPressed: () {},
                       ),
-                      SizedBox(width: 20),
+                      const SizedBox(width: 20),
                       _buildUserProfile(context),
                     ],
                   ),
@@ -255,7 +255,7 @@ void loadImageProfile() async {
                     children: [
                       Container(
                         width: double.infinity,
-                        padding: EdgeInsets.all(24),
+                        padding: const EdgeInsets.all(24),
                         decoration: BoxDecoration(
                           color: Colors.white.withValues(alpha: 0.9),
                           borderRadius: BorderRadius.circular(20),
@@ -264,7 +264,7 @@ void loadImageProfile() async {
                               color: Colors.black.withValues(alpha: 0.05),
                               blurRadius: 20,
                               spreadRadius: 0,
-                              offset: Offset(0, 10),
+                              offset: const Offset(0, 10),
                             ),
                           ],
                         ),
@@ -281,18 +281,18 @@ void loadImageProfile() async {
                                       Row(
                                         children: [
                                           Text(
-                                            "Welcome Back",
+                                            'Welcome Back',
                                             style: TextStyle(
-                                              color: Color(0xff175CD3),
+                                              color: const Color(0xff175CD3),
 
                                               fontSize: isLargeScreen
                                                   ? 36
                                                   : 28,
                                               fontWeight: FontWeight.w700,
-                                              fontFamily: "inter",
+                                              fontFamily: 'inter',
                                             ),
                                           ),
-                                          SizedBox(width: 8),
+                                          const SizedBox(width: 8),
                                           Image.asset(
                                             Assets.iconsHand,
                                             width: isLargeScreen ? 32 : 24,
@@ -309,14 +309,14 @@ void loadImageProfile() async {
                                           ),
                                         ],
                                       ),
-                                      SizedBox(height: 8),
+                                      const SizedBox(height: 8),
                                       Text(
-                                        "Start your learning journey now — your next big achievement starts here!",
+                                        'Start your learning journey now — your next big achievement starts here!',
                                         style: TextStyle(
                                           fontSize: isLargeScreen ? 16 : 14,
                                           fontWeight: FontWeight.w400,
-                                          fontFamily: "inter",
-                                          color: Color(0xFF64748B),
+                                          fontFamily: 'inter',
+                                          color: const Color(0xFF64748B),
                                         ),
                                       ),
                                     ],
@@ -327,11 +327,11 @@ void loadImageProfile() async {
                           ],
                         ),
                       ),
-                      SizedBox(height: 30),
+                      const SizedBox(height: 30),
 
                       Container(
                         width: double.infinity,
-                        padding: EdgeInsets.all(24),
+                        padding: const EdgeInsets.all(24),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(20),
@@ -340,7 +340,7 @@ void loadImageProfile() async {
                               color: Colors.grey.withValues(alpha: 0.15),
                               blurRadius: 20,
                               spreadRadius: 0,
-                              offset: Offset(0, 8),
+                              offset: const Offset(0, 8),
                             ),
                           ],
                         ),
@@ -390,7 +390,7 @@ void loadImageProfile() async {
                           },
                         ),
                       ),
-                      SizedBox(height: 40),
+                      const SizedBox(height: 40),
 
                     ],
                   ),
@@ -437,22 +437,22 @@ void loadImageProfile() async {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            "Total Courses = ",
+            'Total Courses = ',
             style: TextStyle(
               fontSize: isLargeScreen ? 16 : 14,
               fontWeight: FontWeight.w500,
               color: Colors.white.withValues(alpha: 0.9),
-              fontFamily: "inter",
+              fontFamily: 'inter',
             ),
           ),
           const SizedBox(width: 4),
           Text(
-            "$count",
+            '$count',
             style: TextStyle(
               fontSize: isLargeScreen ? 36 : 28,
               fontWeight: FontWeight.w700,
               color: Colors.white,
-              fontFamily: "inter",
+              fontFamily: 'inter',
             ),
           ),
         ],
@@ -474,20 +474,20 @@ void loadImageProfile() async {
           width: 40,
           height: 40,
           decoration: BoxDecoration(
-            color: Color(0xffF8FAFC),
+            color: const Color(0xffF8FAFC),
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: Color(0xffE2E8F0), width: 1),
+            border: Border.all(color: const Color(0xffE2E8F0), width: 1),
           ),
           child: Center(
             child: Badge(
               smallSize: 6,
-              backgroundColor: Color(0xffFF3B30),
-              offset: Offset(-1, 1),
+              backgroundColor: const Color(0xffFF3B30),
+              offset: const Offset(-1, 1),
               child: SvgPicture.asset(
                 icon,
                 width: 18,
                 height: 18,
-                colorFilter: ColorFilter.mode(
+                colorFilter: const ColorFilter.mode(
                   Color(0xFF175CD3),
                   BlendMode.srcIn,
                 ),
@@ -536,7 +536,7 @@ void loadImageProfile() async {
         shape: BoxShape.circle,
         color: Colors.grey.shade200,
       ),
-      child: Center(
+      child: const Center(
         child: CircularProgressIndicator(
           strokeWidth: 2,
           color: Color(0xFF175CD3),
@@ -568,35 +568,35 @@ void loadImageProfile() async {
 
   Widget _buildUserProfile(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: Color(0xffF8FAFC),
+        color: const Color(0xffF8FAFC),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Color(0xffE2E8F0), width: 1),
+        border: Border.all(color: const Color(0xffE2E8F0), width: 1),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           webProfileAvatar(
-            imageUrl: buildProfileImageUrl(userData["profileImageUrl"]),
+            imageUrl: buildProfileImageUrl(userData['profileImageUrl']),
             radius: 16,
             isOnline: true,
             //   userData["profileImageUrl"]
           ),
 
-          SizedBox(width: 8),
+          const SizedBox(width: 8),
           Text(
-              userData["fullName"] ?? "User",
-            style: TextStyle(
+              userData['fullName'] ?? 'User',
+            style: const TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w600,
-              fontFamily: "inter",
+              fontFamily: 'inter',
               color: Color(0xFF1E293B),
             ),
           ),
-          SizedBox(width: 4),
+          const SizedBox(width: 4),
           IconButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.keyboard_arrow_down_outlined,
               color: Color(0xFF64748B),
               size: 20,
@@ -651,8 +651,8 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
         onTap: () {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text("📘 Selected: ${widget.courseModel.courseTitle}"),
-                  backgroundColor: Color(0xFF175CD3),
+              content: Text('📘 Selected: ${widget.courseModel.courseTitle}'),
+                  backgroundColor: const Color(0xFF175CD3),
                   behavior: SnackBarBehavior.floating,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
@@ -662,12 +662,12 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
             },
             child: AnimatedScale(
               scale: isHovered ? 1.08 : 1.0,
-              duration: Duration(milliseconds: 250),
+              duration: const Duration(milliseconds: 250),
               curve: Curves.easeOutCubic,
               child: AnimatedContainer(
-                duration: Duration(milliseconds: 300),
+                duration: const Duration(milliseconds: 300),
                 curve: Curves.easeInOut,
-                padding: EdgeInsets.all(12),
+                padding: const EdgeInsets.all(12),
                 width: 304,
                 height: 250,
                 decoration: BoxDecoration(
@@ -682,32 +682,32 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
               color: Colors.black.withValues(alpha: 0.25),
               blurRadius: 20,
               spreadRadius: 0,
-              offset: Offset(0, 12),
+              offset: const Offset(0, 12),
             ),
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.15),
               blurRadius: 10,
               spreadRadius: 0,
-              offset: Offset(0, 6),
+              offset: const Offset(0, 6),
             ),
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.08),
               blurRadius: 5,
               spreadRadius: 0,
-              offset: Offset(0, 3),
+              offset: const Offset(0, 3),
             ),
           ] : [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.08),
               blurRadius: 15,
               spreadRadius: 0,
-              offset: Offset(0, 4),
+              offset: const Offset(0, 4),
             ),
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.04),
               blurRadius: 6,
               spreadRadius: 0,
-              offset: Offset(0, 1),
+              offset: const Offset(0, 1),
             ),
           ],
                 ),
@@ -718,7 +718,7 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                       width: 304,
                       height: 164,
                       child: ClipRRect(
-                        borderRadius: BorderRadius.only(
+                        borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(16),
                           topRight: Radius.circular(16),
                           bottomLeft: Radius.circular(16),
@@ -753,42 +753,42 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(height: 6),
+                            const SizedBox(height: 6),
                              Text(
                                widget.courseModel.courseTitle,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w700,
-                                fontFamily: "inter",
+                                fontFamily: 'inter',
                                 color: Color(0xFF175CD3),
                               ),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             ),
-                            SizedBox(height: 3),
+                            const SizedBox(height: 3),
                              Text(
                                widget.courseModel.courseDescription,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 11,
                                 fontWeight: FontWeight.w400,
-                                fontFamily: "inter",
+                                fontFamily: 'inter',
                                 color: Color(0xFF64748B),
                               ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
-                            Spacer(),
+                            const Spacer(),
                             Row(
                               children: [
-                                Icon(
+                                const Icon(
                                   Icons.star,
                                   color: Color(0xFFF59E0B),
                                   size: 14,
                                 ),
-                                Spacer(),
+                                const Spacer(),
                                  Text(
-                                   "${widget.courseModel.creditHours} Hours",
-                                  style: TextStyle(
+                                   '${widget.courseModel.creditHours} Hours',
+                                  style: const TextStyle(
                                     fontSize: 11,
                                     fontWeight: FontWeight.w500,
                                     color: Color(0xFF64748B),
@@ -840,7 +840,7 @@ void _showUserMenu(BuildContext context) async {
             Icon(Icons.person, color: Color(0xFF175CD3)),
             SizedBox(width: 8),
             Text(
-              "Profile",
+              'Profile',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
           ],
@@ -853,7 +853,7 @@ void _showUserMenu(BuildContext context) async {
             Icon(Icons.settings, color: Color(0xFF059669)),
             SizedBox(width: 8),
             Text(
-              "Settings",
+              'Settings',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
           ],
@@ -867,7 +867,7 @@ void _showUserMenu(BuildContext context) async {
             Icon(Icons.logout, color: Color(0xFFDC2626)),
             SizedBox(width: 8),
             Text(
-              "Logout",
+              'Logout',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -883,7 +883,7 @@ void _showUserMenu(BuildContext context) async {
   if (result == 'logout') {
     await LogoutServer.logout();
   } else if (result == 'profile') {
-Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => StudentProfileScreen(),));
+Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const StudentProfileScreen(),));
 
   } else if (result == 'settings') {
     // TODO: Add settings action later
