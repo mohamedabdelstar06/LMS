@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
+import 'package:lms/features/screens/instructor/home_courses/view.dart';
 import 'package:lms/features/screens/instructor/teacher_profile/state_managment/cubit_d_profile.dart';
 import 'package:lms/features/screens/instructor/teacher_profile/state_managment/state_d_profile.dart';
 
@@ -15,7 +16,10 @@ import '../../../../core/cons/Colors/app_colors.dart';
 import '../../../../core/helpers/logout_server/logout.dart';
 import '../../../../generated/assets.dart';
 import '../../Announcement/view.dart';
+import '../../admin/admin_profile/view.dart';
+import '../../admin/courses/create_course/Adding_view.dart';
 import '../../student/student_courses/view.dart';
+import '../create_course/Adding_view.dart';
 import 'model/view.dart';
 import 'dart:html' as html;
 
@@ -238,7 +242,7 @@ class _ProfileScreenState extends State<TeacherProfileScreen> {
     return Container(
       width: 250,
       margin: const EdgeInsetsDirectional.only(
-        start: 40,
+        start: 30,
         end: 0,
         top: 50,
         bottom: 50,
@@ -248,6 +252,7 @@ class _ProfileScreenState extends State<TeacherProfileScreen> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
+            // ignore: deprecated_member_use
             color: Colors.black.withOpacity(0.08),
             blurRadius: 20,
             offset: const Offset(0, 4),
@@ -263,7 +268,9 @@ class _ProfileScreenState extends State<TeacherProfileScreen> {
             Icons.person,
             'Profile',
             'Profile',
-                () {},
+                () {
+
+            },
           ),
           _buildMenuItem(
             Icons.book_outlined,
@@ -274,11 +281,27 @@ class _ProfileScreenState extends State<TeacherProfileScreen> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const StudentCourseScreen(),
+                  builder: (context) => const TeacherCourseScreen(),
                 ),
               );
             },
           ),
+          _buildMenuItem(
+
+            Icons.event_available,
+            Icons.event_note_outlined,
+            'Create New Course',
+            'Create New Course',
+                () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const TeacherCreateNewCoursePage(),
+                ),
+              );
+            },
+          ),
+
           _buildMenuItem(
             Icons.notifications_active_outlined,
             Icons.notifications_active_rounded,
@@ -291,7 +314,6 @@ class _ProfileScreenState extends State<TeacherProfileScreen> {
                   builder: (context) => const AnnouncementScreen(),
                 ),
               );
-
             },
           ),
 

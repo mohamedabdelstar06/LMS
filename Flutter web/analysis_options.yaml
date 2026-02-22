@@ -1,36 +1,76 @@
-# This file configures the analyzer, which statically analyzes Dart code to
-# check for errors, warnings, and lints.
-#
-# The issues identified by the analyzer are surfaced in the UI of Dart-enabled
-# IDEs (https://dart.dev/tools#ides-and-editors). The analyzer can also be
-# invoked from the command line by running `flutter analyze`.
-
-# The following line activates admin_profile set of recommended lints for Flutter apps,
-# packages, and plugins designed to encourage good coding practices.
-analyzer:
-  errors:
-    avoid_web_libraries_in_flutter: ignore
-    deprecated_member_use: ignore
-    file_names: ignore
-    undefined_hidden_name: ignore
-    unused_field: ignore
-    unused_import: ignore ignore
 include: package:flutter_lints/flutter.yaml
 
-linter:
-  # The lint rules applied to this project can be customized in the
-  # section below to disable rules from the `package:flutter_lints/flutter.yaml`
-  # included above or to enable additional rules. A list of all available lints
-  # and their documentation is published at https://dart.dev/lints.
-  #
-  # Instead of disabling admin_profile lint rule for the entire project in the
-  # section below, it can also be suppressed for admin_profile single line of code
-  # or admin_profile specific dart file by using the `// ignore: name_of_lint` and
-  # `// ignore_for_file: name_of_lint` syntax on the line or in the file
-  # producing the lint.
-  rules:
-    # avoid_print: false  # Uncomment to disable the `avoid_print` rule
-    # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
+exclude:
+  - build/**
 
-# Additional information about this file can be found at
-# https://dart.dev/guides/language/analysis-options
+analyzer:
+  errors:
+    avoid_web_libraries_in_flutter: warning
+    deprecated_member_use: warning
+    file_names: warning
+    undefined_hidden_name: error
+    unused_field: warning
+    unused_import: warning
+    dead_code: warning
+    todo: ignore
+
+linter:
+  rules:
+
+    # Performance Rules
+    prefer_const_constructors: true
+    prefer_const_literals_to_create_immutables: true
+    prefer_const_declarations: true
+    prefer_final_fields: true
+    prefer_final_locals: true
+    avoid_unnecessary_containers: true
+    sized_box_for_whitespace: true
+    avoid_redundant_argument_values: true
+    avoid_function_literals_in_foreach_calls: true
+
+    # Code Cleanliness
+    prefer_collection_literals: true
+    unnecessary_lambdas: true
+    avoid_returning_null_for_void: true
+    unnecessary_this: true
+    unnecessary_overrides: true
+    unnecessary_parenthesis: true
+    prefer_single_quotes: true
+
+    # Structure & Readability
+    always_declare_return_types: true
+    annotate_overrides: true
+    sort_constructors_first: true
+    use_key_in_widget_constructors: true
+    require_trailing_commas: true
+    curly_braces_in_flow_control_structures: true
+    avoid_print: true
+    avoid_empty_else: true
+    empty_catches: warning
+    directives_ordering: true
+    library_private_types_in_public_api: true
+    type_annotate_public_apis: true
+    use_super_parameters: true
+    avoid_types_on_closure_parameters: true
+
+dart_code_metrics:
+
+  metrics:
+    cyclomatic-complexity: 20
+    maximum-nesting-level: 5
+    number-of-methods: 15
+    source-lines-of-code: 300
+
+  rules:
+    - avoid-unused-parameters
+    - avoid-nested-conditional-expressions
+    - avoid-late-keyword
+    - avoid-collection-methods-with-unrelated-types
+    - avoid-global-state
+    - avoid-missing-enum-constant-in-map
+    - avoid-unnecessary-setstate
+    - avoid-returning-widgets
+    - prefer-extracting-callbacks
+    - prefer-moving-to-variable
+    - no-equal-then-else
+    - prefer-trailing-comma

@@ -12,11 +12,17 @@ import '../../../../core/helpers/cach_helper/shared_pref_helper.dart';
 import '../../../../core/helpers/logout_server/logout.dart';
 import '../../../../generated/assets.dart';
 
-import '../../admin/courses/get_All_courses/model/model.dart';
+import '../../admin/courses/home_courses/model/model.dart';
 import '../../admin/courses/get_All_courses/state_mangment/cubit.dart';
 import '../../admin/courses/home_courses/state_managment/states.dart';
 import '../../admin/department/get_department/get_All_departments/view.dart';
 import '../../instructor/teacher_profile/view.dart';
+String buildProfileImageUrl(String? image) {
+  if (image == null || image.isEmpty) return '';
+  if (image.startsWith('https')) return image;
+  return 'https://skylearn.runasp.net$image';
+}
+
 
 List<GetCourseModel> courses = [
 
@@ -33,13 +39,20 @@ class TeacherCourseScreen extends StatefulWidget {
 
 class _CourseScreenState extends State<TeacherCourseScreen> {
   bool _isLoading = true;
+  Map<String, dynamic> userData = {};
+
 
   String? profileImageUrl;
   String? fullName;
-  Future<void> _loadProfileImage() async {
-    final imageUrl = await PrefHelper.getImageProfile();
+  void _loadProfileImage() async {
+    profileImageUrl = await PrefHelper.getImageProfile();
+    setState(() {});
+  }
+
+  Future<void> _loadUserData() async {
+    final data = await PrefHelper.getUserData();
     setState(() {
-      profileImageUrl = imageUrl;
+      userData = data;
     });
   }
   Future<void> _loadFullName() async {
@@ -49,15 +62,11 @@ class _CourseScreenState extends State<TeacherCourseScreen> {
     });
   }
 
-  // void loadImageProfile() async {
-  //   imageProfile = await PrefHelper.getImageProfile();
-  //   setState(() {});
-  // }
-  // List <CourseModel> allCourses = [];
+
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(milliseconds: 500), () {
+    Future.delayed(const Duration(milliseconds: 500), () {
       if (mounted) {
         setState(() {
           _isLoading = false;
@@ -68,6 +77,7 @@ class _CourseScreenState extends State<TeacherCourseScreen> {
 
     _loadProfileImage();
     _loadFullName();
+    _loadUserData();
   }
 
   @override
@@ -85,7 +95,7 @@ class _CourseScreenState extends State<TeacherCourseScreen> {
             end: Alignment.bottomRight,
           ),
         ),
-        child: Scaffold(
+        child: const Scaffold(
           backgroundColor: Colors.transparent,
           body: Center(
             child: Column(
@@ -97,12 +107,12 @@ class _CourseScreenState extends State<TeacherCourseScreen> {
                 ),
                 SizedBox(height: 20),
                 Text(
-                  "Loading Courses...",
+                  'Loading Courses...',
                   style: TextStyle(
                     color: Colors.blue,
                     fontSize: 18,
                     fontWeight: FontWeight.w500,
-                    fontFamily: "inter",
+                    fontFamily: 'inter',
                   ),
                 ),
               ],
@@ -158,16 +168,16 @@ class _CourseScreenState extends State<TeacherCourseScreen> {
                           horizontal: isLargeScreen ? 40 : (isMediumScreen ? 20 : 16),
                           vertical: 20,
                         ),
-                        padding: EdgeInsets.all(20),
+                        padding: const EdgeInsets.all(20),
                         decoration: BoxDecoration(
-                          color: Color(0xffE3F6FF),
+                          color: const Color(0xffE3F6FF),
                           borderRadius: BorderRadius.circular(20),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.black.withValues(alpha: 0.05),
                               blurRadius: 20,
                               spreadRadius: 0,
-                              offset: Offset(0, 10),
+                              offset: const Offset(0, 10),
                             ),
                           ],
                         ),
@@ -179,34 +189,34 @@ class _CourseScreenState extends State<TeacherCourseScreen> {
                               child: Container(
                                 height: 50,
                                 decoration: BoxDecoration(
-                                  color: Color(0xffF8FAFC),
+                                  color: const Color(0xffF8FAFC),
                                   borderRadius: BorderRadius.circular(15),
                                   border: Border.all(
-                                    color: Color(0xffE2E8F0),
+                                    color: const Color(0xffE2E8F0),
                                     width: 1,
                                   ),
                                 ),
                                 child: TextFormField(
                                   decoration: InputDecoration(
                                     border: InputBorder.none,
-                                    contentPadding: EdgeInsets.symmetric(
+                                    contentPadding: const EdgeInsets.symmetric(
                                       horizontal: 20,
                                       vertical: 15,
                                     ),
-                                    hintText: "Search courses...",
-                                    hintStyle: TextStyle(
+                                    hintText: 'Search courses...',
+                                    hintStyle: const TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w400,
-                                      fontFamily: "inter",
+                                      fontFamily: 'inter',
                                       color: Color(0xFF64748B),
                                     ),
                                     prefixIcon: Padding(
-                                      padding: EdgeInsets.all(12),
+                                      padding: const EdgeInsets.all(12),
                                       child: SvgPicture.asset(
                                         Assets.courseSearchIcon,
                                         width: 20,
                                         height: 20,
-                                        colorFilter: ColorFilter.mode(
+                                        colorFilter: const ColorFilter.mode(
                                           Color(0xFF64748B),
                                           BlendMode.srcIn,
                                         ),
@@ -216,7 +226,7 @@ class _CourseScreenState extends State<TeacherCourseScreen> {
                                 ),
                               ),
                             ),
-                            SizedBox(width: 20),
+                            const SizedBox(width: 20),
 
 
                             Row(
@@ -225,12 +235,12 @@ class _CourseScreenState extends State<TeacherCourseScreen> {
                                   icon: Assets.iconsMessageIcon,
                                   onPressed: () {},
                                 ),
-                                SizedBox(width: 12),
+                                const SizedBox(width: 12),
                                 _buildNotificationButton(
                                   icon: Assets.iconsBellIcon,
                                   onPressed: () {},
                                 ),
-                                SizedBox(width: 20),
+                                const SizedBox(width: 20),
                                 _buildUserProfile(context),
                               ],
                             ),
@@ -238,7 +248,7 @@ class _CourseScreenState extends State<TeacherCourseScreen> {
                         ),
                       ),
 
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
 
 
                       Expanded(
@@ -260,7 +270,7 @@ class _CourseScreenState extends State<TeacherCourseScreen> {
                               children: [
                                 Container(
                                   width: double.infinity,
-                                  padding: EdgeInsets.all(24),
+                                  padding: const EdgeInsets.all(24),
                                   decoration: BoxDecoration(
                                     color: Colors.white.withValues(alpha: 0.9),
                                     borderRadius: BorderRadius.circular(20),
@@ -271,7 +281,7 @@ class _CourseScreenState extends State<TeacherCourseScreen> {
                                         ),
                                         blurRadius: 20,
                                         spreadRadius: 0,
-                                        offset: Offset(0, 10),
+                                        offset: const Offset(0, 10),
                                       ),
                                     ],
                                   ),
@@ -289,9 +299,9 @@ class _CourseScreenState extends State<TeacherCourseScreen> {
                                                 Row(
                                                   children: [
                                                     Text(
-                                                      "Welcome Back",
+                                                      'Welcome Back',
                                                       style: TextStyle(
-                                                        color: Color(
+                                                        color: const Color(
                                                           0xff175CD3,
                                                         ),
                                                         fontSize: isLargeScreen
@@ -299,10 +309,10 @@ class _CourseScreenState extends State<TeacherCourseScreen> {
                                                             : 28,
                                                         fontWeight:
                                                         FontWeight.w700,
-                                                        fontFamily: "inter",
+                                                        fontFamily: 'inter',
                                                       ),
                                                     ),
-                                                    SizedBox(width: 8),
+                                                    const SizedBox(width: 8),
                                                     Image.asset(
                                                       Assets.iconsHand,
                                                       width: isLargeScreen
@@ -323,16 +333,16 @@ class _CourseScreenState extends State<TeacherCourseScreen> {
                                                     ),
                                                   ],
                                                 ),
-                                                SizedBox(height: 8),
+                                                const SizedBox(height: 8),
                                                 Text(
-                                                  "Manage your classes and track your students’ progress easily.",
+                                                  'Manage your classes and track your students’ progress easily.',
                                                   style: TextStyle(
                                                     fontSize: isLargeScreen
                                                         ? 16
                                                         : 14,
                                                     fontWeight: FontWeight.w400,
-                                                    fontFamily: "inter",
-                                                    color: Color(0xFF64748B),
+                                                    fontFamily: 'inter',
+                                                    color: const Color(0xFF64748B),
                                                   ),
                                                 ),
                                               ],
@@ -343,11 +353,11 @@ class _CourseScreenState extends State<TeacherCourseScreen> {
                                     ],
                                   ),
                                 ),
-                                SizedBox(height: 30),
+                                const SizedBox(height: 30),
 
                                 Container(
                                   width: double.infinity,
-                                  padding: EdgeInsets.all(24),
+                                  padding: const EdgeInsets.all(24),
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(20),
@@ -358,7 +368,7 @@ class _CourseScreenState extends State<TeacherCourseScreen> {
                                         ),
                                         blurRadius: 20,
                                         spreadRadius: 0,
-                                        offset: Offset(0, 8),
+                                        offset: const Offset(0, 8),
                                       ),
                                     ],
                                   ),
@@ -410,7 +420,7 @@ class _CourseScreenState extends State<TeacherCourseScreen> {
                                     },
                                   ),
                                 ),
-                                SizedBox(height: 40),
+                                const SizedBox(height: 40),
                               ],
                             ),
                           ),
@@ -440,20 +450,20 @@ class _CourseScreenState extends State<TeacherCourseScreen> {
           width: 40,
           height: 40,
           decoration: BoxDecoration(
-            color: Color(0xffF8FAFC),
+            color: const Color(0xffF8FAFC),
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: Color(0xffE2E8F0), width: 1),
+            border: Border.all(color: const Color(0xffE2E8F0), width: 1),
           ),
           child: Center(
             child: Badge(
               smallSize: 6,
-              backgroundColor: Color(0xffFF3B30),
-              offset: Offset(-1, 1),
+              backgroundColor: const Color(0xffFF3B30),
+              offset: const Offset(-1, 1),
               child: SvgPicture.asset(
                 icon,
                 width: 18,
                 height: 18,
-                colorFilter: ColorFilter.mode(
+                colorFilter: const ColorFilter.mode(
                   Color(0xFF175CD3),
                   BlendMode.srcIn,
                 ),
@@ -477,37 +487,98 @@ class _CourseScreenState extends State<TeacherCourseScreen> {
       },
     );
   }
+  Widget webProfileAvatar({
+    required String? imageUrl,
+    double radius = 16,
+    bool isOnline = true,
+  }) {
+    final size = radius * 2;
+    return Stack(
+      children: [
+        ClipOval(
+          child: SizedBox(
+            width: size,
+            height: size,
+            child: imageUrl != null && imageUrl.isNotEmpty
+                ? WebImage(
+              url: imageUrl,
+              width: size,
+              height: size,
+            )
+                : avatarPlaceholder(size),
+          ),
+        ),
+        onlineIndicator(isOnline: isOnline, size: radius / 2),
+      ],
+    );
+  }
+
+
+  Widget avatarPlaceholder(double size) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.grey.shade200,
+      ),
+      child: const Center(
+        child: CircularProgressIndicator(
+          strokeWidth: 2,
+          color: Color(0xFF175CD3),
+        ),
+      ),
+    );
+  }
+  Widget onlineIndicator({bool isOnline = true, double size = 10}) {
+    return Positioned(
+      bottom: 0,
+      right: 0,
+      child: Container(
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: isOnline ? Colors.green : Colors.grey,
+          border: Border.all(
+            color: Colors.white,
+            width: 2,
+          ),
+        ),
+      ),
+    );
+  }
   Widget _buildUserProfile(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: Color(0xffF8FAFC),
+        color: const Color(0xffF8FAFC),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Color(0xffE2E8F0), width: 1),
+        border: Border.all(color: const Color(0xffE2E8F0), width: 1),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          CircleAvatar(
+          webProfileAvatar(
+            imageUrl: buildProfileImageUrl(userData['profileImageUrl']),
             radius: 16,
-            backgroundColor: Colors.grey[200],
-            backgroundImage: profileImageUrl != null && profileImageUrl!.isNotEmpty
-                ? NetworkImage(profileImageUrl!)
-                : AssetImage(Assets.logo),
-          ),          SizedBox(width: 8),
+            isOnline: true,
+            //   userData["profileImageUrl"]
+          ),
+
+          const SizedBox(width: 8),
           Text(
-            fullName ?? "User",
-            style: TextStyle(
+            userData['fullName'] ?? 'User',
+            style: const TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w600,
-              fontFamily: "inter",
+              fontFamily: 'inter',
               color: Color(0xFF1E293B),
             ),
           ),
-          SizedBox(width: 4),
+          const SizedBox(width: 4),
           IconButton(
-            icon:
-            Icon(
+            icon: const Icon(
               Icons.keyboard_arrow_down_outlined,
               color: Color(0xFF64748B),
               size: 20,
@@ -557,22 +628,22 @@ class _CourseScreenState extends State<TeacherCourseScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            "Total Courses = ",
+            'Total Courses = ',
             style: TextStyle(
               fontSize: isLargeScreen ? 16 : 14,
               fontWeight: FontWeight.w500,
               color: Colors.white.withValues(alpha: 0.9),
-              fontFamily: "inter",
+              fontFamily: 'inter',
             ),
           ),
           const SizedBox(width: 4),
           Text(
-            "$count",
+            '$count',
             style: TextStyle(
               fontSize: isLargeScreen ? 36 : 28,
               fontWeight: FontWeight.w700,
               color: Colors.white,
-              fontFamily: "inter",
+              fontFamily: 'inter',
             ),
           ),
         ],
@@ -621,8 +692,8 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
        ///todo:
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text("📘 Selected: ${widget.courseModel.title}"),
-              backgroundColor: Color(0xFF175CD3),
+              content: Text('📘 Selected: ${widget.courseModel.title}'),
+              backgroundColor: const Color(0xFF175CD3),
               behavior: SnackBarBehavior.floating,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
@@ -632,12 +703,12 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
         },
         child: AnimatedScale(
           scale: isHovered ? 1.08 : 1.0,
-          duration: Duration(milliseconds: 250),
+          duration: const Duration(milliseconds: 250),
           curve: Curves.easeOutCubic,
           child: AnimatedContainer(
-            duration: Duration(milliseconds: 300),
+            duration: const Duration(milliseconds: 300),
             curve: Curves.easeInOut,
-            padding: EdgeInsets.all(12),
+            padding: const EdgeInsets.all(12),
             width: 304,
             height: 250,
             decoration: BoxDecoration(
@@ -653,19 +724,19 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                   color: Colors.black.withValues(alpha: 0.25),
                   blurRadius: 20,
                   spreadRadius: 0,
-                  offset: Offset(0, 12),
+                  offset: const Offset(0, 12),
                 ),
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.15),
                   blurRadius: 10,
                   spreadRadius: 0,
-                  offset: Offset(0, 6),
+                  offset: const Offset(0, 6),
                 ),
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.08),
                   blurRadius: 5,
                   spreadRadius: 0,
-                  offset: Offset(0, 3),
+                  offset: const Offset(0, 3),
                 ),
               ]
                   : [
@@ -673,14 +744,14 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                   color: Colors.black.withValues(alpha: 0.08),
                   blurRadius: 15,
                   spreadRadius: 0,
-                  offset: Offset(0, 4),
+                  offset: const Offset(0, 4),
                 ),
 
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.04),
                   blurRadius: 6,
                   spreadRadius: 0,
-                  offset: Offset(0, 1),
+                  offset: const Offset(0, 1),
                 ),
               ],
             ),
@@ -691,7 +762,7 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                   width: 304,
                   height: 164,
                   child: ClipRRect(
-                    borderRadius: BorderRadius.only(
+                    borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(16),
                       topRight: Radius.circular(16),
                       bottomLeft: Radius.circular(16),
@@ -727,14 +798,14 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 6),
+                        const SizedBox(height: 6),
 
                         Text(
                           widget.courseModel.title,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
-                            fontFamily: "inter",
+                            fontFamily: 'inter',
                             color: Color(0xFF175CD3),
                           ),
                           // maxLines: 2,
@@ -746,16 +817,16 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
 
 
 
-                        SizedBox(height: 3),
+                        const SizedBox(height: 3),
                         Row(
                           children: [
                             Expanded(
                               child: Text(
                                 widget.courseModel.description,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 11,
                                   fontWeight: FontWeight.w400,
-                                  fontFamily: "inter",
+                                  fontFamily: 'inter',
                                   color: Color(0xFF64748B),
                                 ),
                                 maxLines: 1,
@@ -768,14 +839,14 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => DepartmentsScreen(),
+                                    builder: (context) => const DepartmentsScreen(),
                                   ),
                                 );
                                 ScaffoldMessenger.of(
                                   context,
-                                ).showSnackBar(SnackBar(content: Text("data")));
+                                ).showSnackBar(const SnackBar(content: Text('data')));
                               },
-                              child: CircleAvatar(
+                              child: const CircleAvatar(
                                 radius: 14,
                                 backgroundColor: Color(0xff175CD3),
                                 child: Center(
@@ -791,15 +862,15 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 6),
+                        const SizedBox(height: 6),
                         Row(
                             children: [
-                              Text("Enrolled Students = ${widget.courseModel.enrolledStudentsCount}",style:
-                              TextStyle(
+                              Text('Enrolled Students = ${widget.courseModel.enrolledStudentsCount}',style:
+                              const TextStyle(
                                 fontSize: 11,
                                 fontWeight: FontWeight.w400,
                                 color: Color(0xFF64748B),
-                                fontFamily: "inter",
+                                fontFamily: 'inter',
                               ),),
                             ]
                         )
@@ -893,7 +964,7 @@ void _showUserMenu(BuildContext context) async {
             Icon(Icons.person, color: Color(0xFF175CD3)),
             SizedBox(width: 8),
             Text(
-              "Profile",
+              'Profile',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
           ],
@@ -906,7 +977,7 @@ void _showUserMenu(BuildContext context) async {
             Icon(Icons.settings, color: Color(0xFF059669)),
             SizedBox(width: 8),
             Text(
-              "Settings",
+              'Settings',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
           ],
@@ -920,7 +991,7 @@ void _showUserMenu(BuildContext context) async {
             Icon(Icons.logout, color: Color(0xFFDC2626)),
             SizedBox(width: 8),
             Text(
-              "Logout",
+              'Logout',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -936,7 +1007,7 @@ void _showUserMenu(BuildContext context) async {
   if (result == 'logout') {
     await LogoutServer.logout();
   } else if (result == 'profile') {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => TeacherProfileScreen()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => const TeacherProfileScreen()));
 
   } else if (result == 'settings') {
     // TODO: Add settings action later

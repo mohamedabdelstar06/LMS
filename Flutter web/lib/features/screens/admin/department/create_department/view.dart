@@ -36,12 +36,11 @@ class _CreateDepartmentScreenState extends State<CreateDepartmentScreen> {
   final _formKey = GlobalKey<FormState>();
   bool isHeadExpanded = false;
 
-
   Uint8List? selectedImageBytes;
   String selectedMenuItem = 'Create Departments';
   String? hoveredMenuItem;
   bool isLogoutHovered = false;
-  String selectedHeadName = "Select Head";
+  String selectedHeadName = 'Select Head';
 
   Future<void> pickImage() async {
     final bytes = await ImagePickerWeb.getImageAsBytes();
@@ -49,7 +48,6 @@ class _CreateDepartmentScreenState extends State<CreateDepartmentScreen> {
       setState(() => selectedImageBytes = bytes);
     }
   }
-
 
   InputDecoration _inputStyle(String label) {
     return InputDecoration(
@@ -81,7 +79,7 @@ class _CreateDepartmentScreenState extends State<CreateDepartmentScreen> {
           gradient: LinearGradient(
             colors: [
               MYColors.gradientColor_3,
-              MYColors.gradientColor_2.withOpacity(0.25),
+              MYColors.gradientColor_2.withValues(alpha: .25),
               MYColors.gradientColor_3,
             ],
             begin: Alignment.topLeft,
@@ -90,27 +88,31 @@ class _CreateDepartmentScreenState extends State<CreateDepartmentScreen> {
         ),
         child: Row(
           children: [
-              CustomeSidebar(selectedMenuItem: selectedMenuItem),
+            CustomeSidebar(selectedMenuItem: selectedMenuItem),
             BlocConsumer<DepartmentCubit, DepartmentState>(
               listener: (context, state) {
                 if (state is DepartmentSuccess) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(state.message), backgroundColor: Colors.green),
+                    SnackBar(
+                      content: Text(state.message),
+                      backgroundColor: Colors.green,
+                    ),
                   );
                   _clearForm();
                 }
                 if (state is DepartmentError) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(state.message), backgroundColor: Colors.red),
+                    SnackBar(
+                      content: Text(state.message),
+                      backgroundColor: Colors.red,
+                    ),
                   );
                 }
               },
               builder: (context, state) {
                 return SingleChildScrollView(
                   padding: const EdgeInsets.all(40),
-                  child: Center(
-                    child: _buildFormContainer(state),
-                  ),
+                  child: Center(child: _buildFormContainer(state)),
                 );
               },
             ),
@@ -128,21 +130,24 @@ class _CreateDepartmentScreenState extends State<CreateDepartmentScreen> {
   }
 
   Widget _buildField(
-      String label,
-      TextEditingController nameController, {
-        int maxLines = 1,
-      }) {
+    String label,
+    TextEditingController nameController, {
+    int maxLines = 1,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
-          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Color(0xFF2563EB)),
-
+          style: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            color: Color(0xFF2563EB),
+          ),
         ),
         const SizedBox(height: 8),
         TextFormField(
-          validator: (v) => v!.isEmpty ? "Field Required" : null,
+          validator: (v) => v!.isEmpty ? 'Field Required' : null,
 
           controller: nameController,
           maxLines: maxLines,
@@ -164,96 +169,103 @@ class _CreateDepartmentScreenState extends State<CreateDepartmentScreen> {
           color: const Color(0xFFF8FAFC),
         ),
         child: selectedImageBytes == null
-            ? Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Icon(Icons.cloud_upload_outlined, size: 48, color: Color(0xFF94A3B8)),
-            SizedBox(height: 12),
-            Text("Upload Department Image", style: TextStyle(color: Color(0xFF64748B))),
-          ],
-        )
+            ? const Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(
+                    Icons.cloud_upload_outlined,
+                    size: 48,
+                    color: Color(0xFF94A3B8),
+                  ),
+                  SizedBox(height: 12),
+                  Text(
+                    'Upload Department Image',
+                    style: TextStyle(color: Color(0xFF64748B)),
+                  ),
+                ],
+              )
             : ClipRRect(
-          borderRadius: BorderRadius.circular(14),
-          child: Image.memory(selectedImageBytes!, fit: BoxFit.cover),
-        ),
+                borderRadius: BorderRadius.circular(14),
+                child: Image.memory(selectedImageBytes!, fit: BoxFit.cover),
+              ),
       ),
     );
   }
+
   Widget _buildActionButtons(DepartmentState state) {
     bool isLoading = state is DepartmentLoading;
     return Row(
       children: [
-       
         Expanded(
           flex: 2,
           child: InkWell(
-            onTap: isLoading ? null : () {
-              if (_formKey.currentState!.validate()) {
+            onTap: isLoading
+                ? null
+                : () {
+                    if (_formKey.currentState!.validate()) {
+                      if (selectedHeadName == 'Select Head' ||
+                          selectedHeadName.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Please select a department head'),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                        return;
+                      }
 
-                if (selectedHeadName == "Select Head" || selectedHeadName.isEmpty) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Please select a department head"),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
-                  return;
-                }
-
-
-                context.read<DepartmentCubit>().createDepartment(
-                  nameController,
-                  descriptionController,
-                  selectedHeadName,
-                  selectedImageBytes,
-                );
-              }
-            },
+                      context.read<DepartmentCubit>().createDepartment(
+                        nameController,
+                        descriptionController,
+                        selectedHeadName,
+                        selectedImageBytes,
+                      );
+                    }
+                  },
             child: Container(
               height: 55,
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [
-                    Color(0xFF1849A9),
-                    Color(0xFF53B1FD),
-                  ],
+                  colors: [Color(0xFF1849A9), Color(0xFF53B1FD)],
                 ),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Center(
                 child: isLoading
                     ? const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                      ),
-                    ),
-                    SizedBox(width: 12),
-                    Text(
-                      "Creating Department...",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                )
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                Colors.white,
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 12),
+                          Text(
+                            'Creating Department...',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      )
                     : const Text(
-                  "Create Department",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                  ),
-                ),
+                        'Create Department',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        ),
+                      ),
               ),
             ),
           ),
@@ -261,6 +273,7 @@ class _CreateDepartmentScreenState extends State<CreateDepartmentScreen> {
       ],
     );
   }
+
   Widget _buildFormContainer(DepartmentState state) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
@@ -284,7 +297,7 @@ class _CreateDepartmentScreenState extends State<CreateDepartmentScreen> {
             borderRadius: BorderRadius.circular(24),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: .05),
                 blurRadius: 20,
                 offset: const Offset(0, 10),
               ),
@@ -296,7 +309,7 @@ class _CreateDepartmentScreenState extends State<CreateDepartmentScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  "Create Department",
+                  'Create Department',
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
@@ -309,29 +322,31 @@ class _CreateDepartmentScreenState extends State<CreateDepartmentScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
-                      child: _buildField(
-                        "Department Name",
-                        nameController,
-                      ),
+                      child: _buildField('Department Name', nameController),
                     ),
                     const SizedBox(width: 20),
                     Expanded(
                       child: BlocProvider(
-                        create: (_) => UsersCubitDrop()..fetchAdminsAndInstructors(),
+                        create: (_) =>
+                            UsersCubitDrop()..fetchAdminsAndInstructors(),
                         child: BlocBuilder<UsersCubitDrop, UsersStateDrop>(
                           builder: (context, userState) {
                             if (userState is UsersLoadingState) {
                               return const Padding(
                                 padding: EdgeInsets.only(top: 30),
-                                child: Center(child: CircularProgressIndicator()),
+                                child: Center(
+                                  child: CircularProgressIndicator(),
+                                ),
                               );
                             }
 
                             if (userState is UsersErrorState) {
                               return Padding(
                                 padding: const EdgeInsets.only(top: 30),
-                                child: Text("Error: ${userState.message}",
-                                    style: const TextStyle(color: Colors.red)),
+                                child: Text(
+                                  'Error: ${userState.message}',
+                                  style: const TextStyle(color: Colors.red),
+                                ),
                               );
                             }
 
@@ -339,23 +354,27 @@ class _CreateDepartmentScreenState extends State<CreateDepartmentScreen> {
                               if (userState.users.isEmpty) {
                                 return const Padding(
                                   padding: EdgeInsets.only(top: 30),
-                                  child: Text("No users found"),
+                                  child: Text('No users found'),
                                 );
                               }
 
-                              List<UserLiteModel> users = userState.users.whereType<UserLiteModel>().toList();
+                              List<UserLiteModel> users = userState.users
+                                  .whereType<UserLiteModel>()
+                                  .toList();
 
                               return _buildDropdownField(
                                 selectedHeadName,
                                 users,
                                 isHeadExpanded,
-                                    (chosenUser) {
+                                (chosenUser) {
                                   setState(() {
                                     selectedHeadName = chosenUser.fullName;
                                     isHeadExpanded = false;
                                   });
                                 },
-                                    () => setState(() => isHeadExpanded = !isHeadExpanded),
+                                () => setState(
+                                  () => isHeadExpanded = !isHeadExpanded,
+                                ),
                               );
                             }
 
@@ -369,17 +388,16 @@ class _CreateDepartmentScreenState extends State<CreateDepartmentScreen> {
 
                 const SizedBox(height: 24),
 
-                _buildField(
-                  "Description",
-                  descriptionController,
-                  maxLines: 4,
-                ),
+                _buildField('Description', descriptionController, maxLines: 4),
                 const SizedBox(height: 24),
 
                 const Text(
-                  "Photo",
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Color(0xFF2563EB)),
-
+                  'Photo',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF2563EB),
+                  ),
                 ),
                 const SizedBox(height: 8),
                 _buildUploadArea(),
@@ -394,19 +412,24 @@ class _CreateDepartmentScreenState extends State<CreateDepartmentScreen> {
       ),
     );
   }
+
   Widget _buildDropdownField(
-      String displayValue,
-      List<UserLiteModel> users,
-      bool isExpanded,
-      Function(UserLiteModel) onSelected,
-      Function() onToggle,
-      ) {
+    String displayValue,
+    List<UserLiteModel> users,
+    bool isExpanded,
+    Function(UserLiteModel) onSelected,
+    Function() onToggle,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          "Department Head",
-          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Color(0xFF2563EB)),
+          'Department Head',
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            color: Color(0xFF2563EB),
+          ),
         ),
         const SizedBox(height: 8),
         MouseRegion(
@@ -420,7 +443,9 @@ class _CreateDepartmentScreenState extends State<CreateDepartmentScreen> {
                 color: isExpanded ? Colors.white : const Color(0xFFF8FAFC),
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(
-                  color: isExpanded ? const Color(0xFF2563EB) : const Color(0xFFE2E8F0),
+                  color: isExpanded
+                      ? const Color(0xFF2563EB)
+                      : const Color(0xFFE2E8F0),
                   width: isExpanded ? 2 : 1,
                 ),
               ),
@@ -429,12 +454,30 @@ class _CreateDepartmentScreenState extends State<CreateDepartmentScreen> {
                 children: [
                   Row(
                     children: [
-                      Icon(Icons.person_outline, color: isExpanded ? const Color(0xFF2563EB) : const Color(0xFF94A3B8), size: 20),
+                      Icon(
+                        Icons.person_outline,
+                        color: isExpanded
+                            ? const Color(0xFF2563EB)
+                            : const Color(0xFF94A3B8),
+                        size: 20,
+                      ),
                       const SizedBox(width: 12),
-                      Text(displayValue, style: const TextStyle(fontSize: 14, color: Color(0xFF1E293B), fontWeight: FontWeight.w500)),
+                      Text(
+                        displayValue,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Color(0xFF1E293B),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                     ],
                   ),
-                  Icon(isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, color: const Color(0xFF94A3B8)),
+                  Icon(
+                    isExpanded
+                        ? Icons.keyboard_arrow_up
+                        : Icons.keyboard_arrow_down,
+                    color: const Color(0xFF94A3B8),
+                  ),
                 ],
               ),
             ),
@@ -447,7 +490,12 @@ class _CreateDepartmentScreenState extends State<CreateDepartmentScreen> {
               color: Colors.white,
               borderRadius: BorderRadius.circular(8),
               border: Border.all(color: const Color(0xFFE2E8F0)),
-              boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10)],
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: .05),
+                  blurRadius: 10,
+                ),
+              ],
             ),
             constraints: const BoxConstraints(maxHeight: 250),
             child: ListView.builder(
@@ -458,17 +506,27 @@ class _CreateDepartmentScreenState extends State<CreateDepartmentScreen> {
                 return InkWell(
                   onTap: () => onSelected(user),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
                     child: Row(
                       children: [
                         Expanded(
                           child: Text(
-                            "${user.fullName} (${user.role})",
-                            style: const TextStyle(fontSize: 14, color: Color(0xFF1E293B)),
+                            '${user.fullName} (${user.role})',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Color(0xFF1E293B),
+                            ),
                           ),
                         ),
                         if (displayValue == user.fullName)
-                          const Icon(Icons.check, color: Color(0xFF2563EB), size: 18),
+                          const Icon(
+                            Icons.check,
+                            color: Color(0xFF2563EB),
+                            size: 18,
+                          ),
                       ],
                     ),
                   ),
@@ -479,6 +537,4 @@ class _CreateDepartmentScreenState extends State<CreateDepartmentScreen> {
       ],
     );
   }
- 
 }
-

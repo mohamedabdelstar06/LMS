@@ -498,6 +498,323 @@ class _GetUsersScreenState extends State<GetUsersScreen> {
     );
   }
 
+  void _showDangerDeleteDialog(BuildContext context, GetUserModel user) {
+    final TextEditingController confirmController = TextEditingController();
+    final String confirmText = user.fullName;
+    bool isConfirmed = false;
+    final cubit = context.read<GetUsersCubit>();
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) {
+        return StatefulBuilder(
+          builder: (_, setDialogState) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              contentPadding: EdgeInsets.zero,
+              content: Container(
+                width: 480,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(24),
+                      decoration: const BoxDecoration(
+                        color: Color(0xFFFEF2F2),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(16),
+                          topRight: Radius.circular(16),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFEF4444).withOpacity(0.15),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.delete_forever,
+                              color: Color(0xFFEF4444),
+                              size: 28,
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          const Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Delete User',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFFEF4444),
+                                  ),
+                                ),
+                                SizedBox(height: 4),
+                                Text(
+                                  'This action cannot be undone',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: Color(0xFFB91C1C),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.all(24),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFFF7ED),
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                color: const Color(0xFFFED7AA),
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  Icons.info_outline,
+                                  size: 16,
+                                  color: Color(0xFFD97706),
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    'You are about to permanently delete user"${user.fullName}". This will remove all associated data.',
+                                    style: const TextStyle(
+                                      fontSize: 13,
+                                      color: Color(0xFF92400E),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          const Text(
+                            'To confirm, type the user name below:',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Color(0xFF475569),
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 8,
+                            ),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFF8FAFC),
+                              borderRadius: BorderRadius.circular(6),
+                              border: Border.all(
+                                color: const Color(0xFFE2E8F0),
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  Icons.keyboard,
+                                  size: 14,
+                                  color: Color(0xFF64748B),
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  confirmText,
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFFEF4444),
+                                    fontFamily: 'monospace',
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          TextField(
+                            controller: confirmController,
+                            autofocus: true,
+                            decoration: InputDecoration(
+                              hintText: 'Type user name here...',
+                              hintStyle: const TextStyle(
+                                color: Color(0xFF94A3B8),
+                                fontSize: 14,
+                              ),
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 12,
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: const BorderSide(
+                                  color: Color(0xFFE2E8F0),
+                                ),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: const BorderSide(
+                                  color: Color(0xFFE2E8F0),
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: const BorderSide(
+                                  color: Color(0xFFEF4444),
+                                  width: 2,
+                                ),
+                              ),
+                              filled: true,
+                              fillColor: Colors.white,
+                              suffixIcon: isConfirmed
+                                  ? const Icon(
+                                Icons.check_circle,
+                                color: Colors.green,
+                              )
+                                  : null,
+                            ),
+                            onChanged: (value) {
+                              setDialogState(() {
+                                isConfirmed = value.trim() == confirmText;
+                              });
+                            },
+                          ),
+                          if (!isConfirmed && confirmController.text.isNotEmpty)
+                            const Padding(
+                              padding: EdgeInsets.only(top: 6),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.close,
+                                    size: 14,
+                                    color: Color(0xFFEF4444),
+                                  ),
+                                  SizedBox(width: 4),
+                                  Text(
+                                    'Year name does not match',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Color(0xFFEF4444),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          if (isConfirmed)
+                            const Padding(
+                              padding: EdgeInsets.only(top: 6),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.check,
+                                    size: 14,
+                                    color: Colors.green,
+                                  ),
+                                  SizedBox(width: 4),
+                                  Text(
+                                    'Name confirmed — you can now delete',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.green,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: OutlinedButton(
+                              onPressed: () {
+                                confirmController.dispose();
+                                Navigator.pop(dialogContext);
+                              },
+                              style: OutlinedButton.styleFrom(
+                                foregroundColor: const Color(0xFF64748B),
+                                side: const BorderSide(
+                                  color: Color(0xFFE2E8F0),
+                                ),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 14,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                              child: const Text(
+                                'Cancel',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: ElevatedButton.icon(
+                              onPressed: isConfirmed
+                                  ? () {
+                                Navigator.pop(dialogContext);
+                                cubit.deleteUser(user.id);
+                              }
+                                  : null,
+                              icon: const Icon(Icons.delete_forever, size: 18),
+                              label: const Text(
+                                'Delete Forever',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFFEF4444),
+                                foregroundColor: Colors.white,
+                                disabledBackgroundColor: Colors.grey.shade200,
+                                disabledForegroundColor: Colors.grey.shade400,
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 14,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                elevation: 0,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   TableRow _buildModernUserTableRow(
       BuildContext context, GetUserModel user, int index) {
     final isHovered = hoveredRowIndex == index;
@@ -526,9 +843,9 @@ class _GetUsersScreenState extends State<GetUsersScreen> {
             : index.isEven
                 ? Colors.white
                 : const Color(0xFFF8FAFC),
-        border: Border(
+        border: const Border(
           bottom: BorderSide(
-            color: const Color(0xFFE2E8F0),
+            color: Color(0xFFE2E8F0),
             width: 1,
           ),
         ),
@@ -727,6 +1044,25 @@ class _GetUsersScreenState extends State<GetUsersScreen> {
                     color: const Color(0xFF10B981),
                     tooltip: 'Edit',
                     onPressed: () async {
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //       builder: (_) => MultiBlocProvider(
+                      //         providers: [
+                      //           BlocProvider.value(
+                      //             value: context.read<GetUsersCubit>(),
+                      //           ),
+                      //           BlocProvider(
+                      //             create: (context) =>
+                      //             GetUsersCubit()..fetchUsers(
+                      //             ),
+                      //           ),
+                      //         ],
+                      //         child: UpdateUserScreen(user: user,
+                      //           userId: user.id,
+                      //         ),
+                      //       ),
+                      //     ));
                       final cubit = context.read<GetUsersCubit>();
                       final currentState = cubit.state;
                       int page = 1;
@@ -769,7 +1105,7 @@ class _GetUsersScreenState extends State<GetUsersScreen> {
                     icon: Icons.delete,
                     color: const Color(0xFFEF4444),
                     tooltip: 'Delete',
-                    onPressed: () => _showDeleteDialog(context, user),
+                    onPressed: () => _showDangerDeleteDialog(context, user),
                   ),
                 ],
               ),
@@ -782,111 +1118,329 @@ class _GetUsersScreenState extends State<GetUsersScreen> {
 
   Widget _buildUsersTableCell(Widget child) => child;
 
-  void _showDeactivateDialog(BuildContext parentContext, GetUserModel user) {
+  void _showDeactivateDialog(BuildContext context, GetUserModel user) {
+    final TextEditingController confirmController = TextEditingController();
+    final String confirmText = user.fullName;
+    bool isConfirmed = false;
+    final cubit = context.read<GetUsersCubit>();
+
     showDialog(
-      context: parentContext,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: Row(
-          children: [
-            Icon(Icons.block, color: Colors.orange, size: 28),
-            const SizedBox(width: 12),
-            const Text('Deactivate User'),
-          ],
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Are you sure you want to deactivate "${user.fullName}"?',
-              style: const TextStyle(fontSize: 16),
-            ),
-            const SizedBox(height: 12),
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.orange.shade50,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.orange.shade200),
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) {
+        return StatefulBuilder(
+          builder: (_, setDialogState) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
               ),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.info_outline,
-                    color: Colors.orange.shade700,
-                    size: 20,
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      'This user will not be able to access the system.',
-                      style: TextStyle(
-                        color: Colors.orange.shade900,
-                        fontSize: 13,
+              contentPadding: EdgeInsets.zero,
+              content: Container(
+                width: 480,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(24),
+                      decoration: const BoxDecoration(
+                        color: Color(0xFFFEF2F2),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(16),
+                          topRight: Radius.circular(16),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: Color(0xFFF59E0B).withOpacity(0.15),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.block,
+                              color: Color(0xFFF59E0B),
+                              size: 28,
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          const Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Deactivate User',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFFD97706),
+                                  ),
+                                ),
+                                SizedBox(height: 4),
+                                Text(
+                                  'User will lose system access',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: Color(0xFFB45309),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-                ],
+
+                    Padding(
+                      padding: const EdgeInsets.all(24),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFFF7ED),
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                color: const Color(0xFFFED7AA),
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  Icons.info_outline,
+                                  size: 16,
+                                  color: Color(0xFFD97706),
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    'You are about to deactivate user "${user.fullName}". '
+                                        'This user will not be able to log in and access the system.',
+                                    style: const TextStyle(
+                                      fontSize: 13,
+                                      color: Color(0xFF92400E),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          const Text(
+                            'To confirm, type the user name below:',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Color(0xFF475569),
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 8,
+                            ),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFF8FAFC),
+                              borderRadius: BorderRadius.circular(6),
+                              border: Border.all(
+                                color: const Color(0xFFE2E8F0),
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  Icons.keyboard,
+                                  size: 14,
+                                  color: Color(0xFF64748B),
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  confirmText,
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFFF59E0B),                                    fontFamily: 'monospace',
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          TextField(
+                            controller: confirmController,
+                            autofocus: true,
+                            decoration: InputDecoration(
+                              hintText: 'Type user name here...',
+                              hintStyle: const TextStyle(
+                                color: Color(0xFF94A3B8),
+                                fontSize: 14,
+                              ),
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 12,
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: const BorderSide(
+                                  color: Color(0xFFE2E8F0),
+                                ),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: const BorderSide(
+                                  color: Color(0xFFE2E8F0),
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: const BorderSide(
+                                  color: Color(0xFFF59E0B),                                  width: 2,
+                                ),
+                              ),
+                              filled: true,
+                              fillColor: Colors.white,
+                              suffixIcon: isConfirmed
+                                  ? const Icon(
+                                Icons.check_circle,
+                                color: Colors.green,
+                              )
+                                  : null,
+                            ),
+                            onChanged: (value) {
+                              setDialogState(() {
+                                isConfirmed = value.trim() == confirmText;
+                              });
+                            },
+                          ),
+                          if (!isConfirmed && confirmController.text.isNotEmpty)
+                            const Padding(
+                              padding: EdgeInsets.only(top: 6),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.close,
+                                    size: 14,
+                                    color:  Color(0xFFF59E0B),
+                                  ),
+                                  SizedBox(width: 4),
+                                  Text(
+                                    'Year name does not match',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Color(0xFFEF4444),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          if (isConfirmed)
+                            const Padding(
+                              padding: EdgeInsets.only(top: 6),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.check,
+                                    size: 14,
+                                    color: Colors.green,
+                                  ),
+                                  SizedBox(width: 4),
+                                  Text(
+                                    'Name confirmed — you can now deactivate',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.green,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: OutlinedButton(
+                              onPressed: () {
+                                confirmController.dispose();
+                                Navigator.pop(dialogContext);
+                              },
+                              style: OutlinedButton.styleFrom(
+                                foregroundColor: const Color(0xFF64748B),
+                                side: const BorderSide(
+                                  color: Color(0xFFE2E8F0),
+                                ),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 14,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                              child: const Text(
+                                'Cancel',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: ElevatedButton.icon(
+                              onPressed: isConfirmed
+                                  ? () {
+                                Navigator.pop(dialogContext);
+                                cubit.deactivateUser(user.id);
+                              }
+                                  : null,
+                                icon: const Icon(Icons.block,  size: 18),
+                              label: Text(
+                                'Deactivate ${user.fullName}',
+                                style: const TextStyle(fontWeight: FontWeight.w600),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFFF59E0B),
+                                foregroundColor: Colors.white,
+                                disabledBackgroundColor: Colors.grey.shade200,
+                                disabledForegroundColor: Colors.grey.shade400,
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 14,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                elevation: 0,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
-          ),
-          ElevatedButton.icon(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.orange,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-            onPressed: () {
-              parentContext.read<GetUsersCubit>().deactivateUser(user.id);
-              Navigator.of(context).pop();
-            },
-            icon: const Icon(Icons.block, size: 18),
-            label: const Text('Deactivate'),
-          ),
-        ],
-      ),
+            );
+          },
+        );
+      },
     );
   }
 
-  void _showDeleteDialog(BuildContext parentContext, GetUserModel user) {
-    showDialog(
-      context: parentContext,
-      builder: (context) => AlertDialog(
-        title: const Text('Delete User'),
-        content: Text('Are you sure you want to delete "${user.fullName}"?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            onPressed: () {
-              parentContext.read<GetUsersCubit>().deleteUser(user.id);
-              Navigator.of(context).pop();
-            },
-            child: const Text('Delete'),
-          ),
-        ],
-      ),
-    );
-  }
+
 }
 
 class _RoleBadge extends StatelessWidget {
-  final String role;
 
   const _RoleBadge({required this.role});
+  final String role;
 
   @override
   Widget build(BuildContext context) {
@@ -923,15 +1477,15 @@ class _RoleBadge extends StatelessWidget {
 }
 
 class _InfoBadge extends StatelessWidget {
-  final IconData icon;
-  final String text;
-  final Color color;
 
   const _InfoBadge({
     required this.icon,
     required this.text,
     required this.color,
   });
+  final IconData icon;
+  final String text;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -1063,10 +1617,10 @@ void _showUserDetailsDialog(GetUserModel user, BuildContext context) {
 }
 
 class _DetailRow extends StatelessWidget {
-  final String label;
-  final String value;
 
   const _DetailRow({required this.label, required this.value});
+  final String label;
+  final String value;
 
   @override
   Widget build(BuildContext context) {

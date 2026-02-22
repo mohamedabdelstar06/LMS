@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lms/core/cons/api_helper_resources/api_resources.dart';
@@ -57,8 +59,8 @@ class GetUsersCubit extends Cubit<GetUsersState> {
         final mergedUsers = [
           ...oldState.usersResponse.users,
           ...usersResponse.users.where(
-            (newUser) => !oldState.usersResponse.users.any(
-              (oldUser) => oldUser.id == newUser.id,
+                (newUser) => !oldState.usersResponse.users.any(
+                  (oldUser) => oldUser.id == newUser.id,
             ),
           ),
         ];
@@ -247,9 +249,9 @@ class GetUsersCubit extends Cubit<GetUsersState> {
     } on DioException catch (e) {
       final errorMsg =
           e.response?.data?['message'] ??
-          e.response?.data.toString() ??
-          e.message ??
-          'Connection error';
+              e.response?.data.toString() ??
+              e.message ??
+              'Connection error';
       emit(DeleteUserError(errorMsg));
 
       if (state is GetUsersLoaded) {
@@ -341,6 +343,7 @@ class GetUsersCubit extends Cubit<GetUsersState> {
             statusCode: response.statusCode,
           ),
         );
+        unawaited(fetchUsers());
 
         if (currentState is GetUsersLoaded) {
           await fetchUsers(
