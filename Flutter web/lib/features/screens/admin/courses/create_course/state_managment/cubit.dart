@@ -25,21 +25,21 @@ class CreateCourseCubit extends Cubit<CreateCourseState> {
 
       final token = await TokenStorageHelper.getTokenSecure();
       if (token == null || token.isEmpty) {
-        emit(CreateCourseError("You are not authorized. Token missing."));
+        emit(CreateCourseError('You are not authorized. Token missing.'));
         return;
       }
 
       final formData = FormData.fromMap({
-        "Title": fullNameController.text.trim(),
-        "Description": descriptionController.text.trim(),
-        "DepartmentName": departmentName,
-        "YearName": yearName,
-        "CreditHours": int.tryParse(creditHoursController.text.trim()) ?? 0,
+        'Title': fullNameController.text.trim(),
+        'Description': descriptionController.text.trim(),
+        'DepartmentName': departmentName,
+        'YearName': yearName,
+        'CreditHours': int.tryParse(creditHoursController.text.trim()) ?? 0,
         if (imageBytes != null)
-          "ImageFile": MultipartFile.fromBytes(
+          'ImageFile': MultipartFile.fromBytes(
             imageBytes,
-            filename: "Course.png",
-            contentType: MediaType("image", "png"),
+            filename: 'Course.png',
+            contentType: MediaType('image', 'png'),
           ),
       });
 
@@ -47,21 +47,22 @@ class CreateCourseCubit extends Cubit<CreateCourseState> {
         ApiResources.createCourseEndPoint,
         data: formData,
         options: Options(
-          headers: {"Authorization": "Bearer $token"},
+          headers: {'Authorization': 'Bearer $token'},
         ),
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        emit(CreateCourseSuccess("Course created successfully"));
+        emit(CreateCourseSuccess('Course created successfully'));
 
       } else {
-        emit(CreateCourseError("Failed: ${response.statusMessage}"));
+        emit(CreateCourseError('Failed: ${response.statusMessage}'));
       }
     } on DioException catch (e) {
-      final errorMsg = e.response?.data['message'] ?? e.message ?? "Connection Error";
+      final errorMsg = e.response?.data['message'] ?? e.message ?? 'Connection Error';
       emit(CreateCourseError(errorMsg));
     } catch (e) {
       emit(CreateCourseError(e.toString()));
     }
   }
+ 
 }

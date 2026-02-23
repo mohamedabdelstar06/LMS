@@ -165,14 +165,14 @@ class _CourseScreenState extends State<AdminCourseScreen> {
                                   ),
                                   child: Column(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    CrossAxisAlignment.start,
                                     children: [
                                       Row(
                                         children: [
                                           Expanded(
                                             child: Column(
                                               crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                              CrossAxisAlignment.start,
                                               children: [
                                                 Row(
                                                   children: [
@@ -186,7 +186,7 @@ class _CourseScreenState extends State<AdminCourseScreen> {
                                                             ? 36
                                                             : 28,
                                                         fontWeight:
-                                                            FontWeight.w700,
+                                                        FontWeight.w700,
                                                         fontFamily: "inter",
                                                       ),
                                                     ),
@@ -272,19 +272,19 @@ class _CourseScreenState extends State<AdminCourseScreen> {
                                       return GridView.builder(
                                         shrinkWrap: true,
                                         physics:
-                                            const NeverScrollableScrollPhysics(),
+                                        const NeverScrollableScrollPhysics(),
                                         addAutomaticKeepAlives: false,
                                         addRepaintBoundaries: true,
                                         addSemanticIndexes: false,
                                         cacheExtent: 0,
                                         gridDelegate:
-                                            SliverGridDelegateWithFixedCrossAxisCount(
-                                              crossAxisCount: crossAxisCount,
-                                              crossAxisSpacing: 20,
-                                              mainAxisSpacing: 20,
-                                              childAspectRatio:
-                                                  childAspectRatio,
-                                            ),
+                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: crossAxisCount,
+                                          crossAxisSpacing: 20,
+                                          mainAxisSpacing: 20,
+                                          childAspectRatio:
+                                          childAspectRatio,
+                                        ),
                                         itemCount: state.courses.length,
                                         itemBuilder: (context, index) {
                                           final course = state.courses[index];
@@ -392,7 +392,7 @@ class _CourseCardWidget extends StatefulWidget {
   final int index;
   final ValueChanged<int> onDelete;
 
-   const _CourseCardWidget({
+  const _CourseCardWidget({
     required this.index,
     required this.onDelete, required this.courseModel,
   });
@@ -420,7 +420,7 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
       },
       child: GestureDetector(
         onTap: () {
-         /// Todo:
+          /// Todo:
 
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -452,40 +452,40 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
               ),
               boxShadow: isHovered
                   ? [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.25),
-                        blurRadius: 20,
-                        spreadRadius: 0,
-                        offset: Offset(0, 12),
-                      ),
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.15),
-                        blurRadius: 10,
-                        spreadRadius: 0,
-                        offset: Offset(0, 6),
-                      ),
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.08),
-                        blurRadius: 5,
-                        spreadRadius: 0,
-                        offset: Offset(0, 3),
-                      ),
-                    ]
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.25),
+                  blurRadius: 20,
+                  spreadRadius: 0,
+                  offset: Offset(0, 12),
+                ),
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.15),
+                  blurRadius: 10,
+                  spreadRadius: 0,
+                  offset: Offset(0, 6),
+                ),
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.08),
+                  blurRadius: 5,
+                  spreadRadius: 0,
+                  offset: Offset(0, 3),
+                ),
+              ]
                   : [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.08),
-                        blurRadius: 15,
-                        spreadRadius: 0,
-                        offset: Offset(0, 4),
-                      ),
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.08),
+                  blurRadius: 15,
+                  spreadRadius: 0,
+                  offset: Offset(0, 4),
+                ),
 
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.04),
-                        blurRadius: 6,
-                        spreadRadius: 0,
-                        offset: Offset(0, 1),
-                      ),
-                    ],
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.04),
+                  blurRadius: 6,
+                  spreadRadius: 0,
+                  offset: Offset(0, 1),
+                ),
+              ],
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -506,12 +506,12 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                       ),
                       child: widget.courseModel.imageUrl.isNotEmpty
                           ? IgnorePointer(
-                            child: WebImage(
-                                                    url: buildImageUrl(widget.courseModel.imageUrl),
-                                                    width: double.infinity,
-                                                    height: 120,
-                                                  ),
-                          )
+                        child: WebImage(
+                          url: buildImageUrl(widget.courseModel.imageUrl),
+                          width: double.infinity,
+                          height: 120,
+                        ),
+                      )
                           : const SizedBox(
                         height: 120,
                         child: Center(
@@ -531,17 +531,17 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                       children: [
                         SizedBox(height: 6),
 
-                            Text(
-                              widget.courseModel.title,
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w700,
-                                fontFamily: "inter",
-                                color: Color(0xFF175CD3),
-                              ),
-                              // maxLines: 2,
-                              // overflow: TextOverflow.ellipsis,
-                            ),
+                        Text(
+                          widget.courseModel.title,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: "inter",
+                            color: Color(0xFF175CD3),
+                          ),
+                          // maxLines: 2,
+                          // overflow: TextOverflow.ellipsis,
+                        ),
 
 
 
@@ -594,17 +594,17 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                           ],
                         ),
                         SizedBox(height: 6),
-Row(
-  children: [
-    Text("Enrolled Students = ${widget.courseModel.enrolledStudentsCount}",style:
-      TextStyle(
-        fontSize: 11,
-      fontWeight: FontWeight.w400,
-        color: Color(0xFF64748B),
-      fontFamily: "inter",
-      ),),
-  ]
-)
+                        Row(
+                            children: [
+                              Text("Enrolled Students = ${widget.courseModel.enrolledStudentsCount}",style:
+                              TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w400,
+                                color: Color(0xFF64748B),
+                                fontFamily: "inter",
+                              ),),
+                            ]
+                        )
 
                       ],
                     ),
@@ -670,7 +670,7 @@ class WebImage extends StatelessWidget {
 void _showUserMenu(BuildContext context) async {
   final RenderBox button = context.findRenderObject() as RenderBox;
   final RenderBox overlay =
-      Overlay.of(context).context.findRenderObject() as RenderBox;
+  Overlay.of(context).context.findRenderObject() as RenderBox;
 
   final RelativeRect position = RelativeRect.fromRect(
     Rect.fromPoints(
