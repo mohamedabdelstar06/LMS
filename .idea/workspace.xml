@@ -15,7 +15,6 @@
       <change beforePath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/courses/home_courses/state_managment/cubit.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/courses/home_courses/state_managment/cubit.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/courses/home_courses/state_managment/states.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/courses/home_courses/state_managment/states.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/courses/home_courses/view.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/courses/home_courses/view.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Flutter web/lib/features/screens/instructor/home_courses/view.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/instructor/home_courses/view.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
