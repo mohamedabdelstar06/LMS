@@ -7,7 +7,6 @@ import 'package:lms/features/screens/admin/admin_profile/view.dart';
 import 'package:lms/features/screens/admin/courses/Enrollment_course/state_mangment/cubits.dart';
 import 'package:lms/features/screens/admin/courses/Enrollment_course/state_mangment/states.dart';
 import 'package:lms/features/screens/admin/courses/create_course/Adding_view.dart';
-import 'package:lms/features/screens/admin/courses/get_All_courses/state_mangment/cubit.dart';
 import 'package:lms/features/screens/admin/courses/home_courses/model/model.dart';
 import 'package:lms/features/screens/admin/courses/home_courses/state_managment/states.dart';
 import 'package:lms/features/screens/admin/courses/home_courses/view.dart';
@@ -22,6 +21,8 @@ import 'package:lms/features/screens/admin/users/get_users/get_user_dropdown/sta
 import 'package:lms/features/screens/admin/users/get_users/view.dart';
 import 'package:lms/features/screens/admin/year/create_year/view.dart';
 import 'package:lms/features/screens/admin/year/get_year/get_All_years/view.dart';
+
+import '../home_courses/state_managment/cubit.dart';
 
 
 class EnrollmentPage extends StatelessWidget {

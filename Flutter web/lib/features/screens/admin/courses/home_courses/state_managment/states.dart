@@ -17,4 +17,3 @@ class GetCourseError extends GetCourseState {
   final String message;
   GetCourseError(this.message);
 }
-
