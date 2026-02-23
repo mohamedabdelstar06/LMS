@@ -11,26 +11,26 @@ import '../../../../../core/widgets/admin_table_header.dart';
 import '../../../../../core/widgets/app_network_image.dart';
 import 'get_user_model/view.dart';
 
-class GetUsersPage extends StatelessWidget {
+// class GetUsersPage extends StatelessWidget {
+//   const GetUsersPage({super.key});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return BlocProvider(
+//       create: (_) => GetUsersCubit(dio: Dio()),
+//       child: const GetUsersScreen(),
+//     );
+//   }
+// }
+
+class GetUsersPage extends StatefulWidget {
   const GetUsersPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => GetUsersCubit(dio: Dio()),
-      child: const GetUsersScreen(),
-    );
-  }
+  State<GetUsersPage> createState() => _GetUsersScreenState();
 }
 
-class GetUsersScreen extends StatefulWidget {
-  const GetUsersScreen({super.key});
-
-  @override
-  State<GetUsersScreen> createState() => _GetUsersScreenState();
-}
-
-class _GetUsersScreenState extends State<GetUsersScreen> {
+class _GetUsersScreenState extends State<GetUsersPage> {
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _searchController = TextEditingController();
   String selectedMenuItem = 'All Users';
@@ -39,7 +39,7 @@ class _GetUsersScreenState extends State<GetUsersScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<GetUsersCubit>().fetchUsers();
+    // context.read<GetUsersCubit>().fetchUsers();
   }
 
   @override
@@ -51,7 +51,10 @@ class _GetUsersScreenState extends State<GetUsersScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return BlocProvider(
+  create: (context) =>     GetUsersCubit()..fetchUsers(),
+
+  child: Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
@@ -67,66 +70,63 @@ class _GetUsersScreenState extends State<GetUsersScreen> {
         body: BlocListener<GetUsersCubit, GetUsersState>(
           listener: (context, state) {
             if (state is DeleteUserSuccess) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.message),
-                  backgroundColor: Colors.green,
-                  duration: const Duration(seconds: 2),
-                ),
-              );
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.green,
+                duration: const Duration(seconds: 2),
+              ));
+              context.read<GetUsersCubit>().fetchUsers();
             }
 
             if (state is DeleteUserError) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.message),
-                  backgroundColor: Colors.red,
-                  duration: const Duration(seconds: 3),
-                ),
-              );
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.red,
+                duration: const Duration(seconds: 3),
+              ));
             }
+
             if (state is DeactivateUserSuccess) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Row(
-                    children: [
-                      const Icon(Icons.check_circle, color: Colors.white),
-                      const SizedBox(width: 8),
-                      Text(state.message),
-                    ],
-                  ),
-                  backgroundColor: Colors.orange,
-                  duration: const Duration(seconds: 2),
-                ),
-              );
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Row(children: [
+                  const Icon(Icons.check_circle, color: Colors.white),
+                  const SizedBox(width: 8),
+                  Text(state.message),
+                ]),
+                backgroundColor: Colors.orange,
+                duration: const Duration(seconds: 2),
+              ));
+              context.read<GetUsersCubit>().fetchUsers();
             }
 
             if (state is DeactivateUserError) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.message),
-                  backgroundColor: Colors.red,
-                  duration: const Duration(seconds: 3),
-                ),
-              );
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.red,
+                duration: const Duration(seconds: 3),
+              ));
             }
+
+
             if (state is UpdateUsersSuccess) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.message),
-                  backgroundColor: Colors.green,
-                  duration: const Duration(seconds: 2),
-                ),
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.green,
+                duration: const Duration(seconds: 2),
+              ));
+              Navigator.pop(context
               );
+              // context.read<GetUsersCubit>().fetchUsers();
+
+
             }
+
             if (state is UpdateUsersError) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.errorMessage),
-                  backgroundColor: Colors.red,
-                  duration: const Duration(seconds: 3),
-                ),
-              );
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(state.errorMessage),
+                backgroundColor: Colors.red,
+                duration: const Duration(seconds: 3),
+              ));
             }
           },
           child: Row(
@@ -162,7 +162,7 @@ class _GetUsersScreenState extends State<GetUsersScreen> {
                                     title: 'Total',
                                     count: state.usersResponse.totalCount,
                                     icon: Icons.people,
-                                    color:  Colors.blueAccent.shade200,
+                                    color: Colors.blueAccent.shade200,
                                   ),
                                   AdminStatBadge(
                                     title: 'Admins',
@@ -188,239 +188,162 @@ class _GetUsersScreenState extends State<GetUsersScreen> {
                             return const SizedBox.shrink();
                           },
                         ),
+
                         Expanded(
                           child: BlocBuilder<GetUsersCubit, GetUsersState>(
                             buildWhen: (p, c) =>
-                                c is! UpdateUsersSuccess && c is! UpdateUsersError,
+                            c is GetUsersLoading ||
+                                c is GetUsersLoaded ||
+                                c is GetUsersError ||
+                                c is DeleteUserLoading,
                             builder: (context, state) {
-                              if (state is GetUsersLoading ||
-                                  state is DeleteUserLoading ||
-                                  state is UpdateUsersLoading) {
-                              return const Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            }
+                              if (state is GetUsersLoading || state is DeleteUserLoading) {
+                                return const Center(child: CircularProgressIndicator());
+                              }
 
-                            if (state is GetUsersError) {
-                              return Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.error_outline,
-                                      size: 64,
-                                      color: Colors.red.shade300,
-                                    ),
-                                    const SizedBox(height: 16),
-                                    Text(
-                                      state.message,
-                                      style: const TextStyle(color: Colors.red),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    const SizedBox(height: 16),
-                                    ElevatedButton.icon(
-                                      onPressed: () => context
-                                          .read<GetUsersCubit>()
-                                          .fetchUsers(),
-                                      icon: const Icon(Icons.refresh),
-                                      label: const Text('Retry'),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }
-
-                            if (state is GetUsersLoaded) {
-                              final users = state.usersResponse.users;
-
-                              if (users.isEmpty) {
+                              if (state is GetUsersError) {
                                 return Center(
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Icon(
-                                        Icons.people_outline,
-                                        size: 64,
-                                        color: Colors.grey.shade400,
-                                      ),
+                                      Icon(Icons.error_outline, size: 64, color: Colors.red.shade300),
                                       const SizedBox(height: 16),
-                                      Text(
-                                        "No users found",
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          color: Colors.grey.shade600,
-                                        ),
+                                      Text(state.message,
+                                          style: const TextStyle(color: Colors.red),
+                                          textAlign: TextAlign.center),
+                                      const SizedBox(height: 16),
+                                      ElevatedButton.icon(
+                                        onPressed: () => context.read<GetUsersCubit>().fetchUsers(),
+                                        icon: const Icon(Icons.refresh),
+                                        label: const Text('Retry'),
                                       ),
                                     ],
                                   ),
                                 );
                               }
 
-                              return RefreshIndicator(
-                                onRefresh: () async =>
-                                    context.read<GetUsersCubit>().fetchUsers(),
-                                child: SingleChildScrollView(
+                              if (state is GetUsersLoaded) {
+                                final users = state.usersResponse.users;
+
+                                if (users.isEmpty) {
+                                  return Center(
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Icon(Icons.people_outline, size: 64, color: Colors.grey.shade400),
+                                        const SizedBox(height: 16),
+                                        Text("No users found",
+                                            style: TextStyle(fontSize: 18, color: Colors.grey.shade600)),
+                                      ],
+                                    ),
+                                  );
+                                }
+
+                                return SingleChildScrollView(
                                   controller: _scrollController,
                                   child: Container(
                                     padding: const EdgeInsets.all(24),
-                                    child: _buildModernUsersTable(
-                                        context, users),
+                                    child: _buildModernUsersTable(context, users),
                                   ),
-                                ),
-                              );
-                            }
+                                );
+                              }
 
-                            return const SizedBox.shrink();
-                          },
+                              return const SizedBox.shrink();
+                            },
+                          ),
                         ),
-                      ),
 
-                      BlocBuilder<GetUsersCubit, GetUsersState>(
-                        builder: (context, state) {
-                          if (state is GetUsersLoaded) {
-                            final int currentPage = state.currentPage;
-                            final int totalPages =
-                                state.usersResponse.totalPages;
-                            final bool hasNext =
-                                state.usersResponse.hasNextPage;
-                            final bool hasPrevious =
-                                state.usersResponse.hasPreviousPage;
+                        // ✅ Pagination
+                        BlocBuilder<GetUsersCubit, GetUsersState>(
+                          buildWhen: (p, c) => c is GetUsersLoaded,
+                          builder: (context, state) {
+                            if (state is GetUsersLoaded) {
+                              final int currentPage = state.currentPage;
+                              final int totalPages = state.usersResponse.totalPages;
+                              final bool hasNext = state.usersResponse.hasNextPage;
+                              final bool hasPrevious = state.usersResponse.hasPreviousPage;
 
-                            return Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 24,
-                                vertical: 16,
-                              ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                gradient: LinearGradient(
-                                  colors: [
+                              return Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  gradient: LinearGradient(colors: [
                                     MYColors.gradientColor_3,
-                                    MYColors.gradientColor_2.withValues(
-                                      alpha: 0.2,
+                                    MYColors.gradientColor_2.withValues(alpha: 0.2),
+                                  ]),
+                                  border: Border(top: BorderSide(color: Colors.grey.shade200)),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    ElevatedButton.icon(
+                                      onPressed: hasPrevious
+                                          ? () => context.read<GetUsersCubit>().goToPage(currentPage - 1)
+                                          : null,
+                                      icon: const Icon(Icons.arrow_back_ios_rounded, size: 16),
+                                      label: const Text('Previous'),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: hasPrevious ? const Color(0xFF1849A9) : Colors.grey.shade300,
+                                        foregroundColor: Colors.white,
+                                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                      ),
+                                    ),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                                      decoration: BoxDecoration(
+                                        gradient: const LinearGradient(
+                                            colors: [Color(0xFF1849A9), Color(0xFF53B1FD)]),
+                                        borderRadius: BorderRadius.circular(30),
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const Icon(Icons.library_books_rounded, color: Colors.white, size: 18),
+                                          const SizedBox(width: 8),
+                                          Text('Page $currentPage',
+                                              style: const TextStyle(
+                                                  color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+                                          const SizedBox(width: 4),
+                                          Text('of $totalPages',
+                                              style: TextStyle(
+                                                  color: Colors.white.withOpacity(0.8),
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w500)),
+                                        ],
+                                      ),
+                                    ),
+                                    ElevatedButton.icon(
+                                      onPressed: hasNext
+                                          ? () => context.read<GetUsersCubit>().goToPage(currentPage + 1)
+                                          : null,
+                                      label: const Text('Next'),
+                                      icon: const Icon(Icons.arrow_forward_ios_rounded, size: 16),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: hasNext ? const Color(0xFF1849A9) : Colors.grey.shade300,
+                                        foregroundColor: Colors.white,
+                                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                      ),
                                     ),
                                   ],
                                 ),
-
-                                border: Border(
-                                  top: BorderSide(color: Colors.grey.shade200),
-                                ),
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  ElevatedButton.icon(
-                                    onPressed: hasPrevious
-                                        ? () => context
-                                              .read<GetUsersCubit>()
-                                              .goToPage(currentPage - 1)
-                                        : null,
-                                    icon: const Icon(
-                                      Icons.arrow_back_ios_rounded,
-                                      size: 16,
-                                    ),
-                                    label: const Text('Previous'),
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: hasPrevious
-                                          ? const Color(0xFF1849A9)
-                                          : Colors.grey.shade300,
-                                      foregroundColor: Colors.white,
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 20,
-                                        vertical: 12,
-                                      ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                    ),
-                                  ),
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 24,
-                                      vertical: 12,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      gradient: const LinearGradient(
-                                        colors: [
-                                          Color(0xFF1849A9),
-                                          Color(0xFF53B1FD),
-                                        ],
-                                      ),
-                                      borderRadius: BorderRadius.circular(30),
-                                    ),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        const Icon(
-                                          Icons.library_books_rounded,
-                                          color: Colors.white,
-                                          size: 18,
-                                        ),
-                                        const SizedBox(width: 8),
-                                        Text(
-                                          'Page $currentPage',
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        const SizedBox(width: 4),
-                                        Text(
-                                          'of $totalPages',
-                                          style: TextStyle(
-                                            color: Colors.white.withOpacity(
-                                              0.8,
-                                            ),
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  ElevatedButton.icon(
-                                    onPressed: hasNext
-                                        ? () => context
-                                              .read<GetUsersCubit>()
-                                              .goToPage(currentPage + 1)
-                                        : null,
-                                    label: const Text('Next'),
-                                    icon: const Icon(
-                                      Icons.arrow_forward_ios_rounded,
-                                      size: 16,
-                                    ),
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: hasNext
-                                          ? const Color(0xFF1849A9)
-                                          : Colors.grey.shade300,
-                                      foregroundColor: Colors.white,
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 20,
-                                        vertical: 12,
-                                      ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }
-                          return const SizedBox.shrink();
-                        },
-                      ),
-                    ],
+                              );
+                            }
+                            return const SizedBox.shrink();
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-          )],
+            ],
           ),
         ),
       ),
-    );
+    ),
+);
   }
 
   Widget _buildModernUsersTable(
@@ -500,7 +423,7 @@ class _GetUsersScreenState extends State<GetUsersScreen> {
 
   void _showDangerDeleteDialog(BuildContext context, GetUserModel user) {
     final TextEditingController confirmController = TextEditingController();
-    final String confirmText = user.fullName;
+    final String confirmText = user.fullName.trim();
     bool isConfirmed = false;
     final cubit = context.read<GetUsersCubit>();
 
@@ -711,7 +634,7 @@ class _GetUsersScreenState extends State<GetUsersScreen> {
                                   ),
                                   SizedBox(width: 4),
                                   Text(
-                                    'Year name does not match',
+                                    'User name does not match',
                                     style: TextStyle(
                                       fontSize: 12,
                                       color: Color(0xFFEF4444),
@@ -1120,7 +1043,7 @@ class _GetUsersScreenState extends State<GetUsersScreen> {
 
   void _showDeactivateDialog(BuildContext context, GetUserModel user) {
     final TextEditingController confirmController = TextEditingController();
-    final String confirmText = user.fullName;
+    final String confirmText = user.fullName.trim();
     bool isConfirmed = false;
     final cubit = context.read<GetUsersCubit>();
 
@@ -1330,7 +1253,7 @@ class _GetUsersScreenState extends State<GetUsersScreen> {
                                   ),
                                   SizedBox(width: 4),
                                   Text(
-                                    'Year name does not match',
+                                    'User name does not match',
                                     style: TextStyle(
                                       fontSize: 12,
                                       color: Color(0xFFEF4444),
@@ -1402,9 +1325,9 @@ class _GetUsersScreenState extends State<GetUsersScreen> {
                               }
                                   : null,
                                 icon: const Icon(Icons.block,  size: 18),
-                              label: Text(
-                                'Deactivate ${user.fullName}',
-                                style: const TextStyle(fontWeight: FontWeight.w600),
+                              label: const Text(
+                                'Deactivate User',
+                                style: TextStyle(fontWeight: FontWeight.w600),
                               ),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xFFF59E0B),

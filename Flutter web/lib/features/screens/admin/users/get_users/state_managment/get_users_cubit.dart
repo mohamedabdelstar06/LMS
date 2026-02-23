@@ -9,9 +9,8 @@ import '../get_user_model/view.dart';
 import 'get_users_state.dart';
 
 class GetUsersCubit extends Cubit<GetUsersState> {
-  final Dio dio;
-
-  GetUsersCubit({required this.dio}) : super(GetUsersInitial());
+Dio dio = Dio();
+  GetUsersCubit() : super(GetUsersInitial());
 
   Future<void> fetchUsers({
     int page = 1,
@@ -323,6 +322,7 @@ class GetUsersCubit extends Cubit<GetUsersState> {
         emit(const UpdateUsersError("Unauthorized: Please login again."));
         return;
       }
+      final dio = Dio();
 
       final response = await dio.put(
         "${ApiResources.apiUrl}${ApiResources.getUsersEndPoint}/$userId",
@@ -343,8 +343,7 @@ class GetUsersCubit extends Cubit<GetUsersState> {
             statusCode: response.statusCode,
           ),
         );
-        unawaited(fetchUsers());
-
+  // fetchUsers();
         if (currentState is GetUsersLoaded) {
           await fetchUsers(
             page: currentState.currentPage,

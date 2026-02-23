@@ -76,8 +76,8 @@ class _ProfileScreenState extends State<StudentProfileScreen> {
   String? hoveredMenuItem;
   bool isLogoutHovered = false;
   bool isProfilePictureHovered = false;
-  String selectedStartYear = "2020";
-  String selectedEndYear = "2025";
+  String selectedStartYear = '2020';
+  String selectedEndYear = '2025';
   DateTime? selectedDate;
 
   bool isStartExpanded = false;
@@ -191,9 +191,9 @@ class _ProfileScreenState extends State<StudentProfileScreen> {
   }
 
   String _formatDate(DateTime date) {
-    return "${date.day.toString()}/"
-        "${date.month.toString()}/"
-        "${date.year}";
+    return '${date.day.toString()}/'
+        '${date.month.toString()}/'
+        '${date.year}';
   }
 
   String getFullImageUrl(String? imageUrl) {
@@ -561,7 +561,7 @@ class _ProfileScreenState extends State<StudentProfileScreen> {
                   'Date of Birth',
                   dobController,
                   dobFocus,
-                  user.dateOfBirth ?? "Select Date",
+                  user.dateOfBirth ?? 'Select Date',
                 ),
                 const SizedBox(height: 16),
                 _buildTextField(
@@ -737,7 +737,7 @@ class _ProfileScreenState extends State<StudentProfileScreen> {
               height: 100,
               fit: BoxFit.cover,
               errorBuilder: (context, error, stackTrace) {
-                print("Error loading image: $error");
+                print('Error loading image: $error');
                 return Image.asset(
                   Assets.logo,
                   width: 100,
@@ -1136,7 +1136,7 @@ class _ProfileScreenState extends State<StudentProfileScreen> {
     return BlocConsumer<StudentProfileCubit, StudentProfileState>(
       listener: (context, state) {
         if (state is StudentProfileLoaded) {
-          _showSuccessSnackbar("Profile updated successfully!");
+          _showSuccessSnackbar('Profile updated successfully!');
           setState(() {
             _webImage = null;
             _selectedImage = null;
@@ -1207,12 +1207,12 @@ class _ProfileScreenState extends State<StudentProfileScreen> {
                     ),
                     SizedBox(width: 10),
                     Text(
-                      "Saving...",
+                      'Saving...',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight:
                         FontWeight.w600,
-                        fontFamily: "inter",
+                        fontFamily: 'inter',
                         color: Colors.white,
                       ),
                     ),
@@ -1223,11 +1223,11 @@ class _ProfileScreenState extends State<StudentProfileScreen> {
                   children: [
 
                     Text(
-                      "Save Changes",
+                      'Save Changes',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
-                        fontFamily: "inter",
+                        fontFamily: 'inter',
                         color: Colors.white,
                       ),
                     ),
@@ -1260,7 +1260,7 @@ class DateRangeSelector extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          "Start / End Date",
+          'Start / End Date',
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
@@ -1271,9 +1271,9 @@ class DateRangeSelector extends StatelessWidget {
 
         Row(
           children: [
-            Expanded(child: _buildDropdown("2020")),
+            Expanded(child: _buildDropdown('2020')),
             const SizedBox(width: 16),
-            Expanded(child: _buildDropdown("2025")),
+            Expanded(child: _buildDropdown('2025')),
           ],
         ),
       ],
