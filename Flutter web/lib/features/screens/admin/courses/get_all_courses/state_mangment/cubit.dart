@@ -11,7 +11,9 @@ class GetCourseCubit extends Cubit<GetCourseState> {
   final Dio dio = Dio();
 
   Future<void> getCourses() async {
-    emit(GetCourseLoading());
+    emit(GetCourseLoading(
+
+    ));
 
     try {
       final token = await TokenStorageHelper.getTokenSecure();

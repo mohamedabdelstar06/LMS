@@ -5,16 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="34c5994d-3bb8-490c-a2da-d1525c2e37c3" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/courses/update_course/view.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Flutter web/lib/core/cons/api_helper_resources/api_resources.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/lib/core/cons/api_helper_resources/api_resources.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/courses/create_course/state_managment/cubit.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/courses/create_course/state_managment/cubit.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/courses/create_course/state_managment/states.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/courses/create_course/state_managment/states.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/courses/enrollment_course/view.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/courses/enrollment_course/view.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/courses/get_all_courses/state_mangment/cubit.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/courses/get_all_courses/state_mangment/cubit.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/courses/get_all_courses/state_mangment/states.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/courses/get_all_courses/state_mangment/states.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/courses/home_courses/state_managment/cubit.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/courses/home_courses/state_managment/cubit.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/courses/home_courses/state_managment/states.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/courses/home_courses/state_managment/states.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/courses/home_courses/view.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/courses/home_courses/view.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/squadron/get_squadron/get_all squadrons/state_managment/cubit.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/squadron/get_squadron/get_all squadrons/state_managment/cubit.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/squadron/get_squadron/get_all squadrons/view.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/squadron/get_squadron/get_all squadrons/view.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/squadron/get_squadron/update_squadrons/view.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/squadron/get_squadron/update_squadrons/view.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/users/get_users/view.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/users/get_users/view.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/users/get_users/view_updating_user.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/users/get_users/view_updating_user.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Flutter web/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Flutter web/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -117,6 +114,21 @@
           <url>file://$PROJECT_DIR$/Flutter web/lib/features/screens/admin/courses/create_course/Adding_view.dart</url>
           <line>221</line>
           <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/Flutter web/lib/features/screens/admin/squadron/get_squadron/update_squadrons/view.dart</url>
+          <line>160</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/Flutter web/lib/features/screens/admin/squadron/get_squadron/get_all squadrons/view.dart</url>
+          <line>347</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/Flutter web/lib/features/screens/admin/squadron/get_squadron/get_all squadrons/view.dart</url>
+          <line>86</line>
+          <option name="timeStamp" value="10" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

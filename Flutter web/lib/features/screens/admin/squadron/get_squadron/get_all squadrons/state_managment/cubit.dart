@@ -15,17 +15,17 @@ class AllSquadronCubit extends Cubit<AllSquadronState> {
     try {
       final token = await TokenStorageHelper.getTokenSecure();
       if (token == null || token.isEmpty) {
-        emit(AllSquadronError("Unauthorized: Please login again."));
+        emit(const AllSquadronError('Unauthorized: Please login again.'));
         return;
       }
 
       final dio = Dio();
       final response = await dio.get(
-        "${ApiResources.apiUrl}${ApiResources.squadronEndPoint}",
+        '${ApiResources.apiUrl}${ApiResources.squadronEndPoint}',
         options: Options(
           headers: {
-            "Authorization": "Bearer $token",
-            "Content-Type": "application/json",
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'application/json',
           },
         ),
       );
@@ -38,90 +38,83 @@ class AllSquadronCubit extends Cubit<AllSquadronState> {
 
         emit(AllSquadronLoaded(squadrons));
       } else {
-        emit(AllSquadronError("Failed to load departments. Status: ${response.statusCode}"));
+        emit(AllSquadronError('Failed to load departments. Status: ${response.statusCode}'));
       }
     } on DioException catch (e) {
-      String errorMessage = "Failed to load departments";
+      String errorMessage = 'Failed to load departments';
       if (e.response != null) {
-        errorMessage = "Server Error: ${e.response?.statusCode} - ${e.response?.statusMessage}";
+        errorMessage = 'Server Error: ${e.response?.statusCode} - ${e.response?.statusMessage}';
       } else if (e.type == DioExceptionType.connectionTimeout) {
-        errorMessage = "Connection timeout. Please check your internet.";
+        errorMessage = 'Connection timeout. Please check your internet.';
       } else if (e.type == DioExceptionType.connectionError) {
-        errorMessage = "Connection Error. Please check the API URL or your network.";
+        errorMessage = 'Connection Error. Please check the API URL or your network.';
       }
       emit(AllSquadronError(errorMessage));
     } catch (e) {
-      emit(AllSquadronError("An unexpected error occurred."));
+      emit(const AllSquadronError('An unexpected error occurred.'));
     }
   }
 
+
   Future<void> deleteSquadron(int id) async {
+    emit(DeleteSquadronLoading());
+
     try {
       final token = await TokenStorageHelper.getTokenSecure();
-
       if (token == null || token.isEmpty) {
-        emit(AllSquadronError("Unauthorized: Please login again."));
+        emit(const DeleteSquadronError('Unauthorized: Please login again.'));
         return;
       }
 
       final dio = Dio();
       final response = await dio.delete(
-        "${ApiResources.apiUrl}${ApiResources.squadronEndPoint}/$id",
+        '${ApiResources.apiUrl}${ApiResources.squadronEndPoint}/$id',
         options: Options(
           headers: {
-            "Authorization": "Bearer $token",
-            "Content-Type": "application/json",
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'application/json',
           },
-          validateStatus: (status) => status != null && status < 500,
-
         ),
       );
 
       if (response.statusCode == 200 || response.statusCode == 204) {
+        emit(const DeleteSquadronSuccess(
+          'Squadron deleted successfully',
+        ));
         fetchSquadrons();
       } else {
-        emit(
-          AllSquadronError(
-            "Failed to delete squadron. Status: ${response.statusCode}",
-          ),
-        );
+        emit(DeleteSquadronError('Failed to delete squadron. Status: ${response.statusCode}'));
       }
     } on DioException catch (e) {
-
-      String errorMessage = "Failed to delete squadron";
-
+      String errorMessage = 'Failed to delete squadron';
       if (e.response != null) {
-        errorMessage =
-        "Server Error: ${e.response?.statusCode} - ${e.response?.statusMessage}";
+        errorMessage = 'Server Error: ${e.response?.statusCode} - ${e.response?.statusMessage}';
       } else if (e.type == DioExceptionType.connectionTimeout) {
-        errorMessage = "Connection timeout. Please check your internet.";
+        errorMessage = 'Connection timeout. Please check your internet.';
       } else if (e.type == DioExceptionType.connectionError) {
-        errorMessage =
-        "Connection Error. Please check the API URL or your network.";
+        errorMessage = 'Connection Error. Please check the API URL or your network.';
       }
-
-      emit(AllSquadronError(errorMessage));
+      emit(DeleteSquadronError(errorMessage));
     } catch (e) {
-      emit(AllSquadronError("An unexpected error occurred."));
+      emit(const DeleteSquadronError('An unexpected error occurred.'));
     }
-  }
-  Future<void> fetchSquadronById(int id) async {
+  }  Future<void> fetchSquadronById(int id) async {
     emit(GetSquadronByIdLoading());
 
     try {
       final token = await TokenStorageHelper.getTokenSecure();
       if (token == null || token.isEmpty) {
-        emit(AllSquadronError("Unauthorized: Please login again."));
+        emit(const AllSquadronError('Unauthorized: Please login again.'));
         return;
       }
 
       final dio = Dio();
       final response = await dio.get(
-        "${ApiResources.apiUrl}${ApiResources.squadronEndPoint}/$id",
+        '${ApiResources.apiUrl}${ApiResources.squadronEndPoint}/$id',
         options: Options(
           headers: {
-            "Authorization": "Bearer $token",
-            "Content-Type": "application/json",
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'application/json',
           },
         ),
       );
@@ -131,14 +124,14 @@ class AllSquadronCubit extends Cubit<AllSquadronState> {
         emit(GetSquadronByIdLoaded(squadron));
       } else {
         emit(AllSquadronError(
-          "Failed to load squadron. Status: ${response.statusCode}",
+          'Failed to load squadron. Status: ${response.statusCode}',
         ));
       }
     } on DioException catch (e) {
       emit(AllSquadronError(
         e.response != null
-            ? "Server Error: ${e.response?.statusCode}"
-            : "Connection Error",
+            ? 'Server Error: ${e.response?.statusCode}'
+            : 'Connection Error',
       ));
     }
   }
@@ -148,41 +141,40 @@ class AllSquadronCubit extends Cubit<AllSquadronState> {
     try {
       final token = await TokenStorageHelper.getTokenSecure();
       if (token == null || token.isEmpty) {
-        emit(AllSquadronError("Unauthorized: Please login again."));
+        emit(const AllSquadronError('Unauthorized: Please login again.'));
         return;
       }
 
       final dio = Dio();
       final response = await dio.put(
-        "${ApiResources.apiUrl}${ApiResources.squadronEndPoint}/${model.id}",
+        '${ApiResources.apiUrl}${ApiResources.squadronEndPoint}/${model.id}',
         data: model.toJson(),
         options: Options(
           headers: {
-            "Authorization": "Bearer $token",
-            "Content-Type": "application/json",
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'application/json',
           },
           validateStatus: (status) => status != null && status < 500,
         ),
       );
 
       if (response.statusCode == 200 || response.statusCode == 204) {
-        emit(UpdateSquadronSuccess("Squadron updated successfully"));
+        emit(const UpdateSquadronSuccess('Squadron updated successfully'));
         fetchSquadrons();
       } else {
         emit(AllSquadronError(
-          "Failed to update squadron. Status: ${response.statusCode}",
+          'Failed to update squadron. Status: ${response.statusCode}',
         ));
       }
     } on DioException catch (e) {
       emit(AllSquadronError(
         e.response != null
-            ? "Server Error: ${e.response?.statusCode}"
-            : "Connection Error",
+            ? 'Server Error: ${e.response?.statusCode}'
+            : 'Connection Error',
       ));
     }
   }
 
 
 }
-
 

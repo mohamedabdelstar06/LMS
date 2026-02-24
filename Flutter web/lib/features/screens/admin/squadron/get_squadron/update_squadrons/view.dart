@@ -1,13 +1,15 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../../core/cons/Colors/app_colors.dart';
 import '../get_all squadrons/state_managment/cubit.dart';
 import '../get_all squadrons/state_managment/states.dart';
-import '../get_all squadrons/view.dart';
+import '../model/view.dart';
 
 class EditSquadronScreen extends StatefulWidget {
+  const EditSquadronScreen({super.key, required this.squadronId, this.squadronData, });
   final int squadronId;
-  const EditSquadronScreen({super.key, required this.squadronId});
+  final SquadronModel? squadronData;
 
   @override
   State<EditSquadronScreen> createState() => _EditSquadronScreenState();
@@ -23,7 +25,13 @@ class _EditSquadronScreenState extends State<EditSquadronScreen> {
     super.initState();
     nameController = TextEditingController();
     descriptionController = TextEditingController();
-    context.read<AllSquadronCubit>().fetchSquadronById(widget.squadronId);
+    if (widget.squadronData != null) {
+      nameController.text = widget.squadronData!.name;
+      descriptionController.text = widget.squadronData!.description;
+    } else {
+
+      context.read<AllSquadronCubit>().fetchSquadronById(widget.squadronId);
+    }
   }
 
   @override
@@ -110,9 +118,9 @@ class _EditSquadronScreenState extends State<EditSquadronScreen> {
               ),
               child: Center(
                 child: isLoading
-                    ? Row(
+                    ? const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
+                  children: [
                     SizedBox(
                       width: 20,
                       height: 20,
@@ -150,36 +158,39 @@ class _EditSquadronScreenState extends State<EditSquadronScreen> {
 
 
   Widget _buildFormContainer(bool isLoading, dynamic squadron) {
-    return Container(
-      width: 1100,
-      padding: const EdgeInsets.all(40),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
-          ),
-        ],
-      ),
-      child: Form(
-        key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "Edit Squadron",
-              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+    return FadeInUp(
+      duration: const Duration(seconds: 2),
+      child: Container(
+        width: 1100,
+        padding: const EdgeInsets.all(40),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(24),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 20,
+              offset: const Offset(0, 10),
             ),
-            const SizedBox(height: 32),
-            _buildField("Squadron Name", nameController),
-            const SizedBox(height: 24),
-            _buildField("Description", descriptionController, maxLines: 4),
-            const SizedBox(height: 40),
-            _buildActionButton(isLoading, squadron),
           ],
+        ),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                "Edit Squadron",
+                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 32),
+              _buildField("Squadron Name", nameController),
+              const SizedBox(height: 24),
+              _buildField("Description", descriptionController, maxLines: 4),
+              const SizedBox(height: 40),
+              _buildActionButton(isLoading, squadron),
+            ],
+          ),
         ),
       ),
     );
@@ -203,6 +214,7 @@ class _EditSquadronScreenState extends State<EditSquadronScreen> {
         ),
         child: BlocConsumer<AllSquadronCubit, AllSquadronState>(
           listener: (context, state) {
+
             if (state is UpdateSquadronSuccess) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -221,10 +233,11 @@ class _EditSquadronScreenState extends State<EditSquadronScreen> {
                 ),
               );
               _clearForm();
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (_) => const GetSquadronPage()),
-              );
+              Navigator.pop(context);
+              // Navigator.pushReplacement(
+              //   context,
+              //   MaterialPageRoute(builder: (_) => const GetSquadronPage()),
+              // );
             }
 
             if (state is UpdateSquadronError) {
@@ -252,9 +265,6 @@ class _EditSquadronScreenState extends State<EditSquadronScreen> {
 
             final isLoading = state is UpdateSquadronLoading;
 
-            if (squadron == null) {
-              return const Center(child: CircularProgressIndicator());
-            }
 
             return SingleChildScrollView(
                 padding: const EdgeInsets.all(40),
