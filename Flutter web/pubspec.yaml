@@ -34,6 +34,7 @@ dependencies:
   flutter_dropzone:
   web: ^1.1.1
   dart_code_metrics:
+  animate_do: ^4.2.0
 
 dev_dependencies:
   flutter_test:

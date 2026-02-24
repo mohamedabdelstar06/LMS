@@ -343,7 +343,7 @@ Dio dio = Dio();
             statusCode: response.statusCode,
           ),
         );
-  // fetchUsers();
+  fetchUsers();
         if (currentState is GetUsersLoaded) {
           await fetchUsers(
             page: currentState.currentPage,

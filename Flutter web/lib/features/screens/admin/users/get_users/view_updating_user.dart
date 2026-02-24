@@ -195,31 +195,31 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                 if (state is GetUserByIdSuccess) {
                   _populateFormFromUser(state.user);
                 }
-                // if (state is UpdateUsersSuccess) {
-                //   ScaffoldMessenger.of(context).showSnackBar(
-                //     SnackBar(
-                //       content: Text(state.message),
-                //       backgroundColor: Colors.green.shade600,
-                //     ),
-                //   );
-                //   Navigator.pop(context);
-                //   // Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const GetUsersPage()));
-                //
-                //
-                // }
-                if (state is UpdateUsersError) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(state.errorMessage),
-                      backgroundColor: Colors.redAccent,
-                    ),
+                if (state is UpdateUsersSuccess) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(state.message),
+                    backgroundColor: Colors.green,
+                    duration: const Duration(seconds: 2),
+                  ));
+                  Navigator.pop(context
                   );
+                  // context.read<GetUsersCubit>().fetchUsers();
+
+
+                }
+
+                if (state is UpdateUsersError) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(state.errorMessage),
+                    backgroundColor: Colors.red,
+                    duration: const Duration(seconds: 3),
+                  ));
                 }
               },
-              buildWhen: (previous, current) =>
-                  current is GetUserByIdLoading ||
-                  current is GetUserByIdSuccess ||
-                  current is GetUserByIdError ,
+              // buildWhen: (previous, current) =>
+              //     current is GetUserByIdLoading ||
+              //     current is GetUserByIdSuccess ||
+              //     current is GetUserByIdError ,
               builder: (context, state) {
 
                 if (state is GetUserByIdLoading && _loadedUser == null) {
