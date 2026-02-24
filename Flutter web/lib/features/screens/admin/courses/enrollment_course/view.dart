@@ -628,9 +628,9 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
 
   Widget _buildSecondDropdownField(
     String displayValue,
-    List<GetCourseModel> courses,
+    List<GetCoursesModel> courses,
     bool isExpanded,
-    Function(GetCourseModel) onSelected,
+    Function(GetCoursesModel) onSelected,
     Function() onToggle,
   ) {
     return Column(
@@ -847,8 +847,8 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
                   const SizedBox(width: 30),
                   Expanded(
                     child: BlocProvider(
-                      create: (_) => GetCourseCubit()..getCourses(),
-                      child: BlocBuilder<GetCourseCubit, GetCourseState>(
+                      create: (_) => GetCoursesCubit()..getCourses(),
+                      child: BlocBuilder<GetCoursesCubit, GetCourseStates>(
                         builder: (context, courseState) {
                           if (courseState is GetCourseLoading) {
                             return const Padding(
@@ -875,8 +875,8 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
                               );
                             }
 
-                            List<GetCourseModel> courses = courseState.courses
-                                .whereType<GetCourseModel>()
+                            List<GetCoursesModel> courses = courseState.courses
+                                .whereType<GetCoursesModel>()
                                 .toList();
 
                             return _buildSecondDropdownField(

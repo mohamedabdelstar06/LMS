@@ -2,18 +2,39 @@
 import '../model/model.dart';
 
 
-abstract class GetCourseState {}
+abstract class GetCourseStates {}
 
-class GetCourseInitial extends GetCourseState {}
+class GetCourseInitial extends GetCourseStates {}
 
-class GetCourseLoading extends GetCourseState {}
+class GetCourseLoading extends GetCourseStates {}
 
-class GetCourseSuccess extends GetCourseState {
-  final List<GetCourseModel> courses;
+class GetCourseSuccess extends GetCourseStates {
+  final List<GetCoursesModel> courses;
   GetCourseSuccess(this.courses);
 }
 
-class GetCourseError extends GetCourseState {
+class GetCourseError extends GetCourseStates {
   final String message;
   GetCourseError(this.message);
+}
+
+class DeleteCourseLoading extends GetCourseStates{}
+class DeleteCourseSuccess extends GetCourseStates{
+  DeleteCourseSuccess(this.message);
+  final String message;
+}
+class DeleteCourseError extends GetCourseStates{
+  DeleteCourseError(this.message);
+  final String message;
+}
+
+
+class GetCourseByIdLoading extends GetCourseStates {}
+class GetCourseByIdSuccess extends GetCourseStates {
+  GetCourseByIdSuccess(this.course);
+  final GetCoursesModel course;
+}
+class GetCourseByIdError extends GetCourseStates {
+  GetCourseByIdError(this.message);
+  final String message;
 }

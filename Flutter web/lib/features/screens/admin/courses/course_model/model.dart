@@ -15,7 +15,7 @@ class CourseModel {
   });
 }
 
-List<GetCourseModel> courses = [
+List<GetCoursesModel> courses = [
   // CourseModel(
   //   imageUrl: "assets/test_images/course_1.png",
   //   rate: "0%",

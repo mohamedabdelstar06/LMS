@@ -98,7 +98,9 @@ class AllSquadronCubit extends Cubit<AllSquadronState> {
     } catch (e) {
       emit(const DeleteSquadronError('An unexpected error occurred.'));
     }
-  }  Future<void> fetchSquadronById(int id) async {
+  }
+
+  Future<void> fetchSquadronById(int id) async {
     emit(GetSquadronByIdLoading());
 
     try {

@@ -3,6 +3,7 @@ import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lms/core/widgets/app_bar.dart';
+import 'package:lms/features/screens/admin/courses/home_courses/state_managment/cubit.dart';
 import 'package:lms/features/screens/admin/courses/home_courses/state_managment/states.dart';
 import '../../../../../core/cons/Colors/app_colors.dart';
 import '../../../../../core/helpers/logout_server/logout.dart';
@@ -11,7 +12,7 @@ import '../../department/get_department/get_All_departments/view.dart';
 import '../get_All_courses/state_mangment/cubit.dart';
 import 'model/model.dart';
 
-List<GetCourseModel> courses = [
+List<GetCoursesModel> courses = [
 
 ];
 
@@ -36,8 +37,7 @@ class _CourseScreenState extends State<AdminCourseScreen> {
   @override
   void initState() {
     super.initState();
-    // Simulate loading time and then show content
-    Future.delayed(Duration(milliseconds: 500), () {
+    Future.delayed(const Duration(milliseconds: 500), () {
       if (mounted) {
         setState(() {
           _isLoading = false;
@@ -64,7 +64,7 @@ class _CourseScreenState extends State<AdminCourseScreen> {
             end: Alignment.bottomRight,
           ),
         ),
-        child: Scaffold(
+        child: const Scaffold(
           backgroundColor: Colors.transparent,
           body: Center(
             child: Column(
@@ -97,7 +97,7 @@ class _CourseScreenState extends State<AdminCourseScreen> {
     final isMediumScreen = screenWidth > 800;
 
     return BlocProvider(
-      create: (context) => GetCourseCubit()..getCourses(),
+      create: (context) => GetCoursesCubit()..getCourses(),
       child: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -111,196 +111,267 @@ class _CourseScreenState extends State<AdminCourseScreen> {
           ),
         ),
         child: Scaffold(
-          appBar: CustomAppBar(),
+          appBar: const CustomAppBar(),
           backgroundColor: Colors.transparent,
-          body: BlocBuilder<GetCourseCubit, GetCourseState>(
+          body: BlocConsumer<GetCoursesCubit, GetCourseStates>(
+            listener: (context, state) {
+              if (state is DeleteCourseSuccess) {
+                Navigator.of(context).pop();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: const Row(
+                      children: [
+                        Icon(Icons.check_circle, color: Colors.white),
+                        SizedBox(width: 12),
+                        Text('Course deleted successfully'),
+                      ],
+                    ),
+                    backgroundColor: Colors.green,
+                    behavior: SnackBarBehavior.floating,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                );
+                context.read<GetCoursesCubit>().getCourses();
+              } else if (state is DeleteCourseError) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Row(
+                      children: [
+                        const Icon(Icons.error_outline, color: Colors.white),
+                        const SizedBox(width: 12),
+                        Text(state.message),
+                      ],
+                    ),
+                    backgroundColor: Colors.red,
+                    behavior: SnackBarBehavior.floating,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                );
+              }
+            },
             builder: (context, state) {
-              if (state is GetCourseLoading) {
+              if (state is GetCourseLoading || state is DeleteCourseLoading) {
                 return const Center(child: CircularProgressIndicator());
               }
-
               if (state is GetCourseError) {
                 return Center(child: Text(state.message));
               }
-              if (state is GetCourseSuccess) {
+              final courses = context.read<GetCoursesCubit>().currentCourses;
+
+              if (state is GetCourseSuccess ||
+                  state is DeleteCourseSuccess ||
+                  state is DeleteCourseError)     {
                 return SafeArea(
                   child: Column(
                     children: [
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
 
 
                       Expanded(
                         child: SingleChildScrollView(
                           physics: const BouncingScrollPhysics(),
-                          child: Container(
-                            width: double.infinity,
-                            constraints: BoxConstraints(
-                              maxWidth: isLargeScreen
-                                  ? 1400
-                                  : (isMediumScreen ? 1000 : double.infinity),
-                            ),
-                            margin: EdgeInsets.symmetric(
-                              horizontal: isLargeScreen
-                                  ? 40
-                                  : (isMediumScreen ? 20 : 16),
-                            ),
-                            child: Column(
-                              children: [
-                                Container(
-                                  width: double.infinity,
-                                  padding: EdgeInsets.all(24),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white.withValues(alpha: 0.9),
-                                    borderRadius: BorderRadius.circular(20),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withValues(
-                                          alpha: 0.05,
-                                        ),
-                                        blurRadius: 20,
-                                        spreadRadius: 0,
-                                        offset: Offset(0, 10),
+                          child: Column(
+                            children: [
+                              Container(
+                                width: double.infinity,
+                                constraints: BoxConstraints(
+                                  maxWidth: isLargeScreen
+                                      ? 1400
+                                      : (isMediumScreen ? 1000 : double.infinity),
+                                ),
+                                margin: EdgeInsets.symmetric(
+                                  horizontal: isLargeScreen
+                                      ? 40
+                                      : (isMediumScreen ? 20 : 16),
+                                ),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      width: double.infinity,
+                                      padding: const EdgeInsets.all(24),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white.withValues(alpha: 0.9),
+                                        borderRadius: BorderRadius.circular(20),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black.withValues(
+                                              alpha: 0.05,
+                                            ),
+                                            blurRadius: 20,
+                                            spreadRadius: 0,
+                                            offset: const Offset(0, 10),
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                         children: [
-                                          Expanded(
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                              children: [
-                                                Row(
+                                          Row(
+                                            children: [
+                                              Expanded(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                                   children: [
-                                                    Text(
-                                                      "Welcome Back",
-                                                      style: TextStyle(
-                                                        color: Color(
-                                                          0xff175CD3,
+                                                    Row(
+                                                      children: [
+                                                        Text(
+                                                          "Welcome Back",
+                                                          style: TextStyle(
+                                                            color: const Color(
+                                                              0xff175CD3,
+                                                            ),
+                                                            fontSize: isLargeScreen
+                                                                ? 36
+                                                                : 28,
+                                                            fontWeight:
+                                                            FontWeight.w700,
+                                                            fontFamily: "inter",
+                                                          ),
                                                         ),
-                                                        fontSize: isLargeScreen
-                                                            ? 36
-                                                            : 28,
-                                                        fontWeight:
-                                                        FontWeight.w700,
-                                                        fontFamily: "inter",
-                                                      ),
-                                                    ),
-                                                    SizedBox(width: 8),
-                                                    Image.asset(
-                                                      Assets.iconsHand,
-                                                      width: isLargeScreen
-                                                          ? 32
-                                                          : 24,
-                                                      height: isLargeScreen
-                                                          ? 32
-                                                          : 24,
-                                                    ),
-                                                    const Spacer(),
-                                                    SizedBox(
-                                                      width: isLargeScreen ? 260 : 220,
+                                                        const SizedBox(width: 8),
+                                                        Image.asset(
+                                                          Assets.iconsHand,
+                                                          width: isLargeScreen
+                                                              ? 32
+                                                              : 24,
+                                                          height: isLargeScreen
+                                                              ? 32
+                                                              : 24,
+                                                        ),
+                                                        const Spacer(),
+                                                        SizedBox(
+                                                          width: isLargeScreen ? 260 : 220,
 
-                                                      child: _buildCoursesCounter(
-                                                        count: state.courses.length,
-                                                        isLargeScreen: isLargeScreen,
+                                                          child: _buildCoursesCounter(
+                                                            count: courses.length,
+                                                            isLargeScreen: isLargeScreen,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    const SizedBox(height: 8),
+                                                    Text(
+                                                      "Manage your classes and track your students’ progress easily.",
+                                                      style: TextStyle(
+                                                        fontSize: isLargeScreen
+                                                            ? 16
+                                                            : 14,
+                                                        fontWeight: FontWeight.w400,
+                                                        fontFamily: "inter",
+                                                        color: const Color(0xFF64748B),
                                                       ),
                                                     ),
                                                   ],
                                                 ),
-                                                SizedBox(height: 8),
-                                                Text(
-                                                  "Manage your classes and track your students’ progress easily.",
-                                                  style: TextStyle(
-                                                    fontSize: isLargeScreen
-                                                        ? 16
-                                                        : 14,
-                                                    fontWeight: FontWeight.w400,
-                                                    fontFamily: "inter",
-                                                    color: Color(0xFF64748B),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
+                                              ),
+                                            ],
                                           ),
                                         ],
                                       ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(height: 30),
+                                    ),
+                                    const SizedBox(height: 30),
 
-                                Container(
-                                  width: double.infinity,
-                                  padding: EdgeInsets.all(24),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(20),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withValues(
-                                          alpha: 0.15,
-                                        ),
-                                        blurRadius: 20,
-                                        spreadRadius: 0,
-                                        offset: Offset(0, 8),
+                                    Container(
+                                      width: double.infinity,
+                                      padding: const EdgeInsets.all(24),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(20),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.grey.withValues(
+                                              alpha: 0.15,
+                                            ),
+                                            blurRadius: 20,
+                                            spreadRadius: 0,
+                                            offset: const Offset(0, 8),
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                  child: LayoutBuilder(
-                                    builder: (context, constraints) {
-                                      int crossAxisCount;
-                                      double childAspectRatio;
+                                      child: LayoutBuilder(
+                                        builder: (context, constraints) {
+                                          int crossAxisCount;
+                                          double childAspectRatio;
 
-                                      if (constraints.maxWidth > 1200) {
-                                        crossAxisCount = 4;
-                                        childAspectRatio = 1.18;
-                                      } else if (constraints.maxWidth > 900) {
-                                        crossAxisCount = 3;
-                                        childAspectRatio = 1.14;
-                                      } else if (constraints.maxWidth > 600) {
-                                        crossAxisCount = 2;
-                                        childAspectRatio = 1.14;
-                                      } else {
-                                        crossAxisCount = 1;
-                                        childAspectRatio = 1.5;
-                                      }
+                                          if (constraints.maxWidth > 1200) {
+                                            crossAxisCount = 4;
+                                            childAspectRatio = 1.18;
+                                          } else if (constraints.maxWidth > 900) {
+                                            crossAxisCount = 3;
+                                            childAspectRatio = 1.14;
+                                          } else if (constraints.maxWidth > 600) {
+                                            crossAxisCount = 2;
+                                            childAspectRatio = 1.14;
+                                          } else {
+                                            crossAxisCount = 1;
+                                            childAspectRatio = 1.5;
+                                          }
 
-                                      return GridView.builder(
-                                        shrinkWrap: true,
-                                        physics:
-                                        const NeverScrollableScrollPhysics(),
-                                        addAutomaticKeepAlives: false,
-                                        addRepaintBoundaries: true,
-                                        addSemanticIndexes: false,
-                                        cacheExtent: 0,
-                                        gridDelegate:
-                                        SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: crossAxisCount,
-                                          crossAxisSpacing: 20,
-                                          mainAxisSpacing: 20,
-                                          childAspectRatio:
-                                          childAspectRatio,
-                                        ),
-                                        itemCount: state.courses.length,
-                                        itemBuilder: (context, index) {
-                                          final course = state.courses[index];
+                                          return GridView.builder(
+                                            shrinkWrap: true,
+                                            physics:
+                                            const NeverScrollableScrollPhysics(),
+                                            addAutomaticKeepAlives: false,
+                                            addRepaintBoundaries: true,
+                                            addSemanticIndexes: false,
+                                            cacheExtent: 0,
+                                            gridDelegate:
+                                            SliverGridDelegateWithFixedCrossAxisCount(
+                                              crossAxisCount: crossAxisCount,
+                                              crossAxisSpacing: 20,
+                                              mainAxisSpacing: 20,
+                                              childAspectRatio:
+                                              childAspectRatio,
+                                            ),
+                                            itemCount: courses.length,
+                                            itemBuilder: (context, index) {
+                                              final course = courses[index];
 
-                                          return _buildCourseCard(
-                                            course,
-                                            index,
+                                              return _buildCourseCard(
+                                                course,
+                                                index,
+                                              );
+                                            },
                                           );
                                         },
-                                      );
-                                    },
-                                  ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 40),
+
+                                    Container(
+
+                                      width: double.infinity,
+                                      padding: const EdgeInsets.all(24),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(20),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.grey.withValues(
+                                              alpha: 0.15,
+                                            ),
+                                            blurRadius: 20,
+                                            spreadRadius: 0,
+                                            offset: const Offset(0, 8),
+                                          ),
+                                        ],
+                                      ),
+                                      child: _buildDangerZone(
+                                        context,
+                                        courses,
+                                      ),
+                                    ),// Bottom padding
+                                  ],
                                 ),
-                                SizedBox(height: 40), // Bottom padding
-                              ],
-                            ),
+                              ),
+
+                            ],
                           ),
                         ),
                       ),
@@ -308,6 +379,17 @@ class _CourseScreenState extends State<AdminCourseScreen> {
                   ),
                 );
               }
+
+
+              //   if (state is GetCourseLoading) {
+              //   return const Center(child: CircularProgressIndicator());
+              // }
+
+              // if (state is GetCourseError) {
+              //   return Center(child: Text(state.message));
+              // }
+              // if (state is GetCourseSuccess)
+
               return const SizedBox();
             },
           ),
@@ -370,16 +452,16 @@ class _CourseScreenState extends State<AdminCourseScreen> {
     );
   }
 
-  Widget _buildCourseCard(GetCourseModel course, int index) {
+  Widget _buildCourseCard(GetCoursesModel course, int index) {
     return _CourseCardWidget(
       courseModel: course,
       index: index,
       onDelete: (int courseIndex) {
-        setState(() {
-          if (courseIndex >= 0 && courseIndex < courses.length) {
-            courses.removeAt(courseIndex);
-          }
-        });
+        // setState(() {
+        //   if (courseIndex >= 0 && courseIndex < courses.length) {
+        //     courses.removeAt(courseIndex);
+        //   }
+        // });
       },
     );
   }
@@ -387,7 +469,7 @@ class _CourseScreenState extends State<AdminCourseScreen> {
 }
 
 class _CourseCardWidget extends StatefulWidget {
-  final GetCourseModel courseModel ;
+  final GetCoursesModel courseModel ;
 
   final int index;
   final ValueChanged<int> onDelete;
@@ -425,7 +507,7 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text("📘 Selected: ${widget.courseModel.title}"),
-              backgroundColor: Color(0xFF175CD3),
+              backgroundColor: const Color(0xFF175CD3),
               behavior: SnackBarBehavior.floating,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
@@ -435,12 +517,12 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
         },
         child: AnimatedScale(
           scale: isHovered ? 1.08 : 1.0,
-          duration: Duration(milliseconds: 250),
+          duration: const Duration(milliseconds: 250),
           curve: Curves.easeOutCubic,
           child: AnimatedContainer(
-            duration: Duration(milliseconds: 300),
+            duration: const Duration(milliseconds: 300),
             curve: Curves.easeInOut,
-            padding: EdgeInsets.all(12),
+            padding: const EdgeInsets.all(12),
             width: 304,
             height: 250,
             decoration: BoxDecoration(
@@ -456,19 +538,19 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                   color: Colors.black.withValues(alpha: 0.25),
                   blurRadius: 20,
                   spreadRadius: 0,
-                  offset: Offset(0, 12),
+                  offset: const Offset(0, 12),
                 ),
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.15),
                   blurRadius: 10,
                   spreadRadius: 0,
-                  offset: Offset(0, 6),
+                  offset: const Offset(0, 6),
                 ),
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.08),
                   blurRadius: 5,
                   spreadRadius: 0,
-                  offset: Offset(0, 3),
+                  offset: const Offset(0, 3),
                 ),
               ]
                   : [
@@ -476,14 +558,14 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                   color: Colors.black.withValues(alpha: 0.08),
                   blurRadius: 15,
                   spreadRadius: 0,
-                  offset: Offset(0, 4),
+                  offset: const Offset(0, 4),
                 ),
 
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.04),
                   blurRadius: 6,
                   spreadRadius: 0,
-                  offset: Offset(0, 1),
+                  offset: const Offset(0, 1),
                 ),
               ],
             ),
@@ -494,7 +576,7 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                   width: 304,
                   height: 164,
                   child: ClipRRect(
-                    borderRadius: BorderRadius.only(
+                    borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(16),
                       topRight: Radius.circular(16),
                       bottomLeft: Radius.circular(16),
@@ -529,11 +611,11 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 6),
+                        const SizedBox(height: 6),
 
                         Text(
                           widget.courseModel.title,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
                             fontFamily: "inter",
@@ -548,13 +630,13 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
 
 
 
-                        SizedBox(height: 3),
+                        const SizedBox(height: 3),
                         Row(
                           children: [
                             Expanded(
                               child: Text(
                                 widget.courseModel.description,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 11,
                                   fontWeight: FontWeight.w400,
                                   fontFamily: "inter",
@@ -570,14 +652,14 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => DepartmentsScreen(),
+                                    builder: (context) => const DepartmentsScreen(),
                                   ),
                                 );
                                 ScaffoldMessenger.of(
                                   context,
-                                ).showSnackBar(SnackBar(content: Text("data")));
+                                ).showSnackBar(const SnackBar(content: Text("data")));
                               },
-                              child: CircleAvatar(
+                              child: const CircleAvatar(
                                 radius: 14,
                                 backgroundColor: Color(0xff175CD3),
                                 child: Center(
@@ -593,11 +675,11 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 6),
+                        const SizedBox(height: 6),
                         Row(
                             children: [
                               Text("Enrolled Students = ${widget.courseModel.enrolledStudentsCount}",style:
-                              TextStyle(
+                              const TextStyle(
                                 fontSize: 11,
                                 fontWeight: FontWeight.w400,
                                 color: Color(0xFF64748B),
@@ -665,6 +747,8 @@ class WebImage extends StatelessWidget {
     );
   }
 }
+
+
 
 
 void _showUserMenu(BuildContext context) async {
@@ -743,4 +827,680 @@ void _showUserMenu(BuildContext context) async {
   } else if (result == 'settings') {
     // TODO: Add settings action later
   }
+}
+
+
+Widget _buildDangerZone(BuildContext context, dynamic courses) {
+  return Container(
+    width: double.infinity,
+    decoration: BoxDecoration(
+      border: Border.all(color: const Color(0xFFEF4444), width: 1.5),
+      borderRadius: BorderRadius.circular(16),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          decoration: const BoxDecoration(
+            color: Color(0xFFFEF2F2),
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(14),
+              topRight: Radius.circular(14),
+            ),
+          ),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFEF4444).withOpacity(0.15),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Icon(
+                  Icons.warning_amber_rounded,
+                  color: Color(0xFFEF4444),
+                  size: 22,
+                ),
+              ),
+              const SizedBox(width: 12),
+              const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Danger Zone',
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFFEF4444),
+                    ),
+                  ),
+                  Text(
+                    'These actions are irreversible. Please proceed with caution.',
+                    style: TextStyle(fontSize: 12, color: Color(0xFFB91C1C)),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        const Divider(height: 1, color: Color(0xFFEF4444)),
+        ListView.separated(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: courses.length,
+          separatorBuilder: (_, __) => const Divider(
+            height: 1,
+            color: Color(0xFFFFE4E4),
+            indent: 24,
+            endIndent: 24,
+          ),
+          itemBuilder: (context, index) {
+            final course = courses[index];
+            return _buildDangerZoneRow(context, course);
+          },
+        ),
+        const SizedBox(height: 8),
+      ],
+    ),
+  );
+}
+
+Widget _buildDangerZoneRow(BuildContext context, GetCoursesModel course) {
+  // final hasStudents = course.enrolledStudentsCount > 0;
+
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+    child: Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color:
+            // hasStudents
+                // ? Colors.grey.withOpacity(0.1)
+                // :
+              const Color(0xFF2563EB).withOpacity(0.1),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Icon(
+            Icons.airplanemode_active,
+            size: 18,
+            color:
+            // hasStudents ?
+            // Colors.grey :
+            const Color(0xFF2563EB),
+          ),
+        ),
+        const SizedBox(width: 14),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                course.title,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF1E293B),
+                ),
+              ),
+              const SizedBox(height: 2),
+              Row(
+                children: [
+                  Icon(
+                    Icons.people_outline,
+                    size: 13,
+                    color:
+                    // hasStudents
+                    //     ? const Color(0xFFEF4444)
+                    //     :
+
+                    const Color(0xFF64748B),
+                  ),
+                  const SizedBox(width: 4),
+                  // Text(
+                  //   hasStudents
+                  //       ? '${course.enrolledStudentsCount} student${course.enrolledStudentsCount > 1 ? 's' : ''} — cannot delete'
+                  //       :
+                  //   'No students — safe to delete',
+                  //   style: TextStyle(
+                  //     fontSize: 12,
+                  //     color: hasStudents
+                  //         ? const Color(0xFFEF4444)
+                  //         : const Color(0xFF64748B),
+                  //     fontWeight: hasStudents
+                  //         ? FontWeight.w500
+                  //         : FontWeight.normal,
+                  //   ),
+                  // ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(width: 16),
+        Tooltip(
+          message:
+          // hasStudents
+          //     ? 'Remove all students before deleting'
+          //     :
+
+          'Delete ${course.title}',
+          child: ElevatedButton.icon(
+            onPressed:
+            // hasStudents
+            //     ? null
+            //     :
+                () => _showDangerDeleteDialog(context, course),
+            icon: const Icon(Icons.delete_forever, size: 16),
+            label: const Text('Delete'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFFEF4444),
+              foregroundColor: Colors.white,
+              disabledBackgroundColor: Colors.grey.shade200,
+              disabledForegroundColor: Colors.grey.shade400,
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 10,
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              elevation: 0,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+void _showDangerDeleteDialog(BuildContext context, dynamic course) {
+  final TextEditingController confirmController = TextEditingController();
+  final String confirmText = course.title;
+  bool isConfirmed = false;
+  final cubit = context.read<GetCoursesCubit>();
+
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (dialogContext) {
+      return BlocProvider.value(
+        value: cubit,
+
+        child: StatefulBuilder(
+          builder: (_, setDialogState) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              contentPadding: EdgeInsets.zero,
+              content: Container(
+                width: 480,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(24),
+                      decoration: const BoxDecoration(
+                        color: Color(0xFFFEF2F2),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(16),
+                          topRight: Radius.circular(16),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: const Color(
+                                0xFFEF4444,
+                              ).withOpacity(0.15),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.delete_forever,
+                              color: Color(0xFFEF4444),
+                              size: 28,
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          const Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Delete Course Permanently',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFFEF4444),
+                                  ),
+                                ),
+                                SizedBox(height: 4),
+                                Text(
+                                  'This action cannot be undone',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: Color(0xFFB91C1C),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.all(24),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFFF7ED),
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                color: const Color(0xFFFED7AA),
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  Icons.info_outline,
+                                  size: 16,
+                                  color: Color(0xFFD97706),
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    'You are about to permanently delete squadron"${course.title}". This will remove all associated data.',
+                                    style: const TextStyle(
+                                      fontSize: 13,
+                                      color: Color(0xFF92400E),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          const Text(
+                            'To confirm, type the course name below:',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Color(0xFF475569),
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 8,
+                            ),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFF8FAFC),
+                              borderRadius: BorderRadius.circular(6),
+                              border: Border.all(
+                                color: const Color(0xFFE2E8F0),
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  Icons.keyboard,
+                                  size: 14,
+                                  color: Color(0xFF64748B),
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  confirmText,
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFFEF4444),
+                                    fontFamily: 'monospace',
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          TextField(
+                            controller: confirmController,
+                            autofocus: true,
+                            decoration: InputDecoration(
+                              hintText: 'Type course name here...',
+                              hintStyle: const TextStyle(
+                                color: Color(0xFF94A3B8),
+                                fontSize: 14,
+                              ),
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 12,
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: const BorderSide(
+                                  color: Color(0xFFE2E8F0),
+                                ),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: const BorderSide(
+                                  color: Color(0xFFE2E8F0),
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: const BorderSide(
+                                  color: Color(0xFFEF4444),
+                                  width: 2,
+                                ),
+                              ),
+                              filled: true,
+                              fillColor: Colors.white,
+                              suffixIcon: isConfirmed
+                                  ? const Icon(
+                                Icons.check_circle,
+                                color: Colors.green,
+                              )
+                                  : null,
+                            ),
+                            onChanged: (value) {
+                              setDialogState(() {
+                                isConfirmed = value.trim() == confirmText;
+                              });
+                            },
+                          ),
+                          if (!isConfirmed &&
+                              confirmController.text.isNotEmpty)
+                            const Padding(
+                              padding: EdgeInsets.only(top: 6),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.close,
+                                    size: 14,
+                                    color: Color(0xFFEF4444),
+                                  ),
+                                  SizedBox(width: 4),
+                                  Text(
+                                    'course name does not match',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Color(0xFFEF4444),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          if (isConfirmed)
+                            const Padding(
+                              padding: EdgeInsets.only(top: 6),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.check,
+                                    size: 14,
+                                    color: Colors.green,
+                                  ),
+                                  SizedBox(width: 4),
+                                  Text(
+                                    'Name confirmed — you can now delete',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.green,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: OutlinedButton(
+                              onPressed: () {
+                                confirmController.dispose();
+                                Navigator.pop(dialogContext);
+                              },
+                              style: OutlinedButton.styleFrom(
+                                foregroundColor: const Color(0xFF64748B),
+                                side: const BorderSide(
+                                  color: Color(0xFFE2E8F0),
+                                ),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 14,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                              child: const Text(
+                                'Cancel',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child:
+                            BlocBuilder<
+                                GetCoursesCubit,
+                                GetCourseStates
+                            >(
+                              builder: (context, state) {
+
+                                final isLoading =
+                                state is DeleteCourseLoading;
+
+                                if (isLoading )
+                                {
+                                  return ElevatedButton(
+                                    onPressed: null,
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color(
+                                        0xFFEF4444,
+                                      ).withOpacity(0.7),
+                                      foregroundColor: Colors.white,
+                                      disabledBackgroundColor:
+                                      const Color(
+                                        0xFFEF4444,
+                                      ).withOpacity(0.7),
+                                      disabledForegroundColor:
+                                      Colors.white,
+                                      padding:
+                                      const EdgeInsets.symmetric(
+                                        vertical: 14,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                        BorderRadius.circular(8),
+                                      ),
+                                      elevation: 0,
+                                    ),
+                                    child: const SizedBox(
+                                        height: 18,
+                                        child:
+                                        Center(
+                                          child: Row(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                            children: [
+                                              SizedBox(
+                                                width: 20,
+                                                height: 17,
+                                                child: CircularProgressIndicator(
+                                                  strokeWidth: 1.4,
+                                                  valueColor:
+                                                  AlwaysStoppedAnimation<
+                                                      Color
+                                                  >(Colors.white),
+                                                ),
+                                              ),
+                                              SizedBox(width: 10),
+                                              Text(
+                                                'Deleting...',
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight:
+                                                  FontWeight.w600,
+                                                  fontFamily: 'inter',
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                    ),
+                                  );
+                                }
+                                return ElevatedButton.icon(
+                                  onPressed: isConfirmed
+                                      ? () {
+                                    // Navigator.pop(
+                                    //   dialogContext,
+                                    // );
+                                    cubit.deleteCourse(
+                                      course.id,
+                                    );
+                                  }
+                                      : null,
+                                  icon: const Icon(
+                                    Icons.delete_forever,
+                                    size: 18,
+                                  ),
+                                  label: const Text(
+                                    'Delete Forever',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: const Color(
+                                      0xFFEF4444,
+                                    ),
+                                    foregroundColor: Colors.white,
+                                    disabledBackgroundColor:
+                                    Colors.grey.shade200,
+                                    disabledForegroundColor:
+                                    Colors.grey.shade400,
+                                    padding:
+                                    const EdgeInsets.symmetric(
+                                      vertical: 14,
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                      BorderRadius.circular(8),
+                                    ),
+                                    elevation: 0,
+                                  ),
+                                );
+
+
+                                // return isLoading
+                                //     ? ElevatedButton(
+                                //         onPressed: null,
+                                //         style: ElevatedButton.styleFrom(
+                                //           backgroundColor: const Color(
+                                //             0xFFEF4444,
+                                //           ).withOpacity(0.7),
+                                //           foregroundColor: Colors.white,
+                                //           disabledBackgroundColor:
+                                //               const Color(
+                                //                 0xFFEF4444,
+                                //               ).withOpacity(0.7),
+                                //           disabledForegroundColor:
+                                //               Colors.white,
+                                //           padding:
+                                //               const EdgeInsets.symmetric(
+                                //                 vertical: 14,
+                                //               ),
+                                //           shape: RoundedRectangleBorder(
+                                //             borderRadius:
+                                //                 BorderRadius.circular(8),
+                                //           ),
+                                //           elevation: 0,
+                                //         ),
+                                //         child: const SizedBox(
+                                //           height: 18,
+                                //           child:
+                                //               CircularProgressIndicator(
+                                //                 strokeWidth: 2,
+                                //                 color: Colors.white,
+                                //               ),
+                                //         ),
+                                //       )
+                                //     : ElevatedButton.icon(
+                                //         onPressed: isConfirmed
+                                //             ? () {
+                                //                 // Navigator.pop(
+                                //                 //   dialogContext,
+                                //                 // );
+                                //                 cubit.deleteSquadron(
+                                //                   squadron.id,
+                                //                 );
+                                //               }
+                                //             : null,
+                                //         icon: const Icon(
+                                //           Icons.delete_forever,
+                                //           size: 18,
+                                //         ),
+                                //         label: const Text(
+                                //           'Delete Forever',
+                                //           style: TextStyle(
+                                //             fontWeight: FontWeight.w600,
+                                //           ),
+                                //         ),
+                                //         style: ElevatedButton.styleFrom(
+                                //           backgroundColor: const Color(
+                                //             0xFFEF4444,
+                                //           ),
+                                //           foregroundColor: Colors.white,
+                                //           disabledBackgroundColor:
+                                //               Colors.grey.shade200,
+                                //           disabledForegroundColor:
+                                //               Colors.grey.shade400,
+                                //           padding:
+                                //               const EdgeInsets.symmetric(
+                                //                 vertical: 14,
+                                //               ),
+                                //           shape: RoundedRectangleBorder(
+                                //             borderRadius:
+                                //                 BorderRadius.circular(8),
+                                //           ),
+                                //           elevation: 0,
+                                //         ),
+                                //       );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      );
+    },
+  );
 }

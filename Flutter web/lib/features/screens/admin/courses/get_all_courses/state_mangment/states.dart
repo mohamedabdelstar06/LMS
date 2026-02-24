@@ -9,11 +9,13 @@ class CourseInitialState extends CoursesStateDrop {}
 class CourseLoadingState extends CoursesStateDrop {}
 
 class CourseLoadedState extends CoursesStateDrop {
-  final List<GetCourseModel> courses;
   CourseLoadedState(this.courses);
+  final List<GetCourseModel> courses;
 }
 
 class CoursesErrorState extends CoursesStateDrop {
-  final String message;
   CoursesErrorState(this.message);
+  final String message;
 }
+
+
