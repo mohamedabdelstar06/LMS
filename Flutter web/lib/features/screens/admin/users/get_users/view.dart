@@ -1041,7 +1041,8 @@ class _GetUsersScreenState extends State<GetUsersPage> {
                         page = currentState.currentPage;
                         searchQuery = currentState.searchQuery;
                       }
-                      await Navigator.push(
+                      await
+                      Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (_) =>

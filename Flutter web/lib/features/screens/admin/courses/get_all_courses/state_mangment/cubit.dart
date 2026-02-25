@@ -5,7 +5,7 @@ import '../../../../../../core/helpers/cach_helper/shared_pref_helper.dart';
 import '../../home_courses/model/model.dart';
 import '../../home_courses/state_managment/states.dart';
 
-class GetCourseCubit extends Cubit<GetCourseState> {
+class GetCourseCubit extends Cubit<GetCourseStates> {
   GetCourseCubit() : super(GetCourseInitial());
 
   final Dio dio = Dio();
@@ -35,8 +35,8 @@ class GetCourseCubit extends Cubit<GetCourseState> {
       if (response.statusCode == 200) {
         final List data = response.data;
 
-        final List<GetCourseModel> courses = data
-            .map<GetCourseModel>((e) => GetCourseModel.fromJson(e))
+        final List<GetCoursesModel> courses = data
+            .map<GetCoursesModel>((e) => GetCoursesModel.fromJson(e))
             .toList();
 
         emit(GetCourseSuccess(courses));

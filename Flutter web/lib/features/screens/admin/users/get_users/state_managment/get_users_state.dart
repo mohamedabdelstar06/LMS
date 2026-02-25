@@ -131,8 +131,13 @@ class UpdateUsersLoading extends GetUsersState {}
 class UpdateUsersSuccess extends GetUsersState {
   final String message;
   final int? statusCode;
+  final DateTime timestamp;
 
-  const UpdateUsersSuccess(this.message, {this.statusCode});
+  UpdateUsersSuccess(this.message, {this.statusCode})
+      : timestamp = DateTime.now();
+
+  @override
+  List<Object?> get props => [message, statusCode, timestamp];
 }
 
 class UpdateUsersError extends GetUsersState {
@@ -140,8 +145,10 @@ class UpdateUsersError extends GetUsersState {
   final int? statusCode;
 
   const UpdateUsersError(this.errorMessage, {this.statusCode});
+
+  @override
+  List<Object?> get props => [errorMessage, statusCode];
 }
-// ====================== Get User By ID ======================
 
 class GetUserByIdLoading extends GetUsersState {
   const GetUserByIdLoading();

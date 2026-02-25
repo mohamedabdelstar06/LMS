@@ -336,25 +336,12 @@ Dio dio = Dio();
       );
 
       if (response.statusCode == 200 || response.statusCode == 204) {
-        final currentState = state;
         emit(
           UpdateUsersSuccess(
             "User updated successfully",
             statusCode: response.statusCode,
           ),
         );
-  fetchUsers();
-        if (currentState is GetUsersLoaded) {
-          await fetchUsers(
-            page: currentState.currentPage,
-            searchQuery: currentState.searchQuery,
-            filterStatus: currentState.filterStatus,
-            sortBy: currentState.sortBy,
-            order: currentState.order,
-          );
-        } else {
-          await fetchUsers();
-        }
       } else {
         emit(
           UpdateUsersError(

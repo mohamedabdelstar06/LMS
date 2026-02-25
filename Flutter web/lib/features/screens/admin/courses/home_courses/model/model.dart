@@ -1,4 +1,4 @@
-class GetCourseModel {
+class GetCoursesModel {
   final int id;
   final String title;
   final String description;
@@ -14,7 +14,7 @@ class GetCourseModel {
   final DateTime createdAt;
   final DateTime? updatedAt;
 
-  GetCourseModel({
+  GetCoursesModel({
     required this.id,
     required this.title,
     required this.description,
@@ -31,8 +31,8 @@ class GetCourseModel {
     this.updatedAt,
   });
 
-  factory GetCourseModel.fromJson(Map<String, dynamic> json) {
-    return GetCourseModel(
+  factory GetCoursesModel.fromJson(Map<String, dynamic> json) {
+    return GetCoursesModel(
       id: json['id'],
       title: json['title'],
       description: json['description'],
