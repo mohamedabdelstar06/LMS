@@ -16,6 +16,7 @@ import '../../admin/courses/home_courses/model/model.dart';
 import '../../admin/courses/get_All_courses/state_mangment/cubit.dart';
 import '../../admin/courses/home_courses/state_managment/cubit.dart';
 import '../../admin/courses/home_courses/state_managment/states.dart';
+import '../../admin/courses/update_course/view.dart';
 import '../../admin/department/get_department/get_All_departments/view.dart';
 import '../../instructor/teacher_profile/view.dart';
 String buildProfileImageUrl(String? image) {
@@ -1592,18 +1593,19 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
-                            /// TODO : ADJUST EDIT COURSE
                             InkWell(
                               onTap: () {
+
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => const DepartmentsScreen(),
+                                    builder: (_) => BlocProvider.value(
+                                      value: context.read<GetCoursesCubit>(),
+                                      child: UpdateNewCoursePage(courseId: widget.courseModel.id),
+                                    ),
                                   ),
                                 );
-                                ScaffoldMessenger.of(
-                                  context,
-                                ).showSnackBar(const SnackBar(content: Text('data')));
+
                               },
                               child: const CircleAvatar(
                                 radius: 14,
@@ -1619,6 +1621,7 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                                 //),
                               ),
                             ),
+
                           ],
                         ),
                         const SizedBox(height: 6),
