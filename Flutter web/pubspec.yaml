@@ -20,6 +20,7 @@ dependencies:
   image_picker:
   flutter_svg: ^2.2.1
   dio: ^5.9.0
+  equatable:
   shared_preferences: ^2.5.3
   flutter_bloc: ^9.1.1
   awesome_dialog: ^3.3.0

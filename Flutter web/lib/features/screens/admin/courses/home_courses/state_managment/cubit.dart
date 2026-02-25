@@ -1,5 +1,8 @@
+import 'dart:typed_data';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dio/dio.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:lms/features/screens/admin/courses/home_courses/state_managment/states.dart';
 import '../../../../../../core/cons/api_helper_resources/api_resources.dart';
 import '../../../../../../core/helpers/cach_helper/shared_pref_helper.dart';
@@ -8,9 +11,9 @@ import '../model/model.dart';
 
 
 class GetCoursesCubit extends Cubit<GetCourseStates> {
-  List<GetCoursesModel> currentCourses = [];
 
   GetCoursesCubit() : super(GetCourseInitial());
+  List<GetCoursesModel> currentCourses = [];
 
   final Dio dio = Dio();
 
@@ -20,7 +23,7 @@ class GetCoursesCubit extends Cubit<GetCourseStates> {
     try {
       final token = await TokenStorageHelper.getTokenSecure();
       if (token == null || token.isEmpty) {
-        emit(GetCourseError('You are not authorized. Token missing.'));
+        emit(const GetCourseError('You are not authorized. Token missing.'));
         return;
       }
 
@@ -44,13 +47,13 @@ class GetCoursesCubit extends Cubit<GetCourseStates> {
 
         emit(GetCourseSuccess(courses));
       } else if (response.statusCode == 401) {
-        emit(GetCourseError('Unauthorized. Please login again.'));
+        emit(const GetCourseError('Unauthorized. Please login again.'));
       } else {
-        emit(GetCourseError('Failed to load courses'));
+        emit(const GetCourseError('Failed to load courses'));
       }
     } on DioException catch (e) {
       if (e.response?.statusCode == 401) {
-        emit(GetCourseError('Unauthorized. Please login again.'));
+        emit(const GetCourseError('Unauthorized. Please login again.'));
       } else {
         emit(GetCourseError(e.message ?? 'Something went wrong'));
       }
@@ -64,7 +67,7 @@ class GetCoursesCubit extends Cubit<GetCourseStates> {
     try {
       final token = await TokenStorageHelper.getTokenSecure();
       if (token == null || token.isEmpty) {
-        emit( DeleteCourseError('Unauthorized: Please login again.'));
+        emit( const DeleteCourseError('Unauthorized: Please login again.'));
         return;
       }
 
@@ -80,7 +83,7 @@ class GetCoursesCubit extends Cubit<GetCourseStates> {
       );
 
       if (response.statusCode == 200 || response.statusCode == 204) {
-        emit( DeleteCourseSuccess(
+        emit( const DeleteCourseSuccess(
           'Course deleted successfully',
         ));
         await getCourses();      } else {
@@ -97,7 +100,7 @@ class GetCoursesCubit extends Cubit<GetCourseStates> {
       }
       emit(DeleteCourseError(errorMessage));
     } catch (e) {
-      emit( DeleteCourseError('An unexpected error occurred.'));
+      emit( const DeleteCourseError('An unexpected error occurred.'));
     }
   }
 
@@ -108,7 +111,7 @@ class GetCoursesCubit extends Cubit<GetCourseStates> {
     try {
       final token = await TokenStorageHelper.getTokenSecure();
       if (token == null || token.isEmpty) {
-        emit( GetCourseByIdError('Unauthorized: Please login again.'));
+        emit( const GetCourseByIdError('Unauthorized: Please login again.'));
         return;
       }
 
@@ -137,6 +140,78 @@ class GetCoursesCubit extends Cubit<GetCourseStates> {
             ? 'Server Error: ${e.response?.statusCode}'
             : 'Connection Error',
       ));
+    }
+  }
+
+  Future<void> updateCourse({
+    required int courseId,
+    required Map<String, dynamic> courseData,
+  }) async {
+    emit(UpdateCourseLoading());
+
+    try {
+      final token = await TokenStorageHelper.getTokenSecure();
+      if (token == null || token.isEmpty) {
+        emit(const UpdateCourseError('Unauthorized: Please login again.'));
+        return;
+      }
+      final dio = Dio();
+
+      final formData = FormData.fromMap({
+        'Title': courseData['title'],
+        'Description': courseData['description'],
+        'DepartmentName': courseData['departmentName'],
+        'YearName': courseData['yearName'],
+        'CreditHours': int.tryParse(courseData['credithours']?.toString() ?? '') ?? 0,
+      });
+
+      final Uint8List? imageBytes = courseData['imageFile'];
+      if (imageBytes != null) {
+        formData.files.add(MapEntry(
+          'ImageFile',
+          MultipartFile.fromBytes(
+            imageBytes,
+            filename: 'cover.jpg',
+            contentType: MediaType('image', 'jpeg'),
+          ),
+        ));
+      }
+
+      final response = await dio.put(
+        '${ApiResources.apiUrl}${ApiResources.getCourseEndPoint}/$courseId',
+        data: formData,
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+          validateStatus: (status) => status != null && status < 500,
+        ),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        emit(UpdateCourseSuccess('Course updated successfully'));
+      } else if (response.statusCode == 409) {
+        final msg = response.data is Map
+            ? (response.data['message'] ?? 'A course with this title already exists')
+            : 'A course with this title already exists';
+        emit(UpdateCourseError(msg));
+      } else {
+        emit(UpdateCourseError('Failed to update course (${response.statusCode})'));
+      }
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 409) {
+        final data = e.response?.data;
+        final msg = data is Map
+            ? (data['message'] ?? 'A course with this title already exists')
+            : 'A course with this title already exists';
+        emit(UpdateCourseError(msg));
+      } else {
+        emit(UpdateCourseError(
+          e.response?.data?['message'] ?? e.message ?? 'Error while updating',
+        ));
+      }
+    } catch (e) {
+      emit(UpdateCourseError('Unexpected error: $e'));
     }
   }
 }

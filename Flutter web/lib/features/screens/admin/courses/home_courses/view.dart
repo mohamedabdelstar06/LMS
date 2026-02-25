@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lms/core/widgets/app_bar.dart';
 import 'package:lms/features/screens/admin/courses/home_courses/state_managment/cubit.dart';
 import 'package:lms/features/screens/admin/courses/home_courses/state_managment/states.dart';
+import 'package:lms/features/screens/admin/courses/update_course/view.dart';
 import '../../../../../core/cons/Colors/app_colors.dart';
 import '../../../../../core/helpers/logout_server/logout.dart';
 import '../../../../../generated/assets.dart';
@@ -76,12 +77,12 @@ class _CourseScreenState extends State<AdminCourseScreen> {
                 ),
                 SizedBox(height: 20),
                 Text(
-                  "Loading Courses...",
+                  'Loading Courses...',
                   style: TextStyle(
                     color: Colors.blue,
                     fontSize: 18,
                     fontWeight: FontWeight.w500,
-                    fontFamily: "inter",
+                    fontFamily: 'inter',
                   ),
                 ),
               ],
@@ -221,7 +222,7 @@ class _CourseScreenState extends State<AdminCourseScreen> {
                                                     Row(
                                                       children: [
                                                         Text(
-                                                          "Welcome Back",
+                                                          'Welcome Back',
                                                           style: TextStyle(
                                                             color: const Color(
                                                               0xff175CD3,
@@ -231,7 +232,7 @@ class _CourseScreenState extends State<AdminCourseScreen> {
                                                                 : 28,
                                                             fontWeight:
                                                             FontWeight.w700,
-                                                            fontFamily: "inter",
+                                                            fontFamily: 'inter',
                                                           ),
                                                         ),
                                                         const SizedBox(width: 8),
@@ -257,13 +258,13 @@ class _CourseScreenState extends State<AdminCourseScreen> {
                                                     ),
                                                     const SizedBox(height: 8),
                                                     Text(
-                                                      "Manage your classes and track your students’ progress easily.",
+                                                      'Manage your classes and track your students’ progress easily.',
                                                       style: TextStyle(
                                                         fontSize: isLargeScreen
                                                             ? 16
                                                             : 14,
                                                         fontWeight: FontWeight.w400,
-                                                        fontFamily: "inter",
+                                                        fontFamily: 'inter',
                                                         color: const Color(0xFF64748B),
                                                       ),
                                                     ),
@@ -381,14 +382,6 @@ class _CourseScreenState extends State<AdminCourseScreen> {
               }
 
 
-              //   if (state is GetCourseLoading) {
-              //   return const Center(child: CircularProgressIndicator());
-              // }
-
-              // if (state is GetCourseError) {
-              //   return Center(child: Text(state.message));
-              // }
-              // if (state is GetCourseSuccess)
 
               return const SizedBox();
             },
@@ -429,22 +422,22 @@ class _CourseScreenState extends State<AdminCourseScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            "Total Courses = ",
+            'Total Courses = ',
             style: TextStyle(
               fontSize: isLargeScreen ? 16 : 14,
               fontWeight: FontWeight.w500,
               color: Colors.white.withValues(alpha: 0.9),
-              fontFamily: "inter",
+              fontFamily: 'inter',
             ),
           ),
           const SizedBox(width: 4),
           Text(
-            "$count",
+            '$count',
             style: TextStyle(
               fontSize: isLargeScreen ? 36 : 28,
               fontWeight: FontWeight.w700,
               color: Colors.white,
-              fontFamily: "inter",
+              fontFamily: 'inter',
             ),
           ),
         ],
@@ -457,11 +450,7 @@ class _CourseScreenState extends State<AdminCourseScreen> {
       courseModel: course,
       index: index,
       onDelete: (int courseIndex) {
-        // setState(() {
-        //   if (courseIndex >= 0 && courseIndex < courses.length) {
-        //     courses.removeAt(courseIndex);
-        //   }
-        // });
+
       },
     );
   }
@@ -469,15 +458,15 @@ class _CourseScreenState extends State<AdminCourseScreen> {
 }
 
 class _CourseCardWidget extends StatefulWidget {
-  final GetCoursesModel courseModel ;
-
-  final int index;
-  final ValueChanged<int> onDelete;
 
   const _CourseCardWidget({
     required this.index,
     required this.onDelete, required this.courseModel,
   });
+  final GetCoursesModel courseModel ;
+
+  final int index;
+  final ValueChanged<int> onDelete;
 
   @override
   State<_CourseCardWidget> createState() => _CourseCardWidgetState();
@@ -506,7 +495,7 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
 
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text("📘 Selected: ${widget.courseModel.title}"),
+              content: Text('📘 Selected: ${widget.courseModel.title}'),
               backgroundColor: const Color(0xFF175CD3),
               behavior: SnackBarBehavior.floating,
               shape: RoundedRectangleBorder(
@@ -618,7 +607,7 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                           style: const TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
-                            fontFamily: "inter",
+                            fontFamily: 'inter',
                             color: Color(0xFF175CD3),
                           ),
                           // maxLines: 2,
@@ -639,7 +628,7 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                                 style: const TextStyle(
                                   fontSize: 11,
                                   fontWeight: FontWeight.w400,
-                                  fontFamily: "inter",
+                                  fontFamily: 'inter',
                                   color: Color(0xFF64748B),
                                 ),
                                 maxLines: 1,
@@ -649,15 +638,17 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                             /// TODO : ADJUST EDIT COURSE
                             InkWell(
                               onTap: () {
+
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => const DepartmentsScreen(),
+                                    builder: (_) => BlocProvider.value(
+                                      value: context.read<GetCoursesCubit>(),
+                                      child: UpdateNewCoursePage(courseId: widget.courseModel.id),
+                                    ),
                                   ),
                                 );
-                                ScaffoldMessenger.of(
-                                  context,
-                                ).showSnackBar(const SnackBar(content: Text("data")));
+
                               },
                               child: const CircleAvatar(
                                 radius: 14,
@@ -678,12 +669,12 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                         const SizedBox(height: 6),
                         Row(
                             children: [
-                              Text("Enrolled Students = ${widget.courseModel.enrolledStudentsCount}",style:
+                              Text('Enrolled Students = ${widget.courseModel.enrolledStudentsCount}',style:
                               const TextStyle(
                                 fontSize: 11,
                                 fontWeight: FontWeight.w400,
                                 color: Color(0xFF64748B),
-                                fontFamily: "inter",
+                                fontFamily: 'inter',
                               ),),
                             ]
                         )
@@ -707,9 +698,6 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
 }
 
 class WebImage extends StatelessWidget {
-  final String url;
-  final double width;
-  final double height;
 
   WebImage({
     super.key,
@@ -719,6 +707,9 @@ class WebImage extends StatelessWidget {
   }) {
     _register();
   }
+  final String url;
+  final double width;
+  final double height;
 
   static final Set<String> _registeredViews = {};
 
@@ -780,7 +771,7 @@ void _showUserMenu(BuildContext context) async {
             Icon(Icons.person, color: Color(0xFF175CD3)),
             SizedBox(width: 8),
             Text(
-              "Profile",
+              'Profile',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
           ],
@@ -793,7 +784,7 @@ void _showUserMenu(BuildContext context) async {
             Icon(Icons.settings, color: Color(0xFF059669)),
             SizedBox(width: 8),
             Text(
-              "Settings",
+              'Settings',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
           ],
@@ -807,7 +798,7 @@ void _showUserMenu(BuildContext context) async {
             Icon(Icons.logout, color: Color(0xFFDC2626)),
             SizedBox(width: 8),
             Text(
-              "Logout",
+              'Logout',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -924,13 +915,13 @@ Widget _buildDangerZoneRow(BuildContext context, GetCoursesModel course) {
               const Color(0xFF2563EB).withOpacity(0.1),
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Icon(
+          child: const Icon(
             Icons.airplanemode_active,
             size: 18,
             color:
             // hasStudents ?
             // Colors.grey :
-            const Color(0xFF2563EB),
+            Color(0xFF2563EB),
           ),
         ),
         const SizedBox(width: 14),
@@ -947,7 +938,7 @@ Widget _buildDangerZoneRow(BuildContext context, GetCoursesModel course) {
                 ),
               ),
               const SizedBox(height: 2),
-              Row(
+              const Row(
                 children: [
                   Icon(
                     Icons.people_outline,
@@ -957,9 +948,9 @@ Widget _buildDangerZoneRow(BuildContext context, GetCoursesModel course) {
                     //     ? const Color(0xFFEF4444)
                     //     :
 
-                    const Color(0xFF64748B),
+                    Color(0xFF64748B),
                   ),
-                  const SizedBox(width: 4),
+                  SizedBox(width: 4),
                   // Text(
                   //   hasStudents
                   //       ? '${course.enrolledStudentsCount} student${course.enrolledStudentsCount > 1 ? 's' : ''} — cannot delete'

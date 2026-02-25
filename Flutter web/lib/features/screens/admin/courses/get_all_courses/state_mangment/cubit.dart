@@ -56,6 +56,3 @@ class GetCourseCubit extends Cubit<GetCourseStates> {
     }
   }
 }
-/*
-
- */
