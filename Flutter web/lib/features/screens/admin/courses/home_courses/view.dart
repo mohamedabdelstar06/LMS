@@ -9,6 +9,8 @@ import 'package:lms/features/screens/admin/courses/update_course/view.dart';
 import '../../../../../core/cons/Colors/app_colors.dart';
 import '../../../../../core/helpers/logout_server/logout.dart';
 import '../../../../../generated/assets.dart';
+import '../../../lectures/state_managment/lectures_cubit.dart';
+import '../../../lectures/view/view.dart';
 import '../../department/get_department/get_All_departments/view.dart';
 import '../get_All_courses/state_mangment/cubit.dart';
 import 'model/model.dart';
@@ -491,18 +493,18 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
       },
       child: GestureDetector(
         onTap: () {
-          /// Todo:
-
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('📘 Selected: ${widget.courseModel.title}'),
-              backgroundColor: const Color(0xFF175CD3),
-              behavior: SnackBarBehavior.floating,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => BlocProvider(
+                create: (_) => LectureCubit(),
+                child: LecturesScreen(
+                  courseId: widget.courseModel.id,
+                ),
               ),
             ),
           );
+      
         },
         child: AnimatedScale(
           scale: isHovered ? 1.08 : 1.0,
@@ -635,7 +637,6 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
-                            /// TODO : ADJUST EDIT COURSE
                             InkWell(
                               onTap: () {
 

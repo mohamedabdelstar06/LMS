@@ -53,7 +53,7 @@ class _GetUsersScreenState extends State<GetUsersPage> {
           ),
         ),
         child: Scaffold(
-          body: BlocListener<GetUsersCubit, GetUsersState>(
+          body: BlocConsumer<GetUsersCubit, GetUsersState>(
             listener: (context, state) {
               if (state is DeleteUserSuccess) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -93,291 +93,209 @@ class _GetUsersScreenState extends State<GetUsersPage> {
                 ));
               }
 
-
-              // if (state is UpdateUsersSuccess) {
-              //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              //     content: Text(state.message),
-              //     backgroundColor: Colors.green,
-              //     duration: const Duration(seconds: 2),
-              //   ));
-              //   Navigator.pop(context
-              //   );
-              //   // context.read<GetUsersCubit>().fetchUsers();
-              //
-              //
-              // }
-              //
-              // if (state is UpdateUsersError) {
-              //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              //     content: Text(state.errorMessage),
-              //     backgroundColor: Colors.red,
-              //     duration: const Duration(seconds: 3),
-              //   ));
-              // }
+              if (state is UpdateUsersSuccess) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(state.message),
+                  backgroundColor: Colors.green,
+                  duration: const Duration(seconds: 2),
+                ));
+                context.read<GetUsersCubit>().fetchUsers();
+              }
             },
-            child: Row(
-              children: [
-                CustomeSidebar(selectedMenuItem: selectedMenuItem),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.08),
-                            blurRadius: 20,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        children: [
-                          BlocBuilder<GetUsersCubit, GetUsersState>(
-                            buildWhen: (p, c) => c is GetUsersLoaded,
-                            builder: (context, state) {
-                              if (state is GetUsersLoaded) {
-                                return AdminTableHeader(
-                                  icon: Icons.people,
-                                  title: 'All Users',
-                                  subtitle: 'Manage all users',
-                                  stats: [
-                                    AdminStatBadge(
-                                      title: 'Total',
-                                      count: state.usersResponse.totalCount,
-                                      icon: Icons.people,
-                                      color: Colors.blueAccent.shade200,
-                                    ),
-                                    AdminStatBadge(
-                                      title: 'Admins',
-                                      count: state.usersResponse.totalAdmins,
-                                      icon: Icons.admin_panel_settings,
-                                      color: Colors.purple.shade200,
-                                    ),
-                                    AdminStatBadge(
-                                      title: 'Instructors',
-                                      count: state.usersResponse
-                                          .totalInstructors,
-                                      icon: Icons.school,
-                                      color: Colors.orange.shade200,
-                                    ),
-                                    AdminStatBadge(
-                                      title: 'Students',
-                                      count: state.usersResponse.totalStudents,
-                                      icon: Icons.person,
-                                      color: Colors.green.shade200,
-                                    ),
-                                  ],
-                                );
-                              }
-                              return const SizedBox.shrink();
-                            },
-                          ),
+            builder: (context, state) {
+              if (state is GetUsersLoading) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              return Row(
+                children: [
+                  CustomeSidebar(selectedMenuItem: selectedMenuItem),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.08),
+                              blurRadius: 20,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          children: [
+                            // Header
+                            if (state is GetUsersLoaded)
+                              AdminTableHeader(
+                                icon: Icons.people,
+                                title: 'All Users',
+                                subtitle: 'Manage all users',
+                                stats: [
+                                  AdminStatBadge(
+                                    title: 'Total',
+                                    count: state.usersResponse.totalCount,
+                                    icon: Icons.people,
+                                    color: Colors.blueAccent.shade200,
+                                  ),
+                                  AdminStatBadge(
+                                    title: 'Admins',
+                                    count: state.usersResponse.totalAdmins,
+                                    icon: Icons.admin_panel_settings,
+                                    color: Colors.purple.shade200,
+                                  ),
+                                  AdminStatBadge(
+                                    title: 'Instructors',
+                                    count: state.usersResponse.totalInstructors,
+                                    icon: Icons.school,
+                                    color: Colors.orange.shade200,
+                                  ),
+                                  AdminStatBadge(
+                                    title: 'Students',
+                                    count: state.usersResponse.totalStudents,
+                                    icon: Icons.person,
+                                    color: Colors.green.shade200,
+                                  ),
+                                ],
+                              ),
 
-                          Expanded(
-                            child: BlocBuilder<GetUsersCubit, GetUsersState>(
-                              buildWhen: (p, c) =>
-                              c is GetUsersLoading ||
-                                  c is GetUsersLoaded ||
-                                  c is GetUsersError ||
-                                  c is DeleteUserLoading,
-                              builder: (context, state) {
-                                if (state is GetUsersLoading ||
-                                    state is DeleteUserLoading) {
-                                  return const Center(
-                                      child: CircularProgressIndicator());
-                                }
+                            // Table Body
+                            Expanded(
+                              child: Builder(
+                                builder: (_) {
+                                  if (state is GetUsersLoading || state is DeleteUserLoading) {
+                                    return const Center(child: CircularProgressIndicator());
+                                  }
 
-                                if (state is GetUsersError) {
-                                  return Center(
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment
-                                          .center,
-                                      children: [
-                                        Icon(Icons.error_outline, size: 64,
-                                            color: Colors.red.shade300),
-                                        const SizedBox(height: 16),
-                                        Text(state.message,
-                                            style: const TextStyle(
-                                                color: Colors.red),
-                                            textAlign: TextAlign.center),
-                                        const SizedBox(height: 16),
-                                        ElevatedButton.icon(
-                                          onPressed: () =>
-                                              context
-                                                  .read<GetUsersCubit>()
-                                                  .fetchUsers(),
-                                          icon: const Icon(Icons.refresh),
-                                          label: const Text('Retry'),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                }
-
-                                if (state is GetUsersLoaded) {
-                                  final users = state.usersResponse.users;
-
-                                  if (users.isEmpty) {
+                                  if (state is GetUsersError) {
                                     return Center(
                                       child: Column(
-                                        mainAxisAlignment: MainAxisAlignment
-                                            .center,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
-                                          Icon(Icons.people_outline, size: 64,
-                                              color: Colors.grey.shade400),
+                                          Icon(Icons.error_outline, size: 64, color: Colors.red.shade300),
                                           const SizedBox(height: 16),
-                                          Text("No users found",
-                                              style: TextStyle(fontSize: 18,
-                                                  color: Colors.grey.shade600)),
+                                          Text(state.message,
+                                              style: const TextStyle(color: Colors.red),
+                                              textAlign: TextAlign.center),
+                                          const SizedBox(height: 16),
+                                          ElevatedButton.icon(
+                                            onPressed: () => context.read<GetUsersCubit>().fetchUsers(),
+                                            icon: const Icon(Icons.refresh),
+                                            label: const Text('Retry'),
+                                          ),
                                         ],
                                       ),
                                     );
                                   }
 
-                                  return SingleChildScrollView(
-                                    controller: _scrollController,
-                                    child: Container(
-                                      padding: const EdgeInsets.all(24),
-                                      child: _buildModernUsersTable(
-                                          context, users),
-                                    ),
-                                  );
-                                }
+                                  if (state is GetUsersLoaded) {
+                                    final users = state.usersResponse.users;
+                                    if (users.isEmpty) {
+                                      return Center(
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Icon(Icons.people_outline, size: 64, color: Colors.grey.shade400),
+                                            const SizedBox(height: 16),
+                                            Text("No users found",
+                                                style: TextStyle(fontSize: 18, color: Colors.grey.shade600)),
+                                          ],
+                                        ),
+                                      );
+                                    }
+                                    return SingleChildScrollView(
+                                      controller: _scrollController,
+                                      child: Container(
+                                        padding: const EdgeInsets.all(24),
+                                        child: _buildModernUsersTable(context, users),
+                                      ),
+                                    );
+                                  }
 
-                                return const SizedBox.shrink();
-                              },
+                                  return const SizedBox.shrink();
+                                },
+                              ),
                             ),
-                          ),
 
-                          // ✅ Pagination
-                          BlocBuilder<GetUsersCubit, GetUsersState>(
-                            buildWhen: (p, c) => c is GetUsersLoaded,
-                            builder: (context, state) {
-                              if (state is GetUsersLoaded) {
+                            // Pagination
+                            if (state is GetUsersLoaded)
+                              Builder(builder: (_) {
                                 final int currentPage = state.currentPage;
-                                final int totalPages = state.usersResponse
-                                    .totalPages;
-                                final bool hasNext = state.usersResponse
-                                    .hasNextPage;
-                                final bool hasPrevious = state.usersResponse
-                                    .hasPreviousPage;
+                                final int totalPages = state.usersResponse.totalPages;
+                                final bool hasNext = state.usersResponse.hasNextPage;
+                                final bool hasPrevious = state.usersResponse.hasPreviousPage;
 
                                 return Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 24, vertical: 16),
+                                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20),
                                     gradient: LinearGradient(colors: [
                                       MYColors.gradientColor_3,
-                                      MYColors.gradientColor_2.withValues(
-                                          alpha: 0.2),
+                                      MYColors.gradientColor_2.withValues(alpha: 0.2),
                                     ]),
-                                    border: Border(top: BorderSide(
-                                        color: Colors.grey.shade200)),
+                                    border: Border(top: BorderSide(color: Colors.grey.shade200)),
                                   ),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment
-                                        .spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       ElevatedButton.icon(
                                         onPressed: hasPrevious
-                                            ? () =>
-                                            context
-                                                .read<GetUsersCubit>()
-                                                .goToPage(currentPage - 1)
+                                            ? () => context.read<GetUsersCubit>().goToPage(currentPage - 1)
                                             : null,
-                                        icon: const Icon(
-                                            Icons.arrow_back_ios_rounded,
-                                            size: 16),
+                                        icon: const Icon(Icons.arrow_back_ios_rounded, size: 16),
                                         label: const Text('Previous'),
                                         style: ElevatedButton.styleFrom(
-                                          backgroundColor: hasPrevious
-                                              ? const Color(0xFF1849A9)
-                                              : Colors.grey.shade300,
+                                          backgroundColor: hasPrevious ? const Color(0xFF1849A9) : Colors.grey.shade300,
                                           foregroundColor: Colors.white,
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 20, vertical: 12),
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius
-                                                  .circular(12)),
+                                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                                         ),
                                       ),
                                       Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 24, vertical: 12),
+                                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                                         decoration: BoxDecoration(
-                                          gradient: const LinearGradient(
-                                              colors: [
-                                                Color(0xFF1849A9),
-                                                Color(0xFF53B1FD)
-                                              ]),
-                                          borderRadius: BorderRadius.circular(
-                                              30),
+                                          gradient: const LinearGradient(colors: [Color(0xFF1849A9), Color(0xFF53B1FD)]),
+                                          borderRadius: BorderRadius.circular(30),
                                         ),
                                         child: Row(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
-                                            const Icon(
-                                                Icons.library_books_rounded,
-                                                color: Colors.white, size: 18),
+                                            const Icon(Icons.library_books_rounded, color: Colors.white, size: 18),
                                             const SizedBox(width: 8),
                                             Text('Page $currentPage',
-                                                style: const TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight
-                                                        .bold)),
+                                                style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
                                             const SizedBox(width: 4),
                                             Text('of $totalPages',
-                                                style: TextStyle(
-                                                    color: Colors.white
-                                                        .withOpacity(0.8),
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight
-                                                        .w500)),
+                                                style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 14, fontWeight: FontWeight.w500)),
                                           ],
                                         ),
                                       ),
                                       ElevatedButton.icon(
                                         onPressed: hasNext
-                                            ? () =>
-                                            context
-                                                .read<GetUsersCubit>()
-                                                .goToPage(currentPage + 1)
+                                            ? () => context.read<GetUsersCubit>().goToPage(currentPage + 1)
                                             : null,
                                         label: const Text('Next'),
-                                        icon: const Icon(
-                                            Icons.arrow_forward_ios_rounded,
-                                            size: 16),
+                                        icon: const Icon(Icons.arrow_forward_ios_rounded, size: 16),
                                         style: ElevatedButton.styleFrom(
-                                          backgroundColor: hasNext
-                                              ? const Color(0xFF1849A9)
-                                              : Colors.grey.shade300,
+                                          backgroundColor: hasNext ? const Color(0xFF1849A9) : Colors.grey.shade300,
                                           foregroundColor: Colors.white,
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 20, vertical: 12),
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius
-                                                  .circular(12)),
+                                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                                         ),
                                       ),
                                     ],
                                   ),
                                 );
-                              }
-                              return const SizedBox.shrink();
-                            },
-                          ),
-                        ],
+                              }),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              );
+            },
           ),
         ),
       ),
