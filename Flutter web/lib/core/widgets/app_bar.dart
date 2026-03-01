@@ -1,18 +1,19 @@
-
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../features/screens/admin/admin_profile/view.dart';
+import '../../features/screens/logs/state_mangement/logs_cubit.dart';
+import '../../features/screens/logs/state_mangement/repositery_fetch.dart';
+import '../../features/screens/logs/view/view.dart';
 import '../../generated/assets.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-
-  const CustomAppBar({super.key,});
+  const CustomAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-
       width: double.infinity,
       height: 100,
       decoration: BoxDecoration(
@@ -24,89 +25,113 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ],
         color: Color(0xffE3F6FF),
-      ) ,
+      ),
       child: Center(
         child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              AnimatedCircleAvatar(),
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            AnimatedCircleAvatar(),
 
-              SizedBox(
-                width: 400,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-
-                    InkWell(
-                        onTap: (){},
-                        child: Text("Home",style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                            fontFamily: "inter",
-                            color: Color(0xff0D2772)
-
-                        ))),
-                    Spacer(),
-                    InkWell(
-                        onTap: (){},
-                        child: Text("My Courses",style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                            fontFamily: "inter",
-                            color: Color(0xff0D2772)
-
-                        ))),
-                    Spacer(),
-                    InkWell(
-                        onTap: (){},
-                        child: Text("Dashboard",style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                            fontFamily: "inter",
-                            color: Color(0xff0D2772)
-
-                        ))),
-
-                  ],
-                ),
+            SizedBox(
+              width: 400,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  InkWell(
+                    onTap: () {},
+                    child: Text(
+                      "Home",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: "inter",
+                        color: Color(0xff0D2772),
+                      ),
+                    ),
+                  ),
+                  Spacer(),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => BlocProvider(
+                            create: (_) =>
+                                ActivityLogsCubit(ActivityLogsRepository()),
+                            child: const ActivityLogsScreen(),
+                          ),
+                        ),
+                      );
+                    },
+                    child: const Text(
+                      "System Logs",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: "inter",
+                        color: Color(0xff0D2772),
+                      ),
+                    ),
+                  ),
+                  Spacer(),
+                  InkWell(
+                    onTap: () {},
+                    child: Text(
+                      "Dashboard",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: "inter",
+                        color: Color(0xff0D2772),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              SizedBox(
-                width: 180,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
+            ),
+            SizedBox(
+              width: 180,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
 
-                  children: [
-
-
-                    InkWell(child: SvgPicture.asset(Assets.iconsSearchIcon),onTap: (){},),
-                    Spacer(),
-                    InkWell(child: SvgPicture.asset(Assets.iconsBellIcon),onTap: (){},),
-                    Spacer(),
-                    InkWell(child: SvgPicture.asset(Assets.iconsMessageIcon),onTap: (){},),
-                    Spacer(),
-                    InkWell(child: SvgPicture.asset(Assets.iconsManIcon),onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (_)=> AdminProfileScreen()));
-                    },),
-
-
-
-
-                  ],
-                ),
-              )
-
-            ]
+                children: [
+                  InkWell(
+                    child: SvgPicture.asset(Assets.iconsSearchIcon),
+                    onTap: () {},
+                  ),
+                  Spacer(),
+                  InkWell(
+                    child: SvgPicture.asset(Assets.iconsBellIcon),
+                    onTap: () {},
+                  ),
+                  Spacer(),
+                  InkWell(
+                    child: SvgPicture.asset(Assets.iconsMessageIcon),
+                    onTap: () {},
+                  ),
+                  Spacer(),
+                  InkWell(
+                    child: SvgPicture.asset(Assets.iconsManIcon),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => AdminProfileScreen()),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
-
-
-
   }
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
+
 class AnimatedCircleAvatar extends StatefulWidget {
   const AnimatedCircleAvatar({super.key});
 
@@ -128,9 +153,10 @@ class _AnimatedCircleAvatarState extends State<AnimatedCircleAvatar>
       duration: const Duration(seconds: 2),
     )..repeat(reverse: true);
 
-    _scaleAnimation = Tween<double>(begin: 0.9, end: 1.1).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
+    _scaleAnimation = Tween<double>(
+      begin: 0.9,
+      end: 1.1,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
   }
 
   @override
