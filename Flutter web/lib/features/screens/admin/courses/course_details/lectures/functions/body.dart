@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../model/model.dart';
@@ -7,7 +6,6 @@ import '../state_managment/lectures_state.dart';
 import 'lectureTile.dart';
 
 class Body extends StatelessWidget {
-
   const Body({
     required this.state,
     required this.filtered,
@@ -16,8 +14,10 @@ class Body extends StatelessWidget {
     required this.onEdit,
     required this.onDelete,
     required this.onView,
+    required this.onComments,
     required this.onRetry,
   });
+
   final LectureState state;
   final List<LectureModel> filtered;
   final String searchQuery;
@@ -25,6 +25,7 @@ class Body extends StatelessWidget {
   final void Function(LectureModel) onEdit;
   final void Function(LectureModel) onDelete;
   final void Function(LectureModel) onView;
+  final void Function(LectureModel) onComments;
   final VoidCallback onRetry;
 
   @override
@@ -76,12 +77,10 @@ class Body extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.search_off_rounded,
-                size: 64, color: Colors.grey.shade400),
+            Icon(Icons.search_off_rounded, size: 64, color: Colors.grey.shade400),
             const SizedBox(height: 12),
             Text('No results for "$searchQuery"',
-                style:
-                TextStyle(fontSize: 16, color: Colors.grey.shade600)),
+                style: TextStyle(fontSize: 16, color: Colors.grey.shade600)),
           ],
         ),
       );
@@ -92,16 +91,13 @@ class Body extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.video_library_outlined,
-                size: 72, color: Colors.grey.shade300),
+            Icon(Icons.video_library_outlined, size: 72, color: Colors.grey.shade300),
             const SizedBox(height: 16),
             Text('No lectures yet',
-                style:
-                TextStyle(fontSize: 18, color: Colors.grey.shade500)),
+                style: TextStyle(fontSize: 18, color: Colors.grey.shade500)),
             const SizedBox(height: 8),
             Text('Add your first lecture to get started',
-                style:
-                TextStyle(fontSize: 14, color: Colors.grey.shade400)),
+                style: TextStyle(fontSize: 14, color: Colors.grey.shade400)),
           ],
         ),
       );
@@ -124,6 +120,7 @@ class Body extends StatelessWidget {
               onView: () => onView(l),
               onEdit: () => onEdit(l),
               onDelete: () => onDelete(l),
+              onComments: () => onComments(l),
             );
           },
         ),

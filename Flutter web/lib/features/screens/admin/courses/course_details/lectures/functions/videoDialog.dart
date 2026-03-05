@@ -261,9 +261,9 @@ class _WebVideoPlayerState extends State<WebVideoPlayer> {
         ..style.height = '100%'
         ..style.objectFit = 'contain'
         ..style.backgroundColor = '#0A1628'
-        ..setAttribute('playsinline', 'true')
+        ..setAttribute('plays inline', 'true')
         ..setAttribute('preload', 'metadata')
-        ..setAttribute('controlsList', 'nodownload');
+        ..setAttribute('controlsList', 'download');
     });
   }
 
@@ -335,7 +335,7 @@ class _VideoInfoCard extends StatelessWidget {
                     icon: Icons.videocam_outlined,
                     label: contentType!.toUpperCase(),
                     color: _Sky.purple),
-              _InfoChip(
+              const _InfoChip(
                   icon: Icons.hd_outlined,
                   label: 'Browser Player',
                   color: _Sky.green),
