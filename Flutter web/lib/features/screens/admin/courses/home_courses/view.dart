@@ -9,9 +9,9 @@ import 'package:lms/features/screens/admin/courses/update_course/view.dart';
 import '../../../../../core/cons/Colors/app_colors.dart';
 import '../../../../../core/helpers/logout_server/logout.dart';
 import '../../../../../generated/assets.dart';
-import '../../../lectures/state_managment/lectures_cubit.dart';
-import '../../../lectures/view/view.dart';
 import '../../department/get_department/get_All_departments/view.dart';
+import '../course_details/lectures/state_managment/lectures_cubit.dart';
+import '../course_details/lectures/view/view.dart';
 import '../get_All_courses/state_mangment/cubit.dart';
 import 'model/model.dart';
 

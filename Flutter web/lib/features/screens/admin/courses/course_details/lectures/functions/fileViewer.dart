@@ -1,6 +1,5 @@
 import 'dart:ui_web' as ui;
 import 'package:flutter/material.dart';
-// ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
 
 import 'fileTypeHelper.dart';
@@ -42,10 +41,6 @@ void navigateToFileViewer(
 }
 
 class FileViewerPage extends StatelessWidget {
-  final String fileUrl;
-  final String title;
-  final String? description;
-  final String? createdByName;
 
   const FileViewerPage({
     super.key,
@@ -54,6 +49,10 @@ class FileViewerPage extends StatelessWidget {
     this.description,
     this.createdByName,
   });
+  final String fileUrl;
+  final String title;
+  final String? description;
+  final String? createdByName;
 
   @override
   Widget build(BuildContext context) {
@@ -157,10 +156,6 @@ class FileViewerPage extends StatelessWidget {
 }
 
 class _VideoLayout extends StatelessWidget {
-  final String fileUrl;
-  final String title;
-  final String? description;
-  final String? createdByName;
 
   const _VideoLayout({
     required this.fileUrl,
@@ -168,6 +163,10 @@ class _VideoLayout extends StatelessWidget {
     this.description,
     this.createdByName,
   });
+  final String fileUrl;
+  final String title;
+  final String? description;
+  final String? createdByName;
 
   @override
   Widget build(BuildContext context) {
@@ -214,10 +213,6 @@ class _VideoLayout extends StatelessWidget {
 }
 
 class _AudioLayout extends StatelessWidget {
-  final String fileUrl;
-  final String title;
-  final String? description;
-  final String? createdByName;
 
   const _AudioLayout({
     required this.fileUrl,
@@ -225,6 +220,10 @@ class _AudioLayout extends StatelessWidget {
     this.description,
     this.createdByName,
   });
+  final String fileUrl;
+  final String title;
+  final String? description;
+  final String? createdByName;
 
   @override
   Widget build(BuildContext context) {
@@ -254,12 +253,12 @@ class _AudioLayout extends StatelessWidget {
 }
 
 class _HtmlVideo extends StatefulWidget {
-  final String fileUrl;
-  final double width;
-  final double height;
 
   const _HtmlVideo(
       {required this.fileUrl, required this.width, required this.height});
+  final String fileUrl;
+  final double width;
+  final double height;
 
   @override
   State<_HtmlVideo> createState() => _HtmlVideoState();
@@ -310,8 +309,8 @@ class _HtmlVideoState extends State<_HtmlVideo> {
 }
 
 class _HtmlAudio extends StatefulWidget {
-  final String fileUrl;
   const _HtmlAudio({required this.fileUrl});
+  final String fileUrl;
 
   @override
   State<_HtmlAudio> createState() => _HtmlAudioState();
@@ -398,11 +397,6 @@ class _AudioVisual extends StatelessWidget {
 }
 
 class _InfoCard extends StatelessWidget {
-  final String title;
-  final String? description;
-  final String? createdByName;
-  final Color typeColor;
-  final String typeLabel;
 
   const _InfoCard({
     required this.title,
@@ -411,6 +405,11 @@ class _InfoCard extends StatelessWidget {
     required this.typeColor,
     required this.typeLabel,
   });
+  final String title;
+  final String? description;
+  final String? createdByName;
+  final Color typeColor;
+  final String typeLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -469,11 +468,11 @@ class _InfoCard extends StatelessWidget {
 }
 
 class _Chip extends StatelessWidget {
+
+  const _Chip({required this.icon, required this.label, required this.color});
   final IconData icon;
   final String label;
   final Color color;
-
-  const _Chip({required this.icon, required this.label, required this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -501,10 +500,10 @@ class _Chip extends StatelessWidget {
 }
 
 class _SidePanel extends StatelessWidget {
-  final String fileUrl;
-  final FileType type;
 
   const _SidePanel({required this.fileUrl, required this.type});
+  final String fileUrl;
+  final FileType type;
 
   @override
   Widget build(BuildContext context) {
@@ -563,12 +562,12 @@ class _SidePanel extends StatelessWidget {
 }
 
 class _DetailRow extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final String value;
 
   const _DetailRow(
       {required this.icon, required this.label, required this.value});
+  final IconData icon;
+  final String label;
+  final String value;
 
   @override
   Widget build(BuildContext context) {
@@ -604,10 +603,10 @@ class _DetailRow extends StatelessWidget {
 }
 
 class _OpenInTabButton extends StatelessWidget {
-  final String fileUrl;
-  final bool showLabel;
 
   const _OpenInTabButton({required this.fileUrl, this.showLabel = false});
+  final String fileUrl;
+  final bool showLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -667,10 +666,10 @@ class _OpenInTabButton extends StatelessWidget {
 }
 
 class _TypeIcon extends StatelessWidget {
-  final FileType type;
-  final double size;
 
   const _TypeIcon({required this.type, required this.size});
+  final FileType type;
+  final double size;
 
   @override
   Widget build(BuildContext context) {

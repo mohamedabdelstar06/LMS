@@ -1,6 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../comments/view/view.dart';
 import '../functions/addAndEditDialog.dart';
 import '../functions/body.dart';
 import '../functions/delateAndViewDialog.dart';
@@ -30,6 +31,24 @@ class _LecturesScreenState extends State<LecturesScreen> {
     super.dispose();
   }
 
+  void _openComments(BuildContext context, int lectureId) {
+    showDialog(
+      context: context,
+      builder: (_) => Dialog(
+        backgroundColor: Colors.transparent,
+        insetPadding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(18),
+          child: SizedBox(
+            width: 680,
+            height: MediaQuery.of(context).size.height * 0.82,
+            child: CommentsScreen(lectureId: lectureId),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -39,52 +58,22 @@ class _LecturesScreenState extends State<LecturesScreen> {
         body: BlocConsumer<LectureCubit, LectureState>(
           listener: (context, state) {
             if (state is LectureDeleteSuccess) {
-              showSnack(
-                context,
-                state.message,
-                Colors.green,
-                Icons.check_circle_rounded,
-              );
+              showSnack(context, state.message, Colors.green, Icons.check_circle_rounded);
             }
             if (state is LectureDeleteError) {
-              showSnack(
-                context,
-                state.message,
-                Colors.red,
-                Icons.error_outline,
-              );
+              showSnack(context, state.message, Colors.red, Icons.error_outline);
             }
             if (state is LectureCreateSuccess) {
-              showSnack(
-                context,
-                state.message,
-                Colors.green,
-                Icons.check_circle_rounded,
-              );
+              showSnack(context, state.message, Colors.green, Icons.check_circle_rounded);
             }
             if (state is LectureCreateError) {
-              showSnack(
-                context,
-                state.message,
-                Colors.red,
-                Icons.error_outline,
-              );
+              showSnack(context, state.message, Colors.red, Icons.error_outline);
             }
             if (state is LectureUpdateSuccess) {
-              showSnack(
-                context,
-                state.message,
-                Colors.green,
-                Icons.check_circle_rounded,
-              );
+              showSnack(context, state.message, Colors.green, Icons.check_circle_rounded);
             }
             if (state is LectureUpdateError) {
-              showSnack(
-                context,
-                state.message,
-                Colors.red,
-                Icons.error_outline,
-              );
+              showSnack(context, state.message, Colors.red, Icons.error_outline);
             }
           },
           builder: (context, state) {
@@ -94,12 +83,10 @@ class _LecturesScreenState extends State<LecturesScreen> {
             final filtered = all.where((l) {
               final matchSearch =
                   l.title.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-                  l.description.toLowerCase().contains(
-                    _searchQuery.toLowerCase(),
-                  );
+                      l.description.toLowerCase().contains(_searchQuery.toLowerCase());
               final matchType =
                   _filterType == 'All' ||
-                  l.contentType.toLowerCase() == _filterType.toLowerCase();
+                      l.contentType.toLowerCase() == _filterType.toLowerCase();
               return matchSearch && matchType;
             }).toList();
 
@@ -107,8 +94,8 @@ class _LecturesScreenState extends State<LecturesScreen> {
               children: [
                 Sidebar(
                   collapsed: _sidebarCollapsed,
-                  onToggle: () =>
-                      setState(() => _sidebarCollapsed = !_sidebarCollapsed),
+                  onToggle: () => setState(() => _sidebarCollapsed = !_sidebarCollapsed),
+                  activeLabel: 'Lectures',
                 ),
                 Expanded(
                   child: Column(
@@ -119,8 +106,7 @@ class _LecturesScreenState extends State<LecturesScreen> {
                         filterType: _filterType,
                         onFilterChange: (v) => setState(() => _filterType = v),
                         lectureCount: all.length,
-                        onAddNew: () =>
-                            showAddEditDialog(context, widget.courseId, cubit),
+                        onAddNew: () => showAddEditDialog(context, widget.courseId, cubit),
                       ),
                       Expanded(
                         child: Body(
@@ -128,14 +114,10 @@ class _LecturesScreenState extends State<LecturesScreen> {
                           filtered: filtered,
                           searchQuery: _searchQuery,
                           cubit: cubit,
-                          onEdit: (l) => showAddEditDialog(
-                            context,
-                            widget.courseId,
-                            cubit,
-                            lecture: l,
-                          ),
+                          onEdit: (l) => showAddEditDialog(context, widget.courseId, cubit, lecture: l),
                           onDelete: (l) => showDeleteDialog(context, cubit, l),
                           onView: (l) => showViewDialog(context, l),
+                          onComments: (l) => _openComments(context, l.id),
                           onRetry: () => cubit.fetchLectures(widget.courseId),
                         ),
                       ),

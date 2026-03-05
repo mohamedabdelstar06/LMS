@@ -3,7 +3,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/helpers/cach_helper/shared_pref_helper.dart';
+import '../../../../../../../core/helpers/cach_helper/shared_pref_helper.dart';
 import '../model/model.dart';
 import 'lectures_state.dart';
 

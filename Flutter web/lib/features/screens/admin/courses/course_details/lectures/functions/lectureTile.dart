@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:lms/features/screens/lectures/functions/smallBadge.dart';
+import 'package:lms/features/screens/admin/courses/course_details/lectures/functions/smallBadge.dart';
 
 import '../model/model.dart';
 import 'actionButton.dart';
@@ -8,7 +8,6 @@ import 'contentTypeIconAndBadge.dart';
 import 'fileTypeHelper.dart';
 import 'fileViewer.dart';
 import 'metaChip.dart';
-  // ← navigateToFileViewer
 
 class LectureTile extends StatefulWidget {
   const LectureTile({
@@ -18,6 +17,7 @@ class LectureTile extends StatefulWidget {
     required this.onView,
     required this.onEdit,
     required this.onDelete,
+    required this.onComments,
   });
 
   final LectureModel lecture;
@@ -25,6 +25,7 @@ class LectureTile extends StatefulWidget {
   final VoidCallback onView;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
+  final VoidCallback onComments;
 
   @override
   State<LectureTile> createState() => LectureTileState();
@@ -34,11 +35,8 @@ class LectureTileState extends State<LectureTile> {
   bool _hovered = false;
 
   String? get _mediaUrl => widget.lecture.fileUrl;
-
   bool get _hasMedia => _mediaUrl != null && _mediaUrl!.isNotEmpty;
-
-  FileType get _fileType =>
-      _hasMedia ? detectFileType(_mediaUrl!) : FileType.unknown;
+  FileType get _fileType => _hasMedia ? detectFileType(_mediaUrl!) : FileType.unknown;
 
   Color get _accent {
     switch (_fileType) {
@@ -69,7 +67,6 @@ class LectureTileState extends State<LectureTile> {
 
   void _handleMainTap() {
     if (!_hasMedia) { widget.onView(); return; }
-
     switch (_fileType) {
       case FileType.pdf:
       case FileType.unknown:
@@ -241,6 +238,8 @@ class LectureTileState extends State<LectureTile> {
             onTap: widget.onEdit,
           ),
           const SizedBox(height: 6),
+          _CommentsBtn(onTap: widget.onComments),
+          const SizedBox(height: 6),
           ActionBtn(
             icon: Icons.delete_outline_rounded,
             tooltip: 'Delete',
@@ -253,10 +252,67 @@ class LectureTileState extends State<LectureTile> {
   }
 }
 
+class _CommentsBtn extends StatefulWidget {
+  final VoidCallback onTap;
+  const _CommentsBtn({required this.onTap});
+
+  @override
+  State<_CommentsBtn> createState() => _CommentsBtnState();
+}
+
+class _CommentsBtnState extends State<_CommentsBtn> {
+  bool _hov = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      onEnter: (_) => setState(() => _hov = true),
+      onExit: (_) => setState(() => _hov = false),
+      child: Tooltip(
+        message: 'Comments',
+        preferBelow: false,
+        decoration: BoxDecoration(
+          color: const Color(0xFF1E293B),
+          borderRadius: BorderRadius.circular(6),
+        ),
+        textStyle: const TextStyle(color: Colors.white, fontSize: 11),
+        child: GestureDetector(
+          onTap: widget.onTap,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 150),
+            width: 32,
+            height: 32,
+            decoration: BoxDecoration(
+              color: _hov
+                  ? const Color(0xFF0EA5E9).withOpacity(0.12)
+                  : const Color(0xFF0EA5E9).withOpacity(0.07),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(
+                color: _hov
+                    ? const Color(0xFF0EA5E9).withOpacity(0.5)
+                    : const Color(0xFF0EA5E9).withOpacity(0.2),
+              ),
+            ),
+            child: AnimatedScale(
+              scale: _hov ? 1.15 : 1.0,
+              duration: const Duration(milliseconds: 150),
+              child: const Icon(
+                Icons.chat_bubble_outline_rounded,
+                size: 15,
+                color: Color(0xFF0EA5E9),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _ActionBadge extends StatelessWidget {
   final Color accent;
   final String label;
-
   const _ActionBadge({required this.accent, required this.label});
 
   @override
