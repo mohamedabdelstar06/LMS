@@ -1,4 +1,6 @@
 import 'dart:ui_web' as ui;
+import 'dart:html' as html;
+
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +18,6 @@ import '../../../../generated/assets.dart';
 import '../../Announcement/view.dart';
 import '../student_courses/view.dart';
 import 'ProfileModel/view.dart';
-import 'dart:html' as html;
 
 class WebImage extends StatelessWidget {
   final String url;
