@@ -326,7 +326,7 @@ class _UpdateNewCoursePageState extends State<UpdateNewCoursePage> {
                   imageUrl: '',
                   instructorId: 0,
                   instructorName: '',
-                  createdAt: DateTime.now(),
+                  createdAt: DateTime.now(), lecturesCount: 0, quizzesCount: 0, assignmentsCount: 0,
                 ),
               );
 
@@ -693,6 +693,8 @@ class _UpdateNewCoursePageState extends State<UpdateNewCoursePage> {
               ),
               const SizedBox(height: 8),
               TextField(
+                minLines: 1,
+                maxLines: 2,
                 controller: descriptionController,
                 decoration: const InputDecoration(
                   hintText: 'Brief overview of what the course covers',

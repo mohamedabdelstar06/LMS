@@ -52,7 +52,9 @@ class _LecturesScreenState extends State<LecturesScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => LectureCubit()..fetchLectures(widget.courseId),
+      create: (_) => LectureCubit(
+        courseModel: context.read<LectureCubit>().courseModel,
+      )..fetchLectures(widget.courseId),
       child: Scaffold(
         backgroundColor: const Color(0xFFF0F4FF),
         body: BlocConsumer<LectureCubit, LectureState>(
@@ -92,11 +94,19 @@ class _LecturesScreenState extends State<LecturesScreen> {
 
             return Row(
               children: [
-                Sidebar(
-                  collapsed: _sidebarCollapsed,
-                  onToggle: () => setState(() => _sidebarCollapsed = !_sidebarCollapsed),
-                  activeLabel: 'Lectures',
-                ),
+                // Sidebar(
+                //   collapsed: _sidebarCollapsed,
+                //   onToggle: () => setState(() => _sidebarCollapsed = !_sidebarCollapsed),
+                //   activeLabel: 'Lectures',
+                //   courseModel: cubit.courseModel,
+                //   onIteSelected: (lectureId) {
+                //     if (lectureId != null) {
+                //       final lecture = all.firstWhere((l) => l.id == lectureId);
+                //       showViewDialog(context, lecture);
+                //     }
+                //   },
+                //
+                // ),
                 Expanded(
                   child: Column(
                     children: [

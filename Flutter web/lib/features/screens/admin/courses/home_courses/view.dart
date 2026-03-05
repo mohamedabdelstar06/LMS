@@ -9,16 +9,11 @@ import 'package:lms/features/screens/admin/courses/update_course/view.dart';
 import '../../../../../core/cons/Colors/app_colors.dart';
 import '../../../../../core/helpers/logout_server/logout.dart';
 import '../../../../../generated/assets.dart';
-import '../../department/get_department/get_All_departments/view.dart';
-import '../course_details/lectures/state_managment/lectures_cubit.dart';
-import '../course_details/lectures/view/view.dart';
+import '../course_details/layout.dart';
 import '../get_All_courses/state_mangment/cubit.dart';
 import 'model/model.dart';
 
-List<GetCoursesModel> courses = [
-
-];
-
+List<GetCoursesModel> courses = [];
 
 class AdminCourseScreen extends StatefulWidget {
   const AdminCourseScreen({super.key});
@@ -30,26 +25,12 @@ class AdminCourseScreen extends StatefulWidget {
 class _CourseScreenState extends State<AdminCourseScreen> {
   bool _isLoading = true;
 
-  String? imageProfile;
-
-  // void loadImageProfile() async {
-  //   imageProfile = await PrefHelper.getImageProfile();
-  //   setState(() {});
-  // }
-  // List <CourseModel> allCourses = [];
   @override
   void initState() {
     super.initState();
     Future.delayed(const Duration(milliseconds: 500), () {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
+      if (mounted) setState(() => _isLoading = false);
     });
-    // allCourses = courses;
-
-    // loadImageProfile();
   }
 
   @override
@@ -95,7 +76,6 @@ class _CourseScreenState extends State<AdminCourseScreen> {
     }
 
     final screenWidth = MediaQuery.of(context).size.width;
-    // final screenHeight = MediaQuery.of(context).size.height;
     final isLargeScreen = screenWidth > 1200;
     final isMediumScreen = screenWidth > 800;
 
@@ -167,13 +147,11 @@ class _CourseScreenState extends State<AdminCourseScreen> {
 
               if (state is GetCourseSuccess ||
                   state is DeleteCourseSuccess ||
-                  state is DeleteCourseError)     {
+                  state is DeleteCourseError) {
                 return SafeArea(
                   child: Column(
                     children: [
                       const SizedBox(height: 20),
-
-
                       Expanded(
                         child: SingleChildScrollView(
                           physics: const BouncingScrollPhysics(),
@@ -197,15 +175,14 @@ class _CourseScreenState extends State<AdminCourseScreen> {
                                       width: double.infinity,
                                       padding: const EdgeInsets.all(24),
                                       decoration: BoxDecoration(
-                                        color: Colors.white.withValues(alpha: 0.9),
+                                        color:
+                                        Colors.white.withValues(alpha: 0.9),
                                         borderRadius: BorderRadius.circular(20),
                                         boxShadow: [
                                           BoxShadow(
                                             color: Colors.black.withValues(
-                                              alpha: 0.05,
-                                            ),
+                                                alpha: 0.05),
                                             blurRadius: 20,
-                                            spreadRadius: 0,
                                             offset: const Offset(0, 10),
                                           ),
                                         ],
@@ -227,9 +204,9 @@ class _CourseScreenState extends State<AdminCourseScreen> {
                                                           'Welcome Back',
                                                           style: TextStyle(
                                                             color: const Color(
-                                                              0xff175CD3,
-                                                            ),
-                                                            fontSize: isLargeScreen
+                                                                0xff175CD3),
+                                                            fontSize:
+                                                            isLargeScreen
                                                                 ? 36
                                                                 : 28,
                                                             fontWeight:
@@ -249,25 +226,31 @@ class _CourseScreenState extends State<AdminCourseScreen> {
                                                         ),
                                                         const Spacer(),
                                                         SizedBox(
-                                                          width: isLargeScreen ? 260 : 220,
-
-                                                          child: _buildCoursesCounter(
-                                                            count: courses.length,
-                                                            isLargeScreen: isLargeScreen,
+                                                          width: isLargeScreen
+                                                              ? 260
+                                                              : 220,
+                                                          child:
+                                                          _buildCoursesCounter(
+                                                            count:
+                                                            courses.length,
+                                                            isLargeScreen:
+                                                            isLargeScreen,
                                                           ),
                                                         ),
                                                       ],
                                                     ),
                                                     const SizedBox(height: 8),
                                                     Text(
-                                                      'Manage your classes and track your students’ progress easily.',
+                                                      'Manage your classes and track your students\' progress easily.',
                                                       style: TextStyle(
                                                         fontSize: isLargeScreen
                                                             ? 16
                                                             : 14,
-                                                        fontWeight: FontWeight.w400,
+                                                        fontWeight:
+                                                        FontWeight.w400,
                                                         fontFamily: 'inter',
-                                                        color: const Color(0xFF64748B),
+                                                        color: const Color(
+                                                            0xFF64748B),
                                                       ),
                                                     ),
                                                   ],
@@ -279,7 +262,6 @@ class _CourseScreenState extends State<AdminCourseScreen> {
                                       ),
                                     ),
                                     const SizedBox(height: 30),
-
                                     Container(
                                       width: double.infinity,
                                       padding: const EdgeInsets.all(24),
@@ -288,11 +270,9 @@ class _CourseScreenState extends State<AdminCourseScreen> {
                                         borderRadius: BorderRadius.circular(20),
                                         boxShadow: [
                                           BoxShadow(
-                                            color: Colors.grey.withValues(
-                                              alpha: 0.15,
-                                            ),
+                                            color: Colors.grey
+                                                .withValues(alpha: 0.15),
                                             blurRadius: 20,
-                                            spreadRadius: 0,
                                             offset: const Offset(0, 8),
                                           ),
                                         ],
@@ -305,10 +285,12 @@ class _CourseScreenState extends State<AdminCourseScreen> {
                                           if (constraints.maxWidth > 1200) {
                                             crossAxisCount = 4;
                                             childAspectRatio = 1.18;
-                                          } else if (constraints.maxWidth > 900) {
+                                          } else if (constraints.maxWidth >
+                                              900) {
                                             crossAxisCount = 3;
                                             childAspectRatio = 1.14;
-                                          } else if (constraints.maxWidth > 600) {
+                                          } else if (constraints.maxWidth >
+                                              600) {
                                             crossAxisCount = 2;
                                             childAspectRatio = 1.14;
                                           } else {
@@ -329,26 +311,20 @@ class _CourseScreenState extends State<AdminCourseScreen> {
                                               crossAxisCount: crossAxisCount,
                                               crossAxisSpacing: 20,
                                               mainAxisSpacing: 20,
-                                              childAspectRatio:
-                                              childAspectRatio,
+                                              childAspectRatio: childAspectRatio,
                                             ),
                                             itemCount: courses.length,
                                             itemBuilder: (context, index) {
                                               final course = courses[index];
-
                                               return _buildCourseCard(
-                                                course,
-                                                index,
-                                              );
+                                                  course, index);
                                             },
                                           );
                                         },
                                       ),
                                     ),
                                     const SizedBox(height: 40),
-
                                     Container(
-
                                       width: double.infinity,
                                       padding: const EdgeInsets.all(24),
                                       decoration: BoxDecoration(
@@ -356,24 +332,18 @@ class _CourseScreenState extends State<AdminCourseScreen> {
                                         borderRadius: BorderRadius.circular(20),
                                         boxShadow: [
                                           BoxShadow(
-                                            color: Colors.grey.withValues(
-                                              alpha: 0.15,
-                                            ),
+                                            color: Colors.grey
+                                                .withValues(alpha: 0.15),
                                             blurRadius: 20,
-                                            spreadRadius: 0,
                                             offset: const Offset(0, 8),
                                           ),
                                         ],
                                       ),
-                                      child: _buildDangerZone(
-                                        context,
-                                        courses,
-                                      ),
-                                    ),// Bottom padding
+                                      child: _buildDangerZone(context, courses),
+                                    ),
                                   ],
                                 ),
                               ),
-
                             ],
                           ),
                         ),
@@ -382,9 +352,6 @@ class _CourseScreenState extends State<AdminCourseScreen> {
                   ),
                 );
               }
-
-
-
               return const SizedBox();
             },
           ),
@@ -392,7 +359,6 @@ class _CourseScreenState extends State<AdminCourseScreen> {
       ),
     );
   }
-
 
   Widget _buildCoursesCounter({
     required int count,
@@ -403,10 +369,7 @@ class _CourseScreenState extends State<AdminCourseScreen> {
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [
-            Color(0xFF175CD3),
-            Color(0xFF4F8DFD),
-          ],
+          colors: [Color(0xFF175CD3), Color(0xFF4F8DFD)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -451,22 +414,19 @@ class _CourseScreenState extends State<AdminCourseScreen> {
     return _CourseCardWidget(
       courseModel: course,
       index: index,
-      onDelete: (int courseIndex) {
-
-      },
+      onDelete: (int courseIndex) {},
     );
   }
-
 }
 
 class _CourseCardWidget extends StatefulWidget {
-
   const _CourseCardWidget({
     required this.index,
-    required this.onDelete, required this.courseModel,
+    required this.onDelete,
+    required this.courseModel,
   });
-  final GetCoursesModel courseModel ;
 
+  final GetCoursesModel courseModel;
   final int index;
   final ValueChanged<int> onDelete;
 
@@ -481,30 +441,17 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
   Widget build(BuildContext context) {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
-      onEnter: (_) {
-        setState(() {
-          isHovered = true;
-        });
-      },
-      onExit: (_) {
-        setState(() {
-          isHovered = false;
-        });
-      },
+      onEnter: (_) => setState(() => isHovered = true),
+      onExit: (_) => setState(() => isHovered = false),
       child: GestureDetector(
         onTap: () {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => BlocProvider(
-                create: (_) => LectureCubit(),
-                child: LecturesScreen(
-                  courseId: widget.courseModel.id,
-                ),
-              ),
+              builder: (_) =>
+                  CourseLayout(courseModel: widget.courseModel),
             ),
           );
-      
         },
         child: AnimatedScale(
           scale: isHovered ? 1.08 : 1.0,
@@ -528,19 +475,16 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.25),
                   blurRadius: 20,
-                  spreadRadius: 0,
                   offset: const Offset(0, 12),
                 ),
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.15),
                   blurRadius: 10,
-                  spreadRadius: 0,
                   offset: const Offset(0, 6),
                 ),
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.08),
                   blurRadius: 5,
-                  spreadRadius: 0,
                   offset: const Offset(0, 3),
                 ),
               ]
@@ -548,14 +492,11 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.08),
                   blurRadius: 15,
-                  spreadRadius: 0,
                   offset: const Offset(0, 4),
                 ),
-
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.04),
                   blurRadius: 6,
-                  spreadRadius: 0,
                   offset: const Offset(0, 1),
                 ),
               ],
@@ -567,34 +508,23 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                   width: 304,
                   height: 164,
                   child: ClipRRect(
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(16),
-                      topRight: Radius.circular(16),
-                      bottomLeft: Radius.circular(16),
-                      bottomRight: Radius.circular(16),
-                    ),
-                    child:    ClipRRect(
-                      borderRadius: const BorderRadius.vertical(
-                        top: Radius.circular(16),
-                      ),
-                      child: widget.courseModel.imageUrl.isNotEmpty
-                          ? IgnorePointer(
-                        child: WebImage(
-                          url: buildImageUrl(widget.courseModel.imageUrl),
-                          width: double.infinity,
-                          height: 120,
-                        ),
-                      )
-                          : const SizedBox(
+                    borderRadius: BorderRadius.circular(16),
+                    child: widget.courseModel.imageUrl.isNotEmpty
+                        ? IgnorePointer(
+                      child: WebImage(
+                        url: buildImageUrl(widget.courseModel.imageUrl),
+                        width: double.infinity,
                         height: 120,
-                        child: Center(
-                          child: Icon(Icons.image_not_supported),
-                        ),
+                      ),
+                    )
+                        : const SizedBox(
+                      height: 120,
+                      child: Center(
+                        child: Icon(Icons.image_not_supported),
                       ),
                     ),
                   ),
                 ),
-
                 Expanded(
                   child: SizedBox(
                     width: 304,
@@ -603,7 +533,6 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(height: 6),
-
                         Text(
                           widget.courseModel.title,
                           style: const TextStyle(
@@ -612,15 +541,7 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                             fontFamily: 'inter',
                             color: Color(0xFF175CD3),
                           ),
-                          // maxLines: 2,
-                          // overflow: TextOverflow.ellipsis,
                         ),
-
-
-
-
-
-
                         const SizedBox(height: 3),
                         Row(
                           children: [
@@ -639,47 +560,40 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                             ),
                             InkWell(
                               onTap: () {
-
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (_) => BlocProvider.value(
                                       value: context.read<GetCoursesCubit>(),
-                                      child: UpdateNewCoursePage(courseId: widget.courseModel.id),
+                                      child: UpdateNewCoursePage(
+                                        courseId: widget.courseModel.id,
+                                      ),
                                     ),
                                   ),
                                 );
-
                               },
                               child: const CircleAvatar(
                                 radius: 14,
                                 backgroundColor: Color(0xff175CD3),
-                                child: Center(
-                                  child: Icon(
-                                    Icons.edit,
-                                    color: Colors.white,
-                                    size: 15,
-                                  ),
+                                child: Icon(
+                                  Icons.edit,
+                                  color: Colors.white,
+                                  size: 15,
                                 ),
-
-                                //),
                               ),
                             ),
                           ],
                         ),
                         const SizedBox(height: 6),
-                        Row(
-                            children: [
-                              Text('Enrolled Students = ${widget.courseModel.enrolledStudentsCount}',style:
-                              const TextStyle(
-                                fontSize: 11,
-                                fontWeight: FontWeight.w400,
-                                color: Color(0xFF64748B),
-                                fontFamily: 'inter',
-                              ),),
-                            ]
-                        )
-
+                        Text(
+                          'Enrolled Students = ${widget.courseModel.enrolledStudentsCount}',
+                          style: const TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w400,
+                            color: Color(0xFF64748B),
+                            fontFamily: 'inter',
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -691,15 +605,14 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
       ),
     );
   }
+
   String buildImageUrl(String? imageUrl) {
     if (imageUrl == null || imageUrl.isEmpty) return '';
     return 'http://skylearn.runasp.net${imageUrl.startsWith('/') ? '' : '/'}$imageUrl';
   }
-
 }
 
 class WebImage extends StatelessWidget {
-
   WebImage({
     super.key,
     required this.url,
@@ -708,6 +621,7 @@ class WebImage extends StatelessWidget {
   }) {
     _register();
   }
+
   final String url;
   final double width;
   final double height;
@@ -716,17 +630,14 @@ class WebImage extends StatelessWidget {
 
   void _register() {
     if (_registeredViews.contains(url)) return;
-
     ui.platformViewRegistry.registerViewFactory(url, (int _) {
       final img = html.ImageElement()
         ..src = url
         ..style.width = '100%'
         ..style.height = '100%'
         ..style.objectFit = 'cover';
-
       return img;
     });
-
     _registeredViews.add(url);
   }
 
@@ -739,9 +650,6 @@ class WebImage extends StatelessWidget {
     );
   }
 }
-
-
-
 
 void _showUserMenu(BuildContext context) async {
   final RenderBox button = context.findRenderObject() as RenderBox;
@@ -771,10 +679,9 @@ void _showUserMenu(BuildContext context) async {
           children: [
             Icon(Icons.person, color: Color(0xFF175CD3)),
             SizedBox(width: 8),
-            Text(
-              'Profile',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-            ),
+            Text('Profile',
+                style:
+                TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
           ],
         ),
       ),
@@ -784,10 +691,9 @@ void _showUserMenu(BuildContext context) async {
           children: [
             Icon(Icons.settings, color: Color(0xFF059669)),
             SizedBox(width: 8),
-            Text(
-              'Settings',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-            ),
+            Text('Settings',
+                style:
+                TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
           ],
         ),
       ),
@@ -798,14 +704,11 @@ void _showUserMenu(BuildContext context) async {
           children: [
             Icon(Icons.logout, color: Color(0xFFDC2626)),
             SizedBox(width: 8),
-            Text(
-              'Logout',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: Color(0xFFDC2626),
-              ),
-            ),
+            Text('Logout',
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFFDC2626))),
           ],
         ),
       ),
@@ -814,13 +717,8 @@ void _showUserMenu(BuildContext context) async {
 
   if (result == 'logout') {
     await LogoutServer.logout();
-  } else if (result == 'profile') {
-    // TODO: Add profile action later
-  } else if (result == 'settings') {
-    // TODO: Add settings action later
   }
 }
-
 
 Widget _buildDangerZone(BuildContext context, dynamic courses) {
   return Container(
@@ -900,8 +798,6 @@ Widget _buildDangerZone(BuildContext context, dynamic courses) {
 }
 
 Widget _buildDangerZoneRow(BuildContext context, GetCoursesModel course) {
-  // final hasStudents = course.enrolledStudentsCount > 0;
-
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
     child: Row(
@@ -909,20 +805,13 @@ Widget _buildDangerZoneRow(BuildContext context, GetCoursesModel course) {
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color:
-            // hasStudents
-                // ? Colors.grey.withOpacity(0.1)
-                // :
-              const Color(0xFF2563EB).withOpacity(0.1),
+            color: const Color(0xFF2563EB).withOpacity(0.1),
             borderRadius: BorderRadius.circular(8),
           ),
           child: const Icon(
             Icons.airplanemode_active,
             size: 18,
-            color:
-            // hasStudents ?
-            // Colors.grey :
-            Color(0xFF2563EB),
+            color: Color(0xFF2563EB),
           ),
         ),
         const SizedBox(width: 14),
@@ -941,32 +830,7 @@ Widget _buildDangerZoneRow(BuildContext context, GetCoursesModel course) {
               const SizedBox(height: 2),
               const Row(
                 children: [
-                  Icon(
-                    Icons.people_outline,
-                    size: 13,
-                    color:
-                    // hasStudents
-                    //     ? const Color(0xFFEF4444)
-                    //     :
-
-                    Color(0xFF64748B),
-                  ),
-                  SizedBox(width: 4),
-                  // Text(
-                  //   hasStudents
-                  //       ? '${course.enrolledStudentsCount} student${course.enrolledStudentsCount > 1 ? 's' : ''} — cannot delete'
-                  //       :
-                  //   'No students — safe to delete',
-                  //   style: TextStyle(
-                  //     fontSize: 12,
-                  //     color: hasStudents
-                  //         ? const Color(0xFFEF4444)
-                  //         : const Color(0xFF64748B),
-                  //     fontWeight: hasStudents
-                  //         ? FontWeight.w500
-                  //         : FontWeight.normal,
-                  //   ),
-                  // ),
+                  Icon(Icons.people_outline, size: 13, color: Color(0xFF64748B)),
                 ],
               ),
             ],
@@ -974,29 +838,16 @@ Widget _buildDangerZoneRow(BuildContext context, GetCoursesModel course) {
         ),
         const SizedBox(width: 16),
         Tooltip(
-          message:
-          // hasStudents
-          //     ? 'Remove all students before deleting'
-          //     :
-
-          'Delete ${course.title}',
+          message: 'Delete ${course.title}',
           child: ElevatedButton.icon(
-            onPressed:
-            // hasStudents
-            //     ? null
-            //     :
-                () => _showDangerDeleteDialog(context, course),
+            onPressed: () => _showDangerDeleteDialog(context, course),
             icon: const Icon(Icons.delete_forever, size: 16),
             label: const Text('Delete'),
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFFEF4444),
               foregroundColor: Colors.white,
-              disabledBackgroundColor: Colors.grey.shade200,
-              disabledForegroundColor: Colors.grey.shade400,
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 10,
-              ),
+              padding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
@@ -1021,7 +872,6 @@ void _showDangerDeleteDialog(BuildContext context, dynamic course) {
     builder: (dialogContext) {
       return BlocProvider.value(
         value: cubit,
-
         child: StatefulBuilder(
           builder: (_, setDialogState) {
             return AlertDialog(
@@ -1031,9 +881,8 @@ void _showDangerDeleteDialog(BuildContext context, dynamic course) {
               contentPadding: EdgeInsets.zero,
               content: Container(
                 width: 480,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                ),
+                decoration:
+                BoxDecoration(borderRadius: BorderRadius.circular(16)),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -1052,9 +901,8 @@ void _showDangerDeleteDialog(BuildContext context, dynamic course) {
                           Container(
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                              color: const Color(
-                                0xFFEF4444,
-                              ).withOpacity(0.15),
+                              color:
+                              const Color(0xFFEF4444).withOpacity(0.15),
                               shape: BoxShape.circle,
                             ),
                             child: const Icon(
@@ -1090,7 +938,6 @@ void _showDangerDeleteDialog(BuildContext context, dynamic course) {
                         ],
                       ),
                     ),
-
                     Padding(
                       padding: const EdgeInsets.all(24),
                       child: Column(
@@ -1102,20 +949,16 @@ void _showDangerDeleteDialog(BuildContext context, dynamic course) {
                               color: const Color(0xFFFFF7ED),
                               borderRadius: BorderRadius.circular(8),
                               border: Border.all(
-                                color: const Color(0xFFFED7AA),
-                              ),
+                                  color: const Color(0xFFFED7AA)),
                             ),
                             child: Row(
                               children: [
-                                const Icon(
-                                  Icons.info_outline,
-                                  size: 16,
-                                  color: Color(0xFFD97706),
-                                ),
+                                const Icon(Icons.info_outline,
+                                    size: 16, color: Color(0xFFD97706)),
                                 const SizedBox(width: 8),
                                 Expanded(
                                   child: Text(
-                                    'You are about to permanently delete squadron"${course.title}". This will remove all associated data.',
+                                    'You are about to permanently delete "${course.title}". This will remove all associated data.',
                                     style: const TextStyle(
                                       fontSize: 13,
                                       color: Color(0xFF92400E),
@@ -1137,23 +980,17 @@ void _showDangerDeleteDialog(BuildContext context, dynamic course) {
                           const SizedBox(height: 8),
                           Container(
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 8,
-                            ),
+                                horizontal: 12, vertical: 8),
                             decoration: BoxDecoration(
                               color: const Color(0xFFF8FAFC),
                               borderRadius: BorderRadius.circular(6),
                               border: Border.all(
-                                color: const Color(0xFFE2E8F0),
-                              ),
+                                  color: const Color(0xFFE2E8F0)),
                             ),
                             child: Row(
                               children: [
-                                const Icon(
-                                  Icons.keyboard,
-                                  size: 14,
-                                  color: Color(0xFF64748B),
-                                ),
+                                const Icon(Icons.keyboard,
+                                    size: 14, color: Color(0xFF64748B)),
                                 const SizedBox(width: 8),
                                 Text(
                                   confirmText,
@@ -1178,35 +1015,27 @@ void _showDangerDeleteDialog(BuildContext context, dynamic course) {
                                 fontSize: 14,
                               ),
                               contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 12,
-                              ),
+                                  horizontal: 16, vertical: 12),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
                                 borderSide: const BorderSide(
-                                  color: Color(0xFFE2E8F0),
-                                ),
+                                    color: Color(0xFFE2E8F0)),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
                                 borderSide: const BorderSide(
-                                  color: Color(0xFFE2E8F0),
-                                ),
+                                    color: Color(0xFFE2E8F0)),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
                                 borderSide: const BorderSide(
-                                  color: Color(0xFFEF4444),
-                                  width: 2,
-                                ),
+                                    color: Color(0xFFEF4444), width: 2),
                               ),
                               filled: true,
                               fillColor: Colors.white,
                               suffixIcon: isConfirmed
-                                  ? const Icon(
-                                Icons.check_circle,
-                                color: Colors.green,
-                              )
+                                  ? const Icon(Icons.check_circle,
+                                  color: Colors.green)
                                   : null,
                             ),
                             onChanged: (value) {
@@ -1221,18 +1050,14 @@ void _showDangerDeleteDialog(BuildContext context, dynamic course) {
                               padding: EdgeInsets.only(top: 6),
                               child: Row(
                                 children: [
-                                  Icon(
-                                    Icons.close,
-                                    size: 14,
-                                    color: Color(0xFFEF4444),
-                                  ),
+                                  Icon(Icons.close,
+                                      size: 14, color: Color(0xFFEF4444)),
                                   SizedBox(width: 4),
                                   Text(
                                     'course name does not match',
                                     style: TextStyle(
-                                      fontSize: 12,
-                                      color: Color(0xFFEF4444),
-                                    ),
+                                        fontSize: 12,
+                                        color: Color(0xFFEF4444)),
                                   ),
                                 ],
                               ),
@@ -1242,18 +1067,13 @@ void _showDangerDeleteDialog(BuildContext context, dynamic course) {
                               padding: EdgeInsets.only(top: 6),
                               child: Row(
                                 children: [
-                                  Icon(
-                                    Icons.check,
-                                    size: 14,
-                                    color: Colors.green,
-                                  ),
+                                  Icon(Icons.check,
+                                      size: 14, color: Colors.green),
                                   SizedBox(width: 4),
                                   Text(
                                     'Name confirmed — you can now delete',
                                     style: TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.green,
-                                    ),
+                                        fontSize: 12, color: Colors.green),
                                   ),
                                 ],
                               ),
@@ -1261,7 +1081,6 @@ void _showDangerDeleteDialog(BuildContext context, dynamic course) {
                         ],
                       ),
                     ),
-
                     Padding(
                       padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
                       child: Row(
@@ -1275,52 +1094,38 @@ void _showDangerDeleteDialog(BuildContext context, dynamic course) {
                               style: OutlinedButton.styleFrom(
                                 foregroundColor: const Color(0xFF64748B),
                                 side: const BorderSide(
-                                  color: Color(0xFFE2E8F0),
-                                ),
+                                    color: Color(0xFFE2E8F0)),
                                 padding: const EdgeInsets.symmetric(
-                                  vertical: 14,
-                                ),
+                                    vertical: 14),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                               ),
-                              child: const Text(
-                                'Cancel',
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              ),
+                              child: const Text('Cancel',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600)),
                             ),
                           ),
                           const SizedBox(width: 12),
                           Expanded(
-                            child:
-                            BlocBuilder<
-                                GetCoursesCubit,
-                                GetCourseStates
-                            >(
+                            child: BlocBuilder<GetCoursesCubit,
+                                GetCourseStates>(
                               builder: (context, state) {
-
                                 final isLoading =
                                 state is DeleteCourseLoading;
-
-                                if (isLoading )
-                                {
+                                if (isLoading) {
                                   return ElevatedButton(
                                     onPressed: null,
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color(
-                                        0xFFEF4444,
-                                      ).withOpacity(0.7),
+                                      backgroundColor: const Color(0xFFEF4444)
+                                          .withOpacity(0.7),
                                       foregroundColor: Colors.white,
                                       disabledBackgroundColor:
-                                      const Color(
-                                        0xFFEF4444,
-                                      ).withOpacity(0.7),
-                                      disabledForegroundColor:
-                                      Colors.white,
-                                      padding:
-                                      const EdgeInsets.symmetric(
-                                        vertical: 14,
-                                      ),
+                                      const Color(0xFFEF4444)
+                                          .withOpacity(0.7),
+                                      disabledForegroundColor: Colors.white,
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 14),
                                       shape: RoundedRectangleBorder(
                                         borderRadius:
                                         BorderRadius.circular(8),
@@ -1328,75 +1133,58 @@ void _showDangerDeleteDialog(BuildContext context, dynamic course) {
                                       elevation: 0,
                                     ),
                                     child: const SizedBox(
-                                        height: 18,
-                                        child:
-                                        Center(
-                                          child: Row(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                            children: [
-                                              SizedBox(
-                                                width: 20,
-                                                height: 17,
-                                                child: CircularProgressIndicator(
-                                                  strokeWidth: 1.4,
-                                                  valueColor:
-                                                  AlwaysStoppedAnimation<
-                                                      Color
-                                                  >(Colors.white),
-                                                ),
+                                      height: 18,
+                                      child: Center(
+                                        child: Row(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                          children: [
+                                            SizedBox(
+                                              width: 20,
+                                              height: 17,
+                                              child:
+                                              CircularProgressIndicator(
+                                                strokeWidth: 1.4,
+                                                valueColor:
+                                                AlwaysStoppedAnimation<
+                                                    Color>(Colors.white),
                                               ),
-                                              SizedBox(width: 10),
-                                              Text(
-                                                'Deleting...',
-                                                style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight:
-                                                  FontWeight.w600,
-                                                  fontFamily: 'inter',
-                                                  color: Colors.white,
-                                                ),
+                                            ),
+                                            SizedBox(width: 10),
+                                            Text(
+                                              'Deleting...',
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w600,
+                                                fontFamily: 'inter',
+                                                color: Colors.white,
                                               ),
-                                            ],
-                                          ),
-                                        )
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                                     ),
                                   );
                                 }
                                 return ElevatedButton.icon(
                                   onPressed: isConfirmed
-                                      ? () {
-                                    // Navigator.pop(
-                                    //   dialogContext,
-                                    // );
-                                    cubit.deleteCourse(
-                                      course.id,
-                                    );
-                                  }
+                                      ? () => cubit.deleteCourse(course.id)
                                       : null,
-                                  icon: const Icon(
-                                    Icons.delete_forever,
-                                    size: 18,
-                                  ),
-                                  label: const Text(
-                                    'Delete Forever',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
+                                  icon: const Icon(Icons.delete_forever,
+                                      size: 18),
+                                  label: const Text('Delete Forever',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600)),
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: const Color(
-                                      0xFFEF4444,
-                                    ),
+                                    backgroundColor:
+                                    const Color(0xFFEF4444),
                                     foregroundColor: Colors.white,
                                     disabledBackgroundColor:
                                     Colors.grey.shade200,
                                     disabledForegroundColor:
                                     Colors.grey.shade400,
-                                    padding:
-                                    const EdgeInsets.symmetric(
-                                      vertical: 14,
-                                    ),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 14),
                                     shape: RoundedRectangleBorder(
                                       borderRadius:
                                       BorderRadius.circular(8),
@@ -1404,82 +1192,6 @@ void _showDangerDeleteDialog(BuildContext context, dynamic course) {
                                     elevation: 0,
                                   ),
                                 );
-
-
-                                // return isLoading
-                                //     ? ElevatedButton(
-                                //         onPressed: null,
-                                //         style: ElevatedButton.styleFrom(
-                                //           backgroundColor: const Color(
-                                //             0xFFEF4444,
-                                //           ).withOpacity(0.7),
-                                //           foregroundColor: Colors.white,
-                                //           disabledBackgroundColor:
-                                //               const Color(
-                                //                 0xFFEF4444,
-                                //               ).withOpacity(0.7),
-                                //           disabledForegroundColor:
-                                //               Colors.white,
-                                //           padding:
-                                //               const EdgeInsets.symmetric(
-                                //                 vertical: 14,
-                                //               ),
-                                //           shape: RoundedRectangleBorder(
-                                //             borderRadius:
-                                //                 BorderRadius.circular(8),
-                                //           ),
-                                //           elevation: 0,
-                                //         ),
-                                //         child: const SizedBox(
-                                //           height: 18,
-                                //           child:
-                                //               CircularProgressIndicator(
-                                //                 strokeWidth: 2,
-                                //                 color: Colors.white,
-                                //               ),
-                                //         ),
-                                //       )
-                                //     : ElevatedButton.icon(
-                                //         onPressed: isConfirmed
-                                //             ? () {
-                                //                 // Navigator.pop(
-                                //                 //   dialogContext,
-                                //                 // );
-                                //                 cubit.deleteSquadron(
-                                //                   squadron.id,
-                                //                 );
-                                //               }
-                                //             : null,
-                                //         icon: const Icon(
-                                //           Icons.delete_forever,
-                                //           size: 18,
-                                //         ),
-                                //         label: const Text(
-                                //           'Delete Forever',
-                                //           style: TextStyle(
-                                //             fontWeight: FontWeight.w600,
-                                //           ),
-                                //         ),
-                                //         style: ElevatedButton.styleFrom(
-                                //           backgroundColor: const Color(
-                                //             0xFFEF4444,
-                                //           ),
-                                //           foregroundColor: Colors.white,
-                                //           disabledBackgroundColor:
-                                //               Colors.grey.shade200,
-                                //           disabledForegroundColor:
-                                //               Colors.grey.shade400,
-                                //           padding:
-                                //               const EdgeInsets.symmetric(
-                                //                 vertical: 14,
-                                //               ),
-                                //           shape: RoundedRectangleBorder(
-                                //             borderRadius:
-                                //                 BorderRadius.circular(8),
-                                //           ),
-                                //           elevation: 0,
-                                //         ),
-                                //       );
                               },
                             ),
                           ),

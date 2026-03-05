@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lms/features/screens/admin/courses/home_courses/model/model.dart';
 
 import '../../../../../../../core/helpers/cach_helper/shared_pref_helper.dart';
 import '../model/model.dart';
@@ -42,10 +43,11 @@ class ApiService {
 
 
 class LectureCubit extends Cubit<LectureState> {
-  LectureCubit() : super(LectureInitial());
+  LectureCubit({required this.courseModel}) : super(LectureInitial());
 
 
   List<LectureModel> currentLectures = [];
+  final GetCoursesModel courseModel;
 
 
   Future<void> fetchLectures(int courseId) async {
