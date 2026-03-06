@@ -32,9 +32,9 @@ class ContentTypePill extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
-        color: s.color.withOpacity(0.2),
+        color: s.color.withValues(alpha: .2),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: s.color.withOpacity(0.5)),
+        border: Border.all(color: s.color.withValues(alpha: .5)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

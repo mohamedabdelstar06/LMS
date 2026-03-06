@@ -21,7 +21,7 @@ class HeroBar extends StatelessWidget {
         child: Container(
           margin: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.15),
+            color: Colors.white.withValues(alpha: .15),
             shape: BoxShape.circle,
           ),
           child: const Icon(
@@ -32,7 +32,6 @@ class HeroBar extends StatelessWidget {
         ),
       ),
       flexibleSpace: FlexibleSpaceBar(
-        stretchModes: const [StretchMode.zoomBackground],
         background: Stack(
           fit: StackFit.expand,
           children: [
@@ -57,7 +56,7 @@ class HeroBar extends StatelessWidget {
                 height: 180,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.white.withOpacity(0.05),
+                  color: Colors.white.withValues(alpha: .05),
                 ),
               ),
             ),
@@ -69,7 +68,7 @@ class HeroBar extends StatelessWidget {
                 height: 100,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.white.withOpacity(0.07),
+                  color: Colors.white.withValues(alpha: .07),
                 ),
               ),
             ),

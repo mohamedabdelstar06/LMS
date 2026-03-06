@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'card.dart';
 import 'card_title.dart';
-import 'file_cfg.dart';
+import 'file_configuration.dart';
 import 'file_row_state.dart';
 
 class AdditionalFilesCard extends StatelessWidget {
@@ -11,7 +12,7 @@ class AdditionalFilesCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return CardShip(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

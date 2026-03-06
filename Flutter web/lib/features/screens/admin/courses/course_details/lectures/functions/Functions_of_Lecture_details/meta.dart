@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import '../../model/model.dart';
 import 'chip.dart';
 
@@ -15,7 +14,6 @@ class MetaStrip extends StatelessWidget {
       spacing: 8,
       runSpacing: 8,
       children: [
-        ChipCard(Icons.tag_rounded, 'ID ${lecture.id}', const Color(0xFF0284C7), ),
         ChipCard(
           Icons.calendar_today_outlined,
           DateFormat('MMM d, yyyy').format(lecture.createdAt),

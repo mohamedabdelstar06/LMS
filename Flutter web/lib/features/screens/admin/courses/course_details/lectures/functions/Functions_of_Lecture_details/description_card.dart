@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 
+import 'card.dart';
 import 'card_title.dart';
 
 class DescriptionCard extends StatefulWidget {
@@ -17,11 +18,12 @@ class DescriptionCardState extends State<DescriptionCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return CardShip(
+
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CardTitle(Icons.notes_rounded, 'Description'),
+          const CardTitle(Icons.notes_rounded, 'Description'),
           const SizedBox(height: 12),
           AnimatedCrossFade(
             firstChild: Text(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
 import '../../model/model.dart';
+import 'card.dart';
 
 class AuthorCard extends StatelessWidget {
   const AuthorCard({super.key, required this.lecture});
@@ -9,9 +9,11 @@ class AuthorCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return CardShip(
+
       child: Row(
         children: [
+
           Container(
             width: 46,
             height: 46,
@@ -75,6 +77,7 @@ class AuthorCard extends StatelessWidget {
               ),
             ),
           ),
+          const SizedBox(width: 10),
         ],
       ),
     );

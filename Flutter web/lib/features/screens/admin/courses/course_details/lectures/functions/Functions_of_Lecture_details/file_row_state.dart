@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'file_cfg.dart';
+import 'file_configuration.dart';
 const String _kBase = 'https://skylearn.runasp.net';
 
 String _url(String url) {

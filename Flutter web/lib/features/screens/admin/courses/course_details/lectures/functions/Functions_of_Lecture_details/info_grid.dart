@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../model/model.dart';
+import 'card.dart';
 import 'card_title.dart';
 import 'info_tile.dart';
 
@@ -12,11 +13,11 @@ class InfoGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return CardShip(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CardTitle(Icons.info_outline_rounded, 'Details'),
+          const CardTitle(Icons.info_outline_rounded, 'Details'),
           const SizedBox(height: 14),
           Row(
             children: [
