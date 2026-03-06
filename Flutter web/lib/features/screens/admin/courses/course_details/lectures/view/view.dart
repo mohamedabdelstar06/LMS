@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../comments/view/view.dart';
 import '../functions/Delete_dialog.dart';
-import '../functions/addAndEditDialog.dart';
+import '../functions/add_editDialog.dart';
 import '../functions/body.dart';
 import '../functions/add_ViewDialog.dart';
 import '../functions/sideBar.dart';
