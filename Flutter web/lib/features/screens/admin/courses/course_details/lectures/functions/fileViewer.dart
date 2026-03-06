@@ -56,7 +56,7 @@ class FileViewerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final type = detectFileType(fileUrl);
+    final type = FileDetector().detect(fileUrl);
 
     return Container(
       decoration: const BoxDecoration(
@@ -126,34 +126,69 @@ class FileViewerPage extends StatelessWidget {
 
   Widget _buildBody(BuildContext context, FileType type) {
     switch (type) {
+
       case FileType.video:
         return _VideoLayout(
-            fileUrl: fileUrl,
-            title: title,
-            description: description,
-            createdByName: createdByName);
+          fileUrl: fileUrl,
+          title: title,
+          description: description,
+          createdByName: createdByName,
+        );
+
       case FileType.audio:
         return _AudioLayout(
-            fileUrl: fileUrl,
-            title: title,
-            description: description,
-            createdByName: createdByName);
+          fileUrl: fileUrl,
+          title: title,
+          description: description,
+          createdByName: createdByName,
+        );
+
       case FileType.pdf:
+      case FileType.excel:
+      case FileType.word:
+      case FileType.powerpoint:
+      case FileType.image:
+      case FileType.text:
+      case FileType.archive:
       case FileType.unknown:
-        openInBrowserTab(fileUrl);
+      openInBrowserTab(fileUrl);
         return const SizedBox.shrink();
     }
   }
-
   String _typeLabel(FileType type) {
     switch (type) {
-      case FileType.video:   return 'Video Lecture';
-      case FileType.audio:   return 'Audio Lecture';
-      case FileType.pdf:     return 'PDF Document';
-      case FileType.unknown: return 'File';
+
+      case FileType.video:
+        return 'Video Lecture';
+
+      case FileType.audio:
+        return 'Audio Lecture';
+
+      case FileType.pdf:
+        return 'PDF Document';
+
+      case FileType.excel:
+        return 'Excel File';
+
+      case FileType.word:
+        return 'Word Document';
+
+      case FileType.powerpoint:
+        return 'PowerPoint';
+
+      case FileType.image:
+        return 'Image';
+
+      case FileType.text:
+        return 'Text File';
+
+      case FileType.archive:
+        return 'Archive File';
+
+      case FileType.unknown:
+      return 'File';
     }
-  }
-}
+  }}
 
 class _VideoLayout extends StatelessWidget {
 
@@ -690,12 +725,32 @@ class _TypeIcon extends StatelessWidget {
     switch (type) {
       case FileType.video:
         return (Icons.play_circle_outline_rounded, _Sky.purple);
+
       case FileType.audio:
         return (Icons.headphones_rounded, _Sky.green);
+
       case FileType.pdf:
         return (Icons.picture_as_pdf_outlined, _Sky.red);
+
+      case FileType.excel:
+        return (Icons.table_chart_rounded, const Color(0xFF16A34A));
+
+      case FileType.word:
+        return (Icons.description_outlined, const Color(0xFF2563EB));
+
+      case FileType.powerpoint:
+        return (Icons.slideshow_outlined, const Color(0xFFF97316));
+
+      case FileType.image:
+        return (Icons.image_outlined, const Color(0xFFDB2777));
+
+      case FileType.text:
+        return (Icons.text_snippet_outlined, const Color(0xFF6B7280));
+
+      case FileType.archive:
+        return (Icons.folder_zip_outlined, const Color(0xFF92400E));
+
       case FileType.unknown:
         return (Icons.insert_drive_file_outlined, _Sky.blue1);
     }
-  }
-}
+  }}

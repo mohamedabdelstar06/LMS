@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../comments/view/view.dart';
+import '../functions/Delete_dialog.dart';
 import '../functions/addAndEditDialog.dart';
 import '../functions/body.dart';
-import '../functions/delateAndViewDialog.dart';
+import '../functions/add_ViewDialog.dart';
 import '../functions/sideBar.dart';
 import '../functions/topBar.dart';
 import '../state_managment/lectures_cubit.dart';
@@ -45,6 +46,27 @@ class _LecturesScreenState extends State<LecturesScreen> {
             child: CommentsScreen(lectureId: lectureId),
           ),
         ),
+      ),
+    );
+  }
+  void showSnack(BuildContext ctx, String msg, Color color, IconData icon) {
+    ScaffoldMessenger.of(ctx).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            Icon(icon, color: Colors.white, size: 18),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(msg,
+                  style: const TextStyle(fontWeight: FontWeight.w600)),
+            ),
+          ],
+        ),
+        backgroundColor: color,
+        behavior: SnackBarBehavior.floating,
+        margin: const EdgeInsets.all(20),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        duration: const Duration(seconds: 2),
       ),
     );
   }
@@ -126,7 +148,11 @@ class _LecturesScreenState extends State<LecturesScreen> {
                           cubit: cubit,
                           onEdit: (l) => showAddEditDialog(context, widget.courseId, cubit, lecture: l),
                           onDelete: (l) => showDeleteDialog(context, cubit, l),
-                          onView: (l) => showViewDialog(context, l),
+                          onView: (l) {
+                            Navigator.push(context, MaterialPageRoute(
+                              builder: (_) => ShowViewDialogScreen(lecture: l),
+                            ));
+                          },
                           onComments: (l) => _openComments(context, l.id),
                           onRetry: () => cubit.fetchLectures(widget.courseId),
                         ),

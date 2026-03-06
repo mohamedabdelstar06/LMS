@@ -14,6 +14,7 @@ dependencies:
     sdk: flutter
   intl:
   timeago:
+  url_launcher:
   time:
   cupertino_icons: ^1.0.8
   video_player: ^2.10.1

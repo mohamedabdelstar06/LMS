@@ -1,23 +1,60 @@
 import 'dart:html' as html;
 
+import 'package:lms/core/cons/api_helper_resources/api_resources.dart';
+
 const String _baseUrl = 'https://skylearn.runasp.net';
 
-enum FileType { video, audio, pdf, unknown }
+enum FileType {
+  video,
+  audio,
+  pdf,
+  excel,
+  word,
+  powerpoint,
+  image,
+  text,
+  archive,
+  unknown,
+}
 
-FileType detectFileType(String url) {
-  final lower = url.toLowerCase().split('?').first;
-  if (lower.endsWith('.mp4') || lower.endsWith('.webm') ||
-      lower.endsWith('.mov') || lower.endsWith('.avi') ||
-      lower.endsWith('.mkv') || lower.endsWith('.ogg')) {
-    return FileType.video;
+ class FileDetector {
+  static const Map<FileType, Set<String>> _extensions = {
+    FileType.video: {'mp4', 'webm', 'mov', 'avi', 'mkv', 'ogg'},
+
+    FileType.audio: {'mp3', 'wav', 'aac', 'flac', 'm4a', 'opus'},
+
+    FileType.image: {'jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg'},
+
+    FileType.pdf: {'pdf'},
+
+    FileType.excel: {'xls', 'xlsx', 'csv'},
+
+    FileType.word: {'doc', 'docx'},
+
+    FileType.powerpoint: {'ppt', 'pptx'},
+
+    FileType.text: {'txt', 'json', 'xml', 'html'},
+
+    FileType.archive: {'zip', 'rar', '7z', 'tar', 'gz'},
+  };
+
+   FileType detect(String url) {
+    final cleanUrl = url.toLowerCase().split('?').first;
+
+    if (!cleanUrl.contains('.')) {
+      return FileType.unknown;
+    }
+
+    final extension = cleanUrl.split('.').last;
+
+    for (final entry in _extensions.entries) {
+      if (entry.value.contains(extension)) {
+        return entry.key;
+      }
+    }
+
+    return FileType.unknown;
   }
-  if (lower.endsWith('.mp3') || lower.endsWith('.wav') ||
-      lower.endsWith('.aac') || lower.endsWith('.flac') ||
-      lower.endsWith('.m4a') || lower.endsWith('.opus')) {
-    return FileType.audio;
-  }
-  if (lower.endsWith('.pdf')) return FileType.pdf;
-  return FileType.unknown;
 }
 
 String resolveUrl(String url) {

@@ -574,46 +574,309 @@ class _CommentTileState extends State<_CommentTile> {
   }
 
   void _showDeleteDialog(BuildContext context, CommentsCubit cubit, int id) {
+    final TextEditingController confirmController = TextEditingController();
+    const String confirmText = 'Comment';
+    bool isConfirmed = false;
+
     showDialog(
       context: context,
-      builder: (_) => AlertDialog(
-        backgroundColor: const Color(0xFF1E293B),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text(
-          'Delete Comment',
-          style: TextStyle(
-            color: Color(0xFFF1F5F9),
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        content: const Text(
-          'Are you sure you want to delete this comment?',
-          style: TextStyle(color: Color(0xFF94A3B8), fontSize: 13),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text(
-              'Cancel',
-              style: TextStyle(color: Color(0xFF64748B)),
-            ),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              cubit.deleteComment(id);
-            },
-            child: const Text(
-              'Delete',
-              style: TextStyle(
-                color: Color(0xFFEF4444),
-                fontWeight: FontWeight.w600,
+      barrierDismissible: false,
+      builder: (dialogContext) {
+        return StatefulBuilder(
+          builder: (_, setDialogState) {
+            return AlertDialog(
+              backgroundColor: const Color(0xFF1E293B),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+                side: BorderSide(
+                  color: const Color(0xFFEF4444).withOpacity(0.3),
+                ),
               ),
-            ),
-          ),
-        ],
-      ),
+              contentPadding: EdgeInsets.zero,
+              content: SizedBox(
+                width: 400,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(20),
+                      decoration: const BoxDecoration(
+                        color: Color(0xFF1A1A2E),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(16),
+                          topRight: Radius.circular(16),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFEF4444).withOpacity(0.15),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.delete_forever_rounded,
+                              color: Color(0xFFEF4444),
+                              size: 24,
+                            ),
+                          ),
+                          const SizedBox(width: 14),
+                          const Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Delete Comment',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
+                                    color: Color(0xFFF1F5F9),
+                                  ),
+                                ),
+                                SizedBox(height: 2),
+                                Text(
+                                  'This action cannot be undone',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Color(0xFF94A3B8),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFEF4444).withOpacity(0.08),
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                color: const Color(0xFFEF4444).withOpacity(0.25),
+                              ),
+                            ),
+                            child: const Row(
+                              children: [
+                                Icon(
+                                  Icons.warning_amber_rounded,
+                                  size: 16,
+                                  color: Color(0xFFFCA5A5),
+                                ),
+                                SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    'Deleting this comment will also remove all its replies permanently.',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Color(0xFFFCA5A5),
+                                      height: 1.4,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 18),
+
+                          const Text(
+                            'To confirm deletion, type:',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Color(0xFF94A3B8),
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 14, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF0F172A),
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                color: const Color(0xFF334155),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(
+                                  Icons.keyboard_rounded,
+                                  size: 14,
+                                  color: Color(0xFF64748B),
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  confirmText,
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w700,
+                                    color: Color(0xFFEF4444),
+                                    fontFamily: 'monospace',
+                                    letterSpacing: 1,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+
+                          TextField(
+                            controller: confirmController,
+                            autofocus: true,
+                            style: const TextStyle(
+                              color: Color(0xFFF1F5F9),
+                              fontSize: 14,
+                            ),
+                            decoration: InputDecoration(
+                              hintText: 'Type "$confirmText" to confirm...',
+                              hintStyle: const TextStyle(
+                                color: Color(0xFF475569),
+                                fontSize: 13,
+                              ),
+                              filled: true,
+                              fillColor: const Color(0xFF0F172A),
+                              contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 14, vertical: 12),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: const BorderSide(
+                                    color: Color(0xFF334155)),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: const BorderSide(
+                                    color: Color(0xFFEF4444), width: 1.5),
+                              ),
+                              suffixIcon: confirmController.text.isNotEmpty
+                                  ? Icon(
+                                isConfirmed
+                                    ? Icons.check_circle_rounded
+                                    : Icons.cancel_rounded,
+                                color: isConfirmed
+                                    ? const Color(0xFF22C55E)
+                                    : const Color(0xFFEF4444),
+                                size: 18,
+                              )
+                                  : null,
+                            ),
+                            onChanged: (value) {
+                              setDialogState(() {
+                                isConfirmed = value.trim() == confirmText;
+                              });
+                            },
+                          ),
+
+                          // Validation feedback
+                          if (confirmController.text.isNotEmpty) ...[
+                            const SizedBox(height: 6),
+                            Row(
+                              children: [
+                                Icon(
+                                  isConfirmed
+                                      ? Icons.check_rounded
+                                      : Icons.close_rounded,
+                                  size: 13,
+                                  color: isConfirmed
+                                      ? const Color(0xFF22C55E)
+                                      : const Color(0xFFEF4444),
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  isConfirmed
+                                      ? 'Confirmed — you can now delete'
+                                      : 'Text does not match',
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    color: isConfirmed
+                                        ? const Color(0xFF22C55E)
+                                        : const Color(0xFFEF4444),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: OutlinedButton(
+                              onPressed: () {
+                                confirmController.dispose();
+                                Navigator.pop(dialogContext);
+                              },
+                              style: OutlinedButton.styleFrom(
+                                foregroundColor: const Color(0xFF94A3B8),
+                                side: const BorderSide(
+                                    color: Color(0xFF334155)),
+                                padding:
+                                const EdgeInsets.symmetric(vertical: 12),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              child: const Text(
+                                'Cancel',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: ElevatedButton.icon(
+                              onPressed: isConfirmed
+                                  ? () {
+                                Navigator.pop(dialogContext);
+                                cubit.deleteComment(id);
+                              }
+                                  : null,
+                              icon: const Icon(Icons.delete_forever_rounded,
+                                  size: 16),
+                              label: const Text(
+                                'Delete',
+                                style: TextStyle(fontWeight: FontWeight.w700),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFFEF4444),
+                                foregroundColor: Colors.white,
+                                disabledBackgroundColor:
+                                const Color(0xFF334155),
+                                disabledForegroundColor:
+                                const Color(0xFF64748B),
+                                padding:
+                                const EdgeInsets.symmetric(vertical: 12),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                elevation: 0,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }

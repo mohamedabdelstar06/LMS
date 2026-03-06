@@ -1,51 +1,65 @@
-abstract class LectureState {}
+abstract class LectureState {
+  const LectureState();
+}
 
-class LectureInitial extends LectureState {}
+class LectureInitial extends LectureState {
+  const LectureInitial();
+}
 
-class LectureLoading extends LectureState {}
+class LectureLoading extends LectureState {
+  const LectureLoading();
+}
 
 class LectureLoaded extends LectureState {
-  LectureLoaded(this.lectures);
+  const LectureLoaded(this.lectures);
   final List<dynamic> lectures;
 }
 
 class LectureError extends LectureState {
-  LectureError(this.message);
+  const LectureError(this.message);
   final String message;
 }
 
-class LectureCreateLoading extends LectureState {}
+class LectureCreateLoading extends LectureState {
+  const LectureCreateLoading({this.progress = 0.0});
+  final double progress;
+}
 
 class LectureCreateSuccess extends LectureState {
-  LectureCreateSuccess(this.message);
+  const LectureCreateSuccess(this.message);
   final String message;
 }
 
 class LectureCreateError extends LectureState {
-  LectureCreateError(this.message);
+  const LectureCreateError(this.message);
   final String message;
 }
 
-class LectureUpdateLoading extends LectureState {}
+class LectureUpdateLoading extends LectureState {
+  const LectureUpdateLoading({this.progress = 0.0});
+  final double progress;
+}
 
 class LectureUpdateSuccess extends LectureState {
-  LectureUpdateSuccess(this.message);
+  const LectureUpdateSuccess(this.message);
   final String message;
 }
 
 class LectureUpdateError extends LectureState {
-  LectureUpdateError(this.message);
+  const LectureUpdateError(this.message);
   final String message;
 }
 
-class LectureDeleteLoading extends LectureState {}
+class LectureDeleteLoading extends LectureState {
+  const LectureDeleteLoading();
+}
 
 class LectureDeleteSuccess extends LectureState {
-  LectureDeleteSuccess(this.message);
+  const LectureDeleteSuccess(this.message);
   final String message;
 }
 
 class LectureDeleteError extends LectureState {
-  LectureDeleteError(this.message);
+  const LectureDeleteError(this.message);
   final String message;
 }

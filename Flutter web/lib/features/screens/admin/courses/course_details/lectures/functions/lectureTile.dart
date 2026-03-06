@@ -4,6 +4,7 @@ import 'package:lms/features/screens/admin/courses/course_details/lectures/funct
 
 import '../model/model.dart';
 import 'actionButton.dart';
+import 'add_ViewDialog.dart';
 import 'contentTypeIconAndBadge.dart';
 import 'fileTypeHelper.dart';
 import 'fileViewer.dart';
@@ -36,50 +37,134 @@ class LectureTileState extends State<LectureTile> {
 
   String? get _mediaUrl => widget.lecture.fileUrl;
   bool get _hasMedia => _mediaUrl != null && _mediaUrl!.isNotEmpty;
-  FileType get _fileType => _hasMedia ? detectFileType(_mediaUrl!) : FileType.unknown;
+  FileType get _fileType => _hasMedia ? FileDetector().detect(_mediaUrl!) : FileType.unknown;
 
   Color get _accent {
     switch (_fileType) {
-      case FileType.video:   return const Color(0xFF7C3AED);
-      case FileType.audio:   return const Color(0xFF059669);
-      case FileType.pdf:     return const Color(0xFFEF4444);
-      case FileType.unknown: return const Color(0xFFDC2626);
+      case FileType.video:
+        return const Color(0xFF7C3AED);
+
+      case FileType.audio:
+        return const Color(0xFF059669);
+
+      case FileType.pdf:
+        return const Color(0xFFEF4444);
+
+      case FileType.excel:
+        return const Color(0xFF16A34A);
+
+      case FileType.word:
+        return const Color(0xFF2563EB);
+
+      case FileType.powerpoint:
+        return const Color(0xFFF97316);
+
+      case FileType.image:
+        return const Color(0xFFDB2777);
+
+      case FileType.text:
+        return const Color(0xFF6B7280);
+
+      case FileType.archive:
+        return const Color(0xFF92400E);
+
+      case FileType.unknown:
+        return const Color(0xFFDC2626);
     }
   }
 
   IconData get _actionIcon {
     switch (_fileType) {
-      case FileType.video:   return Icons.play_circle_outline_rounded;
-      case FileType.audio:   return Icons.headphones_rounded;
-      case FileType.pdf:     return Icons.picture_as_pdf_outlined;
-      case FileType.unknown: return Icons.visibility_outlined;
+      case FileType.video:
+        return Icons.play_circle_outline_rounded;
+
+      case FileType.audio:
+        return Icons.headphones_rounded;
+
+      case FileType.pdf:
+        return Icons.picture_as_pdf_outlined;
+
+      case FileType.excel:
+        return Icons.table_chart_rounded;
+
+      case FileType.word:
+        return Icons.description_outlined;
+
+      case FileType.powerpoint:
+        return Icons.slideshow_outlined;
+
+      case FileType.image:
+        return Icons.image_outlined;
+
+      case FileType.text:
+        return Icons.text_snippet_outlined;
+
+      case FileType.archive:
+        return Icons.folder_zip_outlined;
+
+      case FileType.unknown:
+        return Icons.visibility_outlined;
     }
   }
-
   String get _actionTooltip {
     switch (_fileType) {
-      case FileType.video:   return 'Watch Video';
-      case FileType.audio:   return 'Listen';
-      case FileType.pdf:     return 'Open PDF';
-      case FileType.unknown: return 'View Details';
+      case FileType.video:
+        return 'Watch Video';
+
+      case FileType.audio:
+        return 'Listen Audio';
+
+      case FileType.pdf:
+        return 'Open PDF';
+
+      case FileType.excel:
+        return 'Open Excel';
+
+      case FileType.word:
+        return 'Open Word Document';
+
+      case FileType.powerpoint:
+        return 'Open Presentation';
+
+      case FileType.image:
+        return 'View Image';
+
+      case FileType.text:
+        return 'Open Text File';
+
+      case FileType.archive:
+        return 'Download Archive';
+
+      case FileType.unknown:
+        return 'Open File';
     }
   }
+  ///! TODO: For videos, consider embedding a video player instead of opening in a new tab. For PDFs, an inline viewer could enhance UX.
 
   void _handleMainTap() {
     if (!_hasMedia) { widget.onView(); return; }
     switch (_fileType) {
       case FileType.pdf:
       case FileType.unknown:
-        openInBrowserTab(_mediaUrl!);
-      case FileType.video:
       case FileType.audio:
-        navigateToFileViewer(
-          context,
-          fileUrl: _mediaUrl!,
-          title: widget.lecture.title,
-          description: widget.lecture.description,
-          createdByName: widget.lecture.createdByName,
-        );
+      case FileType.video:
+      case FileType.excel:
+      case FileType.word:
+      case FileType.powerpoint:
+      case FileType.image:
+      case FileType.text:
+      case FileType.archive:
+
+
+        openInBrowserTab(_mediaUrl!);
+
+        // navigateToFileViewer(
+        //   context,
+        //   fileUrl: _mediaUrl!,
+        //   title: widget.lecture.title,
+        //   description: widget.lecture.description,
+        //   createdByName: widget.lecture.createdByName,
+        // );
     }
   }
 
@@ -92,7 +177,12 @@ class LectureTileState extends State<LectureTile> {
       onEnter: (_) => setState(() => _hovered = true),
       onExit:  (_) => setState(() => _hovered = false),
       child: GestureDetector(
-        onTap: _handleMainTap,
+      //!  onTap: _handleMainTap,
+        onTap: (){
+          Navigator.push(context, MaterialPageRoute(
+            builder: (_) => ShowViewDialogScreen(lecture: l),
+          ));
+        },
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 180),
           decoration: BoxDecoration(
@@ -225,8 +315,10 @@ class LectureTileState extends State<LectureTile> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ActionBtn(
-            icon: _actionIcon,
-            tooltip: _actionTooltip,
+            icon: Icons.visibility,
+            tooltip: 'View',
+            //! icon: _actionIcon,
+           //! tooltip: _actionTooltip,
             color: const Color(0xFF175CD3),
             onTap: _handleMainTap,
           ),
