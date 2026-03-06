@@ -15,7 +15,7 @@ class LectureTile extends StatefulWidget {
     super.key,
     required this.lecture,
     required this.isDeleting,
-    required this.onView,
+    // required this.onView,
     required this.onEdit,
     required this.onDelete,
     required this.onComments,
@@ -23,7 +23,7 @@ class LectureTile extends StatefulWidget {
 
   final LectureModel lecture;
   final bool isDeleting;
-  final VoidCallback onView;
+  // final VoidCallback onView;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
   final VoidCallback onComments;
@@ -142,7 +142,9 @@ class LectureTileState extends State<LectureTile> {
   ///! TODO: For videos, consider embedding a video player instead of opening in a new tab. For PDFs, an inline viewer could enhance UX.
 
   void _handleMainTap() {
-    if (!_hasMedia) { widget.onView(); return; }
+    if (!_hasMedia) {
+      // widget.onView();
+      return; }
     switch (_fileType) {
       case FileType.pdf:
       case FileType.unknown:
@@ -213,14 +215,29 @@ class LectureTileState extends State<LectureTile> {
   }
 
   Widget _buildAccentBar() {
-    return Container(
-      width: 4,
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 250),
+      curve: Curves.easeOut,
+      margin: const EdgeInsets.symmetric(vertical: 12),
+      width: 2.7,
       decoration: BoxDecoration(
-        color: _accent,
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(14),
-          bottomLeft: Radius.circular(14),
+        borderRadius: BorderRadius.circular(14),
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: _hovered
+              ? [_accent, _accent.withOpacity(0.6)]
+              : [_accent.withOpacity(0.7), _accent.withOpacity(0.3)],
         ),
+        boxShadow: _hovered
+            ? [
+          BoxShadow(
+            color: _accent.withOpacity(0.4),
+            blurRadius: 12,
+            spreadRadius: 1,
+          )
+        ]
+            : [],
       ),
     );
   }
@@ -272,26 +289,26 @@ class LectureTileState extends State<LectureTile> {
                   color: const Color(0xFF175CD3).withOpacity(0.08),
                   borderRadius: BorderRadius.circular(6),
                 ),
-                child: Text('#${l.id}',
+                child: Text('${l.title}',
                     style: const TextStyle(
-                        fontSize: 11, fontWeight: FontWeight.w700, color: Color(0xFF175CD3))),
+                        fontSize: 14, fontWeight: FontWeight.w700, color: Color(0xFF175CD3))),
               ),
-              Expanded(
-                child: Text(l.title,
-                    style: const TextStyle(
-                        fontSize: 14, fontWeight: FontWeight.w700, color: Color(0xFF0F172A))),
-              ),
+              // Expanded(
+              //   child: Text(l.title,
+              //       style: const TextStyle(
+              //           fontSize: 14, fontWeight: FontWeight.w700, color: Color(0xFF0F172A))),
+              // ),
               if (l.hasSummary) const SmallBadge('Summary', Color(0xFF059669)),
               if (l.hasSummary && l.hasTranscript) const SizedBox(width: 4),
               if (l.hasTranscript) const SmallBadge('Transcript', Color(0xFF7C3AED)),
             ],
           ),
-          const SizedBox(height: 4),
-          Text(l.description,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 12, color: Color(0xFF64748B))),
-          const SizedBox(height: 8),
+          // const SizedBox(height: 4),
+          // Text(l.description,
+          //     maxLines: 1,
+          //     overflow: TextOverflow.ellipsis,
+          //     style: const TextStyle(fontSize: 12, color: Color(0xFF64748B))),
+          const SizedBox(height: 15),
           Wrap(
             spacing: 8,
             runSpacing: 6,
@@ -300,7 +317,7 @@ class LectureTileState extends State<LectureTile> {
               MetaChip(Icons.calendar_today_outlined,
                   DateFormat('MMM d, yyyy').format(l.createdAt)),
               ContentTypeBadge(l.contentType),
-              if (_hasMedia) _ActionBadge(accent: _accent, label: _actionTooltip),
+              // if (_hasMedia) _ActionBadge(accent: _accent, label: _actionTooltip),
             ],
           ),
         ],
@@ -314,14 +331,14 @@ class LectureTileState extends State<LectureTile> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          ActionBtn(
-            icon: Icons.visibility,
-            tooltip: 'View',
-            //! icon: _actionIcon,
-           //! tooltip: _actionTooltip,
-            color: const Color(0xFF175CD3),
-            onTap: _handleMainTap,
-          ),
+          // ActionBtn(
+          //   icon: Icons.visibility,
+          //   tooltip: 'View',
+          //   //! icon: _actionIcon,
+          //  //! tooltip: _actionTooltip,
+          //   color: const Color(0xFF175CD3),
+          //   onTap: _handleMainTap,
+          // ),
           const SizedBox(height: 6),
           ActionBtn(
             icon: Icons.edit_outlined,
@@ -345,8 +362,8 @@ class LectureTileState extends State<LectureTile> {
 }
 
 class _CommentsBtn extends StatefulWidget {
-  final VoidCallback onTap;
   const _CommentsBtn({required this.onTap});
+  final VoidCallback onTap;
 
   @override
   State<_CommentsBtn> createState() => _CommentsBtnState();
@@ -403,9 +420,9 @@ class _CommentsBtnState extends State<_CommentsBtn> {
 }
 
 class _ActionBadge extends StatelessWidget {
+  const _ActionBadge({required this.accent, required this.label});
   final Color accent;
   final String label;
-  const _ActionBadge({required this.accent, required this.label});
 
   @override
   Widget build(BuildContext context) {

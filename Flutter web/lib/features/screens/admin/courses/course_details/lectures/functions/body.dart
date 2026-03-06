@@ -6,14 +6,14 @@ import '../state_managment/lectures_state.dart';
 import 'lectureTile.dart';
 
 class Body extends StatelessWidget {
-  const Body({
+  const Body({super.key,
     required this.state,
     required this.filtered,
     required this.searchQuery,
     required this.cubit,
     required this.onEdit,
     required this.onDelete,
-    required this.onView,
+    // required this.onView,
     required this.onComments,
     required this.onRetry,
   });
@@ -24,7 +24,7 @@ class Body extends StatelessWidget {
   final LectureCubit cubit;
   final void Function(LectureModel) onEdit;
   final void Function(LectureModel) onDelete;
-  final void Function(LectureModel) onView;
+  // final void Function(LectureModel) onView;
   final void Function(LectureModel) onComments;
   final VoidCallback onRetry;
 
@@ -117,7 +117,7 @@ class Body extends StatelessWidget {
             return LectureTile(
               lecture: l,
               isDeleting: isDeleting,
-              onView: () => onView(l),
+              // onView: () => onView(l),
               onEdit: () => onEdit(l),
               onDelete: () => onDelete(l),
               onComments: () => onComments(l),

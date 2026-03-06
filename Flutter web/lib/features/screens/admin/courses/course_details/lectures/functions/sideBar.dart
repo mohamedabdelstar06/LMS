@@ -33,12 +33,12 @@ class _SidebarState extends State<Sidebar> {
     super.initState();
     activeLabel = widget.activeLabel;
     _items = [
-      _SItem(Icons.details_rounded, 'Course Details'),
-      _SItem(Icons.video_library_rounded, 'Lectures'),
-      _SItem(Icons.quiz_rounded, 'Quizzes'),
-      _SItem(Icons.assignment_rounded, 'Assignments'),
-      _SItem(Icons.help_outline_rounded, 'Questions'),
-      _SItem(Icons.settings_rounded, 'Settings'),
+      const _SItem(Icons.details_rounded, 'Course Details'),
+      const _SItem(Icons.video_library_rounded, 'Lectures'),
+      const _SItem(Icons.quiz_rounded, 'Quizzes'),
+      const _SItem(Icons.assignment_rounded, 'Assignments'),
+      const _SItem(Icons.help_outline_rounded, 'Questions'),
+      const _SItem(Icons.settings_rounded, 'Settings'),
     ];
   }
 
@@ -116,8 +116,8 @@ class _SidebarState extends State<Sidebar> {
           onTap: widget.onToggle,
           child: Container(
             padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: const Color(0xFFE0F2FE),
+            decoration: const BoxDecoration(
+              color: Color(0xFFE0F2FE),
               shape: BoxShape.circle,
             ),
             child: const Icon(
@@ -163,8 +163,8 @@ class _SidebarState extends State<Sidebar> {
               onTap: widget.onToggle,
               child: Container(
                 padding: const EdgeInsets.all(6),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFE0F2FE),
+                decoration: const BoxDecoration(
+                  color: Color(0xFFE0F2FE),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(

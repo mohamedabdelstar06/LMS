@@ -25,10 +25,10 @@ class AddEditDialog extends StatefulWidget {
   final LectureModel? lecture;
 
   @override
-  State<AddEditDialog> createState() => _AddEditDialogState();
+  State<AddEditDialog> createState() => AddEditDialogState();
 }
 
-class _AddEditDialogState extends State<AddEditDialog>
+class AddEditDialogState extends State<AddEditDialog>
     with SingleTickerProviderStateMixin {
   late final TextEditingController _titleCtrl;
   late final TextEditingController _descCtrl;

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class TopBar extends StatelessWidget {
 
-  const TopBar({
+  const TopBar({super.key,
     required this.searchCtrl,
     required this.onSearch,
     required this.filterType,

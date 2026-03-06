@@ -7,7 +7,7 @@ class TypeSelector extends StatelessWidget {
   final String selected;
   final ValueChanged<String> onChange;
 
-  static const _types = ['Pdf', 'Video', 'Audio', 'Image'];
+  static const _types = ['Pdf', 'Video', 'Audio',];
 
   @override
   Widget build(BuildContext context) {

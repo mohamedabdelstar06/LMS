@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class ActionBtn extends StatefulWidget {
   const ActionBtn(
-      {required this.icon,
+      {super.key, required this.icon,
         required this.tooltip,
         required this.color,
         required this.onTap});

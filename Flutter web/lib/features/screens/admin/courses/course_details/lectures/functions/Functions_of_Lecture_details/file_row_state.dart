@@ -67,79 +67,83 @@ class FileRowState extends State<FileRow> {
       cursor: SystemMouseCursors.click,
       onEnter: (_) => setState(() => _hover = true),
       onExit: (_) => setState(() => _hover = false),
-      child: GestureDetector(
-        onTap: _open,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 160),
-          padding: const EdgeInsets.all(14),
-          decoration: BoxDecoration(
-            color: _hover ? cfg.color.withOpacity(0.07) : cfg.bg,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: _hover
-                  ? cfg.color.withOpacity(0.4)
-                  : cfg.color.withOpacity(0.15),
-              width: _hover ? 1.5 : 1,
-            ),
-            boxShadow: _hover
-                ? [
-              BoxShadow(
-                color: cfg.color.withOpacity(0.12),
-                blurRadius: 12,
-                offset: const Offset(0, 4),
-              ),
-            ]
-                : [],
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 160),
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color:
+          // _hover ? cfg.color.withOpacity(0.07) :
+          cfg.bg,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color:
+            // _hover
+                // ? cfg.color.withOpacity(0.4)
+                // :
+              cfg.color.withOpacity(0.15),
+            width: _hover ? 1.5 : 1,
           ),
-          child: Row(
-            children: [
-              Container(
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [cfg.color, cfg.color.withOpacity(0.7)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
+          boxShadow: _hover
+              ? [
+            BoxShadow(
+              color: cfg.color.withOpacity(0.12),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+            ),
+          ]
+              : [],
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [cfg.color, cfg.color.withOpacity(0.7)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(11),
+                boxShadow: [
+                  BoxShadow(
+                    color: cfg.color.withOpacity(0.3),
+                    blurRadius: 8,
+                    offset: const Offset(0, 3),
                   ),
-                  borderRadius: BorderRadius.circular(11),
-                  boxShadow: [
-                    BoxShadow(
-                      color: cfg.color.withOpacity(0.3),
-                      blurRadius: 8,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: Icon(cfg.icon, color: Colors.white, size: 22),
+                ],
               ),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      _fileName,
-                      style: const TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xFF0F172A),
-                      ),
-                      overflow: TextOverflow.ellipsis,
+              child: Icon(cfg.icon, color: Colors.white, size: 22),
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    _fileName,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF0F172A),
                     ),
-                    const SizedBox(height: 2),
-                    Text(
-                      widget.ext.toUpperCase(),
-                      style: TextStyle(
-                        fontSize: 11,
-                        color: cfg.color,
-                        fontWeight: FontWeight.w600,
-                      ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    widget.ext.toUpperCase(),
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: cfg.color,
+                      fontWeight: FontWeight.w600,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              AnimatedContainer(
+            ),
+            GestureDetector(
+              onTap: _open,
+              child: AnimatedContainer(
                 duration: const Duration(milliseconds: 160),
                 padding: const EdgeInsets.symmetric(
                   horizontal: 12,
@@ -174,8 +178,8 @@ class FileRowState extends State<FileRow> {
                   ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

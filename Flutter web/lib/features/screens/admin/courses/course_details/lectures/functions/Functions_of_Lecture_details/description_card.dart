@@ -23,7 +23,7 @@ class DescriptionCardState extends State<DescriptionCard> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const CardTitle(Icons.notes_rounded, 'Description'),
+          const CardTitle(Icons.notes_rounded, 'About this lecture'),
           const SizedBox(height: 12),
           AnimatedCrossFade(
             firstChild: Text(

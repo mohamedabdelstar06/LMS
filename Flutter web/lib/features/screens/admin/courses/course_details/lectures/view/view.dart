@@ -8,6 +8,7 @@ import '../functions/body.dart';
 import '../functions/add_ViewDialog.dart';
 import '../functions/sideBar.dart';
 import '../functions/topBar.dart';
+import '../model/model.dart';
 import '../state_managment/lectures_cubit.dart';
 import '../state_managment/lectures_state.dart';
 
@@ -80,55 +81,14 @@ class _LecturesScreenState extends State<LecturesScreen> {
       child: Scaffold(
         backgroundColor: const Color(0xFFF0F4FF),
         body: BlocConsumer<LectureCubit, LectureState>(
-          listener: (context, state) {
-            if (state is LectureDeleteSuccess) {
-              showSnack(context, state.message, Colors.green, Icons.check_circle_rounded);
-            }
-            if (state is LectureDeleteError) {
-              showSnack(context, state.message, Colors.red, Icons.error_outline);
-            }
-            if (state is LectureCreateSuccess) {
-              showSnack(context, state.message, Colors.green, Icons.check_circle_rounded);
-            }
-            if (state is LectureCreateError) {
-              showSnack(context, state.message, Colors.red, Icons.error_outline);
-            }
-            if (state is LectureUpdateSuccess) {
-              showSnack(context, state.message, Colors.green, Icons.check_circle_rounded);
-            }
-            if (state is LectureUpdateError) {
-              showSnack(context, state.message, Colors.red, Icons.error_outline);
-            }
-          },
+          listener: _listener,
           builder: (context, state) {
             final cubit = context.read<LectureCubit>();
-            final all = cubit.currentLectures;
-
-            final filtered = all.where((l) {
-              final matchSearch =
-                  l.title.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-                      l.description.toLowerCase().contains(_searchQuery.toLowerCase());
-              final matchType =
-                  _filterType == 'All' ||
-                      l.contentType.toLowerCase() == _filterType.toLowerCase();
-              return matchSearch && matchType;
-            }).toList();
+            final allLectures = cubit.currentLectures;
+            final filtered = _filterLectures(allLectures);
 
             return Row(
               children: [
-                // Sidebar(
-                //   collapsed: _sidebarCollapsed,
-                //   onToggle: () => setState(() => _sidebarCollapsed = !_sidebarCollapsed),
-                //   activeLabel: 'Lectures',
-                //   courseModel: cubit.courseModel,
-                //   onIteSelected: (lectureId) {
-                //     if (lectureId != null) {
-                //       final lecture = all.firstWhere((l) => l.id == lectureId);
-                //       showViewDialog(context, lecture);
-                //     }
-                //   },
-                //
-                // ),
                 Expanded(
                   child: Column(
                     children: [
@@ -137,22 +97,22 @@ class _LecturesScreenState extends State<LecturesScreen> {
                         onSearch: (v) => setState(() => _searchQuery = v),
                         filterType: _filterType,
                         onFilterChange: (v) => setState(() => _filterType = v),
-                        lectureCount: all.length,
-                        onAddNew: () => showAddEditDialog(context, widget.courseId, cubit),
+                        lectureCount: allLectures.length,
+                        onAddNew: () =>
+                            showAddEditDialog(context, widget.courseId, cubit),
                       ),
+
                       Expanded(
                         child: Body(
                           state: state,
                           filtered: filtered,
                           searchQuery: _searchQuery,
                           cubit: cubit,
-                          onEdit: (l) => showAddEditDialog(context, widget.courseId, cubit, lecture: l),
+                          onEdit: (l) => showAddEditDialog(
+                              context, widget.courseId, cubit,
+                              lecture: l),
                           onDelete: (l) => showDeleteDialog(context, cubit, l),
-                          onView: (l) {
-                            Navigator.push(context, MaterialPageRoute(
-                              builder: (_) => ShowViewDialogScreen(lecture: l),
-                            ));
-                          },
+                          // onView: (l) => _openLecture(context, l),
                           onComments: (l) => _openComments(context, l.id),
                           onRetry: () => cubit.fetchLectures(widget.courseId),
                         ),
@@ -164,6 +124,49 @@ class _LecturesScreenState extends State<LecturesScreen> {
             );
           },
         ),
+      ),
+    );
+  }
+  void _listener(BuildContext context, LectureState state) {
+    if (state is LectureDeleteSuccess ||
+        state is LectureCreateSuccess ||
+        state is LectureUpdateSuccess) {
+      showSnack(
+        context,
+        (state as dynamic).message,
+        Colors.green,
+        Icons.check_circle_rounded,
+      );
+    }
+
+    if (state is LectureDeleteError ||
+        state is LectureCreateError ||
+        state is LectureUpdateError) {
+      showSnack(
+        context,
+        (state as dynamic).message,
+        Colors.red,
+        Icons.error_outline,
+      );
+    }
+  }
+  List<LectureModel> _filterLectures(List<LectureModel> lectures) {
+    return lectures.where((l) {
+      final matchSearch =
+          l.title.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+              l.description.toLowerCase().contains(_searchQuery.toLowerCase());
+
+      final matchType = _filterType == 'All' ||
+          l.contentType.toLowerCase() == _filterType.toLowerCase();
+
+      return matchSearch && matchType;
+    }).toList();
+  }
+  void _openLecture(BuildContext context, LectureModel lecture) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => ShowViewDialogScreen(lecture: lecture),
       ),
     );
   }
