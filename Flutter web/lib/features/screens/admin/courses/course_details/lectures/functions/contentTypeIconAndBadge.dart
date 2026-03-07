@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ContentTypeIcon extends StatelessWidget {
-  const ContentTypeIcon(this.type, {this.size = 36});
+  const ContentTypeIcon(this.type, {super.key, this.size = 36});
   final String type;
   final double size;
 

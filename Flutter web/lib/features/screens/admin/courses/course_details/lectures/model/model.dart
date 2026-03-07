@@ -26,9 +26,7 @@ class LectureModel {
       description: json['description'] ?? '',
       contentType: json['contentType'] ?? 'Pdf',
       fileUrl: json['fileUrl'] ?? '',
-      additionalFileUrls: json['additionalFileUrls'] != null
-          ? List<String>.from(json['additionalFileUrls'])
-          : null,
+      additionalFileUrls: _parseStringList(json['additionalFileUrls']),
       thumbnailUrl: json['thumbnailUrl'] ?? '',
       hasSummary: json['hasSummary'] ?? false,
       hasTranscript: json['hasTranscript'] ?? false,
@@ -84,4 +82,34 @@ class LectureModel {
 DateTime _parseDate(dynamic value) {
   if (value == null) return DateTime.now();
   return DateTime.tryParse(value.toString()) ?? DateTime.now();
+}
+
+List<String>? _parseStringList(dynamic value) {
+  if (value == null) return null;
+
+  if (value is List) {
+    return value.map((e) => e.toString()).toList();
+  }
+
+  if (value is String) {
+    if (value.trim().isEmpty) return null;
+
+    try {
+      final decoded = value
+          .replaceAll("'", '"'); // safety fix
+
+      final list = decoded
+          .substring(1, decoded.length - 1)
+          .split(',')
+          .map((e) => e.trim())
+          .where((e) => e.isNotEmpty)
+          .toList();
+
+      return list;
+    } catch (_) {
+      return [value];
+    }
+  }
+
+  return null;
 }

@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 class MetaChip extends StatelessWidget {
   const MetaChip(this.icon, this.label,
-      {this.color = const Color(0xFF64748B)});
+      {super.key, this.color = const Color(0xFF64748B)});
   final IconData icon;
   final String label;
   final Color color;

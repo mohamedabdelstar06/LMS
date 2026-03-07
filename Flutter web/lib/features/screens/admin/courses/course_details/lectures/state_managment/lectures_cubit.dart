@@ -43,7 +43,7 @@ class ApiService {
 
 
 class LectureCubit extends Cubit<LectureState> {
-  LectureCubit({required this.courseModel}) : super(LectureInitial());
+  LectureCubit({required this.courseModel}) : super(const LectureInitial());
 
 
   List<LectureModel> currentLectures = [];
@@ -51,7 +51,7 @@ class LectureCubit extends Cubit<LectureState> {
 
 
   Future<void> fetchLectures(int courseId) async {
-    emit(LectureLoading());
+    emit(const LectureLoading());
     try {
       final response =
       await ApiService.dio.get('courses/$courseId/lectures');
@@ -77,8 +77,9 @@ class LectureCubit extends Cubit<LectureState> {
     required String title,
     required String description,
     required PlatformFile file,
+    List<PlatformFile> additionalFiles = const [],
   }) async {
-    emit(LectureCreateLoading());
+    emit(const LectureCreateLoading(progress: 0.0));
     try {
       final formData = FormData.fromMap({
         'courseId': courseId,
@@ -88,15 +89,24 @@ class LectureCubit extends Cubit<LectureState> {
           file.bytes!,
           filename: file.name,
         ),
+        if (additionalFiles.isNotEmpty)
+          'AdditionalFiles': additionalFiles
+              .map((f) => MultipartFile.fromBytes(f.bytes!, filename: f.name))
+              .toList(),
       });
 
       final response = await ApiService.dio.post(
         'courses/$courseId/lectures',
         data: formData,
+        onSendProgress: (sent, total) {
+          if (total > 0) {
+            emit(LectureCreateLoading(progress: sent / total));
+          }
+        },
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        emit(LectureCreateSuccess('Lecture created successfully'));
+        emit(const LectureCreateSuccess('Lecture created successfully'));
         await fetchLectures(courseId);
       } else {
         emit(LectureCreateError(
@@ -114,20 +124,38 @@ class LectureCubit extends Cubit<LectureState> {
     required int courseId,
     required String title,
     required String description,
+    PlatformFile? file,
+    List<PlatformFile> additionalFiles = const [],
   }) async {
-    emit(LectureUpdateLoading());
+    emit(const LectureUpdateLoading(progress: 0.0));
     try {
+      final formData = FormData.fromMap({
+        'title': title,
+        'description': description,
+        if (file != null)
+          'file': MultipartFile.fromBytes(
+            file.bytes!,
+            filename: file.name,
+          ),
+        if (additionalFiles.isNotEmpty)
+          'AdditionalFiles': additionalFiles
+              .map((f) => MultipartFile.fromBytes(f.bytes!, filename: f.name))
+              .toList(),
+      });
+
       final response = await ApiService.dio.put(
-        'lectures/$lectureId',
-        data: {
-          'title': title,
-          'description': description,
+        'courses/$courseId/lectures/$lectureId',
+        data: formData,
+        onSendProgress: (sent, total) {
+          if (total > 0) {
+            emit(LectureUpdateLoading(progress: sent / total));
+          }
         },
       );
 
       if (response.statusCode == 200 || response.statusCode == 204) {
-        emit(LectureUpdateSuccess('Lecture updated successfully'));
-     //?   await fetchLectures(courseId);
+        emit(const LectureUpdateSuccess('Lecture updated successfully'));
+        await fetchLectures(courseId);
       } else {
         emit(LectureUpdateError(
             'Failed to update lecture (${response.statusCode})'));
@@ -143,14 +171,14 @@ class LectureCubit extends Cubit<LectureState> {
     required int lectureId,
     required int courseId,
   }) async {
-    emit(LectureDeleteLoading());
+    emit(const LectureDeleteLoading());
     try {
       final response =
       await ApiService.dio.delete('lectures/$lectureId');
 
       if (response.statusCode == 200 || response.statusCode == 204) {
         currentLectures.removeWhere((l) => l.id == lectureId);
-        emit(LectureDeleteSuccess('Lecture deleted successfully'));
+        emit(const LectureDeleteSuccess('Lecture deleted successfully'));
         emit(LectureLoaded(List.from(currentLectures)));
       } else {
         emit(LectureDeleteError(

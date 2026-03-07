@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 class SmallBadge extends StatelessWidget {
-  const SmallBadge(this.label, this.color);
+  const SmallBadge(this.label, this.color, {super.key});
   final String label;
   final Color color;
 
