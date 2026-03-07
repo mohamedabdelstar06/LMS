@@ -137,7 +137,9 @@ class _CourseScreenState extends State<AdminCourseScreen> {
               }
             },
             builder: (context, state) {
-              if (state is GetCourseLoading || state is DeleteCourseLoading) {
+              if (
+              state is GetCourseLoading ||
+                  state is DeleteCourseLoading) {
                 return const Center(child: CircularProgressIndicator());
               }
               if (state is GetCourseError) {
@@ -809,7 +811,7 @@ Widget _buildDangerZoneRow(BuildContext context, GetCoursesModel course) {
             borderRadius: BorderRadius.circular(8),
           ),
           child: const Icon(
-            Icons.airplanemode_active,
+            Icons.co_present,
             size: 18,
             color: Color(0xFF2563EB),
           ),
@@ -828,11 +830,11 @@ Widget _buildDangerZoneRow(BuildContext context, GetCoursesModel course) {
                 ),
               ),
               const SizedBox(height: 2),
-              const Row(
-                children: [
-                  Icon(Icons.people_outline, size: 13, color: Color(0xFF64748B)),
-                ],
-              ),
+              // const Row(
+              //   children: [
+              //     Icon(Icons.people_outline, size: 13, color: Color(0xFF64748B)),
+              //   ],
+              // ),
             ],
           ),
         ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../get_all_courses/model/model.dart';
+import '../../../home_courses/model/model.dart';
 import '../model/model.dart';
 import '../state_managment/lectures_cubit.dart';
 import '../state_managment/lectures_state.dart';
@@ -15,7 +17,7 @@ class Body extends StatelessWidget {
     required this.onDelete,
     // required this.onView,
     required this.onComments,
-    required this.onRetry,
+    required this.onRetry, required this.course,
   });
 
   final LectureState state;
@@ -27,6 +29,7 @@ class Body extends StatelessWidget {
   // final void Function(LectureModel) onView;
   final void Function(LectureModel) onComments;
   final VoidCallback onRetry;
+  final GetCoursesModel course;
 
   @override
   Widget build(BuildContext context) {
@@ -117,6 +120,7 @@ class Body extends StatelessWidget {
             return LectureTile(
               lecture: l,
               isDeleting: isDeleting,
+              course: course,
               // onView: () => onView(l),
               onEdit: () => onEdit(l),
               onDelete: () => onDelete(l),

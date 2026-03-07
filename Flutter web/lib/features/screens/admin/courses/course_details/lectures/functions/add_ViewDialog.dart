@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:lms/features/screens/admin/courses/course_details/courseDetailsState_managment/functions/instructor_card.dart';
+import 'package:lms/features/screens/admin/courses/home_courses/model/model.dart';
 import '../model/model.dart';
 import 'Functions_of_Lecture_details/additional_file_card.dart';
 import 'Functions_of_Lecture_details/author_card.dart';
@@ -31,9 +33,10 @@ List<String> _parseAdditionalUrls(dynamic raw) {
 }
 
 class ShowViewDialogScreen extends StatefulWidget {
-  const ShowViewDialogScreen({super.key, required this.lecture});
+  const ShowViewDialogScreen({super.key, required this.lecture, required this.course});
 
   final LectureModel lecture;
+  final GetCoursesModel course;
 
   @override
   State<ShowViewDialogScreen> createState() => _ShowViewDialogScreenState();
@@ -69,6 +72,7 @@ class _ShowViewDialogScreenState extends State<ShowViewDialogScreen>
   @override
   Widget build(BuildContext context) {
     final l = widget.lecture;
+    final course = widget.course;
     final additionalUrls = _parseAdditionalUrls(l.additionalFileUrls);
     // final additionalUrls = l.additionalFileUrls ?? [];
     return Scaffold(
@@ -98,7 +102,7 @@ class _ShowViewDialogScreenState extends State<ShowViewDialogScreen>
                     const SizedBox(height: 20),
                     InfoGrid(lecture: l),
                     const SizedBox(height: 20),
-                    AuthorCard(lecture: l),
+                    InstructorCard(course: course,),
                   ]),
                 ),
               ),
