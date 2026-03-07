@@ -113,7 +113,6 @@ class LectureTileState extends State<LectureTile> {
         return Icons.visibility_outlined;
     }
   }
-
   String get _actionTooltip {
     switch (_fileType) {
       case FileType.video:
@@ -147,6 +146,7 @@ class LectureTileState extends State<LectureTile> {
         return 'Open File';
     }
   }
+  ///! TODO: For videos, consider embedding a video player instead of opening in a new tab. For PDFs, an inline viewer could enhance UX.
 
   ///! TODO: For videos, consider embedding a video player instead of opening in a new tab. For PDFs, an inline viewer could enhance UX.
 
@@ -397,6 +397,7 @@ class LectureTileState extends State<LectureTile> {
 
 class _CommentsBtn extends StatefulWidget {
   const _CommentsBtn({required this.onTap});
+  final VoidCallback onTap;
 
   final VoidCallback onTap;
 
