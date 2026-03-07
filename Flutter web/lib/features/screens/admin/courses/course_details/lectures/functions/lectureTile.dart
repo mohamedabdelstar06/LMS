@@ -206,11 +206,11 @@ class LectureTileState extends State<LectureTile> {
                 child: Row(
                   children: [
                     if (l.hasSummary)
-                      _ThumbBadge('S', const Color(0xFF059669)),
+                      const _ThumbBadge('S', Color(0xFF059669)),
                     if (l.hasSummary && l.hasTranscript)
                       const SizedBox(width: 4),
                     if (l.hasTranscript)
-                      _ThumbBadge('T', const Color(0xFF7C3AED)),
+                      const _ThumbBadge('T', Color(0xFF7C3AED)),
                   ],
                 ),
               ),
