@@ -57,6 +57,7 @@ class LectureTileState extends State<LectureTile> {
 
   IconData get _typeIcon {
     switch (_fileType) {
+<<<<<<< HEAD
       case FileType.video:      return Icons.play_circle_fill_rounded;
       case FileType.audio:      return Icons.headphones_rounded;
       case FileType.pdf:        return Icons.picture_as_pdf_rounded;
@@ -67,6 +68,101 @@ class LectureTileState extends State<LectureTile> {
       case FileType.text:       return Icons.text_snippet_rounded;
       case FileType.archive:    return Icons.folder_zip_rounded;
       case FileType.unknown:    return Icons.insert_drive_file_rounded;
+=======
+      case FileType.video:
+        return Icons.play_circle_outline_rounded;
+
+      case FileType.audio:
+        return Icons.headphones_rounded;
+
+      case FileType.pdf:
+        return Icons.picture_as_pdf_outlined;
+
+      case FileType.excel:
+        return Icons.table_chart_rounded;
+
+      case FileType.word:
+        return Icons.description_outlined;
+
+      case FileType.powerpoint:
+        return Icons.slideshow_outlined;
+
+      case FileType.image:
+        return Icons.image_outlined;
+
+      case FileType.text:
+        return Icons.text_snippet_outlined;
+
+      case FileType.archive:
+        return Icons.folder_zip_outlined;
+
+      case FileType.unknown:
+        return Icons.visibility_outlined;
+    }
+  }
+  String get _actionTooltip {
+    switch (_fileType) {
+      case FileType.video:
+        return 'Watch Video';
+
+      case FileType.audio:
+        return 'Listen Audio';
+
+      case FileType.pdf:
+        return 'Open PDF';
+
+      case FileType.excel:
+        return 'Open Excel';
+
+      case FileType.word:
+        return 'Open Word Document';
+
+      case FileType.powerpoint:
+        return 'Open Presentation';
+
+      case FileType.image:
+        return 'View Image';
+
+      case FileType.text:
+        return 'Open Text File';
+
+      case FileType.archive:
+        return 'Download Archive';
+
+      case FileType.unknown:
+        return 'Open File';
+    }
+  }
+  ///! TODO: For videos, consider embedding a video player instead of opening in a new tab. For PDFs, an inline viewer could enhance UX.
+
+  ///! TODO: For videos, consider embedding a video player instead of opening in a new tab. For PDFs, an inline viewer could enhance UX.
+
+  void _handleMainTap() {
+    if (!_hasMedia) {
+      // widget.onView();
+      return;
+    }
+    switch (_fileType) {
+      case FileType.pdf:
+      case FileType.unknown:
+      case FileType.audio:
+      case FileType.video:
+      case FileType.excel:
+      case FileType.word:
+      case FileType.powerpoint:
+      case FileType.image:
+      case FileType.text:
+      case FileType.archive:
+        openInBrowserTab(_mediaUrl!);
+
+      // navigateToFileViewer(
+      //   context,
+      //   fileUrl: _mediaUrl!,
+      //   title: widget.lecture.title,
+      //   description: widget.lecture.description,
+      //   createdByName: widget.lecture.createdByName,
+      // );
+>>>>>>> 064128c30de0e5f4887896a8b9a29bf77281ff35
     }
   }
 
@@ -321,10 +417,16 @@ class LectureTileState extends State<LectureTile> {
   }
 }
 
+<<<<<<< HEAD
 class _ThumbBadge extends StatelessWidget {
   const _ThumbBadge(this.label, this.color);
   final String label;
   final Color color;
+=======
+class _CommentsBtn extends StatefulWidget {
+  const _CommentsBtn({required this.onTap});
+  final VoidCallback onTap;
+>>>>>>> 064128c30de0e5f4887896a8b9a29bf77281ff35
 
   @override
   Widget build(BuildContext context) {
