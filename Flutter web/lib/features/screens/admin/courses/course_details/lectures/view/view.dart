@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../home_courses/model/model.dart';
 import '../../comments/view/view.dart';
 import '../functions/Delete_dialog.dart';
 import '../functions/add_editDialog.dart';
@@ -13,9 +14,10 @@ import '../state_managment/lectures_cubit.dart';
 import '../state_managment/lectures_state.dart';
 
 class LecturesScreen extends StatefulWidget {
-  const LecturesScreen({super.key, required this.courseId});
+  const LecturesScreen({super.key, required this.courseId, required this.course});
 
   final int courseId;
+  final GetCoursesModel course;
 
   @override
   State<LecturesScreen> createState() => _LecturesScreenState();
@@ -114,7 +116,7 @@ class _LecturesScreenState extends State<LecturesScreen> {
                           onDelete: (l) => showDeleteDialog(context, cubit, l),
                           // onView: (l) => _openLecture(context, l),
                           onComments: (l) => _openComments(context, l.id),
-                          onRetry: () => cubit.fetchLectures(widget.courseId),
+                          onRetry: () => cubit.fetchLectures(widget.courseId), course: widget.course,
                         ),
                       ),
                     ],
@@ -166,7 +168,7 @@ class _LecturesScreenState extends State<LecturesScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) => ShowViewDialogScreen(lecture: lecture),
+        builder: (_) => ShowViewDialogScreen(lecture: lecture, course: widget.course,),
       ),
     );
   }

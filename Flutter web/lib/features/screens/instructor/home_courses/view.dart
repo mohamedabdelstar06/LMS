@@ -12,8 +12,8 @@ import '../../../../core/helpers/cach_helper/shared_pref_helper.dart';
 import '../../../../core/helpers/logout_server/logout.dart';
 import '../../../../generated/assets.dart';
 
+import '../../admin/courses/course_details/layout.dart';
 import '../../admin/courses/home_courses/model/model.dart';
-import '../../admin/courses/get_All_courses/state_mangment/cubit.dart';
 import '../../admin/courses/home_courses/state_managment/cubit.dart';
 import '../../admin/courses/home_courses/state_managment/states.dart';
 import '../../admin/courses/update_course/view.dart';
@@ -770,13 +770,13 @@ class _CourseScreenState extends State<TeacherCourseScreen> {
               const Color(0xFF2563EB).withOpacity(0.1),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Icon(
-              Icons.airplanemode_active,
+            child: const Icon(
+              Icons.co_present,
               size: 18,
               color:
               // hasStudents ?
               // Colors.grey :
-              const Color(0xFF2563EB),
+              Color(0xFF2563EB),
             ),
           ),
           const SizedBox(width: 14),
@@ -793,36 +793,36 @@ class _CourseScreenState extends State<TeacherCourseScreen> {
                   ),
                 ),
                 const SizedBox(height: 2),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.people_outline,
-                      size: 13,
-                      color:
-                      // hasStudents
-                      //     ? const Color(0xFFEF4444)
-                      //     :
-
-                      const Color(0xFF64748B),
-                    ),
-                    const SizedBox(width: 4),
-                    // Text(
-                    //   hasStudents
-                    //       ? '${course.enrolledStudentsCount} student${course.enrolledStudentsCount > 1 ? 's' : ''} — cannot delete'
-                    //       :
-                    //   'No students — safe to delete',
-                    //   style: TextStyle(
-                    //     fontSize: 12,
-                    //     color: hasStudents
-                    //         ? const Color(0xFFEF4444)
-                    //         : const Color(0xFF64748B),
-                    //     fontWeight: hasStudents
-                    //         ? FontWeight.w500
-                    //         : FontWeight.normal,
-                    //   ),
-                    // ),
-                  ],
-                ),
+                // Row(
+                //   children: [
+                //     Icon(
+                //       Icons.people_outline,
+                //       size: 13,
+                //       color:
+                //       // hasStudents
+                //       //     ? const Color(0xFFEF4444)
+                //       //     :
+                //
+                //       const Color(0xFF64748B),
+                //     ),
+                //     const SizedBox(width: 4),
+                //     // Text(
+                //     //   hasStudents
+                //     //       ? '${course.enrolledStudentsCount} student${course.enrolledStudentsCount > 1 ? 's' : ''} — cannot delete'
+                //     //       :
+                //     //   'No students — safe to delete',
+                //     //   style: TextStyle(
+                //     //     fontSize: 12,
+                //     //     color: hasStudents
+                //     //         ? const Color(0xFFEF4444)
+                //     //         : const Color(0xFF64748B),
+                //     //     fontWeight: hasStudents
+                //     //         ? FontWeight.w500
+                //     //         : FontWeight.normal,
+                //     //   ),
+                //     // ),
+                //   ],
+                // ),
               ],
             ),
           ),
@@ -1449,15 +1449,11 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
       },
       child: GestureDetector(
         onTap: () {
-       ///todo:
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('📘 Selected: ${widget.courseModel.title}'),
-              backgroundColor: const Color(0xFF175CD3),
-              behavior: SnackBarBehavior.floating,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) =>
+                  CourseLayout(courseModel: widget.courseModel),
             ),
           );
         },

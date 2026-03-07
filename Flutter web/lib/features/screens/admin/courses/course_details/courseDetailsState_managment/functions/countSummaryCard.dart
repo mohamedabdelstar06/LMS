@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CountSummaryCard extends StatelessWidget {
-  const CountSummaryCard({
+  const CountSummaryCard({super.key,
     required this.count,
     required this.icon,
     required this.color,

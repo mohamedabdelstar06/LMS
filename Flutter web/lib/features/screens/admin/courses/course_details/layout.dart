@@ -57,7 +57,7 @@ class CourseLayoutState extends State<CourseLayout> {
       case 'Lectures':
         return BlocProvider(
           create: (_) => LectureCubit(courseModel: widget.courseModel),
-          child: LecturesScreen(courseId: widget.courseModel.id),
+          child: LecturesScreen(courseId: widget.courseModel.id, course: widget.courseModel,),
         );
 
       case 'Quizzes':

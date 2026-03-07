@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lms/features/screens/admin/courses/course_details/lectures/functions/smallBadge.dart';
 
+import '../../../home_courses/model/model.dart';
 import '../model/model.dart';
 import 'actionButton.dart';
 import 'add_ViewDialog.dart';
@@ -19,10 +20,13 @@ class LectureTile extends StatefulWidget {
     required this.onEdit,
     required this.onDelete,
     required this.onComments,
+    required this.course,
   });
 
   final LectureModel lecture;
+  final GetCoursesModel course;
   final bool isDeleting;
+
   // final VoidCallback onView;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
@@ -36,8 +40,11 @@ class LectureTileState extends State<LectureTile> {
   bool _hovered = false;
 
   String? get _mediaUrl => widget.lecture.fileUrl;
+
   bool get _hasMedia => _mediaUrl != null && _mediaUrl!.isNotEmpty;
-  FileType get _fileType => _hasMedia ? FileDetector().detect(_mediaUrl!) : FileType.unknown;
+
+  FileType get _fileType =>
+      _hasMedia ? FileDetector().detect(_mediaUrl!) : FileType.unknown;
 
   Color get _accent {
     switch (_fileType) {
@@ -141,10 +148,13 @@ class LectureTileState extends State<LectureTile> {
   }
   ///! TODO: For videos, consider embedding a video player instead of opening in a new tab. For PDFs, an inline viewer could enhance UX.
 
+  ///! TODO: For videos, consider embedding a video player instead of opening in a new tab. For PDFs, an inline viewer could enhance UX.
+
   void _handleMainTap() {
     if (!_hasMedia) {
       // widget.onView();
-      return; }
+      return;
+    }
     switch (_fileType) {
       case FileType.pdf:
       case FileType.unknown:
@@ -156,34 +166,36 @@ class LectureTileState extends State<LectureTile> {
       case FileType.image:
       case FileType.text:
       case FileType.archive:
-
-
         openInBrowserTab(_mediaUrl!);
 
-        // navigateToFileViewer(
-        //   context,
-        //   fileUrl: _mediaUrl!,
-        //   title: widget.lecture.title,
-        //   description: widget.lecture.description,
-        //   createdByName: widget.lecture.createdByName,
-        // );
+      // navigateToFileViewer(
+      //   context,
+      //   fileUrl: _mediaUrl!,
+      //   title: widget.lecture.title,
+      //   description: widget.lecture.description,
+      //   createdByName: widget.lecture.createdByName,
+      // );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final l = widget.lecture;
+    final course = widget.course;
 
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       onEnter: (_) => setState(() => _hovered = true),
-      onExit:  (_) => setState(() => _hovered = false),
+      onExit: (_) => setState(() => _hovered = false),
       child: GestureDetector(
-      //!  onTap: _handleMainTap,
-        onTap: (){
-          Navigator.push(context, MaterialPageRoute(
-            builder: (_) => ShowViewDialogScreen(lecture: l),
-          ));
+        //!  onTap: _handleMainTap,
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => ShowViewDialogScreen(lecture: l, course: course),
+            ),
+          );
         },
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 180),
@@ -191,12 +203,26 @@ class LectureTileState extends State<LectureTile> {
             color: Colors.white,
             borderRadius: BorderRadius.circular(14),
             border: Border.all(
-              color: _hovered ? _accent.withOpacity(0.35) : const Color(0xFFE2E8F0),
+              color: _hovered
+                  ? _accent.withOpacity(0.35)
+                  : const Color(0xFFE2E8F0),
               width: _hovered ? 1.5 : 1,
             ),
             boxShadow: _hovered
-                ? [BoxShadow(color: _accent.withOpacity(0.08), blurRadius: 20, offset: const Offset(0, 6))]
-                : [const BoxShadow(color: Color(0x08000000), blurRadius: 8, offset: Offset(0, 2))],
+                ? [
+                    BoxShadow(
+                      color: _accent.withOpacity(0.08),
+                      blurRadius: 20,
+                      offset: const Offset(0, 6),
+                    ),
+                  ]
+                : [
+                    const BoxShadow(
+                      color: Color(0x08000000),
+                      blurRadius: 8,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
           ),
           child: IntrinsicHeight(
             child: Row(
@@ -231,12 +257,12 @@ class LectureTileState extends State<LectureTile> {
         ),
         boxShadow: _hovered
             ? [
-          BoxShadow(
-            color: _accent.withOpacity(0.4),
-            blurRadius: 12,
-            spreadRadius: 1,
-          )
-        ]
+                BoxShadow(
+                  color: _accent.withOpacity(0.4),
+                  blurRadius: 12,
+                  spreadRadius: 1,
+                ),
+              ]
             : [],
       ),
     );
@@ -289,9 +315,14 @@ class LectureTileState extends State<LectureTile> {
                   color: const Color(0xFF175CD3).withOpacity(0.08),
                   borderRadius: BorderRadius.circular(6),
                 ),
-                child: Text('${l.title}',
-                    style: const TextStyle(
-                        fontSize: 14, fontWeight: FontWeight.w700, color: Color(0xFF175CD3))),
+                child: Text(
+                  '${l.title}',
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF175CD3),
+                  ),
+                ),
               ),
               // Expanded(
               //   child: Text(l.title,
@@ -300,7 +331,8 @@ class LectureTileState extends State<LectureTile> {
               // ),
               if (l.hasSummary) const SmallBadge('Summary', Color(0xFF059669)),
               if (l.hasSummary && l.hasTranscript) const SizedBox(width: 4),
-              if (l.hasTranscript) const SmallBadge('Transcript', Color(0xFF7C3AED)),
+              if (l.hasTranscript)
+                const SmallBadge('Transcript', Color(0xFF7C3AED)),
             ],
           ),
           // const SizedBox(height: 4),
@@ -314,8 +346,10 @@ class LectureTileState extends State<LectureTile> {
             runSpacing: 6,
             children: [
               MetaChip(Icons.person_outline_rounded, l.createdByName),
-              MetaChip(Icons.calendar_today_outlined,
-                  DateFormat('MMM d, yyyy').format(l.createdAt)),
+              MetaChip(
+                Icons.calendar_today_outlined,
+                DateFormat('MMM d, yyyy').format(l.createdAt),
+              ),
               ContentTypeBadge(l.contentType),
               // if (_hasMedia) _ActionBadge(accent: _accent, label: _actionTooltip),
             ],
@@ -363,6 +397,8 @@ class LectureTileState extends State<LectureTile> {
 
 class _CommentsBtn extends StatefulWidget {
   const _CommentsBtn({required this.onTap});
+  final VoidCallback onTap;
+
   final VoidCallback onTap;
 
   @override
@@ -421,6 +457,7 @@ class _CommentsBtnState extends State<_CommentsBtn> {
 
 class _ActionBadge extends StatelessWidget {
   const _ActionBadge({required this.accent, required this.label});
+
   final Color accent;
   final String label;
 

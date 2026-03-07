@@ -6,7 +6,7 @@ import 'countSummaryCard.dart';
 
 class ContentTabView extends StatelessWidget {
   const ContentTabView(
-      {required this.course, required this.activeIndex});
+      {super.key, required this.course, required this.activeIndex});
   final GetCoursesModel course;
   final int activeIndex;
 
