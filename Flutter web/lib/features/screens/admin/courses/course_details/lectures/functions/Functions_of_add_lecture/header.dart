@@ -48,11 +48,11 @@ class Header extends StatelessWidget {
                   ),
                 ),
                 if (isEdit && lecture != null)
-                  Text(
-                    'ID: ${lecture!.id}',
-                    style: const TextStyle(
+                  const Text(
+                    'Update the lecture information and manage attached files',
+                    style: TextStyle(
                       fontSize: 11,
-                      color: Color(0xFF7C3AED),
+                      color: Color(0xFF64748B),
                       fontWeight: FontWeight.w600,
                     ),
                   )
@@ -64,10 +64,10 @@ class Header extends StatelessWidget {
               ],
             ),
           ),
-          IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: const Icon(Icons.close_rounded, color: Color(0xFF94A3B8)),
-          ),
+          // IconButton(
+          //   onPressed: () => Navigator.pop(context),
+          //   icon: const Icon(Icons.close_rounded, color: Color(0xFF94A3B8)),
+          // ),
         ],
       ),
     );

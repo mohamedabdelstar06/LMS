@@ -8,11 +8,13 @@ import 'package:lms/features/screens/admin/courses/course_details/lectures/funct
 import '../../model/model.dart';
 import '../../state_managment/lectures_cubit.dart';
 import '../../state_managment/lectures_state.dart';
+import 'edit_form_view.dart';
 import 'file_config.dart';
 import 'form_view.dart';
 
 class AddEditDialog extends StatefulWidget {
-  const AddEditDialog({super.key,
+  const AddEditDialog({
+    super.key,
     required this.courseId,
     required this.cubit,
     required this.isEdit,
@@ -29,7 +31,7 @@ class AddEditDialog extends StatefulWidget {
 }
 
 class AddEditDialogState extends State<AddEditDialog>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late final TextEditingController _titleCtrl;
   late final TextEditingController _descCtrl;
   late String _selectedType;
@@ -38,7 +40,9 @@ class AddEditDialogState extends State<AddEditDialog>
   final List<PlatformFile> _additionalFiles = [];
 
   late AnimationController _successAnim;
+  late AnimationController _successUpdateAnim;
   bool _showSuccess = false;
+  bool _showUpdateSucess = false;
 
   @override
   void initState() {
@@ -51,6 +55,11 @@ class AddEditDialogState extends State<AddEditDialog>
       vsync: this,
       duration: const Duration(milliseconds: 600),
     );
+
+    _successUpdateAnim = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+    );
   }
 
   @override
@@ -58,13 +67,12 @@ class AddEditDialogState extends State<AddEditDialog>
     _titleCtrl.dispose();
     _descCtrl.dispose();
     _successAnim.dispose();
+    _successUpdateAnim.dispose();
     super.dispose();
   }
 
   Future<void> _pickMainFile() async {
-    final result = await FilePicker.platform.pickFiles(
-      withData: true,
-    );
+    final result = await FilePicker.platform.pickFiles(withData: true);
     if (result != null && result.files.isNotEmpty) {
       setState(() => _mainFile = result.files.first);
     }
@@ -98,14 +106,21 @@ class AddEditDialogState extends State<AddEditDialog>
         courseId: widget.lecture!.courseId,
         title: title,
         description: desc,
+        file: _mainFile,
+        additionalFiles: _additionalFiles,
       );
-      unawaited(widget.cubit.fetchLectures(widget.courseId));
-      if (ctx.mounted) Navigator.pop(ctx);
+      // unawaited(widget.cubit.fetchLectures(widget.courseId));
+      // if (ctx.mounted) Navigator.pop(ctx);
       return;
     }
 
     if (_mainFile == null) {
-      snack(ctx, 'Please select a lecture file', Colors.orange, Icons.warning_rounded);
+      snack(
+        ctx,
+        'Please select a lecture file',
+        Colors.orange,
+        Icons.warning_rounded,
+      );
       return;
     }
 
@@ -125,18 +140,33 @@ class AddEditDialogState extends State<AddEditDialog>
     if (mounted) Navigator.pop(context);
   }
 
+  Future<void> _onUpdateSuccess() async {
+    setState(() => _showUpdateSucess = true);
+    await _successUpdateAnim.forward();
+    await Future.delayed(const Duration(milliseconds: 900));
+    if (mounted) Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<LectureCubit, LectureState>(
       listener: (ctx, state) {
-        if (state is LectureCreateSuccess || state is LectureUpdateSuccess) {
+        if (state is LectureCreateSuccess) {
           _onSuccess();
         }
+
+        if (state is LectureUpdateSuccess) {
+          _onUpdateSuccess();
+        }
         if (state is LectureCreateError || state is LectureUpdateError) {
-          snack(ctx, state is LectureCreateError
-              ? state.message
-              : (state as LectureUpdateError).message,
-              Colors.red, Icons.error_rounded);
+          snack(
+            ctx,
+            state is LectureCreateError
+                ? state.message
+                : (state as LectureUpdateError).message,
+            Colors.red,
+            Icons.error_rounded,
+          );
         }
       },
       child: Dialog(
@@ -147,22 +177,43 @@ class AddEditDialogState extends State<AddEditDialog>
           duration: const Duration(milliseconds: 400),
           child: _showSuccess
               ? SuccessView(key: const ValueKey('success'), anim: _successAnim)
+              : _showUpdateSucess
+              ? SuccessUpdateView(
+                  key: const ValueKey('update_success'),
+                  anim: _successUpdateAnim,
+                )
+              : widget.isEdit
+              ? EditFormView(
+                  key: const ValueKey('form'),
+                  lecture: widget.lecture!,
+                  titleCtrl: _titleCtrl,
+                  descCtrl: _descCtrl,
+                  selectedType: _selectedType,
+                  onTypeChange: (t) => setState(() => _selectedType = t),
+                  mainFile: _mainFile,
+                  onPickMain: _pickMainFile,
+                  onClearMain: () => setState(() => _mainFile = null),
+                  additionalFiles: _additionalFiles,
+                  onPickAdditional: _pickAdditionalFiles,
+                  onRemoveAdditional: _removeAdditional,
+                  onSubmit: () => _submit(context),
+                )
               : FormView(
-            key: const ValueKey('form'),
-            isEdit: widget.isEdit,
-            lecture: widget.lecture,
-            titleCtrl: _titleCtrl,
-            descCtrl: _descCtrl,
-            selectedType: _selectedType,
-            onTypeChange: (t) => setState(() => _selectedType = t),
-            mainFile: _mainFile,
-            onPickMain: _pickMainFile,
-            onClearMain: () => setState(() => _mainFile = null),
-            additionalFiles: _additionalFiles,
-            onPickAdditional: _pickAdditionalFiles,
-            onRemoveAdditional: _removeAdditional,
-            onSubmit: () => _submit(context),
-          ),
+                  key: const ValueKey('form'),
+                  isEdit: false,
+                  lecture: null,
+                  titleCtrl: _titleCtrl,
+                  descCtrl: _descCtrl,
+                  selectedType: _selectedType,
+                  onTypeChange: (t) => setState(() => _selectedType = t),
+                  mainFile: _mainFile,
+                  onPickMain: _pickMainFile,
+                  onClearMain: () => setState(() => _mainFile = null),
+                  additionalFiles: _additionalFiles,
+                  onPickAdditional: _pickAdditionalFiles,
+                  onRemoveAdditional: _removeAdditional,
+                  onSubmit: () => _submit(context),
+                ),
         ),
       ),
     );

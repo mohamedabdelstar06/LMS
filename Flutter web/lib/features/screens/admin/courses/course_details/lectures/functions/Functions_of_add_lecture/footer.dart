@@ -12,13 +12,17 @@ class Footer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return BlocBuilder<LectureCubit, LectureState>(
       builder: (ctx, state) {
         final isLoading =
             state is LectureCreateLoading || state is LectureUpdateLoading;
-        final pct = state is LectureCreateLoading
-            ? (state.progress * 100).toInt()
-            : null;
+
+        final progress = state is LectureCreateLoading
+            ? state.progress
+            : state is LectureUpdateLoading
+            ? state.progress
+            : 0.0;
 
         return Container(
           padding: const EdgeInsets.fromLTRB(24, 14, 24, 20),
@@ -28,9 +32,8 @@ class Footer extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (isLoading && pct != null) ...[
-                UploadProgressBar(progress: state is LectureCreateLoading
-                    ? state.progress : 0),
+              if (isLoading ) ...[
+                UploadProgressBar(progress: progress),
                 const SizedBox(height: 12),
               ],
               Row(

@@ -8,16 +8,17 @@ import '../state_managment/lectures_state.dart';
 import 'lectureTile.dart';
 
 class Body extends StatelessWidget {
-  const Body({super.key,
+  const Body({
+    super.key,
     required this.state,
     required this.filtered,
     required this.searchQuery,
     required this.cubit,
     required this.onEdit,
     required this.onDelete,
-    // required this.onView,
     required this.onComments,
-    required this.onRetry, required this.course,
+    required this.onRetry,
+    required this.course,
   });
 
   final LectureState state;
@@ -26,7 +27,6 @@ class Body extends StatelessWidget {
   final LectureCubit cubit;
   final void Function(LectureModel) onEdit;
   final void Function(LectureModel) onDelete;
-  // final void Function(LectureModel) onView;
   final void Function(LectureModel) onComments;
   final VoidCallback onRetry;
   final GetCoursesModel course;
@@ -80,10 +80,12 @@ class Body extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.search_off_rounded, size: 64, color: Colors.grey.shade400),
+            Icon(Icons.search_off_rounded,
+                size: 64, color: Colors.grey.shade400),
             const SizedBox(height: 12),
             Text('No results for "$searchQuery"',
-                style: TextStyle(fontSize: 16, color: Colors.grey.shade600)),
+                style:
+                TextStyle(fontSize: 16, color: Colors.grey.shade600)),
           ],
         ),
       );
@@ -94,13 +96,16 @@ class Body extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.video_library_outlined, size: 72, color: Colors.grey.shade300),
+            Icon(Icons.video_library_outlined,
+                size: 72, color: Colors.grey.shade300),
             const SizedBox(height: 16),
             Text('No lectures yet',
-                style: TextStyle(fontSize: 18, color: Colors.grey.shade500)),
+                style:
+                TextStyle(fontSize: 18, color: Colors.grey.shade500)),
             const SizedBox(height: 8),
             Text('Add your first lecture to get started',
-                style: TextStyle(fontSize: 14, color: Colors.grey.shade400)),
+                style:
+                TextStyle(fontSize: 14, color: Colors.grey.shade400)),
           ],
         ),
       );
@@ -112,21 +117,123 @@ class Body extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
       child: AbsorbPointer(
         absorbing: isDeleting,
-        child: ListView.separated(
+        child: GridView.builder(
+          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: 380,
+            mainAxisExtent: 210,
+            crossAxisSpacing: 14,
+            mainAxisSpacing: 14,
+          ),
           itemCount: filtered.length,
-          separatorBuilder: (_, __) => const SizedBox(height: 10),
           itemBuilder: (_, i) {
             final l = filtered[i];
-            return LectureTile(
-              lecture: l,
-              isDeleting: isDeleting,
-              course: course,
-              // onView: () => onView(l),
-              onEdit: () => onEdit(l),
-              onDelete: () => onDelete(l),
-              onComments: () => onComments(l),
+            return _AnimatedGridTile(
+              key: ValueKey(l.id),
+              index: i,
+              child: LectureTile(
+                lecture: l,
+                isDeleting: isDeleting,
+                course: course,
+                onEdit: () => onEdit(l),
+                onDelete: () => onDelete(l),
+                onComments: () => onComments(l),
+              ),
             );
           },
+        ),
+      ),
+    );
+  }
+}
+
+class _AnimatedGridTile extends StatefulWidget {
+  const _AnimatedGridTile({
+    super.key,
+    required this.child,
+    required this.index,
+  });
+
+  final Widget child;
+  final int index;
+
+  @override
+  State<_AnimatedGridTile> createState() => _AnimatedGridTileState();
+}
+
+class _AnimatedGridTileState extends State<_AnimatedGridTile>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _ctrl;
+  late final Animation<double> _fade;
+  late final Animation<Offset> _slide;
+  bool _hovered = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 350 + widget.index * 40),
+    );
+    _fade = CurvedAnimation(parent: _ctrl, curve: Curves.easeOut);
+    _slide = Tween<Offset>(
+      begin: const Offset(0, 0.08),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(parent: _ctrl, curve: Curves.easeOut));
+
+    Future.delayed(Duration(milliseconds: widget.index * 50), () {
+      if (mounted) _ctrl.forward();
+    });
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FadeTransition(
+      opacity: _fade,
+      child: SlideTransition(
+        position: _slide,
+        child: MouseRegion(
+          onEnter: (_) => setState(() => _hovered = true),
+          onExit: (_) => setState(() => _hovered = false),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeOut,
+            transform: Matrix4.identity()
+              ..translate(0.0, _hovered ? -4.0 : 0.0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: _hovered
+                    ? const Color(0xFF4361EE).withOpacity(0.5)
+                    : const Color(0xFFE2E8F0),
+                width: _hovered ? 1.5 : 1,
+              ),
+              boxShadow: _hovered
+                  ? [
+                BoxShadow(
+                  color: const Color(0xFF4361EE).withOpacity(0.12),
+                  blurRadius: 20,
+                  offset: const Offset(0, 8),
+                ),
+              ]
+                  : [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: widget.child,
+            ),
+          ),
         ),
       ),
     );
