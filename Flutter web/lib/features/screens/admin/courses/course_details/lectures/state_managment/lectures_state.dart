@@ -26,8 +26,7 @@ class LectureCreateLoading extends LectureState {
 }
 
 class LectureCreateSuccess extends LectureState {
-  const LectureCreateSuccess(this.message);
-  final String message;
+  const LectureCreateSuccess();
 }
 
 class LectureCreateError extends LectureState {
@@ -41,8 +40,7 @@ class LectureUpdateLoading extends LectureState {
 }
 
 class LectureUpdateSuccess extends LectureState {
-  const LectureUpdateSuccess(this.message);
-  final String message;
+  const LectureUpdateSuccess();
 }
 
 class LectureUpdateError extends LectureState {

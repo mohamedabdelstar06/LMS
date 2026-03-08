@@ -130,9 +130,11 @@ class _LecturesScreenState extends State<LecturesScreen> {
     );
   }
   void _listener(BuildContext context, LectureState state) {
-    if (state is LectureDeleteSuccess ||
-        state is LectureCreateSuccess ||
-        state is LectureUpdateSuccess) {
+    if (state is LectureDeleteSuccess
+    // ||
+        // state is LectureCreateSuccess ||
+        // state is LectureUpdateSuccess
+    ) {
       showSnack(
         context,
         (state as dynamic).message,

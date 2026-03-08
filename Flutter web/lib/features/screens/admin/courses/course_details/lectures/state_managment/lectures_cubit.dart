@@ -106,7 +106,7 @@ class LectureCubit extends Cubit<LectureState> {
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        emit(const LectureCreateSuccess('Lecture created successfully'));
+        emit(const LectureCreateSuccess());
         await fetchLectures(courseId);
       } else {
         emit(LectureCreateError(
@@ -118,7 +118,6 @@ class LectureCubit extends Cubit<LectureState> {
       emit(LectureCreateError('Unexpected error: $e'));
     }
   }
-
   Future<void> updateLecture({
     required int lectureId,
     required int courseId,
@@ -127,7 +126,9 @@ class LectureCubit extends Cubit<LectureState> {
     PlatformFile? file,
     List<PlatformFile> additionalFiles = const [],
   }) async {
-    emit(const LectureUpdateLoading(progress: 0.0));
+    emit(const LectureUpdateLoading());
+
+
     try {
       final formData = FormData.fromMap({
         'title': title,
@@ -143,8 +144,11 @@ class LectureCubit extends Cubit<LectureState> {
               .toList(),
       });
 
+
+
+
       final response = await ApiService.dio.put(
-        'courses/$courseId/lectures/$lectureId',
+        '/lectures/$lectureId',
         data: formData,
         onSendProgress: (sent, total) {
           if (total > 0) {
@@ -153,20 +157,31 @@ class LectureCubit extends Cubit<LectureState> {
         },
       );
 
+
+
       if (response.statusCode == 200 || response.statusCode == 204) {
-        emit(const LectureUpdateSuccess('Lecture updated successfully'));
+        emit(const LectureUpdateSuccess());
         await fetchLectures(courseId);
       } else {
-        emit(LectureUpdateError(
-            'Failed to update lecture (${response.statusCode})'));
+        debugPrint('✖ Unexpected status: ${response.statusCode}');
+        emit(LectureUpdateError('Failed to update lecture (${response.statusCode})'));
       }
     } on DioException catch (e) {
+      debugPrint('✖ DioException');
+      debugPrint('   type     : ${e.type}');
+      debugPrint('   status   : ${e.response?.statusCode}');
+      debugPrint('   message  : ${e.message}');
+      debugPrint('   response : ${e.response?.data}');
+      debugPrint('   headers  : ${e.response?.headers}');
+      debugPrint('   realUrl  : ${e.requestOptions.uri}');
+      debugPrint('   reqHeaders : ${e.requestOptions.headers}');
       emit(LectureUpdateError(_handleDioError(e)));
-    } catch (e) {
+    } catch (e, st) {
+      debugPrint('✖ Unexpected error: $e');
+      debugPrint('$st');
       emit(LectureUpdateError('Unexpected error: $e'));
     }
   }
-
   Future<void> deleteLecture({
     required int lectureId,
     required int courseId,

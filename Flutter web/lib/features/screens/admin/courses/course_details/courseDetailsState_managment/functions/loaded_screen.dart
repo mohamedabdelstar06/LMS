@@ -14,7 +14,7 @@ import 'expandable_discription.dart';
 import 'instructor_card.dart';
 
 class LoadedScreen extends StatelessWidget {
-  const LoadedScreen({required this.state});
+  const LoadedScreen({super.key, required this.state});
   final CourseDetailsLoaded state;
 
   @override

@@ -15,7 +15,7 @@ void showAddEditDialog(
     LectureCubit cubit, {
       LectureModel? lecture,
     }) {
-  final isEdit = lecture != null;
+  final  isEdit = lecture != null;
 
   showDialog(
     context: context,
