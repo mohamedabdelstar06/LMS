@@ -1,3 +1,5 @@
+
+
 namespace SkyLearnApi.Controllers
 {
     [ApiController]
@@ -44,18 +46,25 @@ namespace SkyLearnApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            var result = await _authService.ActivateAccountAsync(dto.Email, dto.Password);
-
-            if (result == null)
+            try
             {
-                return BadRequest(new 
-                { 
-                    message = "Account activation failed. Please verify your email or contact an administrator.",
-                    success = false
-                });
-            }
+                var result = await _authService.ActivateAccountAsync(dto.Email, dto.Password);
 
-            return Ok(result);
+                if (result == null)
+                {
+                    return BadRequest(new 
+                    { 
+                        message = "Account activation failed. Please verify your email or contact an administrator.",
+                        success = false
+                    });
+                }
+
+                return Ok(result);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message, success = false });
+            }
         }
 
         #endregion
@@ -65,30 +74,74 @@ namespace SkyLearnApi.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
+                if (dto == null)
+                {
+                    Log.Warning("Login request received with null DTO");
+                    return BadRequest(new 
+                    { 
+                        message = "Request body is required",
+                        success = false
+                    });
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    Log.Warning("Login request validation failed for email: {Email}", dto.Email);
+                    return BadRequest(new
+                    {
+                        message = "Invalid request data",
+                        success = false,
+                        errors = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage))
+                    });
+                }
+
+                Log.Information("Processing login request for email: {Email}", dto.Email);
+
+                var result = await _authService.LoginAsync(dto.Email, dto.Password);
+
+                if (result == null)
+                {
+                    Log.Warning("Login failed for email: {Email} - Invalid credentials", dto.Email);
+                    return Unauthorized(new 
+                    { 
+                        message = "Invalid credentials. Please check your email and password.",
+                        success = false
+                    });
+                }
+
+                if (string.IsNullOrEmpty(result.Token))
+                {
+                    Log.Error("Login succeeded but token is null or empty for email: {Email}", dto.Email);
+                    return StatusCode(500, new
+                    {
+                        message = "Authentication token generation failed. Please try again.",
+                        success = false
+                    });
+                }
+
+                Log.Information("Login successful for email: {Email}, UserId: {UserId}", 
+                    dto.Email, result.User?.Id);
+
+                return Ok(new
+                {
+                    message = "Login successful",
+                    success = true,
+                    token = result.Token,
+                    expiresIn = result.ExpiresIn,
+                    user = result.User
+                });
             }
-
-            var result = await _authService.LoginAsync(dto.Email, dto.Password);
-
-            if (result == null)
+            catch (Exception ex)
             {
-                return Unauthorized(new 
-                { 
-                    message = "Invalid credentials. Please check your email and password.",
+                Log.Error(ex, "Unexpected error in Login endpoint for email: {Email}", dto?.Email);
+                return StatusCode(500, new
+                {
+                    message = "An error occurred during login. Please try again later.",
                     success = false
                 });
             }
-
-            return Ok(new
-            {
-                message = "Login successful",
-                success = true,
-                token = result.Token,
-                expiresIn = result.ExpiresIn,
-                user = result.User
-            });
         }
 
         #endregion
@@ -184,12 +237,8 @@ namespace SkyLearnApi.Controllers
                 user = updatedProfile
             });
         }
-
         #endregion
-
         #region 6. Password Recovery
-
-     
         [HttpPost("forgot-password")]
         [AllowAnonymous]
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequestDto dto)

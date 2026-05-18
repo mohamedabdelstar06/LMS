@@ -3,6 +3,18 @@
   "WorkspaceRootPath": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{B8141BF6-EAC2-9F2E-24FB-5F669E415A0B}|SkyLearnApi\\SkyLearnApi.csproj|c:\\users\\mk\\downloads\\abdelstarair\\backend2\\skylearnapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{B8141BF6-EAC2-9F2E-24FB-5F669E415A0B}|SkyLearnApi\\SkyLearnApi.csproj|solutionrelative:skylearnapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B8141BF6-EAC2-9F2E-24FB-5F669E415A0B}|SkyLearnApi\\SkyLearnApi.csproj|c:\\users\\mk\\downloads\\abdelstarair\\backend2\\skylearnapi\\entities\\course.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B8141BF6-EAC2-9F2E-24FB-5F669E415A0B}|SkyLearnApi\\SkyLearnApi.csproj|solutionrelative:skylearnapi\\entities\\course.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B8141BF6-EAC2-9F2E-24FB-5F669E415A0B}|SkyLearnApi\\SkyLearnApi.csproj|c:\\users\\mk\\downloads\\abdelstarair\\backend2\\skylearnapi\\services\\implementation\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B8141BF6-EAC2-9F2E-24FB-5F669E415A0B}|SkyLearnApi\\SkyLearnApi.csproj|solutionrelative:skylearnapi\\services\\implementation\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{B8141BF6-EAC2-9F2E-24FB-5F669E415A0B}|SkyLearnApi\\SkyLearnApi.csproj|c:\\users\\mk\\downloads\\abdelstarair\\backend2\\skylearnapi\\services\\implementation\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B8141BF6-EAC2-9F2E-24FB-5F669E415A0B}|SkyLearnApi\\SkyLearnApi.csproj|solutionrelative:skylearnapi\\services\\implementation\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -24,10 +36,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{B8141BF6-EAC2-9F2E-24FB-5F669E415A0B}|SkyLearnApi\\SkyLearnApi.csproj|c:\\users\\mk\\downloads\\abdelstarair\\backend2\\skylearnapi\\services\\implementation\\studentimportservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B8141BF6-EAC2-9F2E-24FB-5F669E415A0B}|SkyLearnApi\\SkyLearnApi.csproj|solutionrelative:skylearnapi\\services\\implementation\\studentimportservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B8141BF6-EAC2-9F2E-24FB-5F669E415A0B}|SkyLearnApi\\SkyLearnApi.csproj|c:\\users\\mk\\downloads\\abdelstarair\\backend2\\skylearnapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{B8141BF6-EAC2-9F2E-24FB-5F669E415A0B}|SkyLearnApi\\SkyLearnApi.csproj|solutionrelative:skylearnapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{B8141BF6-EAC2-9F2E-24FB-5F669E415A0B}|SkyLearnApi\\SkyLearnApi.csproj|c:\\users\\mk\\downloads\\abdelstarair\\backend2\\skylearnapi\\entities\\applicationuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -102,10 +110,6 @@
       "RelativeMoniker": "D:0:0:{B8141BF6-EAC2-9F2E-24FB-5F669E415A0B}|SkyLearnApi\\SkyLearnApi.csproj|solutionrelative:skylearnapi\\services\\implementation\\courseservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B8141BF6-EAC2-9F2E-24FB-5F669E415A0B}|SkyLearnApi\\SkyLearnApi.csproj|c:\\users\\mk\\downloads\\abdelstarair\\backend2\\skylearnapi\\services\\implementation\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B8141BF6-EAC2-9F2E-24FB-5F669E415A0B}|SkyLearnApi\\SkyLearnApi.csproj|solutionrelative:skylearnapi\\services\\implementation\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{B8141BF6-EAC2-9F2E-24FB-5F669E415A0B}|SkyLearnApi\\SkyLearnApi.csproj|c:\\users\\mk\\downloads\\abdelstarair\\backend2\\skylearnapi\\extentions\\identityservicesextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B8141BF6-EAC2-9F2E-24FB-5F669E415A0B}|SkyLearnApi\\SkyLearnApi.csproj|solutionrelative:skylearnapi\\extentions\\identityservicesextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -153,36 +157,24 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "Microsoft.PackageDependencyResolution.targets",
-              "DocumentMoniker": "C:\\Program Files\\dotnet\\sdk\\9.0.308\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.PackageDependencyResolution.targets",
-              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\Program Files\\dotnet\\sdk\\9.0.308\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.PackageDependencyResolution.targets",
-              "ToolTip": "C:\\Program Files\\dotnet\\sdk\\9.0.308\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.PackageDependencyResolution.targets",
-              "RelativeToolTip": "..\\..\\..\\..\\..\\Program Files\\dotnet\\sdk\\9.0.308\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.PackageDependencyResolution.targets",
-              "ViewState": "AgIAABYCAAAAAAAAAAAiwBwCAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003801|",
-              "WhenOpened": "2026-01-24T19:36:45.424Z",
+              "Title": "Course.cs",
+              "DocumentMoniker": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\Entities\\Course.cs",
+              "RelativeDocumentMoniker": "SkyLearnApi\\Entities\\Course.cs",
+              "ToolTip": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\Entities\\Course.cs",
+              "RelativeToolTip": "SkyLearnApi\\Entities\\Course.cs",
+              "ViewState": "AgIAAAEAAAAAAAAAAAAiwAkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-31T16:18:11.539Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "web.config",
-              "DocumentMoniker": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\web.config",
-              "RelativeDocumentMoniker": "SkyLearnApi\\web.config",
-              "ToolTip": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\web.config",
-              "RelativeToolTip": "SkyLearnApi\\web.config",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
-              "WhenOpened": "2026-01-24T19:30:13.61Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 5,
               "Title": "SkyLearnApi.csproj",
               "DocumentMoniker": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\SkyLearnApi.csproj",
               "RelativeDocumentMoniker": "SkyLearnApi\\SkyLearnApi.csproj",
@@ -190,12 +182,11 @@
               "RelativeToolTip": "SkyLearnApi\\SkyLearnApi.csproj",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-12-21T00:17:44.23Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-21T00:17:44.23Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 10,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\Program.cs",
               "RelativeDocumentMoniker": "SkyLearnApi\\Program.cs",
@@ -207,20 +198,68 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "AuthService.cs",
               "DocumentMoniker": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\Services\\Implementation\\AuthService.cs",
               "RelativeDocumentMoniker": "SkyLearnApi\\Services\\Implementation\\AuthService.cs",
               "ToolTip": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\Services\\Implementation\\AuthService.cs",
               "RelativeToolTip": "SkyLearnApi\\Services\\Implementation\\AuthService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAABAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-20T23:40:38.932Z",
+              "WhenOpened": "2025-12-20T23:40:38.932Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "UserService.cs",
+              "DocumentMoniker": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\Services\\Implementation\\UserService.cs",
+              "RelativeDocumentMoniker": "SkyLearnApi\\Services\\Implementation\\UserService.cs",
+              "ToolTip": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\Services\\Implementation\\UserService.cs",
+              "RelativeToolTip": "SkyLearnApi\\Services\\Implementation\\UserService.cs",
+              "ViewState": "AgIAAMkAAAAAAAAAAAAMwNIAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-20T10:58:35.295Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\appsettings.json",
+              "RelativeDocumentMoniker": "SkyLearnApi\\appsettings.json",
+              "ToolTip": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\appsettings.json",
+              "RelativeToolTip": "SkyLearnApi\\appsettings.json",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAABcAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-12-20T23:38:34.385Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 7,
+              "Title": "web.config",
+              "DocumentMoniker": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\web.config",
+              "RelativeDocumentMoniker": "SkyLearnApi\\web.config",
+              "ToolTip": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\web.config",
+              "RelativeToolTip": "SkyLearnApi\\web.config",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
+              "WhenOpened": "2026-01-24T19:30:13.61Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Microsoft.PackageDependencyResolution.targets",
+              "DocumentMoniker": "C:\\Program Files\\dotnet\\sdk\\9.0.308\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.PackageDependencyResolution.targets",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\Program Files\\dotnet\\sdk\\9.0.308\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.PackageDependencyResolution.targets",
+              "ToolTip": "C:\\Program Files\\dotnet\\sdk\\9.0.308\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.PackageDependencyResolution.targets",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\Program Files\\dotnet\\sdk\\9.0.308\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.PackageDependencyResolution.targets",
+              "ViewState": "AgIAABYCAAAAAAAAAAAiwBwCAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003801|",
+              "WhenOpened": "2026-01-24T19:36:45.424Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
               "Title": "SkyLearnApi.http",
               "DocumentMoniker": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\SkyLearnApi.http",
               "RelativeDocumentMoniker": "SkyLearnApi\\SkyLearnApi.http",
@@ -232,7 +271,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 8,
               "Title": "StudentImportService.cs",
               "DocumentMoniker": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\Services\\Implementation\\StudentImportService.cs",
               "RelativeDocumentMoniker": "SkyLearnApi\\Services\\Implementation\\StudentImportService.cs",
@@ -245,7 +284,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 9,
               "Title": "ApplicationUser.cs",
               "DocumentMoniker": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\Entities\\ApplicationUser.cs",
               "RelativeDocumentMoniker": "SkyLearnApi\\Entities\\ApplicationUser.cs",
@@ -257,19 +296,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\appsettings.json",
-              "RelativeDocumentMoniker": "SkyLearnApi\\appsettings.json",
-              "ToolTip": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\appsettings.json",
-              "RelativeToolTip": "SkyLearnApi\\appsettings.json",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAAABoAAAAbAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-12-20T23:38:34.385Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 12,
               "Title": "AuthResponseDto.cs",
               "DocumentMoniker": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\DTOs\\Auth\\AuthResponseDto.cs",
               "RelativeDocumentMoniker": "SkyLearnApi\\DTOs\\Auth\\AuthResponseDto.cs",
@@ -281,7 +308,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 11,
               "Title": "LoginDto.cs",
               "DocumentMoniker": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\DTOs\\Auth\\LoginDto.cs",
               "RelativeDocumentMoniker": "SkyLearnApi\\DTOs\\Auth\\LoginDto.cs",
@@ -293,7 +320,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 13,
               "Title": "AuthController.cs",
               "DocumentMoniker": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\Controllers\\AuthController.cs",
               "RelativeDocumentMoniker": "SkyLearnApi\\Controllers\\AuthController.cs",
@@ -305,7 +332,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 16,
               "Title": "MiddlewareExtensions.cs",
               "DocumentMoniker": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\Extentions\\MiddlewareExtensions.cs",
               "RelativeDocumentMoniker": "SkyLearnApi\\Extentions\\MiddlewareExtensions.cs",
@@ -318,7 +345,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 20,
               "Title": "JwtConfigurationExtensions.cs",
               "DocumentMoniker": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\Extentions\\JwtConfigurationExtensions.cs",
               "RelativeDocumentMoniker": "SkyLearnApi\\Extentions\\JwtConfigurationExtensions.cs",
@@ -330,7 +357,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 14,
               "Title": "JwtAuthenticationExtensions.cs",
               "DocumentMoniker": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\Extentions\\JwtAuthenticationExtensions.cs",
               "RelativeDocumentMoniker": "SkyLearnApi\\Extentions\\JwtAuthenticationExtensions.cs",
@@ -342,7 +369,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 17,
               "Title": "DepartmentController.cs",
               "DocumentMoniker": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\Controllers\\DepartmentController.cs",
               "RelativeDocumentMoniker": "SkyLearnApi\\Controllers\\DepartmentController.cs",
@@ -354,7 +381,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 18,
               "Title": "CourseController.cs",
               "DocumentMoniker": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\Controllers\\CourseController.cs",
               "RelativeDocumentMoniker": "SkyLearnApi\\Controllers\\CourseController.cs",
@@ -366,7 +393,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 19,
               "Title": "UsersController.cs",
               "DocumentMoniker": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\Controllers\\UsersController.cs",
               "RelativeDocumentMoniker": "SkyLearnApi\\Controllers\\UsersController.cs",
@@ -378,7 +405,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 15,
               "Title": "DepartmentService.cs",
               "DocumentMoniker": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\Services\\Implementation\\DepartmentService.cs",
               "RelativeDocumentMoniker": "SkyLearnApi\\Services\\Implementation\\DepartmentService.cs",
@@ -390,7 +417,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 21,
               "Title": "GlobalExceptionMiddleware.cs",
               "DocumentMoniker": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\Middleware\\GlobalExceptionMiddleware.cs",
               "RelativeDocumentMoniker": "SkyLearnApi\\Middleware\\GlobalExceptionMiddleware.cs",
@@ -402,7 +429,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
+              "DocumentIndex": 22,
               "Title": "ApplicationServicesExtensions.cs",
               "DocumentMoniker": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\Extentions\\ApplicationServicesExtensions.cs",
               "RelativeDocumentMoniker": "SkyLearnApi\\Extentions\\ApplicationServicesExtensions.cs",
@@ -414,7 +441,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 23,
               "Title": "globalUsings.cs",
               "DocumentMoniker": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\globalUsings.cs",
               "RelativeDocumentMoniker": "SkyLearnApi\\globalUsings.cs",
@@ -426,7 +453,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
+              "DocumentIndex": 24,
               "Title": "DatabaseExtensions.cs",
               "DocumentMoniker": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\Extentions\\DatabaseExtensions.cs",
               "RelativeDocumentMoniker": "SkyLearnApi\\Extentions\\DatabaseExtensions.cs",
@@ -438,7 +465,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 23,
+              "DocumentIndex": 25,
               "Title": "AnalyticsServicesExtensions.cs",
               "DocumentMoniker": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\Extentions\\AnalyticsServicesExtensions.cs",
               "RelativeDocumentMoniker": "SkyLearnApi\\Extentions\\AnalyticsServicesExtensions.cs",
@@ -450,19 +477,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 25,
-              "Title": "UserService.cs",
-              "DocumentMoniker": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\Services\\Implementation\\UserService.cs",
-              "RelativeDocumentMoniker": "SkyLearnApi\\Services\\Implementation\\UserService.cs",
-              "ToolTip": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\Services\\Implementation\\UserService.cs",
-              "RelativeToolTip": "SkyLearnApi\\Services\\Implementation\\UserService.cs",
-              "ViewState": "AgIAAEoBAAAAAAAAAAAAwFkBAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-20T10:58:35.295Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 24,
+              "DocumentIndex": 26,
               "Title": "CourseService.cs",
               "DocumentMoniker": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\Services\\Implementation\\CourseService.cs",
               "RelativeDocumentMoniker": "SkyLearnApi\\Services\\Implementation\\CourseService.cs",
@@ -474,7 +489,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 26,
+              "DocumentIndex": 27,
               "Title": "IdentityServicesExtensions.cs",
               "DocumentMoniker": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\Extentions\\IdentityServicesExtensions.cs",
               "RelativeDocumentMoniker": "SkyLearnApi\\Extentions\\IdentityServicesExtensions.cs",
@@ -486,7 +501,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 27,
+              "DocumentIndex": 28,
               "Title": "MapsterExtensions.cs",
               "DocumentMoniker": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\Extentions\\MapsterExtensions.cs",
               "RelativeDocumentMoniker": "SkyLearnApi\\Extentions\\MapsterExtensions.cs",
@@ -498,7 +513,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 28,
+              "DocumentIndex": 29,
               "Title": "AppDbContext.cs",
               "DocumentMoniker": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\Data\\AppDbContext.cs",
               "RelativeDocumentMoniker": "SkyLearnApi\\Data\\AppDbContext.cs",
@@ -510,7 +525,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 29,
+              "DocumentIndex": 30,
               "Title": "launchSettings.json",
               "DocumentMoniker": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\Properties\\launchSettings.json",
               "RelativeDocumentMoniker": "SkyLearnApi\\Properties\\launchSettings.json",
@@ -522,7 +537,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 34,
+              "DocumentIndex": 35,
               "Title": "20260119230829_InitialCreate1234.cs",
               "DocumentMoniker": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\Migrations\\20260119230829_InitialCreate1234.cs",
               "RelativeDocumentMoniker": "SkyLearnApi\\Migrations\\20260119230829_InitialCreate1234.cs",
@@ -534,19 +549,18 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 30,
+              "DocumentIndex": 31,
               "Title": "SkyLearnApi",
               "DocumentMoniker": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\SkyLearnApi.csproj",
               "RelativeDocumentMoniker": "SkyLearnApi\\SkyLearnApi.csproj",
               "ToolTip": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\SkyLearnApi.csproj",
               "RelativeToolTip": "SkyLearnApi\\SkyLearnApi.csproj",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2026-01-19T22:51:15.739Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-19T22:51:15.739Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 35,
+              "DocumentIndex": 36,
               "Title": "20260119223713_updateUserTable.cs",
               "DocumentMoniker": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\Migrations\\20260119223713_updateUserTable.cs",
               "RelativeDocumentMoniker": "SkyLearnApi\\Migrations\\20260119223713_updateUserTable.cs",
@@ -558,7 +572,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 31,
+              "DocumentIndex": 32,
               "Title": "YearService.cs",
               "DocumentMoniker": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\Services\\Implementation\\YearService.cs",
               "RelativeDocumentMoniker": "SkyLearnApi\\Services\\Implementation\\YearService.cs",
@@ -571,7 +585,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 32,
+              "DocumentIndex": 33,
               "Title": "JwtSettings.cs",
               "DocumentMoniker": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\Services\\JwtSettings.cs",
               "RelativeDocumentMoniker": "SkyLearnApi\\Services\\JwtSettings.cs",
@@ -583,7 +597,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 33,
+              "DocumentIndex": 34,
               "Title": "JwtService.cs",
               "DocumentMoniker": "C:\\Users\\MK\\Downloads\\abdelstarair\\Backend2\\SkyLearnApi\\Services\\Implementation\\JwtService.cs",
               "RelativeDocumentMoniker": "SkyLearnApi\\Services\\Implementation\\JwtService.cs",
