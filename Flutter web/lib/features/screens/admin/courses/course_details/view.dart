@@ -16,7 +16,7 @@ class CourseDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (ctx) => CourseDetailsCubit()..loadCourse(courseModel, courseModel.id),
+      create: (ctx) => CourseDetailsCubit()..loadCourseById( courseModel.id),
       child: const _CourseDetailsView(),
     );
   }

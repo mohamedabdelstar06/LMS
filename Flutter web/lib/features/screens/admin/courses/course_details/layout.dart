@@ -1,5 +1,17 @@
+// ============================================================
+// course_layout.dart  — updated with live Quizzes + badge
+// ============================================================
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lms/core/helpers/cach_helper/shared_pref_helper.dart';
+import 'package:lms/features/screens/admin/courses/course_details/assignments/assignmnet_repo.dart';
+import 'package:lms/features/screens/admin/courses/course_details/assignments/state_mangmnet/assignments_cubit.dart';
+import 'package:lms/features/screens/admin/courses/course_details/assignments/view/view.dart';
+import 'package:lms/features/screens/quizes/quiz_cubit.dart';
+import 'package:lms/features/screens/quizes/quiz_repository.dart';
+import 'package:lms/features/screens/quizes/quiz_state.dart';
+import 'package:lms/features/screens/quizes/quizzes_screen.dart';
 
 import '../home_courses/model/model.dart';
 import '../course_details/courseDetailsState_managment/course_details_cubit.dart';
@@ -7,6 +19,33 @@ import '../course_details/view.dart';
 import '../course_details/lectures/state_managment/lectures_cubit.dart';
 import '../course_details/lectures/view/view.dart';
 import 'lectures/functions/sideBar.dart';
+
+// Quizzes
+
+
+// ── Shared Dio instance ───────────────────────────────────────
+Dio _buildDio() =>
+    Dio(
+        BaseOptions(
+          baseUrl: 'https://skylearn.runasp.net/api/',
+          receiveDataWhenStatusError: true,
+          connectTimeout: const Duration(seconds: 30),
+          receiveTimeout: const Duration(seconds: 60),
+        ),
+      )
+      ..interceptors.add(
+        InterceptorsWrapper(
+          onRequest: (options, handler) async {
+            final token = await TokenStorageHelper.getTokenSecure();
+            if (token != null && token.isNotEmpty) {
+              options.headers['Authorization'] = 'Bearer $token';
+            }
+            handler.next(options);
+          },
+        ),
+      );
+
+// ─────────────────────────────────────────────────────────────
 
 class CourseLayout extends StatefulWidget {
   const CourseLayout({super.key, required this.courseModel});
@@ -20,25 +59,65 @@ class CourseLayoutState extends State<CourseLayout> {
   bool _collapsed = false;
   String _activeLabel = 'Course Details';
 
-  void setActiveLabel(String label) {
-    setState(() => _activeLabel = label);
+  late final AssignmentCubit _assignmentCubit;
+  late final QuizCubit _quizCubit;
+
+  @override
+  void initState() {
+    super.initState();
+    _assignmentCubit = AssignmentCubit(
+      repository: AssignmentRepository(_buildDio()),
+      courseId: widget.courseModel.id,
+    )..loadAssignments();
+
+    _quizCubit = QuizCubit(
+      repository: QuizRepository(_buildDio()),
+      courseId: widget.courseModel.id,
+    )..loadQuizzes();
   }
 
   @override
+  void dispose() {
+    _assignmentCubit.close();
+    _quizCubit.close();
+    super.dispose();
+  }
+
+  void setActiveLabel(String label) => setState(() => _activeLabel = label);
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF0F7FF),
-      body: Row(
-        children: [
-          Sidebar(
-            collapsed: _collapsed,
-            onToggle: () => setState(() => _collapsed = !_collapsed),
-            activeLabel: _activeLabel,
-            courseModel: widget.courseModel,
-            onIteSelected: setActiveLabel,
-          ),
-          Expanded(child: _buildContent()),
-        ],
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider.value(value: _assignmentCubit),
+        BlocProvider.value(value: _quizCubit),
+      ],
+      child: Scaffold(
+        backgroundColor: const Color(0xFFF0F7FF),
+        body: Row(
+          children: [
+            BlocBuilder<QuizCubit, QuizState>(
+              builder: (context, quizState) {
+                // Resolve live quiz count from state
+                int quizCount = _quizCubit.quizCount;
+
+                return Sidebar(
+                  collapsed: _collapsed,
+                  onToggle: () => setState(() => _collapsed = !_collapsed),
+                  activeLabel: _activeLabel,
+                  courseModel: widget.courseModel,
+                  onIteSelected: setActiveLabel,
+                  // Pass badge counts so the sidebar can display them
+                  // badgeCounts: {
+                  //   'Assignments': _assignmentCubit.assignments.length,
+                  //   'Quizzes': quizCount,
+                  // },
+                );
+              },
+            ),
+            Expanded(child: _buildContent()),
+          ],
+        ),
       ),
     );
   }
@@ -48,35 +127,28 @@ class CourseLayoutState extends State<CourseLayout> {
       case 'Course Details':
         return BlocProvider(
           create: (_) =>
-          CourseDetailsCubit()..loadCourse(widget.courseModel,
-              widget.courseModel.id
-          ),
+              CourseDetailsCubit()..loadCourseById(widget.courseModel.id),
           child: CourseDetailsScreen(courseModel: widget.courseModel),
         );
 
       case 'Lectures':
         return BlocProvider(
           create: (_) => LectureCubit(courseModel: widget.courseModel),
-          child: LecturesScreen(courseId: widget.courseModel.id, course: widget.courseModel,),
+          child: LecturesScreen(
+            courseId: widget.courseModel.id,
+            course: widget.courseModel,
+          ),
         );
 
+      // ── Quizzes: now fully functional ──────────────────────
       case 'Quizzes':
-        return _ComingSoon(
-          icon: Icons.quiz_rounded,
-          label: 'Quizzes',
-          count: widget.courseModel.quizzesCount,
-          color: const Color(0xFF8B5CF6),
-          bgColor: const Color(0xFFF3E8FF),
+        return BlocProvider.value(
+          value: _quizCubit,
+          child: QuizzesScreen(courseModel: widget.courseModel),
         );
 
       case 'Assignments':
-        return _ComingSoon(
-          icon: Icons.assignment_rounded,
-          label: 'Assignments',
-          count: widget.courseModel.assignmentsCount,
-          color: const Color(0xFF059669),
-          bgColor: const Color(0xFFD1FAE5),
-        );
+        return AssignmentsScreen(courseModel: widget.courseModel);
 
       case 'Questions':
         return const _ComingSoon(
@@ -99,13 +171,14 @@ class CourseLayoutState extends State<CourseLayout> {
       default:
         return BlocProvider(
           create: (_) =>
-          CourseDetailsCubit()..loadCourse(widget.courseModel,widget.courseModel.id),
+              CourseDetailsCubit()..loadCourseById(widget.courseModel.id),
           child: CourseDetailsScreen(courseModel: widget.courseModel),
         );
     }
   }
 }
 
+// ── Coming Soon placeholder ───────────────────────────────────
 class _ComingSoon extends StatelessWidget {
   const _ComingSoon({
     required this.icon,
@@ -114,6 +187,7 @@ class _ComingSoon extends StatelessWidget {
     required this.color,
     required this.bgColor,
   });
+
   final IconData icon;
   final String label;
   final int? count;
@@ -158,7 +232,9 @@ class _ComingSoon extends StatelessWidget {
               const SizedBox(height: 8),
               Container(
                 padding: const EdgeInsets.symmetric(
-                    horizontal: 14, vertical: 6),
+                  horizontal: 14,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
                   color: bgColor,
                   borderRadius: BorderRadius.circular(20),
@@ -177,10 +253,7 @@ class _ComingSoon extends StatelessWidget {
             const SizedBox(height: 12),
             Text(
               'Coming soon...',
-              style: TextStyle(
-                color: color.withOpacity(0.5),
-                fontSize: 14,
-              ),
+              style: TextStyle(color: color.withOpacity(0.5), fontSize: 14),
             ),
           ],
         ),
