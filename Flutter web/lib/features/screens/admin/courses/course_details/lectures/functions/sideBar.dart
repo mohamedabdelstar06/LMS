@@ -28,7 +28,7 @@ class _SidebarState extends State<Sidebar>
   late Animation<double> _expandAnim;
 
   static const _items = [
-    _SItem(Icons.auto_awesome_rounded,   'Course Details'),
+    _SItem(Icons.auto_awesome_rounded,   'Dashboard'),
     _SItem(Icons.play_circle_rounded,    'Lectures'),
     _SItem(Icons.quiz_rounded,           'Quizzes'),
     _SItem(Icons.assignment_rounded,     'Assignments'),
@@ -139,12 +139,46 @@ class _SidebarHeader extends StatelessWidget {
     required this.expandAnim,
     required this.onToggle,
   });
+
   final bool collapsed;
   final Animation<double> expandAnim;
   final VoidCallback onToggle;
 
   @override
   Widget build(BuildContext context) {
+    if (collapsed) {
+      return Container(
+        height: 66,
+        padding: const EdgeInsets.symmetric(horizontal: 6),
+        decoration: const BoxDecoration(
+          border: Border(bottom: BorderSide(color: Color(0xFFE0F2FE))),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF0369A1), Color(0xFF0EA5E9)],
+                ),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const Icon(Icons.school_rounded,
+                  color: Colors.white, size: 16),
+            ),
+           const SizedBox(width: 7,),
+
+            _ToggleButton(
+              onTap: onToggle,
+              collapsed: collapsed,
+            ),
+          ],
+        ),
+      );
+    }
+
     return Container(
       height: 66,
       padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -159,49 +193,39 @@ class _SidebarHeader extends StatelessWidget {
             decoration: BoxDecoration(
               gradient: const LinearGradient(
                 colors: [Color(0xFF0369A1), Color(0xFF0EA5E9)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
               ),
               borderRadius: BorderRadius.circular(10),
-              boxShadow: const [
-                BoxShadow(
-                  color: Color(0x330EA5E9),
-                  blurRadius: 10,
-                  offset: Offset(0, 3),
-                ),
-              ],
             ),
             child: const Icon(Icons.school_rounded,
                 color: Colors.white, size: 18),
           ),
-          FadeTransition(
-            opacity: expandAnim,
-            child: SizeTransition(
-              sizeFactor: expandAnim,
-              axis: Axis.horizontal,
-              child: const Padding(
-                padding: EdgeInsets.only(left: 10),
-                child: Text(
-                  'SkyLearn',
-                  style: TextStyle(
-                    color: Color(0xFF0369A1),
-                    fontSize: 15,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: -0.4,
-                  ),
+
+          const SizedBox(width: 10),
+
+          Expanded(
+            child: FadeTransition(
+              opacity: expandAnim,
+              child: const Text(
+                'SkyLearn',
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: Color(0xFF0369A1),
+                  fontSize: 15,
+                  fontWeight: FontWeight.w800,
                 ),
               ),
             ),
           ),
-          const Spacer(),
-          _ToggleButton(onTap: onToggle, collapsed: collapsed),
+
+          _ToggleButton(
+            onTap: onToggle,
+            collapsed: collapsed,
+          ),
         ],
       ),
     );
   }
-}
-
-class _ToggleButton extends StatefulWidget {
+}class _ToggleButton extends StatefulWidget {
   const _ToggleButton({required this.onTap, required this.collapsed});
   final VoidCallback onTap;
   final bool collapsed;
@@ -270,6 +294,8 @@ class _SidebarFooter extends StatelessWidget {
         border: Border(top: BorderSide(color: Color(0xFFE0F2FE))),
       ),
       child: Row(
+        mainAxisAlignment:
+        collapsed ? MainAxisAlignment.center : MainAxisAlignment.start,
         children: [
           Container(
             width: 34,
@@ -277,17 +303,8 @@ class _SidebarFooter extends StatelessWidget {
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [Color(0xFF0369A1), Color(0xFF38BDF8)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
               ),
               shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: Color(0x330EA5E9),
-                  blurRadius: 8,
-                  offset: Offset(0, 2),
-                ),
-              ],
             ),
             child: const Center(
               child: Text(
@@ -300,14 +317,13 @@ class _SidebarFooter extends StatelessWidget {
               ),
             ),
           ),
-          FadeTransition(
-            opacity: expandAnim,
-            child: SizeTransition(
-              sizeFactor: expandAnim,
-              axis: Axis.horizontal,
-              child: const Padding(
-                padding: EdgeInsets.only(left: 10),
-                child: Column(
+
+          if (!collapsed) ...[
+            const SizedBox(width: 10),
+            Expanded(
+              child: FadeTransition(
+                opacity: expandAnim,
+                child: const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
@@ -320,6 +336,7 @@ class _SidebarFooter extends StatelessWidget {
                     ),
                     Text(
                       'System Administrator',
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         color: Color(0xFF94A3B8),
                         fontSize: 10,
@@ -329,9 +346,9 @@ class _SidebarFooter extends StatelessWidget {
                 ),
               ),
             ),
-          ),
+          ],
         ],
-      ),
+      )
     );
   }
 }

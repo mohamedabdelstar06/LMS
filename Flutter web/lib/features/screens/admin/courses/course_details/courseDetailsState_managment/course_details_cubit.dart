@@ -1,4 +1,6 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../../../../../core/helpers/cach_helper/shared_pref_helper.dart';
 import '../../home_courses/model/model.dart';
 import 'course_details_state.dart';
@@ -6,22 +8,36 @@ import 'course_details_state.dart';
 class CourseDetailsCubit extends Cubit<CourseDetailsState> {
   CourseDetailsCubit() : super(CourseDetailsInitial());
 
-  Future<void> loadCourse(GetCoursesModel course, int courseID ) async {
+  Future<void> loadCourseById(int courseId) async {
     emit(CourseDetailsLoading());
 
     try {
       final token = await TokenStorageHelper.getTokenSecure();
 
       if (token == null || token.isEmpty) {
-        emit(CourseDetailsError( 'Unauthorized'));
+        emit(CourseDetailsError('Unauthorized'));
         return;
       }
 
-      await Future.delayed(const Duration(milliseconds: 400));
+      final response = await DioHelper.dio.get(
+        'Course/$courseId',
+        options: Options(
+          headers: {
+            'Authorization': "Bearer $token",
+          },
+        ),
+      );
 
-      emit(CourseDetailsLoaded(course: course, courseId: courseID));
+      final course = GetCoursesModel.fromJson(response.data);
+
+      emit(CourseDetailsLoaded(
+        course: course,
+        courseId: courseId,
+      ));
+    } on DioException catch (e) {
+      emit(CourseDetailsError(e.response?.data.toString() ?? e.message ?? 'Error'));
     } catch (e) {
-      emit(CourseDetailsError( e.toString()));
+      emit(CourseDetailsError(e.toString()));
     }
   }
 
@@ -30,4 +46,14 @@ class CourseDetailsCubit extends Cubit<CourseDetailsState> {
       emit((state as CourseDetailsLoaded).copyWith(activeTab: index));
     }
   }
+}
+
+class DioHelper {
+  static final Dio dio = Dio(
+    BaseOptions(
+      baseUrl: 'https://skylearn.runasp.net/api/',
+      connectTimeout: const Duration(seconds: 30),
+      receiveTimeout: const Duration(seconds: 30),
+    ),
+  );
 }

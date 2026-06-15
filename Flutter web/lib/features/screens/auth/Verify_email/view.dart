@@ -16,20 +16,45 @@ class VerifyScreen  extends StatefulWidget {
   State<VerifyScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<VerifyScreen> {
-
+class _LoginScreenState extends State<VerifyScreen>
+    with SingleTickerProviderStateMixin {
   final formKey = GlobalKey<FormState>();
-  final usernameController = TextEditingController(text: "mohamedabdelstar06@gmail.com");
+  final usernameController = TextEditingController(
+    text: "mohamedabdelstar06@gmail.com",
+  );
 
+  late final AnimationController _animCtrl;
+  late final Animation<double> _opacity;
+  late final Animation<Offset> _slide;
 
   @override
   void initState() {
     super.initState();
 
+    _animCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+    );
+
+    _opacity = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _animCtrl, curve: Curves.easeOutCubic));
+
+    _slide = Tween<Offset>(
+      begin: const Offset(0, 0.06),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(parent: _animCtrl, curve: Curves.easeOutCubic));
+
+    // ابدأ الأنيميشن بعد ما الـ splash يخلص
+    Future.delayed(const Duration(milliseconds: 100), () {
+      if (mounted) _animCtrl.forward();
+    });
   }
 
   @override
   void dispose() {
+    _animCtrl.dispose();
     usernameController.dispose();
     super.dispose();
   }
@@ -53,151 +78,166 @@ class _LoginScreenState extends State<VerifyScreen> {
                 end: Alignment.bottomRight,
               ),
             ),
-            child: Scaffold(
-              backgroundColor: Colors.transparent,
-
-              body: Center(
-                child: Form(
-                  key: formKey,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-
-                    children: [
-                      Row(
+            child: FadeTransition(
+              opacity: _opacity,
+              child: SlideTransition(
+                position: _slide,
+                child: Scaffold(
+                  backgroundColor: Colors.transparent,
+                
+                  body: Center(
+                    child: Form(
+                      key: formKey,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                
                         children: [
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Welcome Back",
+                                style: TextStyle(
+                                  color: Color(0xFF175cd3).withValues(alpha: 0.86),
+                                  fontSize: 32,
+                                  fontWeight: FontWeight.w700,
+                                  fontFamily: "inter",
+                                ),
+                              ),
+                              SizedBox(width: 5),
+                              Image.asset(Assets.iconsHand),
+                            ],
+                          ),
                           Text(
-                            "Welcome Back",
+                            "Enter your email address to check your account and continue.",
                             style: TextStyle(
-                              color: Color(0xFF175cd3).withValues(alpha: 0.86),
-                              fontSize: 32,
-                              fontWeight: FontWeight.w700,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
                               fontFamily: "inter",
+                              color: Color(0xFF545F70),
                             ),
                           ),
-                          SizedBox(width: 5),
-                          Image.asset(Assets.iconsHand),
-                        ],
-                      ),
-                      Text(
-                        "Enter your email address to check your account and continue.",
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: "inter",
-                          color: Color(0xFF545F70),
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 17),
-
-                        width: 514,
-                        height: 223,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(24),
-                        ),
-                        child: Column(
-
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(height: 20),
-                            Text(
-                              "Email",
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                                fontFamily: "inter",
-                                color: Color(0xFF175CD3),
-                              ),
+                          SizedBox(height: 20),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 17),
+                
+                            width: 514,
+                            height: 223,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(24),
                             ),
-                            SizedBox(height: 8),
-                            TextFormField(validator: (value) {
-                              if (value == null || value.trim().isEmpty) {
-                                return "Email is required";
-                              }
-
-                              if (!value.trim().endsWith("@gmail.com")) {
-                                return "Email must contain @gmail.com";
-                              }
-
-                              return null;
-                            },
-
-                              controller: usernameController,
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
+                            child: Column(
+                
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(height: 20),
+                                Text(
+                                  "Email",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: "inter",
+                                    color: Color(0xFF175CD3),
+                                  ),
                                 ),
-                                contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 16,
+                                SizedBox(height: 8),
+                                TextFormField(validator: (value) {
+                                  if (value == null || value.trim().isEmpty) {
+                                    return "Email is required";
+                                  }
+                
+                                  if (!value.trim().endsWith("@gmail.com")) {
+                                    return "Email must contain @gmail.com";
+                                  }
+                
+                                  return null;
+                                },
+                
+                                  controller: usernameController,
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                    ),
+                                    hintText: "Enter your Email",
+                                    hintStyle: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400,
+                                      fontFamily: "inter",
+                                      color: Color(0xFF08303D),
+                                    ),
+                                  ),
                                 ),
-                                hintText: "Enter your Email",
-                                hintStyle: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: "inter",
-                                  color: Color(0xFF08303D),
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: 24),
-
-
-                            BlocBuilder<VerifyCubit, VerifyState>(
-                              bloc: verificationCubit,
-                              builder: (context, state) {
-                                final isLoading = state is LoadingVerifyState;
-
-                                return
-
-
-                                      InkWell(
-                                        onTap: isLoading ? null : () {
-
-                                          context
-                                              .read<VerifyCubit>()
-                                              .postVerifyData(
-                                            usernameController,
-                                            context,
-                                          );
-                                        },
-                                        child: Center(
-                                          child:
-                                          Container(
-                                            width: 470,
-                                            height: 45,
-                                            decoration: BoxDecoration(
-                                              gradient: LinearGradient(
-                                                begin: Alignment.topLeft,
-                                                end: Alignment.bottomRight,
-                                                colors: [
-                                                  Color(0xFF1849A9),
-                                                  Color(0xFF53B1FD),
-                                                ],
-                                              ),
-                                              borderRadius: BorderRadius.circular(12),
-                                            ),
+                                SizedBox(height: 24),
+                
+                
+                                BlocBuilder<VerifyCubit, VerifyState>(
+                                  bloc: verificationCubit,
+                                  builder: (context, state) {
+                                    final isLoading = state is LoadingVerifyState;
+                
+                                    return
+                
+                
+                                          InkWell(
+                                            onTap: isLoading ? null : () {
+                
+                                              context
+                                                  .read<VerifyCubit>()
+                                                  .postVerifyData(
+                                                usernameController,
+                                                context,
+                                              );
+                                            },
                                             child: Center(
-                                              child: isLoading
-                                                  ? Row(
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                children: [
-                                                  SizedBox(
-                                                    width: 20,
-                                                    height: 20,
-                                                    child: CircularProgressIndicator(
-                                                      strokeWidth: 2,
-                                                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                                                    ),
+                                              child:
+                                              Container(
+                                                width: 470,
+                                                height: 45,
+                                                decoration: BoxDecoration(
+                                                  gradient: LinearGradient(
+                                                    begin: Alignment.topLeft,
+                                                    end: Alignment.bottomRight,
+                                                    colors: [
+                                                      Color(0xFF1849A9),
+                                                      Color(0xFF53B1FD),
+                                                    ],
                                                   ),
-                                                  SizedBox(width: 10),
-                                                  Text(
-                                                    "Verifying Email...",
+                                                  borderRadius: BorderRadius.circular(12),
+                                                ),
+                                                child: Center(
+                                                  child: isLoading
+                                                      ? Row(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    children: [
+                                                      SizedBox(
+                                                        width: 20,
+                                                        height: 20,
+                                                        child: CircularProgressIndicator(
+                                                          strokeWidth: 2,
+                                                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                                        ),
+                                                      ),
+                                                      SizedBox(width: 10),
+                                                      Text(
+                                                        "Verifying Email...",
+                                                        style: TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight: FontWeight.w600,
+                                                          fontFamily: "inter",
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  )
+                                                      : Text(
+                                                    "Continue",
                                                     style: TextStyle(
                                                       fontSize: 16,
                                                       fontWeight: FontWeight.w600,
@@ -205,31 +245,22 @@ class _LoginScreenState extends State<VerifyScreen> {
                                                       color: Colors.white,
                                                     ),
                                                   ),
-                                                ],
-                                              )
-                                                  : Text(
-                                                "Continue",
-                                                style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w600,
-                                                  fontFamily: "inter",
-                                                  color: Colors.white,
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                        ),
-                                      );
-
-
-
-
-                              },
+                                          );
+                
+                
+                
+                
+                                  },
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
               ),

@@ -1,6 +1,65 @@
-part of 'assignments_cubit.dart';
+import 'package:equatable/equatable.dart';
+import 'package:lms/features/screens/admin/courses/course_details/assignments/assignment_model.dart';
 
-@immutable
-sealed class AssignmentsState {}
+enum AssignmentStatus { initial, loading, success, failure }
 
-final class AssignmentsInitial extends AssignmentsState {}
+enum AssignmentActionStatus { idle, loading, success, failure }
+
+class AssignmentState extends Equatable {
+  final AssignmentStatus status;
+  final AssignmentActionStatus actionStatus;
+  final List<AssignmentModel> assignments;
+  final AssignmentModel? selectedAssignment;
+  final List<SubmissionModel> submissions;
+  final String? errorMessage;
+  final String? actionError;
+  final List<UploadFileProgress> uploadProgresses;
+  final bool isUploadingFiles;
+
+  const AssignmentState({
+    this.status = AssignmentStatus.initial,
+    this.actionStatus = AssignmentActionStatus.idle,
+    this.assignments = const [],
+    this.selectedAssignment,
+    this.submissions = const [],
+    this.errorMessage,
+    this.actionError,
+    this.uploadProgresses = const [],
+    this.isUploadingFiles = false,
+  });
+
+  AssignmentState copyWith({
+    AssignmentStatus? status,
+    AssignmentActionStatus? actionStatus,
+    List<AssignmentModel>? assignments,
+    AssignmentModel? selectedAssignment,
+    List<SubmissionModel>? submissions,
+    String? errorMessage,
+    String? actionError,
+    List<UploadFileProgress>? uploadProgresses,
+    bool? isUploadingFiles,
+  }) => AssignmentState(
+    status: status ?? this.status,
+    actionStatus: actionStatus ?? this.actionStatus,
+    assignments: assignments ?? this.assignments,
+    selectedAssignment: selectedAssignment ?? this.selectedAssignment,
+    submissions: submissions ?? this.submissions,
+    errorMessage: errorMessage ?? this.errorMessage,
+    actionError: actionError ?? this.actionError,
+    uploadProgresses: uploadProgresses ?? this.uploadProgresses,
+    isUploadingFiles: isUploadingFiles ?? this.isUploadingFiles,
+  );
+
+  @override
+  List<Object?> get props => [
+    status,
+    actionStatus,
+    assignments,
+    selectedAssignment,
+    submissions,
+    errorMessage,
+    actionError,
+    uploadProgresses,
+    isUploadingFiles,
+  ];
+}
