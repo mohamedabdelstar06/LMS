@@ -5,20 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="34c5994d-3bb8-490c-a2da-d1525c2e37c3" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Flutter web/.metadata" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/.metadata" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Flutter web/lib/core/widgets/loading_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/lib/core/widgets/loading_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Flutter web/lib/features/draft/test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/lib/features/draft/test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/courses/course_details/assignments/ass_sheet.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/courses/course_details/assignments/ass_sheet.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/courses/course_details/assignments/assignmnet_repo.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/courses/course_details/assignments/assignmnet_repo.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/courses/course_details/assignments/state_mangmnet/assignments_cubit.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/courses/course_details/assignments/state_mangmnet/assignments_cubit.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/courses/course_details/assignments/state_mangmnet/assignments_state.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/courses/course_details/assignments/state_mangmnet/assignments_state.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/courses/course_details/assignments/view/view.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/courses/course_details/assignments/view/view.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/courses/course_details/courseDetailsState_managment/course_details_cubit.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/courses/course_details/courseDetailsState_managment/course_details_cubit.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/courses/course_details/layout.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/courses/course_details/layout.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/courses/course_details/lectures/functions/sideBar.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/courses/course_details/lectures/functions/sideBar.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/courses/course_details/view.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/admin/courses/course_details/view.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Flutter web/lib/features/screens/auth/Verify_email/view.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/auth/Verify_email/view.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Flutter web/lib/features/screens/pre_processing/pre_loading/loading_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/lib/features/screens/pre_processing/pre_loading/loading_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Flutter web/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Flutter web/web/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/Flutter web/web/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

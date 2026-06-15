@@ -1,5 +1,5 @@
 // ============================================================
-// course_layout.dart  — drop-in replacement for your existing file
+// course_layout.dart  — updated with live Quizzes + badge
 // ============================================================
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +8,10 @@ import 'package:lms/core/helpers/cach_helper/shared_pref_helper.dart';
 import 'package:lms/features/screens/admin/courses/course_details/assignments/assignmnet_repo.dart';
 import 'package:lms/features/screens/admin/courses/course_details/assignments/state_mangmnet/assignments_cubit.dart';
 import 'package:lms/features/screens/admin/courses/course_details/assignments/view/view.dart';
+import 'package:lms/features/screens/quizes/quiz_cubit.dart';
+import 'package:lms/features/screens/quizes/quiz_repository.dart';
+import 'package:lms/features/screens/quizes/quiz_state.dart';
+import 'package:lms/features/screens/quizes/quizzes_screen.dart';
 
 import '../home_courses/model/model.dart';
 import '../course_details/courseDetailsState_managment/course_details_cubit.dart';
@@ -16,9 +20,10 @@ import '../course_details/lectures/state_managment/lectures_cubit.dart';
 import '../course_details/lectures/view/view.dart';
 import 'lectures/functions/sideBar.dart';
 
+// Quizzes
 
 
-// ── Shared Dio instance (reuse your app singleton instead) ───
+// ── Shared Dio instance ───────────────────────────────────────
 Dio _buildDio() =>
     Dio(
         BaseOptions(
@@ -31,17 +36,16 @@ Dio _buildDio() =>
       ..interceptors.add(
         InterceptorsWrapper(
           onRequest: (options, handler) async {
-            // Replace TokenStorageHelper with your actual helper
             final token = await TokenStorageHelper.getTokenSecure();
-             if (token != null && token.isNotEmpty) {
-            options.headers['Authorization'] = 'Bearer $token';
+            if (token != null && token.isNotEmpty) {
+              options.headers['Authorization'] = 'Bearer $token';
             }
             handler.next(options);
           },
         ),
       );
 
-// ────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────
 
 class CourseLayout extends StatefulWidget {
   const CourseLayout({super.key, required this.courseModel});
@@ -55,8 +59,8 @@ class CourseLayoutState extends State<CourseLayout> {
   bool _collapsed = false;
   String _activeLabel = 'Course Details';
 
-  // Cubit kept alive so badge count persists across tab switches
   late final AssignmentCubit _assignmentCubit;
+  late final QuizCubit _quizCubit;
 
   @override
   void initState() {
@@ -65,39 +69,51 @@ class CourseLayoutState extends State<CourseLayout> {
       repository: AssignmentRepository(_buildDio()),
       courseId: widget.courseModel.id,
     )..loadAssignments();
+
+    _quizCubit = QuizCubit(
+      repository: QuizRepository(_buildDio()),
+      courseId: widget.courseModel.id,
+    )..loadQuizzes();
   }
 
   @override
   void dispose() {
     _assignmentCubit.close();
+    _quizCubit.close();
     super.dispose();
   }
 
-  void setActiveLabel(String label) {
-    setState(() => _activeLabel = label);
-  }
+  void setActiveLabel(String label) => setState(() => _activeLabel = label);
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
-      value: _assignmentCubit,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider.value(value: _assignmentCubit),
+        BlocProvider.value(value: _quizCubit),
+      ],
       child: Scaffold(
         backgroundColor: const Color(0xFFF0F7FF),
         body: Row(
           children: [
-            // Pass the live badge count to the sidebar
-            BlocBuilder<AssignmentCubit, dynamic>(
-              builder: (context, assignmentState) => Sidebar(
-                collapsed: _collapsed,
-                onToggle: () => setState(() => _collapsed = !_collapsed),
-                activeLabel: _activeLabel,
-                courseModel: widget.courseModel,
-                onIteSelected: setActiveLabel,
-                // 👇 If your Sidebar accepts a badgeCounts map, pass it here.
-                // badgeCounts: {
-                //   'Assignments': assignmentState.assignments.length,
-                // },
-              ),
+            BlocBuilder<QuizCubit, QuizState>(
+              builder: (context, quizState) {
+                // Resolve live quiz count from state
+                int quizCount = _quizCubit.quizCount;
+
+                return Sidebar(
+                  collapsed: _collapsed,
+                  onToggle: () => setState(() => _collapsed = !_collapsed),
+                  activeLabel: _activeLabel,
+                  courseModel: widget.courseModel,
+                  onIteSelected: setActiveLabel,
+                  // Pass badge counts so the sidebar can display them
+                  // badgeCounts: {
+                  //   'Assignments': _assignmentCubit.assignments.length,
+                  //   'Quizzes': quizCount,
+                  // },
+                );
+              },
             ),
             Expanded(child: _buildContent()),
           ],
@@ -124,16 +140,13 @@ class CourseLayoutState extends State<CourseLayout> {
           ),
         );
 
+      // ── Quizzes: now fully functional ──────────────────────
       case 'Quizzes':
-        return _ComingSoon(
-          icon: Icons.quiz_rounded,
-          label: 'Quizzes',
-          count: widget.courseModel.quizzesCount,
-          color: const Color(0xFF8B5CF6),
-          bgColor: const Color(0xFFF3E8FF),
+        return BlocProvider.value(
+          value: _quizCubit,
+          child: QuizzesScreen(courseModel: widget.courseModel),
         );
 
-      // ── Assignments: now fully functional ─────────────────
       case 'Assignments':
         return AssignmentsScreen(courseModel: widget.courseModel);
 
@@ -165,7 +178,7 @@ class CourseLayoutState extends State<CourseLayout> {
   }
 }
 
-// ─── Coming Soon placeholder (unchanged) ────────────────────
+// ── Coming Soon placeholder ───────────────────────────────────
 class _ComingSoon extends StatelessWidget {
   const _ComingSoon({
     required this.icon,
