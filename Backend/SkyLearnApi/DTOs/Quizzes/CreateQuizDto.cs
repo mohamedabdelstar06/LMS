@@ -9,6 +9,8 @@ namespace SkyLearnApi.DTOs.Quizzes
         public int MaxAttempts { get; set; } = 1;
         public decimal? PassingScore { get; set; }
         public bool ShuffleQuestions { get; set; } = false;
+        public bool ShuffleAnswers { get; set; } = false;
+        public DateTime? StartDate { get; set; }
         public bool ShowCorrectAnswers { get; set; } = true;
         public bool ShowExplanations { get; set; } = true;
         public string GradingMode { get; set; } = "Auto";

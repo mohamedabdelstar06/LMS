@@ -7,7 +7,7 @@ namespace SkyLearnApi.Entities
         public Quiz Quiz { get; set; } = null!;
         public string QuestionText { get; set; } = string.Empty;
         public string? QuestionTextAr { get; set; }
-        public string QuestionType { get; set; } = "MCQ"; // MCQ, Written, TrueFalse
+        public string QuestionType { get; set; } = "MCQ"; // MCQ, Written, TrueFalse, FileUpload
         public decimal Marks { get; set; } = 1;
         public string DifficultyLevel { get; set; } = "Medium"; // Easy, Medium, Hard
         public string? Explanation { get; set; }

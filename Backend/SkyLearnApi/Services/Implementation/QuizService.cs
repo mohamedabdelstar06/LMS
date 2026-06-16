@@ -39,9 +39,11 @@ namespace SkyLearnApi.Services.Implementation
                 MaxAttempts = dto.MaxAttempts,
                 PassingScore = dto.PassingScore,
                 ShuffleQuestions = dto.ShuffleQuestions,
+                ShuffleAnswers = dto.ShuffleAnswers,
                 ShowCorrectAnswers = dto.ShowCorrectAnswers,
                 ShowExplanations = dto.ShowExplanations,
                 GradingMode = dto.GradingMode,
+                StartDate = dto.StartDate,
                 DeadLineDate = dto.DeadLineDate,
                 TargetSquadronId = dto.TargetSquadronId,
                 DifficultyLevel = dto.DifficultyLevel,
@@ -148,9 +150,11 @@ namespace SkyLearnApi.Services.Implementation
             if (dto.MaxAttempts.HasValue) quiz.MaxAttempts = dto.MaxAttempts.Value;
             if (dto.PassingScore.HasValue) quiz.PassingScore = dto.PassingScore;
             if (dto.ShuffleQuestions.HasValue) quiz.ShuffleQuestions = dto.ShuffleQuestions.Value;
+            if (dto.ShuffleAnswers.HasValue) quiz.ShuffleAnswers = dto.ShuffleAnswers.Value;
             if (dto.ShowCorrectAnswers.HasValue) quiz.ShowCorrectAnswers = dto.ShowCorrectAnswers.Value;
             if (dto.ShowExplanations.HasValue) quiz.ShowExplanations = dto.ShowExplanations.Value;
             if (dto.GradingMode != null) quiz.GradingMode = dto.GradingMode;
+            if (dto.StartDate.HasValue) quiz.StartDate = dto.StartDate;
             if (dto.DeadLineDate.HasValue) quiz.DeadLineDate = dto.DeadLineDate;
             if (dto.TargetSquadronId.HasValue) quiz.TargetSquadronId = dto.TargetSquadronId;
             if (dto.DifficultyLevel != null) quiz.DifficultyLevel = dto.DifficultyLevel;
@@ -806,12 +810,14 @@ Return ONLY a valid JSON array with this exact schema, no markdown formatting:
                 PassingScore = quiz.PassingScore,
                 TotalMarks = quiz.TotalMarks,
                 ShuffleQuestions = quiz.ShuffleQuestions,
+                ShuffleAnswers = quiz.ShuffleAnswers,
                 ShowCorrectAnswers = quiz.ShowCorrectAnswers,
                 ShowExplanations = quiz.ShowExplanations,
                 IsAiGenerated = quiz.IsAiGenerated,
                 GradingMode = quiz.GradingMode,
                 QuizScope = quiz.QuizScope,
                 DifficultyLevel = quiz.DifficultyLevel,
+                StartDate = quiz.StartDate,
                 DeadLineDate = quiz.DeadLineDate,
                 TargetSquadronId = quiz.TargetSquadronId,
                 TargetSquadronName = quiz.TargetSquadron?.Name,

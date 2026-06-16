@@ -23,6 +23,7 @@ namespace SkyLearnApi.Extentions
             services.AddScoped<ISquadronService, SquadronService>();
             services.AddScoped<IEnrollmentService, EnrollmentService>();
             services.AddScoped<IStudentImportService, StudentImportService>();
+            services.AddScoped<IDashboardService, DashboardService>();
 
             // New services - Activity system
             services.AddScoped<ILectureService, LectureService>();

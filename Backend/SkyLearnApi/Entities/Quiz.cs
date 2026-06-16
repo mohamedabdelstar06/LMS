@@ -7,6 +7,7 @@ namespace SkyLearnApi.Entities
         public decimal? PassingScore { get; set; }
         public decimal TotalMarks { get; set; }
         public bool ShuffleQuestions { get; set; } = false;
+        public bool ShuffleAnswers { get; set; } = false;
         public bool ShowCorrectAnswers { get; set; } = true;
         public bool ShowExplanations { get; set; } = true;
         public bool IsAiGenerated { get; set; } = false;

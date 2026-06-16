@@ -17,6 +17,42 @@ namespace SkyLearnApi.Controllers
             _geminiService = geminiService;
         }
 
+        [HttpGet("quizzes/{quizId}/questions")]
+        [Authorize(Roles = Roles.AdminOrInstructor)]
+        public async Task<IActionResult> GetByQuiz(int quizId)
+        {
+            var questions = await _context.Questions
+                .Where(q => q.QuizId == quizId)
+                .Include(q => q.Options)
+                .OrderBy(q => q.SortOrder)
+                .ToListAsync();
+
+            var dtos = questions.Select(q => new QuestionResponseDto
+            {
+                Id = q.Id,
+                QuizId = q.QuizId,
+                QuestionText = q.QuestionText,
+                QuestionTextAr = q.QuestionTextAr,
+                QuestionType = q.QuestionType,
+                Marks = q.Marks,
+                DifficultyLevel = q.DifficultyLevel,
+                Explanation = q.Explanation,
+                SourceReference = q.SourceReference,
+                SortOrder = q.SortOrder,
+                ImageUrl = q.ImageUrl,
+                Options = q.Options.OrderBy(o => o.SortOrder).Select(o => new QuestionOptionResponseDto
+                {
+                    Id = o.Id,
+                    OptionText = o.OptionText,
+                    OptionTextAr = o.OptionTextAr,
+                    IsCorrect = o.IsCorrect,
+                    SortOrder = o.SortOrder
+                }).ToList()
+            }).ToList();
+
+            return Ok(dtos);
+        }
+
         [HttpPost("quizzes/{quizId}/questions")]
         [Authorize(Roles = Roles.AdminOrInstructor)]
         public async Task<IActionResult> Create(int quizId, [FromBody] CreateQuestionDto dto)

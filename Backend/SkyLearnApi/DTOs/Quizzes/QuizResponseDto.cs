@@ -12,6 +12,8 @@ namespace SkyLearnApi.DTOs.Quizzes
         public decimal? PassingScore { get; set; }
         public decimal TotalMarks { get; set; }
         public bool ShuffleQuestions { get; set; }
+        public bool ShuffleAnswers { get; set; }
+        public DateTime? StartDate { get; set; }
         public bool ShowCorrectAnswers { get; set; }
         public bool ShowExplanations { get; set; }
         public bool IsAiGenerated { get; set; }
