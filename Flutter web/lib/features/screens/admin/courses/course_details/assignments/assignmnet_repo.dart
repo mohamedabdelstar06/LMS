@@ -1,8 +1,8 @@
-import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:lms/features/screens/admin/courses/course_details/assignments/assignment_model.dart';
 
-// ignore_for_file: avoid_slow_async_io
+
 
 
 class AssignmentRepository {
@@ -35,12 +35,13 @@ class AssignmentRepository {
     required bool allowLateSubmission,
     required bool isVisible,
     int? targetSquadronId,
-    required List<File> files,
+    DateTime? startDate,
+    DateTime? deadlineDate,
+    required List<PickedFileData> files,
     required void Function(String fileName, double progress) onFileProgress,
   }) async {
     final formData = FormData();
 
-    // Text fields
     formData.fields.addAll([
       MapEntry('courseId', courseId.toString()),
       MapEntry('title', title),
@@ -51,34 +52,38 @@ class AssignmentRepository {
       MapEntry('isVisible', isVisible.toString()),
       if (targetSquadronId != null)
         MapEntry('targetSquadronId', targetSquadronId.toString()),
+      if (startDate != null)
+        MapEntry('StartDate', startDate.toIso8601String().split('T').first),
+      if (deadlineDate != null)
+        MapEntry(
+          'DeadLineDate',
+          deadlineDate.toIso8601String().split('T').first,
+        ),
     ]);
 
-    // ✅ FIX: use fromFileSync — no dart:io async, no "unsupported" error
+    // ✅ fromBytes — works on ALL Android versions, no path needed,
+    //    preserves the original filename the user chose
     for (final file in files) {
-      final fileName = _fileName(file.path);
       formData.files.add(
         MapEntry(
           'AssignmentFiles',
-          MultipartFile.fromFileSync(
-            // ← sync, always works on mobile
-            file.path,
-            filename: fileName,
-            contentType: DioMediaType.parse(_mimeType(fileName)),
+          MultipartFile.fromBytes(
+            file.bytes,
+            filename: file.name, // ← real name, not base64
+            contentType: DioMediaType.parse(_mimeType(file.extension)),
           ),
         ),
       );
     }
 
-    final totalFiles = files.length;
     final response = await _dio.post(
       'courses/$courseId/assignments',
       data: formData,
       onSendProgress: (sent, total) {
         if (total <= 0) return;
         final progress = sent / total;
-        // Distribute real Dio progress across all files
-        for (final file in files) {
-          onFileProgress(_fileName(file.path), progress);
+        for (final f in files) {
+          onFileProgress(f.name, progress);
         }
       },
     );
@@ -97,7 +102,9 @@ class AssignmentRepository {
     required bool allowLateSubmission,
     required bool isVisible,
     int? targetSquadronId,
-    List<File> newFiles = const [],
+    DateTime? startDate,
+    DateTime? deadlineDate,
+    List<PickedFileData> newFiles = const [],
   }) async {
     final formData = FormData();
 
@@ -111,18 +118,23 @@ class AssignmentRepository {
       MapEntry('isVisible', isVisible.toString()),
       if (targetSquadronId != null)
         MapEntry('targetSquadronId', targetSquadronId.toString()),
+      if (startDate != null)
+        MapEntry('StartDate', startDate.toIso8601String().split('T').first),
+      if (deadlineDate != null)
+        MapEntry(
+          'DeadLineDate',
+          deadlineDate.toIso8601String().split('T').first,
+        ),
     ]);
 
-    // ✅ FIX: fromFileSync for update too
     for (final file in newFiles) {
-      final fileName = _fileName(file.path);
       formData.files.add(
         MapEntry(
           'AssignmentFiles',
-          MultipartFile.fromFileSync(
-            file.path,
-            filename: fileName,
-            contentType: DioMediaType.parse(_mimeType(fileName)),
+          MultipartFile.fromBytes(
+            file.bytes,
+            filename: file.name,
+            contentType: DioMediaType.parse(_mimeType(file.extension)),
           ),
         ),
       );
@@ -140,21 +152,19 @@ class AssignmentRepository {
   // ── POST /api/assignments/{id}/submit ────────────────────────
   Future<void> submitAssignment({
     required int assignmentId,
-    required List<File> files,
+    required List<PickedFileData> files,
     required void Function(String fileName, double progress) onFileProgress,
   }) async {
     final formData = FormData();
 
-    // ✅ FIX: fromFileSync here too
     for (final file in files) {
-      final fileName = _fileName(file.path);
       formData.files.add(
         MapEntry(
           'File',
-          MultipartFile.fromFileSync(
-            file.path,
-            filename: fileName,
-            contentType: DioMediaType.parse(_mimeType(fileName)),
+          MultipartFile.fromBytes(
+            file.bytes,
+            filename: file.name,
+            contentType: DioMediaType.parse(_mimeType(file.extension)),
           ),
         ),
       );
@@ -166,8 +176,8 @@ class AssignmentRepository {
       onSendProgress: (sent, total) {
         if (total <= 0) return;
         final progress = sent / total;
-        for (final file in files) {
-          onFileProgress(_fileName(file.path), progress);
+        for (final f in files) {
+          onFileProgress(f.name, progress);
         }
       },
     );
@@ -196,11 +206,7 @@ class AssignmentRepository {
   }
 
   // ── Helpers ──────────────────────────────────────────────────
-
-  String _fileName(String path) => path.split('/').last;
-
-  String _mimeType(String fileName) {
-    final ext = fileName.split('.').last.toLowerCase();
+  String _mimeType(String ext) {
     const map = {
       'pdf': 'application/pdf',
       'doc': 'application/msword',
@@ -221,6 +227,54 @@ class AssignmentRepository {
       'rar': 'application/x-rar-compressed',
       'txt': 'text/plain',
     };
-    return map[ext] ?? 'application/octet-stream';
+    return map[ext.toLowerCase()] ?? 'application/octet-stream';
+  }
+}
+/// Wraps PlatformFile and guarantees bytes are loaded.
+/// Use this instead of dart:io File everywhere in the assignments feature.
+class PickedFileData {
+  final String name;        // original filename e.g. "ENSA_Module_4.pptx"
+  final String extension;   // e.g. "pptx"
+  final int sizeBytes;
+  final List<int> bytes;    // actual file content — always present
+
+  PickedFileData({
+    required this.name,
+    required this.extension,
+    required this.sizeBytes,
+    required this.bytes,
+  });
+
+  /// Build from a FilePicker result that was loaded with withData: true
+  static PickedFileData? fromPlatformFile(PlatformFile pf) {
+    if (pf.bytes == null || pf.bytes!.isEmpty) return null;
+    return PickedFileData(
+      name: pf.name,
+      extension: pf.extension ?? pf.name.split('.').last,
+      sizeBytes: pf.size,
+      bytes: pf.bytes!,
+    );
+  }
+
+  String get sizeLabel {
+    if (sizeBytes < 1024) return '$sizeBytes B';
+    if (sizeBytes < 1024 * 1024) {
+      return '${(sizeBytes / 1024).toStringAsFixed(1)} KB';
+    }
+    return '${(sizeBytes / (1024 * 1024)).toStringAsFixed(1)} MB';
+  }
+
+  String get icon {
+    const map = {
+      'pdf'  : '📄',
+      'doc'  : '📝', 'docx': '📝',
+      'ppt'  : '📊', 'pptx': '📊',
+      'xls'  : '📈', 'xlsx': '📈',
+      'jpg'  : '🖼️', 'jpeg': '🖼️', 'png': '🖼️', 'gif': '🖼️',
+      'mp4'  : '🎬', 'mov': '🎬',
+      'zip'  : '🗜️', 'rar': '🗜️',
+      'txt'  : '📃',
+    };
+    return map[extension.toLowerCase()] ?? '📎';
   }
 }

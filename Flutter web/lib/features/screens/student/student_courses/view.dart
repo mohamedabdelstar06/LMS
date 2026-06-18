@@ -5,6 +5,7 @@ import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lms/features/screens/admin/Noti_button.dart';
 import 'package:lms/features/screens/student/student_courses/state_managment/cubit.dart';
 import 'package:lms/features/screens/student/student_courses/state_managment/states.dart';
 
@@ -219,15 +220,19 @@ void loadImageProfile() async {
 
                   Row(
                     children: [
-                      _buildNotificationButton(
-                        icon: Assets.iconsMessageIcon,
-                        onPressed: () {},
-                      ),
-                      const SizedBox(width: 12),
-                      _buildNotificationButton(
-                        icon: Assets.iconsBellIcon,
-                        onPressed: () {},
-                      ),
+FutureBuilder<String?>(
+                                  future: TokenStorageHelper.getTokenSecure(),
+                                  builder: (context, snapshot) {
+                                    if (!snapshot.hasData) {
+                                      return const SizedBox.shrink();
+                                    }
+
+                                    return NotificationBellButton(
+                                      token: snapshot.data!,
+                                      role: 'student',
+                                    );
+                                  },
+                                ),
                       const SizedBox(width: 20),
                       _buildUserProfile(context),
                     ],
@@ -460,44 +465,6 @@ void loadImageProfile() async {
     );
   }
 
-  Widget _buildNotificationButton({
-    required String icon,
-    required VoidCallback onPressed,
-  }) {
-    return Material(
-      color: Colors.transparent,
-      child:
-      InkWell(
-        onTap: onPressed,
-        borderRadius: BorderRadius.circular(12),
-        child: Container(
-          width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            color: const Color(0xffF8FAFC),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: const Color(0xffE2E8F0), width: 1),
-          ),
-          child: Center(
-            child: Badge(
-              smallSize: 6,
-              backgroundColor: const Color(0xffFF3B30),
-              offset: const Offset(-1, 1),
-              child: SvgPicture.asset(
-                icon,
-                width: 18,
-                height: 18,
-                colorFilter: const ColorFilter.mode(
-                  Color(0xFF175CD3),
-                  BlendMode.srcIn,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 
 
 

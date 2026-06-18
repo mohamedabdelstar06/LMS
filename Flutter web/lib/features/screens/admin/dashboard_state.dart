@@ -1,0 +1,29 @@
+part of 'dashboard_cubit.dart';
+
+abstract class DashboardState extends Equatable {
+  const DashboardState();
+  @override
+  List<Object?> get props => [];
+}
+
+class DashboardInitial extends DashboardState {}
+
+class DashboardLoading extends DashboardState {}
+
+class DashboardLoaded extends DashboardState {
+  final DashboardStatsModel stats;
+  final DashboardOverviewModel overview;
+
+  const DashboardLoaded({required this.stats, required this.overview});
+
+  @override
+  List<Object?> get props => [stats, overview];
+}
+
+class DashboardError extends DashboardState {
+  final String message;
+  const DashboardError(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}
