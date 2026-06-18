@@ -10,7 +10,7 @@ class Assets {
   static const String iconsMessageIcon = 'assets/icons/message-icon.svg';
   static const String iconsSearchIcon = 'assets/icons/search_icon.svg';
   static const String courseSearchIcon = 'assets/icons/search.svg';
-  static const String logo = 'assets/logo/logo.jpg';
+  static const String logo = 'assets/images/cougar_app.png';
   static const String manWelcome = 'assets/images/man-welcome.png';
   static const String frame_1 = 'assets/images/frame_1.png';
   static const String frame_2 = 'assets/images/frame_2.png';

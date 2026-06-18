@@ -94,7 +94,6 @@ class _CourseScreenState extends State<AdminCourseScreen> {
           ),
         ),
         child: Scaffold(
-          appBar: const CustomAppBar(),
           backgroundColor: Colors.transparent,
           body: BlocConsumer<GetCoursesCubit, GetCourseStates>(
             listener: (context, state) {

@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lms/features/screens/admin/dashboard_screen.dart';
+import 'package:lms/features/screens/student_dashboard_screen.dart';
 
 
 import '../../../../../core/cons/api_helper_resources/api_resources.dart';
@@ -115,7 +117,7 @@ class LoginCubit extends Cubit<LoginState> {
           Navigator.pushReplacement(
             navigatorKey.currentContext!,
             MaterialPageRoute(
-              builder: (_) => const AdminCourseScreen(),
+              builder: (_) => const AdminDashboardScreen(),
             ),
           );
         }

@@ -6,6 +6,7 @@ import 'package:lms/features/screens/admin/courses/course_details/assignments/as
 import 'package:lms/features/screens/admin/courses/course_details/assignments/state_mangmnet/assignments_state.dart';
 
 
+
 class AssignmentCubit extends Cubit<AssignmentState> {
   final AssignmentRepository _repository;
   final int courseId;
@@ -21,38 +22,13 @@ class AssignmentCubit extends Cubit<AssignmentState> {
   Future<void> loadAssignments() async {
     emit(state.copyWith(status: AssignmentStatus.loading, errorMessage: null));
     try {
-      final assignments = await _repository.getCourseAssignments(courseId);
-      emit(
-        state.copyWith(
-          status: AssignmentStatus.success,
-          assignments: assignments,
-        ),
-      );
+      final list = await _repository.getCourseAssignments(courseId);
+      emit(state.copyWith(status: AssignmentStatus.success, assignments: list));
     } catch (e) {
       emit(
         state.copyWith(
           status: AssignmentStatus.failure,
-          errorMessage: e.toString(),
-        ),
-      );
-    }
-  }
-
-  Future<void> loadAssignmentDetail(int assignmentId) async {
-    emit(state.copyWith(actionStatus: AssignmentActionStatus.loading));
-    try {
-      final assignment = await _repository.getAssignmentById(assignmentId);
-      emit(
-        state.copyWith(
-          actionStatus: AssignmentActionStatus.success,
-          selectedAssignment: assignment,
-        ),
-      );
-    } catch (e) {
-      emit(
-        state.copyWith(
-          actionStatus: AssignmentActionStatus.failure,
-          actionError: e.toString(),
+          errorMessage: _readable(e),
         ),
       );
     }
@@ -68,11 +44,12 @@ class AssignmentCubit extends Cubit<AssignmentState> {
     required bool allowLateSubmission,
     required bool isVisible,
     int? targetSquadronId,
-    required List<File> files,
+    DateTime? startDate,
+    DateTime? deadlineDate,
+    required List<PickedFileData> files,
   }) async {
-    // Initialise per-file progress entries
     final progresses = files
-        .map((f) => UploadFileProgress(fileName: f.path.split('/').last))
+        .map((f) => UploadFileProgress(fileName: f.name))
         .toList();
 
     emit(
@@ -84,12 +61,9 @@ class AssignmentCubit extends Cubit<AssignmentState> {
       ),
     );
 
-    // ✅ FIX: fire-and-forget the animation timers — don't await them
-    //    so they run concurrently with the real Dio upload
+    // Animate progress bars concurrently with the real upload
     if (files.isNotEmpty) {
-      _startProgressAnimations(
-        files.map((f) => f.path.split('/').last).toList(),
-      );
+      _startAnimations(files.map((f) => f.name).toList());
     }
 
     try {
@@ -102,10 +76,10 @@ class AssignmentCubit extends Cubit<AssignmentState> {
         allowLateSubmission: allowLateSubmission,
         isVisible: isVisible,
         targetSquadronId: targetSquadronId,
+        startDate: startDate,
+        deadlineDate: deadlineDate,
         files: files,
-        // Real Dio progress drives these updates too
-        onFileProgress: (fileName, progress) =>
-            _updateSingleFileProgress(fileName, progress),
+        onFileProgress: _updateProgress,
       );
 
       emit(
@@ -117,15 +91,13 @@ class AssignmentCubit extends Cubit<AssignmentState> {
         ),
       );
     } catch (e) {
-      // Mark all files as errored
-      final failed = state.uploadProgresses
-          .map((p) => p.copyWith(hasError: true))
-          .toList();
       emit(
         state.copyWith(
           actionStatus: AssignmentActionStatus.failure,
-          actionError: _readableError(e),
-          uploadProgresses: failed,
+          actionError: _readable(e),
+          uploadProgresses: state.uploadProgresses
+              .map((p) => p.copyWith(hasError: true))
+              .toList(),
           isUploadingFiles: false,
         ),
       );
@@ -143,10 +115,12 @@ class AssignmentCubit extends Cubit<AssignmentState> {
     required bool allowLateSubmission,
     required bool isVisible,
     int? targetSquadronId,
-    List<File> newFiles = const [],
+    DateTime? startDate,
+    DateTime? deadlineDate,
+    List<PickedFileData> newFiles = const [],
   }) async {
     final progresses = newFiles
-        .map((f) => UploadFileProgress(fileName: f.path.split('/').last))
+        .map((f) => UploadFileProgress(fileName: f.name))
         .toList();
 
     emit(
@@ -159,9 +133,7 @@ class AssignmentCubit extends Cubit<AssignmentState> {
     );
 
     if (newFiles.isNotEmpty) {
-      _startProgressAnimations(
-        newFiles.map((f) => f.path.split('/').last).toList(),
-      );
+      _startAnimations(newFiles.map((f) => f.name).toList());
     }
 
     try {
@@ -175,17 +147,17 @@ class AssignmentCubit extends Cubit<AssignmentState> {
         allowLateSubmission: allowLateSubmission,
         isVisible: isVisible,
         targetSquadronId: targetSquadronId,
+        startDate: startDate,
+        deadlineDate: deadlineDate,
         newFiles: newFiles,
       );
-
-      final updatedList = state.assignments
-          .map((a) => a.id == assignmentId ? updated : a)
-          .toList();
 
       emit(
         state.copyWith(
           actionStatus: AssignmentActionStatus.success,
-          assignments: updatedList,
+          assignments: state.assignments
+              .map((a) => a.id == assignmentId ? updated : a)
+              .toList(),
           selectedAssignment: updated,
           uploadProgresses: [],
           isUploadingFiles: false,
@@ -195,7 +167,7 @@ class AssignmentCubit extends Cubit<AssignmentState> {
       emit(
         state.copyWith(
           actionStatus: AssignmentActionStatus.failure,
-          actionError: _readableError(e),
+          actionError: _readable(e),
           uploadProgresses: state.uploadProgresses
               .map((p) => p.copyWith(hasError: true))
               .toList(),
@@ -228,7 +200,7 @@ class AssignmentCubit extends Cubit<AssignmentState> {
       emit(
         state.copyWith(
           actionStatus: AssignmentActionStatus.failure,
-          actionError: _readableError(e),
+          actionError: _readable(e),
         ),
       );
     }
@@ -238,10 +210,10 @@ class AssignmentCubit extends Cubit<AssignmentState> {
 
   Future<void> submitAssignment({
     required int assignmentId,
-    required List<File> files,
+    required List<PickedFileData> files,
   }) async {
     final progresses = files
-        .map((f) => UploadFileProgress(fileName: f.path.split('/').last))
+        .map((f) => UploadFileProgress(fileName: f.name))
         .toList();
 
     emit(
@@ -253,16 +225,14 @@ class AssignmentCubit extends Cubit<AssignmentState> {
       ),
     );
 
-    _startProgressAnimations(files.map((f) => f.path.split('/').last).toList());
+    _startAnimations(files.map((f) => f.name).toList());
 
     try {
       await _repository.submitAssignment(
         assignmentId: assignmentId,
         files: files,
-        onFileProgress: (fileName, progress) =>
-            _updateSingleFileProgress(fileName, progress),
+        onFileProgress: _updateProgress,
       );
-
       emit(
         state.copyWith(
           actionStatus: AssignmentActionStatus.success,
@@ -274,7 +244,7 @@ class AssignmentCubit extends Cubit<AssignmentState> {
       emit(
         state.copyWith(
           actionStatus: AssignmentActionStatus.failure,
-          actionError: _readableError(e),
+          actionError: _readable(e),
           isUploadingFiles: false,
         ),
       );
@@ -307,7 +277,7 @@ class AssignmentCubit extends Cubit<AssignmentState> {
       emit(
         state.copyWith(
           actionStatus: AssignmentActionStatus.failure,
-          actionError: _readableError(e),
+          actionError: _readable(e),
         ),
       );
     }
@@ -323,18 +293,18 @@ class AssignmentCubit extends Cubit<AssignmentState> {
       ),
     );
     try {
-      final submissions = await _repository.getSubmissions(assignmentId);
+      final subs = await _repository.getSubmissions(assignmentId);
       emit(
         state.copyWith(
           actionStatus: AssignmentActionStatus.success,
-          submissions: submissions,
+          submissions: subs,
         ),
       );
     } catch (e) {
       emit(
         state.copyWith(
           actionStatus: AssignmentActionStatus.failure,
-          actionError: _readableError(e),
+          actionError: _readable(e),
         ),
       );
     }
@@ -342,8 +312,7 @@ class AssignmentCubit extends Cubit<AssignmentState> {
 
   // ── Progress helpers ────────────────────────────────────────
 
-  /// Called by Dio's onSendProgress (real network progress).
-  void _updateSingleFileProgress(String fileName, double progress) {
+  void _updateProgress(String fileName, double progress) {
     if (isClosed) return;
     final updated = state.uploadProgresses.map((p) {
       if (p.fileName == fileName) {
@@ -354,46 +323,42 @@ class AssignmentCubit extends Cubit<AssignmentState> {
     emit(state.copyWith(uploadProgresses: updated));
   }
 
-  /// ✅ FIX: unawaited timers — each file animates independently
-  ///    without blocking the actual upload future.
-  void _startProgressAnimations(List<String> fileNames) {
-    for (int i = 0; i < fileNames.length; i++) {
-      _animateFile(fileNames[i], delayMs: i * 120);
+  /// Fire-and-forget staggered animation: 0 → 0.85
+  /// Real Dio onSendProgress will push each file to 1.0
+  void _startAnimations(List<String> names) {
+    for (int i = 0; i < names.length; i++) {
+      _animateOne(names[i], delayMs: i * 100);
     }
   }
 
-  Future<void> _animateFile(String fileName, {required int delayMs}) async {
+  Future<void> _animateOne(String name, {required int delayMs}) async {
     await Future.delayed(Duration(milliseconds: delayMs));
-    // Animate from 0 → 0.85 in smooth steps
-    // (the real Dio progress will push it to 1.0)
     for (int step = 1; step <= 17; step++) {
       if (isClosed) return;
-      await Future.delayed(const Duration(milliseconds: 60));
-      _updateSingleFileProgress(fileName, step / 20.0); // 0.05 → 0.85
+      await Future.delayed(const Duration(milliseconds: 55));
+      _updateProgress(name, step / 20.0); // 0.05 → 0.85
     }
   }
 
   // ── Misc ────────────────────────────────────────────────────
 
-  void resetActionStatus() {
-    emit(
-      state.copyWith(
-        actionStatus: AssignmentActionStatus.idle,
-        actionError: null,
-      ),
-    );
-  }
+  void resetActionStatus() => emit(
+    state.copyWith(
+      actionStatus: AssignmentActionStatus.idle,
+      actionError: null,
+    ),
+  );
 
-  String _readableError(Object e) {
-    final msg = e.toString();
-    if (msg.contains('SocketException') || msg.contains('Network')) {
+  String _readable(Object e) {
+    final s = e.toString();
+    if (s.contains('SocketException') || s.contains('Network')) {
       return 'Network error — check your connection';
     }
-    if (msg.contains('401')) return 'Session expired — please log in again';
-    if (msg.contains('403')) return 'You don\'t have permission to do that';
-    if (msg.contains('404')) return 'Assignment not found';
-    if (msg.contains('413')) return 'File too large — max upload size exceeded';
-    if (msg.contains('500')) return 'Server error — please try again later';
-    return msg;
+    if (s.contains('401')) return 'Session expired — please log in again';
+    if (s.contains('403')) return 'You don\'t have permission for this';
+    if (s.contains('404')) return 'Assignment not found';
+    if (s.contains('413')) return 'File too large';
+    if (s.contains('500')) return 'Server error — try again later';
+    return s;
   }
 }

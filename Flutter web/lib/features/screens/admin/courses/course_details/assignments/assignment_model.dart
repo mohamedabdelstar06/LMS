@@ -9,7 +9,8 @@ class AssignmentModel {
   final bool isVisible;
   final int? targetSquadronId;
   final List<AssignmentFileModel> files;
-  final DateTime? dueDate;
+  final DateTime? startDate;
+  final DateTime? deadlineDate;
   final int submissionsCount;
 
   AssignmentModel({
@@ -23,7 +24,8 @@ class AssignmentModel {
     required this.isVisible,
     this.targetSquadronId,
     required this.files,
-    this.dueDate,
+    this.startDate,
+    this.deadlineDate,
     this.submissionsCount = 0,
   });
 
@@ -41,8 +43,11 @@ class AssignmentModel {
       files: (json['files'] as List<dynamic>? ?? [])
           .map((f) => AssignmentFileModel.fromJson(f))
           .toList(),
-      dueDate: json['dueDate'] != null
-          ? DateTime.tryParse(json['dueDate'])
+      startDate: json['startDate'] != null
+          ? DateTime.tryParse(json['startDate'])
+          : null,
+      deadlineDate: json['deadLineDate'] != null
+          ? DateTime.tryParse(json['deadLineDate'])
           : null,
       submissionsCount: json['submissionsCount'] ?? 0,
     );
