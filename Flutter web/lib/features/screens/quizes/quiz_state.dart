@@ -2,6 +2,7 @@
 // quiz_state.dart
 // ============================================================
 
+
 import 'package:lms/features/screens/quizes/quiz_model.dart';
 
 abstract class QuizState {
@@ -26,35 +27,30 @@ class QuizError extends QuizState {
   const QuizError(this.message);
 }
 
-class QuizCreating extends QuizState {
-  const QuizCreating();
+class QuizActionInProgress extends QuizState {
+  final String label; // "Creating...", "Deleting...", etc
+  const QuizActionInProgress(this.label);
 }
 
-class QuizCreated extends QuizState {
-  final QuizModel quiz;
-  const QuizCreated(this.quiz);
+class QuizActionSuccess extends QuizState {
+  final String message;
+  const QuizActionSuccess(this.message);
 }
 
-class QuizUpdating extends QuizState {
-  const QuizUpdating();
+// ── Detail / Edit ──────────────────────────────────────────────
+class QuizDetailLoading extends QuizState {
+  const QuizDetailLoading();
 }
 
-class QuizUpdated extends QuizState {
-  final QuizModel quiz;
-  const QuizUpdated(this.quiz);
+class QuizDetailLoaded extends QuizState {
+  final QuizDetailModel detail;
+  const QuizDetailLoaded(this.detail);
 }
 
-class QuizDeleting extends QuizState {
-  const QuizDeleting();
-}
-
-class QuizDeleted extends QuizState {
-  final int quizId;
-  const QuizDeleted(this.quizId);
-}
-
+// ── Generate ──────────────────────────────────────────────────
 class QuizGenerating extends QuizState {
-  const QuizGenerating();
+  final double progress; // 0..1, upload progress
+  const QuizGenerating({this.progress = 0});
 }
 
 class QuizGenerated extends QuizState {
@@ -62,14 +58,14 @@ class QuizGenerated extends QuizState {
   const QuizGenerated(this.quiz);
 }
 
-// ── Take Quiz States ──────────────────────────────────────────
+// ── Take Quiz ─────────────────────────────────────────────────
 class QuizSessionLoading extends QuizState {
   const QuizSessionLoading();
 }
 
 class QuizSessionLoaded extends QuizState {
   final QuizTakeSession session;
-  final Map<int, dynamic> answers; // questionId -> answer
+  final Map<int, QuizAnswer> answers; // questionId -> answer
   final bool autoSaving;
 
   const QuizSessionLoaded({
@@ -79,12 +75,11 @@ class QuizSessionLoaded extends QuizState {
   });
 
   QuizSessionLoaded copyWith({
-    QuizTakeSession? session,
-    Map<int, dynamic>? answers,
+    Map<int, QuizAnswer>? answers,
     bool? autoSaving,
   }) =>
       QuizSessionLoaded(
-        session: session ?? this.session,
+        session: session,
         answers: answers ?? this.answers,
         autoSaving: autoSaving ?? this.autoSaving,
       );
@@ -104,11 +99,8 @@ class QuizResultsLoaded extends QuizState {
   const QuizResultsLoaded(this.results);
 }
 
-class QuizTranslating extends QuizState {
-  const QuizTranslating();
-}
-
-class QuizTranslated extends QuizState {
-  final QuizModel quiz;
-  const QuizTranslated(this.quiz);
+// ── Grading ───────────────────────────────────────────────────
+class QuizGradingLoaded extends QuizState {
+  final List<StudentAnswerForGrading> answers;
+  const QuizGradingLoaded(this.answers);
 }

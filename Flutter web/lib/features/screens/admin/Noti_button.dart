@@ -6,23 +6,16 @@ import 'package:lms/features/screens/admin/Noti_states.dart';
 import 'package:lms/features/screens/admin/Noti_styles.dart';
 
 
-/// Drop-in bell button for User, Admin, or Instructor pages.
-/// Provide [token] and [role] ('student' | 'admin' | 'instructor').
-///
-/// Usage — replace existing bell buttons:
-///
-///   NotificationBellButton(token: token, role: 'student')
-///   NotificationBellButton(token: token, role: 'admin')
-///   NotificationBellButton(token: token, role: 'instructor')
+
 class NotificationBellButton extends StatefulWidget {
-  final String token;
-  final String role;
 
   const NotificationBellButton({
     super.key,
     required this.token,
     required this.role,
   });
+  final String token;
+  final String role;
 
   @override
   State<NotificationBellButton> createState() => _NotificationBellButtonState();
@@ -127,9 +120,9 @@ class _NotificationBellButtonState extends State<NotificationBellButton>
                       ),
                       if (unread > 0)
                         Positioned(
-                          top: 6,
-                          right: 6,
-                          child: _UnreadBadge(count: unread, color: accent),
+                          top: 1,
+                          right: 2,
+                          child: _UnreadBadge(count: unread),
                         ),
                     ],
                   ),
@@ -144,31 +137,40 @@ class _NotificationBellButtonState extends State<NotificationBellButton>
 }
 
 class _UnreadBadge extends StatelessWidget {
+  const _UnreadBadge({required this.count});
   final int count;
-  final Color color;
-
-  const _UnreadBadge({required this.count, required this.color});
 
   @override
   Widget build(BuildContext context) {
+    final label = count > 99 ? '99+' : count.toString();
+    final isWide = count > 9; // رقمين أو أكتر → pill shape
+
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
-      constraints: const BoxConstraints(minWidth: 16, maxWidth: 22),
+      curve: Curves.easeOutBack,
       height: 16,
-      padding: const EdgeInsets.symmetric(horizontal: 3),
+      width: isWide ? 22 : 16,
       decoration: BoxDecoration(
-        color: count > 0 ? const Color(0xFFEF4444) : Colors.transparent,
+        color: const Color(0xFFEF4444),
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: Colors.white, width: 1.5),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFFEF4444).withOpacity(0.4),
+            blurRadius: 4,
+            offset: const Offset(0, 1),
+          ),
+        ],
       ),
       child: Center(
         child: Text(
-          count > 99 ? '99+' : count.toString(),
+          label,
           style: const TextStyle(
-            fontSize: 9,
-            fontWeight: FontWeight.w700,
+            fontSize: 8.5,
+            fontWeight: FontWeight.w800,
             color: Colors.white,
             height: 1,
+            letterSpacing: -0.3,
           ),
         ),
       ),

@@ -6,7 +6,8 @@ import 'package:lms/features/screens/admin/users/get_users/state_managment/get_u
 import 'package:lms/features/screens/admin/users/get_users/view_updating_user.dart';
 import '../../../../../core/cons/Colors/app_colors.dart';
 import '../../../../../core/widgets/admin_action_button.dart';
-import '../../../../../core/widgets/custome_sidebar.dart';
+import '../../../../../core/widgets/management/management_layout.dart';
+import '../../../../../core/widgets/management/management_menu_config.dart';
 import '../../../../../core/widgets/admin_table_header.dart';
 import '../../../../../core/widgets/app_network_image.dart';
 import 'get_user_model/view.dart';
@@ -40,20 +41,10 @@ class _GetUsersScreenState extends State<GetUsersPage> {
       GetUsersCubit()
         ..fetchUsers(),
 
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              MYColors.gradientColor_3,
-              MYColors.gradientColor_2.withValues(alpha: 0.25),
-              MYColors.gradientColor_3,
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-        child: Scaffold(
-          body: BlocConsumer<GetUsersCubit, GetUsersState>(
+      child: ManagementScaffold(
+        selectedMenuItem: selectedMenuItem,
+        role: ManagementRole.admin,
+        child: BlocConsumer<GetUsersCubit, GetUsersState>(
             listener: (context, state) {
               if (state is DeleteUserSuccess) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -106,13 +97,9 @@ class _GetUsersScreenState extends State<GetUsersPage> {
               if (state is GetUsersLoading) {
                 return const Center(child: CircularProgressIndicator());
               }
-              return Row(
-                children: [
-                  CustomeSidebar(selectedMenuItem: selectedMenuItem),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
-                      child: Container(
+              return Padding(
+                padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
+                child: Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(16),
@@ -291,14 +278,10 @@ class _GetUsersScreenState extends State<GetUsersPage> {
                           ],
                         ),
                       ),
-                    ),
-                  ),
-                ],
-              );
+                    );
             },
           ),
         ),
-      ),
     );
   }
 

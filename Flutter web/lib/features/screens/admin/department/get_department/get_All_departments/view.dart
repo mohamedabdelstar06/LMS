@@ -2,7 +2,8 @@ import 'dart:ui_web' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lms/core/widgets/app_network_image.dart';
-import 'package:lms/core/widgets/custome_sidebar.dart';
+import 'package:lms/core/widgets/management/management_layout.dart';
+import 'package:lms/core/widgets/management/management_menu_config.dart';
 import 'package:lms/features/screens/admin/department/get_department/get_All_departments/state_managments/cubit.dart';
 import 'package:lms/features/screens/admin/department/get_department/get_All_departments/state_managments/states.dart';
 import 'package:lms/features/screens/admin/department/get_department/get_All_departments/update_view.dart';
@@ -39,22 +40,10 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => DepartmentsCubit()..fetchDepartments(),
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              MYColors.gradientColor_3,
-              MYColors.gradientColor_2.withValues(alpha: 0.25),
-              MYColors.gradientColor_3,
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-
-          body: BlocConsumer<DepartmentsCubit, DepartmentsState>(
+      child: ManagementScaffold(
+        selectedMenuItem: selectedMenuItem,
+        role: ManagementRole.admin,
+        child: BlocConsumer<DepartmentsCubit, DepartmentsState>(
             listener: (context, state) {
               if (state is DeleteDepartmentSuccess) {
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -117,13 +106,9 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
               }
 
               if (state is DepartmentsLoaded) {
-                return Row(
-                  children: [
-                    CustomeSidebar(selectedMenuItem: selectedMenuItem),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
-                        child: Container(
+                return Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
+                  child: Container(
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(16),
@@ -217,9 +202,6 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
                             ],
                           ),
                         ),
-                      ),
-                    ),
-                  ],
                 );
               }
 
@@ -227,7 +209,6 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
             },
           ),
         ),
-      ),
     );
   }
 

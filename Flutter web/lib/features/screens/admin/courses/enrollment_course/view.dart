@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lms/core/cons/Colors/app_colors.dart';
+import 'package:lms/core/widgets/management/management_layout.dart';
+import 'package:lms/core/widgets/management/management_menu_config.dart';
 import 'package:lms/core/helpers/logout_server/logout.dart';
 import 'package:lms/features/screens/Announcement/view.dart';
 import 'package:lms/features/screens/admin/admin_profile/view.dart';
@@ -101,51 +102,35 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              MYColors.gradientColor_3,
-              MYColors.gradientColor_2.withValues(alpha: 0.25),
-              MYColors.gradientColor_3,
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-        child: Row(
-          children: [
-            _buildSidebar(),
-            BlocConsumer<EnrollmentCubit, EnrollmentState>(
-              listener: (context, state) {
-                if (state is EnrollmentActionSuccess) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(state.message),
-                      backgroundColor: Colors.green,
-                    ),
-                  );
-                  _clearForm();
-                }
-                if (state is EnrollmentError) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(state.message),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
-                }
-              },
-              builder: (context, state) {
-                return SingleChildScrollView(
-                  padding: const EdgeInsets.all(40),
-                  child: Center(child: _buildFormContainer(state)),
-                );
-              },
-            ),
-          ],
-        ),
+    return ManagementScaffold(
+      selectedMenuItem: selectedMenuItem,
+      role: ManagementRole.admin,
+      child: BlocConsumer<EnrollmentCubit, EnrollmentState>(
+        listener: (context, state) {
+          if (state is EnrollmentActionSuccess) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.green,
+              ),
+            );
+            _clearForm();
+          }
+          if (state is EnrollmentError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+        },
+        builder: (context, state) {
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(40),
+            child: Center(child: _buildFormContainer(state)),
+          );
+        },
       ),
     );
   }

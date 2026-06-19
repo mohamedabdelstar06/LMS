@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lms/core/widgets/custome_sidebar.dart';
+import 'package:lms/core/widgets/management/management_layout.dart';
+import 'package:lms/core/widgets/management/management_menu_config.dart';
 
 import 'package:lms/features/screens/admin/year/get_year/get_All_years/state_mangement/cubit.dart';
 import 'package:lms/features/screens/admin/year/get_year/get_All_years/state_mangement/states.dart';
@@ -41,21 +42,10 @@ class _DepartmentsScreenState extends State<YearsScreen> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => AllYearsCubit()..fetchYearss(),
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              MYColors.gradientColor_3,
-              MYColors.gradientColor_2.withValues(alpha: 0.25),
-              MYColors.gradientColor_3,
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          body: BlocConsumer<AllYearsCubit, AllYearsState>(
+      child: ManagementScaffold(
+        selectedMenuItem: selectedMenuItem,
+        role: ManagementRole.admin,
+        child: BlocConsumer<AllYearsCubit, AllYearsState>(
             listener: (context, state) {
               if (state is DeleteYearSuccess) {
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -118,13 +108,9 @@ class _DepartmentsScreenState extends State<YearsScreen> {
               }
 
               if (state is YearsLoaded) {
-                return Row(
-                  children: [
-                    CustomeSidebar(selectedMenuItem: selectedMenuItem),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
-                        child: Container(
+                return Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
+                  child: Container(
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(16),
@@ -218,16 +204,12 @@ class _DepartmentsScreenState extends State<YearsScreen> {
                             ],
                           ),
                         ),
-                      ),
-                    ),
-                  ],
                 );
               }
               return const SizedBox.shrink();
             },
           ),
         ),
-      ),
     );
   }
 

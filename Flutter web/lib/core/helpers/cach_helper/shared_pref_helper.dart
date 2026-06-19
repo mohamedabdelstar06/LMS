@@ -1,4 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,57 +12,51 @@ import '../../../features/screens/auth/login/user_model/data.dart';
 import '../../../features/screens/auth/login/view.dart';
 import '../../cons/api_helper_resources/api_resources.dart';
 import '../../cons/context/navigation_key.dart';
-import 'package:dio/dio.dart';
 
 class PrefHelper {
-
-
   static Future<int?> getId() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getInt("id");
+    return prefs.getInt('id');
   }
 
   static Future<String?> getAcademicLevel() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString("academicLevel");
+    return prefs.getString('academicLevel');
   }
 
   static Future<String?> getCity() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString("city");
+    return prefs.getString('city');
   }
 
   static Future<String?> getEmail() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString("email");
+    return prefs.getString('email');
   }
 
-
-  static Future<String?> getFulName () async {
+  static Future<String?> getFulName() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString("fullName");
+    return prefs.getString('fullName');
   }
 
   static Future<String?> getGender() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString("gender");
+    return prefs.getString('gender');
   }
-
-
 
   static Future<String?> getRole() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString("role");
+    return prefs.getString('role');
   }
 
   static Future<String?> getMessage() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString("message");
+    return prefs.getString('message');
   }
 
   static Future<String?> getImageProfile() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString("profileImageUrl");
+    return prefs.getString('profileImageUrl');
   }
 
   // static Future<bool> isLoggedIn() async {
@@ -86,10 +82,10 @@ class PrefHelper {
       context: navigatorKey.currentContext!,
       dialogType: DialogType.warning,
       animType: AnimType.bottomSlide,
-      title: "Confirm Logout",
-      desc: "Are you sure you want to logout?",
-      btnCancelText: "No",
-      btnOkText: "Yes",
+      title: 'Confirm Logout',
+      desc: 'Are you sure you want to logout?',
+      btnCancelText: 'No',
+      btnOkText: 'Yes',
       btnCancelOnPress: () {},
       btnOkOnPress: () async {
         try {
@@ -113,7 +109,7 @@ class PrefHelper {
 
             Navigator.pushAndRemoveUntil(
               navigatorKey.currentContext!,
-              MaterialPageRoute(builder: (context) => LoginScreen()),
+              MaterialPageRoute(builder: (context) => const LoginScreen()),
               (route) => false,
             );
           } else {
@@ -125,10 +121,10 @@ class PrefHelper {
             );
           }
         } on DioException catch (e) {
-          String errorMessage =
-              e.response?.data["message"] ??
+          final String errorMessage =
+              e.response?.data['message'] ??
               e.message ??
-              "An error occurred while logging out.";
+              'An error occurred while logging out.';
 
           ScaffoldMessenger.of(navigatorKey.currentContext!).showSnackBar(
             SnackBar(
@@ -148,115 +144,138 @@ class PrefHelper {
     ).show();
   }
 
-
-
-
-
   static Future<void> saveLoginData(UserModel user) async {
     final prefs = await SharedPreferences.getInstance();
     // await prefs.setString("tokenKey", user.token!);
-    await prefs.setInt("id", user.user.id);
+    await prefs.setInt('id', user.user.id);
     // await prefs.setString("academicLevel", user.user!.academicLevel!);
     // await prefs.setString("city", user.user!.city!);
-    await prefs.setString("email", user.user.email);
- await prefs.setString("fullName", user.user.fullName.split(" ")[0]);
+    await prefs.setString('email', user.user.email);
+    await prefs.setString('fullName', user.user.fullName.split(' ')[0]);
     // await prefs.setString("gender", user.user!.gender!);
-    await prefs.setString("profileImageUrl", user.user.profileImageUrl);
-    await prefs.setString("role", user.user.role);
-    await prefs.setString("message", user.message);
+    await prefs.setString('profileImageUrl', user.user.profileImageUrl);
+    await prefs.setString('role', user.user.role);
+    await prefs.setString('message', user.message);
   }
+
   static Future<void> saveCreatedUserData(CreateUserModel user) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString("email", user.email);
-    await prefs.setString("fullName", user.fullName);
-    await prefs.setString("role", user.role);
-    await prefs.setString("nationalId", user.nationalId);
-    await prefs.setString("dateOfBirth", user.dateOfBirth.toString());
-    await prefs.setString("gender", user.gender!);
-    await prefs.setString("city", user.city!);
-    await prefs.setString("academicLevel", user.academicInfo!.department!.name!);
-    await prefs.setString("academicLevel", user.academicInfo!.department!.id!.toString());
-    await prefs.setString("academicLevel", user.academicInfo!.year! as String);
-    await prefs.setString("academicLevel", user.academicInfo!.admissionYear! as String);
-    await prefs.setString("academicLevel", user.academicInfo!.squadron!.name!);
+    await prefs.setString('email', user.email);
+    await prefs.setString('fullName', user.fullName);
+    await prefs.setString('role', user.role);
+    await prefs.setString('nationalId', user.nationalId);
+    await prefs.setString('dateOfBirth', user.dateOfBirth.toString());
+    await prefs.setString('gender', user.gender!);
+    await prefs.setString('city', user.city!);
+    await prefs.setString(
+      'academicLevel',
+      user.academicInfo!.department!.name!,
+    );
+    await prefs.setString(
+      'academicLevel',
+      user.academicInfo!.department!.id!.toString(),
+    );
+    await prefs.setString('academicLevel', user.academicInfo!.year! as String);
+    await prefs.setString(
+      'academicLevel',
+      user.academicInfo!.admissionYear! as String,
+    );
+    await prefs.setString('academicLevel', user.academicInfo!.squadron!.name!);
 
-    await prefs.setString("profileImageUrl", user.profileImageUrl!);
-    await prefs.setBool("emailConfirmed", user.emailConfirmed);
-    await prefs.setString("createdAt", user.createdAt.toString());
-    await prefs.setString("updatedAt", user.updatedAt.toString());
-
-
-
-
+    await prefs.setString('profileImageUrl', user.profileImageUrl!);
+    await prefs.setBool('emailConfirmed', user.emailConfirmed);
+    await prefs.setString('createdAt', user.createdAt.toString());
+    await prefs.setString('updatedAt', user.updatedAt.toString());
   }
-
-
-
 
   static Future<Map<String, dynamic>> getUserData() async {
     final prefs = await SharedPreferences.getInstance();
 
     return {
-      "email": prefs.getString("email") ?? "",
-      "fullName": prefs.getString("fullName") ?? "User",
-      "role": prefs.getString("role") ?? "",
-      "nationalId": prefs.getString("nationalId") ?? "",
-      "dateOfBirth": prefs.getString("dateOfBirth") ?? "",
-      "gender": prefs.getString("gender") ?? "",
-      "city": prefs.getString("city") ?? "",
-      "academicLevel": prefs.getString("academicLevel") ?? "",
-      "profileImageUrl": prefs.getString("profileImageUrl") ?? "assets/logo/logo.jpg",
-      "isActive": prefs.getBool("isActive") ?? false,
-      "emailConfirmed": prefs.getBool("emailConfirmed") ?? false,
-      "createdAt": prefs.getString("createdAt") ?? "",
-      "updatedAt": prefs.getString("updatedAt") ?? "",
+      'email': prefs.getString('email') ?? '',
+      'fullName': prefs.getString('fullName') ?? 'User',
+      'role': prefs.getString('role') ?? '',
+      'nationalId': prefs.getString('nationalId') ?? '',
+      'dateOfBirth': prefs.getString('dateOfBirth') ?? '',
+      'gender': prefs.getString('gender') ?? '',
+      'city': prefs.getString('city') ?? '',
+      'academicLevel': prefs.getString('academicLevel') ?? '',
+      'profileImageUrl':
+          prefs.getString('profileImageUrl') ?? 'assets/logo/logo.jpg',
+      'isActive': prefs.getBool('isActive') ?? false,
+      'emailConfirmed': prefs.getBool('emailConfirmed') ?? false,
+      'createdAt': prefs.getString('createdAt') ?? '',
+      'updatedAt': prefs.getString('updatedAt') ?? '',
     };
   }
 
   static Future<String?> getFullName() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString("fullName");
+    return prefs.getString('fullName');
   }
-
 
   static Future<String?> getUserCreatedRole() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString("role");
+    return prefs.getString('role');
   }
 
   static Future<String?> getUserCreatedProfileImageUrl() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString("profileImageUrl");
+    return prefs.getString('profileImageUrl');
   }
-
-
 }
 
-
-
-
-
 class TokenStorageHelper {
-  static AndroidOptions _getAndroidOptions() => const AndroidOptions(
-    encryptedSharedPreferences: true,
-  );
+  static AndroidOptions _getAndroidOptions() =>
+      const AndroidOptions(encryptedSharedPreferences: true);
+
+  static String _normalizeToken(String? token) {
+    if (token == null) return '';
+    var t = token.trim();
+    // Remove surrounding double quotes if present
+    if (t.length > 1 && t.startsWith('"') && t.endsWith('"')) {
+      t = t.substring(1, t.length - 1).trim();
+    }
+    // Remove Bearer prefix if accidentally stored
+    if (t.toLowerCase().startsWith('bearer ')) {
+      t = t.substring(7).trim();
+    }
+    return t;
+  }
 
   static Future<void> saveTokenSecure(String token) async {
-    final storage =
-    FlutterSecureStorage(aOptions: _getAndroidOptions());
-    await storage.write(key: "tokenKey", value: token);
+    final normalized = _normalizeToken(token);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('tokenKey', normalized);
+
+    if (!kIsWeb) {
+      final storage = FlutterSecureStorage(aOptions: _getAndroidOptions());
+      await storage.write(key: 'tokenKey', value: normalized);
+    }
   }
 
   static Future<String?> getTokenSecure() async {
-    final storage =
-    FlutterSecureStorage(aOptions: _getAndroidOptions());
-    return await storage.read(key: "tokenKey");
+    final prefs = await SharedPreferences.getInstance();
+    final prefsToken = _normalizeToken(prefs.getString('tokenKey'));
+    if (prefsToken.isNotEmpty) {
+      return prefsToken;
+    }
+
+    if (kIsWeb) return null;
+
+    final storage = FlutterSecureStorage(aOptions: _getAndroidOptions());
+    final secureToken = _normalizeToken(await storage.read(key: 'tokenKey'));
+    return secureToken.isNotEmpty ? secureToken : null;
   }
 
   static Future<void> clearToken() async {
-    final storage =
-    FlutterSecureStorage(aOptions: _getAndroidOptions());
-    await storage.delete(key: "tokenKey");
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('tokenKey');
+
+    if (!kIsWeb) {
+      final storage = FlutterSecureStorage(aOptions: _getAndroidOptions());
+      await storage.delete(key: 'tokenKey');
+    }
   }
 }
 
@@ -264,124 +283,115 @@ class UserStorageHelper {
   static Future<void> saveCreatedUserData(CreateUserModel user) async {
     final prefs = await SharedPreferences.getInstance();
 
-    await prefs.setInt("id", user.id);
-    await prefs.setString("email", user.email);
-    await prefs.setString("fullName", user.fullName);
-    await prefs.setString("role", user.role);
-    await prefs.setString("nationalId", user.nationalId);
+    await prefs.setInt('id', user.id);
+    await prefs.setString('email', user.email);
+    await prefs.setString('fullName', user.fullName);
+    await prefs.setString('role', user.role);
+    await prefs.setString('nationalId', user.nationalId);
 
     if (user.dateOfBirth != null) {
-      await prefs.setString("dateOfBirth", user.dateOfBirth!.toIso8601String());
+      await prefs.setString('dateOfBirth', user.dateOfBirth!.toIso8601String());
     }
 
     if (user.gender != null) {
-      await prefs.setString("gender", user.gender!);
+      await prefs.setString('gender', user.gender!);
     }
 
     if (user.city != null) {
-      await prefs.setString("city", user.city!);
+      await prefs.setString('city', user.city!);
     }
 
     if (user.academicInfo != null) {
       final info = user.academicInfo!;
 
       if (info.department != null && info.department!.name != null) {
-        await prefs.setString("academicDepartment", info.department!.name!);
+        await prefs.setString('academicDepartment', info.department!.name!);
       }
 
       if (info.year != null && info.year!.name != null) {
-        await prefs.setString("academicYear", info.year!.name!);
+        await prefs.setString('academicYear', info.year!.name!);
       }
 
       if (info.squadron != null && info.squadron!.name != null) {
-        await prefs.setString("squadron", info.squadron!.name!);
+        await prefs.setString('squadron', info.squadron!.name!);
       }
 
       if (info.admissionYear != null) {
-        await prefs.setInt("admissionYear", info.admissionYear!);
+        await prefs.setInt('admissionYear', info.admissionYear!);
       }
     }
 
     if (user.profileImageUrl != null) {
-      await prefs.setString("profileImageUrl", user.profileImageUrl!);
+      await prefs.setString('profileImageUrl', user.profileImageUrl!);
     }
 
-    await prefs.setBool("isActive", user.accountStatus == "Active");
-    await prefs.setBool("emailConfirmed", user.emailConfirmed);
+    await prefs.setBool('isActive', user.accountStatus == 'Active');
+    await prefs.setBool('emailConfirmed', user.emailConfirmed);
 
-    await prefs.setString("createdAt", user.createdAt.toIso8601String());
-    await prefs.setString("updatedAt", user.updatedAt.toIso8601String());
+    await prefs.setString('createdAt', user.createdAt.toIso8601String());
+    await prefs.setString('updatedAt', user.updatedAt.toIso8601String());
 
     if (user.lastLoginAt != null) {
-      await prefs.setString("lastLoginAt", user.lastLoginAt!.toIso8601String());
+      await prefs.setString('lastLoginAt', user.lastLoginAt!.toIso8601String());
     }
   }
 }
-
-
 
 class VerifyStorageHelper {
   static Future<void> saveVerifyData(UserStatusModel status) async {
     final prefs = await SharedPreferences.getInstance();
 
-    await prefs.setBool("exists", status.exists);
-    await prefs.setBool("isActivated", status.isActivated);
+    await prefs.setBool('exists', status.exists);
+    await prefs.setBool('isActivated', status.isActivated);
     if (status.email != null && status.email!.isNotEmpty) {
-      await prefs.setString("email", status.email!);
+      await prefs.setString('email', status.email!);
     }
   }
 
   static Future<UserStatusModel?> getVerifyData() async {
     final prefs = await SharedPreferences.getInstance();
 
-    if (!prefs.containsKey("exists")) return null;
+    if (!prefs.containsKey('exists')) return null;
 
     return UserStatusModel(
-      email: prefs.getString("email"),
-      exists: prefs.getBool("exists") ?? false,
-      isActivated: prefs.getBool("isActivated") ?? false,
+      email: prefs.getString('email'),
+      exists: prefs.getBool('exists') ?? false,
+      isActivated: prefs.getBool('isActivated') ?? false,
     );
   }
 
   static Future<String?> getSavedEmail() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString("email");
+    return prefs.getString('email');
   }
 
   static Future<void> clearVerifyData() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.remove("exists");
-    await prefs.remove("isActivated");
-    await prefs.remove("email");
+    await prefs.remove('exists');
+    await prefs.remove('isActivated');
+    await prefs.remove('email');
   }
 }
 
 class ActivateUserPrefs {
-  static Future<void> saveActivateUserData(
-      ActivateUserModel model) async {
+  static Future<void> saveActivateUserData(ActivateUserModel model) async {
     final prefs = await SharedPreferences.getInstance();
 
     await prefs.setInt('user_id', model.user.id);
     await prefs.setString('email', model.user.email);
-    await prefs.setString(
-      'fullName',
-      model.user.fullName.split(' ').first,
-    );
+    await prefs.setString('fullName', model.user.fullName.split(' ').first);
     await prefs.setString('role', model.user.role);
 
     if (model.user.nationalId != null) {
-      await prefs.setString(
-          'nationalId', model.user.nationalId!);
+      await prefs.setString('nationalId', model.user.nationalId!);
     }
 
     if (model.user.accountStatus != null) {
-      await prefs.setString(
-          'accountStatus', model.user.accountStatus!);
+      await prefs.setString('accountStatus', model.user.accountStatus!);
     }
 
     if (model.user.profileImageUrl != null) {
-      await prefs.setString(
-          'profileImageUrl', model.user.profileImageUrl!);
+      await prefs.setString('profileImageUrl', model.user.profileImageUrl!);
     }
 
     await prefs.setString('activateMessage', model.message);

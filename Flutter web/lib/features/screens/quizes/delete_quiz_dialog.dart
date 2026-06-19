@@ -1,5 +1,5 @@
 // ============================================================
-// delete_quiz_dialog.dart  — Danger Zone with name confirmation
+// delete_quiz_dialog.dart — Danger Zone with name confirmation
 // ============================================================
 import 'package:flutter/material.dart';
 
@@ -17,7 +17,6 @@ class _DeleteQuizDialogState extends State<DeleteQuizDialog>
   bool _confirmed = false;
   bool _shaking = false;
   late AnimationController _shakeCtrl;
-  late Animation<double> _shakeAnim;
 
   @override
   void initState() {
@@ -26,12 +25,8 @@ class _DeleteQuizDialogState extends State<DeleteQuizDialog>
       vsync: this,
       duration: const Duration(milliseconds: 400),
     );
-    _shakeAnim = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(parent: _shakeCtrl, curve: Curves.elasticIn),
-    );
     _controller.addListener(() {
-      final matches =
-          _controller.text.trim() == widget.quizTitle.trim();
+      final matches = _controller.text.trim() == widget.quizTitle.trim();
       if (matches != _confirmed) setState(() => _confirmed = matches);
     });
   }
@@ -76,7 +71,6 @@ class _DeleteQuizDialogState extends State<DeleteQuizDialog>
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // ── Danger header ──────────────────────────────
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(24),
@@ -97,11 +91,8 @@ class _DeleteQuizDialogState extends State<DeleteQuizDialog>
                       color: Colors.white.withOpacity(0.2),
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(
-                      Icons.warning_amber_rounded,
-                      color: Colors.white,
-                      size: 32,
-                    ),
+                    child: const Icon(Icons.warning_amber_rounded,
+                        color: Colors.white, size: 32),
                   ),
                   const SizedBox(height: 12),
                   const Text(
@@ -116,61 +107,45 @@ class _DeleteQuizDialogState extends State<DeleteQuizDialog>
                   const SizedBox(height: 4),
                   const Text(
                     'This action cannot be undone',
-                    style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: 13,
-                    ),
+                    style: TextStyle(color: Colors.white70, fontSize: 13),
                   ),
                 ],
               ),
             ),
-
-            // ── Body ──────────────────────────────────────
             Padding(
               padding: const EdgeInsets.all(24),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Warning text
                   Container(
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
                       color: const Color(0xFFFFF1F2),
                       borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: const Color(0xFFFFCDD2),
-                      ),
+                      border: Border.all(color: const Color(0xFFFFCDD2)),
                     ),
                     child: Row(
                       children: [
-                        const Icon(
-                          Icons.info_outline_rounded,
-                          color: Color(0xFFEF4444),
-                          size: 18,
-                        ),
+                        const Icon(Icons.info_outline_rounded,
+                            color: Color(0xFFEF4444), size: 18),
                         const SizedBox(width: 10),
                         Expanded(
                           child: RichText(
                             text: TextSpan(
                               style: const TextStyle(
-                                fontSize: 13,
-                                color: Color(0xFF991B1B),
-                              ),
+                                  fontSize: 13, color: Color(0xFF991B1B)),
                               children: [
                                 const TextSpan(
-                                  text:
-                                      'You are about to permanently delete the quiz ',
-                                ),
+                                    text:
+                                        'You are about to permanently delete the quiz '),
                                 TextSpan(
                                   text: '"${widget.quizTitle}"',
                                   style: const TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                  ),
+                                      fontWeight: FontWeight.w700),
                                 ),
                                 const TextSpan(
-                                  text:
-                                      ' along with all its questions, answers, and student results.',
-                                ),
+                                    text:
+                                        ' along with all its questions, options, and student attempts.'),
                               ],
                             ),
                           ),
@@ -178,10 +153,7 @@ class _DeleteQuizDialogState extends State<DeleteQuizDialog>
                       ],
                     ),
                   ),
-
                   const SizedBox(height: 20),
-
-                  // Confirmation label
                   RichText(
                     text: TextSpan(
                       style: const TextStyle(
@@ -204,18 +176,14 @@ class _DeleteQuizDialogState extends State<DeleteQuizDialog>
                     ),
                   ),
                   const SizedBox(height: 8),
-
-                  // Input with shake animation
                   AnimatedBuilder(
-                    animation: _shakeAnim,
+                    animation: _shakeCtrl,
                     builder: (context, child) {
                       final offset = _shaking
-                          ? 8 * (0.5 - (_shakeAnim.value % 1).abs()).abs()
+                          ? 8 * (0.5 - (_shakeCtrl.value % 1).abs()).abs()
                           : 0.0;
                       return Transform.translate(
-                        offset: Offset(offset, 0),
-                        child: child,
-                      );
+                          offset: Offset(offset, 0), child: child);
                     },
                     child: TextField(
                       controller: _controller,
@@ -228,17 +196,14 @@ class _DeleteQuizDialogState extends State<DeleteQuizDialog>
                       decoration: InputDecoration(
                         hintText: widget.quizTitle,
                         hintStyle: TextStyle(
-                          color: Colors.grey.shade400,
-                          fontFamily: 'monospace',
-                        ),
+                            color: Colors.grey.shade400,
+                            fontFamily: 'monospace'),
                         filled: true,
                         fillColor: _confirmed
                             ? const Color(0xFFF0FDF4)
                             : const Color(0xFFFAFAFA),
                         contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 14,
-                          vertical: 12,
-                        ),
+                            horizontal: 14, vertical: 12),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide(
@@ -265,18 +230,13 @@ class _DeleteQuizDialogState extends State<DeleteQuizDialog>
                           ),
                         ),
                         suffixIcon: _confirmed
-                            ? const Icon(
-                                Icons.check_circle_rounded,
-                                color: Color(0xFF10B981),
-                              )
+                            ? const Icon(Icons.check_circle_rounded,
+                                color: Color(0xFF10B981))
                             : null,
                       ),
                     ),
                   ),
-
                   const SizedBox(height: 24),
-
-                  // Buttons
                   Row(
                     children: [
                       Expanded(
@@ -289,13 +249,10 @@ class _DeleteQuizDialogState extends State<DeleteQuizDialog>
                               side: BorderSide(color: Colors.grey.shade200),
                             ),
                           ),
-                          child: const Text(
-                            'Cancel',
-                            style: TextStyle(
-                              color: Color(0xFF6B7280),
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
+                          child: const Text('Cancel',
+                              style: TextStyle(
+                                  color: Color(0xFF6B7280),
+                                  fontWeight: FontWeight.w600)),
                         ),
                       ),
                       const SizedBox(width: 12),
@@ -320,10 +277,9 @@ class _DeleteQuizDialogState extends State<DeleteQuizDialog>
                               children: const [
                                 Icon(Icons.delete_forever_rounded, size: 18),
                                 SizedBox(width: 6),
-                                Text(
-                                  'Delete Forever',
-                                  style: TextStyle(fontWeight: FontWeight.w700),
-                                ),
+                                Text('Delete Forever',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w700)),
                               ],
                             ),
                           ),
@@ -341,7 +297,6 @@ class _DeleteQuizDialogState extends State<DeleteQuizDialog>
   }
 }
 
-// ── Helper to show the dialog ────────────────────────────────
 Future<bool> showDeleteQuizDialog(
   BuildContext context, {
   required String quizTitle,

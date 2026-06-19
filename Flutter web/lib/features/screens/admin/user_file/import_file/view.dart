@@ -3,7 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:lms/features/screens/admin/user_file/import_file/state_managment/cubit.dart';
 import 'package:lms/features/screens/admin/user_file/import_file/state_managment/states.dart';
-import '../../../../../core/cons/Colors/app_colors.dart';
+import 'package:lms/core/widgets/management/management_layout.dart';
+import 'package:lms/core/widgets/management/management_menu_config.dart';
 import 'model/model.dart';
 
 class ImportStudentsScreen extends StatefulWidget {
@@ -14,6 +15,7 @@ class ImportStudentsScreen extends StatefulWidget {
 }
 
 class _ImportStudentsScreenState extends State<ImportStudentsScreen> {
+  String selectedMenuItem = 'Import users File';
   String? selectedFileName;
   List<int>? selectedFileBytes;
   List<ImportStudentsResponseModel> allResults = [];
@@ -22,20 +24,10 @@ class _ImportStudentsScreenState extends State<ImportStudentsScreen> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => ImportStudentsCubit(),
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              MYColors.gradientColor_3,
-              MYColors.gradientColor_2.withValues(alpha: 0.25),
-              MYColors.gradientColor_3,
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-        child: Scaffold(
-          body: BlocConsumer<ImportStudentsCubit, ImportStudentsState>(
+      child: ManagementScaffold(
+        selectedMenuItem: selectedMenuItem,
+        role: ManagementRole.admin,
+        child: BlocConsumer<ImportStudentsCubit, ImportStudentsState>(
             listener: (context, state) {
               if (state is ImportStudentsError) {
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -100,7 +92,6 @@ class _ImportStudentsScreenState extends State<ImportStudentsScreen> {
             },
           ),
         ),
-      ),
     );
   }
 

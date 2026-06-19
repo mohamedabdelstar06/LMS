@@ -1,5 +1,6 @@
 // ============================================================
-// course_layout.dart  — updated with live Quizzes + badge
+// course_layout_final.dart
+// Quizzes + Questions both wired up
 // ============================================================
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -8,9 +9,6 @@ import 'package:lms/core/helpers/cach_helper/shared_pref_helper.dart';
 import 'package:lms/features/screens/admin/courses/course_details/assignments/assignmnet_repo.dart';
 import 'package:lms/features/screens/admin/courses/course_details/assignments/state_mangmnet/assignments_cubit.dart';
 import 'package:lms/features/screens/admin/courses/course_details/assignments/view/view.dart';
-import 'package:lms/features/screens/quizes/quiz_cubit.dart';
-import 'package:lms/features/screens/quizes/quiz_repository.dart';
-import 'package:lms/features/screens/quizes/quiz_state.dart';
 import 'package:lms/features/screens/quizes/quizzes_screen.dart';
 
 import '../home_courses/model/model.dart';
@@ -20,10 +18,9 @@ import '../course_details/lectures/state_managment/lectures_cubit.dart';
 import '../course_details/lectures/view/view.dart';
 import 'lectures/functions/sideBar.dart';
 
-// Quizzes
+// ── Feature imports ───────────────────────────────────────────
 
 
-// ── Shared Dio instance ───────────────────────────────────────
 Dio _buildDio() =>
     Dio(
         BaseOptions(
@@ -45,12 +42,15 @@ Dio _buildDio() =>
         ),
       );
 
-// ─────────────────────────────────────────────────────────────
-
 class CourseLayout extends StatefulWidget {
-  const CourseLayout({super.key, required this.courseModel});
+  const CourseLayout({
+    super.key,
+    required this.courseModel,
+    this.isAdmin = true,
+  });
 
   final GetCoursesModel courseModel;
+  final bool isAdmin;
 
   @override
   State<CourseLayout> createState() => CourseLayoutState();
@@ -59,41 +59,21 @@ class CourseLayout extends StatefulWidget {
 class CourseLayoutState extends State<CourseLayout> {
   bool _collapsed = false;
   String _activeLabel = 'Course Details';
-  bool _isAdmin = false;
-  bool _roleLoaded = false;
 
   late final AssignmentCubit _assignmentCubit;
-  late final QuizCubit _quizCubit;
 
   @override
   void initState() {
     super.initState();
-    _loadRole();
     _assignmentCubit = AssignmentCubit(
       repository: AssignmentRepository(_buildDio()),
       courseId: widget.courseModel.id,
     )..loadAssignments();
-
-    _quizCubit = QuizCubit(
-      repository: QuizRepository(_buildDio()),
-      courseId: widget.courseModel.id,
-      role: UserRole.admin,
-    )..loadQuizzes();
-  }
-
-  Future<void> _loadRole() async {
-    final role = await PrefHelper.getRole();
-    if (!mounted) return;
-    setState(() {
-      _isAdmin = role == 'Admin' || role == 'Instructor';
-      _roleLoaded = true;
-    });
   }
 
   @override
   void dispose() {
     _assignmentCubit.close();
-    _quizCubit.close();
     super.dispose();
   }
 
@@ -101,33 +81,18 @@ class CourseLayoutState extends State<CourseLayout> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider.value(value: _assignmentCubit),
-        BlocProvider.value(value: _quizCubit),
-      ],
+    return BlocProvider.value(
+      value: _assignmentCubit,
       child: Scaffold(
         backgroundColor: const Color(0xFFF0F7FF),
         body: Row(
           children: [
-            BlocBuilder<QuizCubit, QuizState>(
-              builder: (context, quizState) {
-                // Resolve live quiz count from state
-                int quizCount = _quizCubit.quizCount;
-
-                return Sidebar(
-                  collapsed: _collapsed,
-                  onToggle: () => setState(() => _collapsed = !_collapsed),
-                  activeLabel: _activeLabel,
-                  courseModel: widget.courseModel,
-                  onIteSelected: setActiveLabel,
-                  // Pass badge counts so the sidebar can display them
-                  // badgeCounts: {
-                  //   'Assignments': _assignmentCubit.assignments.length,
-                  //   'Quizzes': quizCount,
-                  // },
-                );
-              },
+            Sidebar(
+              collapsed: _collapsed,
+              onToggle: () => setState(() => _collapsed = !_collapsed),
+              activeLabel: _activeLabel,
+              courseModel: widget.courseModel,
+              onIteSelected: setActiveLabel,
             ),
             Expanded(child: _buildContent()),
           ],
@@ -154,30 +119,29 @@ class CourseLayoutState extends State<CourseLayout> {
           ),
         );
 
-      // ── Quizzes: now fully functional ──────────────────────
+      // ── Quizzes: fully functional ────────────────────────
       case 'Quizzes':
-        return BlocProvider.value(
-          value: _quizCubit,
-          child: QuizzesScreen(courseModel: widget.courseModel, isAdmin: _isAdmin),
+        return QuizzesScreen(
+          courseModel: widget.courseModel,
+          isAdmin: widget.isAdmin,
         );
 
       case 'Assignments':
         return AssignmentsScreen(courseModel: widget.courseModel);
 
+      // ── Questions: browse all questions for this course ───
+      // Typically admin use-case (not tied to a specific quiz)
+      // Shows a picker first then loads questions for that quiz
       case 'Questions':
-        return const _ComingSoon(
-          icon: Icons.help_outline_rounded,
-          label: 'Questions',
-          count: null,
-          color: Color(0xFFF59E0B),
-          bgColor: Color(0xFFFEF3C7),
+        return _QuestionsPlaceholder(
+          courseModel: widget.courseModel,
+          isAdmin: widget.isAdmin,
         );
 
       case 'Settings':
         return const _ComingSoon(
           icon: Icons.settings_rounded,
           label: 'Settings',
-          count: null,
           color: Color(0xFF64748B),
           bgColor: Color(0xFFF1F5F9),
         );
@@ -192,19 +156,100 @@ class CourseLayoutState extends State<CourseLayout> {
   }
 }
 
-// ── Coming Soon placeholder ───────────────────────────────────
+// ── Questions placeholder (prompts user to pick a quiz first) ─
+class _QuestionsPlaceholder extends StatelessWidget {
+  const _QuestionsPlaceholder({
+    required this.courseModel,
+    required this.isAdmin,
+  });
+  final GetCoursesModel courseModel;
+  final bool isAdmin;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: const Color(0xFFF0F7FF),
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 88,
+              height: 88,
+              decoration: BoxDecoration(
+                color: const Color(0xFFFEF3C7),
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFFF59E0B).withOpacity(0.2),
+                    blurRadius: 24,
+                    offset: const Offset(0, 8),
+                  ),
+                ],
+              ),
+              child: const Icon(
+                Icons.help_outline_rounded,
+                color: Color(0xFFF59E0B),
+                size: 42,
+              ),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              'Questions',
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w800,
+                color: Color(0xFF1E1B4B),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Open a quiz from the Quizzes tab,\nthen tap "Questions" to manage them.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey.shade500,
+                height: 1.5,
+              ),
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton.icon(
+              onPressed: () {
+                // Navigate to Quizzes tab
+                final state = context
+                    .findAncestorStateOfType<CourseLayoutState>();
+                state?.setActiveLabel('Quizzes');
+              },
+              icon: const Icon(Icons.quiz_rounded, size: 18),
+              label: const Text('Go to Quizzes'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF6366F1),
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 14,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _ComingSoon extends StatelessWidget {
   const _ComingSoon({
     required this.icon,
     required this.label,
-    required this.count,
     required this.color,
     required this.bgColor,
   });
-
   final IconData icon;
   final String label;
-  final int? count;
   final Color color;
   final Color bgColor;
 
@@ -242,28 +287,6 @@ class _ComingSoon extends StatelessWidget {
                 letterSpacing: -0.3,
               ),
             ),
-            if (count != null) ...[
-              const SizedBox(height: 8),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 14,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  color: bgColor,
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: color.withOpacity(0.3)),
-                ),
-                child: Text(
-                  '$count available',
-                  style: TextStyle(
-                    color: color,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ],
             const SizedBox(height: 12),
             Text(
               'Coming soon...',

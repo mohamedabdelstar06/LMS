@@ -5,7 +5,8 @@ import 'package:lms/features/screens/admin/squadron/create_squadron/state_managm
 
 import '../../../../../core/cons/Colors/app_colors.dart';
 import '../../../../../core/helpers/logout_server/logout.dart';
-import '../../../../../core/widgets/custome_sidebar.dart';
+import 'package:lms/core/widgets/management/management_layout.dart';
+import 'package:lms/core/widgets/management/management_menu_config.dart';
 import '../../../Announcement/view.dart';
 import '../../admin_profile/view.dart';
 import '../../courses/home_courses/view.dart';
@@ -70,54 +71,35 @@ class _CreateDepartmentScreenState extends State<CreateSquadronScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              MYColors.gradientColor_3,
-              MYColors.gradientColor_2.withOpacity(0.25),
-              MYColors.gradientColor_3,
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-        child: Row(
-          children: [
-            CustomeSidebar(selectedMenuItem: selectedMenuItem),
-
-            Expanded(
-              child: BlocConsumer<SquadronCubit, SquadronState>(
-                listener: (context, state) {
-                  if (state is SquadronSuccess) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(state.message),
-                        backgroundColor: Colors.green,
-                      ),
-                    );
-                    _clearForm();
-                  }
-                  if (state is SquadronError) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(state.message),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
-                  }
-                },
-                builder: (context, state) {
-                  return SingleChildScrollView(
-                    padding: const EdgeInsets.all(40),
-                    child: Center(child: _buildFormContainer(state)),
-                  );
-                },
+    return ManagementScaffold(
+      selectedMenuItem: selectedMenuItem,
+      role: ManagementRole.admin,
+      child: BlocConsumer<SquadronCubit, SquadronState>(
+        listener: (context, state) {
+          if (state is SquadronSuccess) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.green,
               ),
-            ),
-          ],
-        ),
+            );
+            _clearForm();
+          }
+          if (state is SquadronError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+        },
+        builder: (context, state) {
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(40),
+            child: Center(child: _buildFormContainer(state)),
+          );
+        },
       ),
     );
   }

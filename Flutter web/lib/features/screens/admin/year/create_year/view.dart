@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lms/core/widgets/custome_sidebar.dart';
+import 'package:lms/core/widgets/management/management_layout.dart';
+import 'package:lms/core/widgets/management/management_menu_config.dart';
 import 'package:lms/features/screens/admin/users/get_users/view.dart';
 import 'package:lms/features/screens/admin/year/create_year/state_management/years_cubit.dart';
 import 'package:lms/features/screens/admin/year/create_year/state_management/years_states.dart';
@@ -93,24 +94,10 @@ class _CreateYearScreenState extends State<CreateYearScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              MYColors.gradientColor_3,
-              MYColors.gradientColor_2.withOpacity(0.25),
-              MYColors.gradientColor_3,
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-        child: Row(
-          children: [
-            CustomeSidebar(selectedMenuItem: selectedMenuItem),
-            Expanded(
-              child: BlocConsumer<YearCubit, YearState>(
+    return ManagementScaffold(
+      selectedMenuItem: selectedMenuItem,
+      role: ManagementRole.admin,
+      child: BlocConsumer<YearCubit, YearState>(
                 listener: (context, state) {
                   if (state is YearSuccess) {
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -137,10 +124,6 @@ class _CreateYearScreenState extends State<CreateYearScreen> {
                   );
                 },
               ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 
