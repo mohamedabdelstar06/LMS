@@ -7,7 +7,7 @@ import 'package:lms/features/screens/instructor/teacher_profile/state_managment/
 import '../../../../../core/cons/api_helper_resources/api_resources.dart';
 
 import '../../../../../core/helpers/cach_helper/shared_pref_helper.dart';
-import '../model/view.dart';
+import '../../../../../core/helpers/profile_response_parser.dart';
 
 
 class TeacherProfileCubit extends Cubit<TeacherProfileState> {
@@ -33,7 +33,7 @@ class TeacherProfileCubit extends Cubit<TeacherProfileState> {
       )).get(ApiResources.getProfileEndpoint);
 
       if (response.statusCode == 200) {
-        final model = TeacherProfileUser.fromJson(response.data);
+        final model = parseTeacherProfileResponse(response.data);
         emit(TeacherProfileLoaded(profile: model));
       } else {
         emit(TeacherProfileError(
@@ -88,7 +88,7 @@ class TeacherProfileCubit extends Cubit<TeacherProfileState> {
       );
 
       if (response.statusCode == 200) {
-        final model = TeacherProfileUser.fromJson(response.data);
+        final model = parseTeacherProfileResponse(response.data);
         emit(TeacherProfileLoaded(profile: model));
       } else {
         emit(TeacherProfileError(message: "Failed to update profile"));

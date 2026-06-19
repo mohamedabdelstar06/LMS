@@ -6,13 +6,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
+import 'package:lms/core/helpers/api_url_helper.dart';
 import 'package:lms/features/screens/instructor/home_courses/view.dart';
 import 'package:lms/features/screens/instructor/teacher_profile/state_managment/cubit_d_profile.dart';
 import 'package:lms/features/screens/instructor/teacher_profile/state_managment/state_d_profile.dart';
 
 
 
-import '../../../../core/cons/Colors/app_colors.dart';
+import 'package:lms/core/widgets/management/management_layout.dart';
+import 'package:lms/core/widgets/management/management_menu_config.dart';
 import '../../../../core/helpers/logout_server/logout.dart';
 import '../../../../generated/assets.dart';
 import '../../Announcement/view.dart';
@@ -59,13 +61,7 @@ class WebImage extends StatelessWidget {
 }
 
 String buildImageUrl(String? imageUrl) {
-  if (imageUrl == null || imageUrl.isEmpty) return '';
-
-  if (imageUrl.startsWith('http')) return imageUrl;
-
-  final cleanPath = imageUrl.startsWith('/') ? imageUrl.substring(1) : imageUrl;
-
-  return 'https://skylearn.runasp.net/$cleanPath';
+  return ApiUrlHelper.resolveMediaUrl(imageUrl) ?? '';
 }
 
 class TeacherProfileScreen extends StatefulWidget {
@@ -196,44 +192,25 @@ class _ProfileScreenState extends State<TeacherProfileScreen> {
         onTap: () {
           FocusScope.of(context).unfocus();
         },
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                MYColors.gradientColor_3,
-                MYColors.gradientColor_2.withValues(alpha: 0.25),
-                MYColors.gradientColor_3,
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-          child: Scaffold(
-            backgroundColor: Colors.transparent,
-            body: Row(
-              children: [
-                _buildSidebar(),
-                Expanded(
-                  child: BlocBuilder<TeacherProfileCubit, TeacherProfileState>(
-                    builder: (context, state) {
-                      if (state is TeacherProfileLoading) {
-                        return const Center(child: CircularProgressIndicator());
-                      } else if (state is TeacherProfileError) {
-                        return Center(child: Text(state.message));
-                      } else if (state is TeacherProfileLoaded) {
-                        final user = state.profile.user;
+        child: ManagementScaffold(
+        selectedMenuItem: selectedMenuItem,
+        role: ManagementRole.instructor,
+        child: BlocBuilder<TeacherProfileCubit, TeacherProfileState>(
+          builder: (context, state) {
+            if (state is TeacherProfileLoading) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is TeacherProfileError) {
+              return Center(child: Text(state.message));
+            } else if (state is TeacherProfileLoaded) {
+              final user = state.profile.user;
 
-                        _initControllers(user);
-                        return _buildProfileContent(user: user);
-                      }
-                      return const Center(child: Text('Loading...'));
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
+              _initControllers(user);
+              return _buildProfileContent(user: user);
+            }
+            return const Center(child: Text('Loading...'));
+          },
         ),
+      ),
       ),
     );
   }

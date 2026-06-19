@@ -4,7 +4,8 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lms/core/widgets/custome_sidebar.dart';
+import 'package:lms/core/widgets/management/management_layout.dart';
+import 'package:lms/core/widgets/management/management_menu_config.dart';
 import '../../../../../core/cons/Colors/app_colors.dart';
 import '../../../../../core/helpers/logout_server/logout.dart';
 import '../../../Announcement/view.dart';
@@ -167,29 +168,10 @@ class _ProfileScreenState extends State<CreateUserScreen> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => CreateUserCubit(),
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              MYColors.gradientColor_3,
-              MYColors.gradientColor_2.withValues(alpha: 0.25),
-              MYColors.gradientColor_3,
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          body: Row(
-            children: [
-              //_buildSidebar(),
-              CustomeSidebar(selectedMenuItem: selectedMenuItem),
-              Expanded(child: _buildProfileContent()),
-            ],
-          ),
-        ),
+      child: ManagementScaffold(
+        selectedMenuItem: selectedMenuItem,
+        role: ManagementRole.admin,
+        child: _buildProfileContent(),
       ),
     );
   }

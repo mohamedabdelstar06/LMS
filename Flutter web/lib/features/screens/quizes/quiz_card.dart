@@ -8,20 +8,27 @@ class QuizCard extends StatelessWidget {
   const QuizCard({
     super.key,
     required this.quiz,
+    required this.isAdmin,
     required this.onTap,
-    required this.onEdit,
-    required this.onDelete,
-    required this.onResults,
+    this.onEdit,
+    this.onDelete,
+    this.onResults,
+    this.onToggleVisibility,
   });
 
   final QuizModel quiz;
+  final bool isAdmin;
   final VoidCallback onTap;
-  final VoidCallback onEdit;
-  final VoidCallback onDelete;
-  final VoidCallback onResults;
+  final VoidCallback? onEdit;
+  final VoidCallback? onDelete;
+  final VoidCallback? onResults;
+  final VoidCallback? onToggleVisibility;
 
   @override
   Widget build(BuildContext context) {
+    final isExpired =
+        quiz.deadLineDate != null && quiz.deadLineDate!.isBefore(DateTime.now());
+
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
@@ -38,7 +45,7 @@ class QuizCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ── Header ──────────────────────────────────────
+          // Header
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
@@ -48,9 +55,7 @@ class QuizCard extends StatelessWidget {
                   const Color(0xFF8B5CF6).withOpacity(0.04),
                 ],
               ),
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(16),
-              ),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
             ),
             child: Row(
               children: [
@@ -65,8 +70,10 @@ class QuizCard extends StatelessWidget {
                     ),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Icon(
-                    Icons.quiz_rounded,
+                  child: Icon(
+                    quiz.isAiGenerated
+                        ? Icons.auto_awesome
+                        : Icons.quiz_rounded,
                     color: Colors.white,
                     size: 24,
                   ),
@@ -76,25 +83,46 @@ class QuizCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        quiz.title,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          color: Color(0xFF1E1B4B),
-                          letterSpacing: -0.3,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              quiz.title,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                color: Color(0xFF1E1B4B),
+                                letterSpacing: -0.3,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          if (quiz.isAiGenerated)
+                            Container(
+                              margin: const EdgeInsets.only(left: 6),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 6, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF8B5CF6).withOpacity(0.12),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: const Text(
+                                'AI',
+                                style: TextStyle(
+                                  fontSize: 9,
+                                  fontWeight: FontWeight.w800,
+                                  color: Color(0xFF8B5CF6),
+                                ),
+                              ),
+                            ),
+                        ],
                       ),
-                      if (quiz.description != null) ...[
+                      if (quiz.description.isNotEmpty) ...[
                         const SizedBox(height: 4),
                         Text(
-                          quiz.description!,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey.shade500,
-                          ),
+                          quiz.description,
+                          style: TextStyle(fontSize: 12, color: Colors.grey.shade500),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -102,98 +130,143 @@ class QuizCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                _StatusBadge(isPublished: quiz.isPublished),
+                _StatusBadge(isVisible: quiz.isVisible, isExpired: isExpired),
               ],
             ),
           ),
 
-          // ── Stats Row ────────────────────────────────────
+          // Stats row
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-            child: Row(
+            child: Wrap(
+              spacing: 8,
+              runSpacing: 8,
               children: [
                 _StatChip(
                   icon: Icons.help_outline_rounded,
-                  label: '${quiz.questionsCount} Qs',
+                  label: '${quiz.questionCount} Qs',
                   color: const Color(0xFF6366F1),
                 ),
-                const SizedBox(width: 10),
-                _StatChip(
-                  icon: Icons.timer_outlined,
-                  label: '${quiz.durationMinutes} min',
-                  color: const Color(0xFF0EA5E9),
-                ),
-                const SizedBox(width: 10),
+                if (quiz.timeLimitMinutes != null)
+                  _StatChip(
+                    icon: Icons.timer_outlined,
+                    label: '${quiz.timeLimitMinutes} min',
+                    color: const Color(0xFF0EA5E9),
+                  ),
                 _StatChip(
                   icon: Icons.verified_outlined,
                   label: '${quiz.passingScore.toInt()}% pass',
                   color: const Color(0xFF10B981),
                 ),
+                _StatChip(
+                  icon: Icons.replay_rounded,
+                  label: '${quiz.maxAttempts} ${quiz.maxAttempts == 1 ? "try" : "tries"}',
+                  color: const Color(0xFFF59E0B),
+                ),
+                if (quiz.targetSquadronName != null)
+                  _StatChip(
+                    icon: Icons.groups_rounded,
+                    label: quiz.targetSquadronName!,
+                    color: const Color(0xFFEC4899),
+                  ),
               ],
             ),
           ),
 
-          // ── Action Row ───────────────────────────────────
+          // Actions
           Container(
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-            child: Row(
-              children: [
-                Expanded(
-                  child: _ActionButton(
-                    icon: Icons.play_arrow_rounded,
-                    label: 'Take Quiz',
-                    color: const Color(0xFF6366F1),
-                    onTap: onTap,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                _IconActionButton(
-                  icon: Icons.bar_chart_rounded,
-                  color: const Color(0xFF0EA5E9),
-                  tooltip: 'Results',
-                  onTap: onResults,
-                ),
-                const SizedBox(width: 8),
-                _IconActionButton(
-                  icon: Icons.edit_rounded,
-                  color: const Color(0xFFF59E0B),
-                  tooltip: 'Edit',
-                  onTap: onEdit,
-                ),
-                const SizedBox(width: 8),
-                _IconActionButton(
-                  icon: Icons.delete_outline_rounded,
-                  color: const Color(0xFFEF4444),
-                  tooltip: 'Delete',
-                  onTap: onDelete,
-                ),
-              ],
-            ),
+            child: isAdmin ? _buildAdminActions(context, isExpired) : _buildStudentActions(context, isExpired),
           ),
         ],
       ),
     );
   }
+
+  Widget _buildAdminActions(BuildContext context, bool isExpired) {
+    return Row(
+      children: [
+        Expanded(
+          child: _ActionButton(
+            icon: Icons.bar_chart_rounded,
+            label: 'Results',
+            color: const Color(0xFF0EA5E9),
+            onTap: onResults ?? () {},
+          ),
+        ),
+        const SizedBox(width: 8),
+        _IconActionButton(
+          icon: quiz.isVisible ? Icons.visibility_rounded : Icons.visibility_off_rounded,
+          color: quiz.isVisible ? const Color(0xFF10B981) : Colors.grey,
+          tooltip: quiz.isVisible ? 'Visible to students' : 'Hidden from students',
+          onTap: onToggleVisibility ?? () {},
+        ),
+        const SizedBox(width: 8),
+        _IconActionButton(
+          icon: Icons.edit_rounded,
+          color: const Color(0xFFF59E0B),
+          tooltip: 'Edit',
+          onTap: onEdit ?? () {},
+        ),
+        const SizedBox(width: 8),
+        _IconActionButton(
+          icon: Icons.delete_outline_rounded,
+          color: const Color(0xFFEF4444),
+          tooltip: 'Delete',
+          onTap: onDelete ?? () {},
+        ),
+      ],
+    );
+  }
+
+  Widget _buildStudentActions(BuildContext context, bool isExpired) {
+    return Row(
+      children: [
+        Expanded(
+          child: _ActionButton(
+            icon: isExpired ? Icons.lock_outline_rounded : Icons.play_arrow_rounded,
+            label: isExpired ? 'Closed' : 'Take Quiz',
+            color: isExpired ? Colors.grey : const Color(0xFF6366F1),
+            onTap: isExpired ? () {} : onTap,
+          ),
+        ),
+        const SizedBox(width: 8),
+        _IconActionButton(
+          icon: Icons.bar_chart_rounded,
+          color: const Color(0xFF0EA5E9),
+          tooltip: 'My Result',
+          onTap: onResults ?? () {},
+        ),
+      ],
+    );
+  }
 }
 
 class _StatusBadge extends StatelessWidget {
-  const _StatusBadge({required this.isPublished});
-  final bool isPublished;
+  const _StatusBadge({required this.isVisible, required this.isExpired});
+  final bool isVisible;
+  final bool isExpired;
 
   @override
   Widget build(BuildContext context) {
+    final Color color;
+    final String label;
+    if (isExpired) {
+      color = const Color(0xFFEF4444);
+      label = 'Expired';
+    } else if (isVisible) {
+      color = const Color(0xFF10B981);
+      label = 'Live';
+    } else {
+      color = const Color(0xFFF59E0B);
+      label = 'Hidden';
+    }
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: isPublished
-            ? const Color(0xFF10B981).withOpacity(0.12)
-            : const Color(0xFFF59E0B).withOpacity(0.12),
+        color: color.withOpacity(0.12),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: isPublished
-              ? const Color(0xFF10B981).withOpacity(0.3)
-              : const Color(0xFFF59E0B).withOpacity(0.3),
-        ),
+        border: Border.all(color: color.withOpacity(0.3)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -201,24 +274,12 @@ class _StatusBadge extends StatelessWidget {
           Container(
             width: 6,
             height: 6,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: isPublished
-                  ? const Color(0xFF10B981)
-                  : const Color(0xFFF59E0B),
-            ),
+            decoration: BoxDecoration(shape: BoxShape.circle, color: color),
           ),
           const SizedBox(width: 5),
-          Text(
-            isPublished ? 'Live' : 'Draft',
-            style: TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w600,
-              color: isPublished
-                  ? const Color(0xFF10B981)
-                  : const Color(0xFFF59E0B),
-            ),
-          ),
+          Text(label,
+              style:
+                  TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: color)),
         ],
       ),
     );
@@ -226,12 +287,7 @@ class _StatusBadge extends StatelessWidget {
 }
 
 class _StatChip extends StatelessWidget {
-  const _StatChip({
-    required this.icon,
-    required this.label,
-    required this.color,
-  });
-
+  const _StatChip({required this.icon, required this.label, required this.color});
   final IconData icon;
   final String label;
   final Color color;
@@ -240,23 +296,13 @@ class _StatChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.08),
-        borderRadius: BorderRadius.circular(8),
-      ),
+      decoration: BoxDecoration(color: color.withOpacity(0.08), borderRadius: BorderRadius.circular(8)),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon, size: 13, color: color),
           const SizedBox(width: 4),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w600,
-              color: color,
-            ),
-          ),
+          Text(label, style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: color)),
         ],
       ),
     );
@@ -264,13 +310,7 @@ class _StatChip extends StatelessWidget {
 }
 
 class _ActionButton extends StatelessWidget {
-  const _ActionButton({
-    required this.icon,
-    required this.label,
-    required this.color,
-    required this.onTap,
-  });
-
+  const _ActionButton({required this.icon, required this.label, required this.color, required this.onTap});
   final IconData icon;
   final String label;
   final Color color;
@@ -291,14 +331,7 @@ class _ActionButton extends StatelessWidget {
             children: [
               Icon(icon, color: Colors.white, size: 16),
               const SizedBox(width: 6),
-              Text(
-                label,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
+              Text(label, style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600)),
             ],
           ),
         ),
@@ -308,13 +341,7 @@ class _ActionButton extends StatelessWidget {
 }
 
 class _IconActionButton extends StatelessWidget {
-  const _IconActionButton({
-    required this.icon,
-    required this.color,
-    required this.tooltip,
-    required this.onTap,
-  });
-
+  const _IconActionButton({required this.icon, required this.color, required this.tooltip, required this.onTap});
   final IconData icon;
   final Color color;
   final String tooltip;
@@ -330,10 +357,7 @@ class _IconActionButton extends StatelessWidget {
         child: InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(10),
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: Icon(icon, color: color, size: 18),
-          ),
+          child: Padding(padding: const EdgeInsets.all(10), child: Icon(icon, color: color, size: 18)),
         ),
       ),
     );

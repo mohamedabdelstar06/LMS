@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lms/core/widgets/custome_drop_down.dart';
-import 'package:lms/core/widgets/custome_sidebar.dart';
+import 'package:lms/core/widgets/management/management_layout.dart';
+import 'package:lms/core/widgets/management/management_menu_config.dart';
 import 'package:lms/core/widgets/cutome_test_field.dart';
 import 'package:lms/core/widgets/dateDropDown.dart';
 import 'package:lms/core/widgets/profile_picture.dart';
 import 'package:lms/features/screens/admin/admin_profile/state_management/cubit_d_profile.dart';
 import 'package:lms/features/screens/admin/admin_profile/state_management/state_d_profile.dart';
 
-import '../../../../core/cons/Colors/app_colors.dart';
 import 'model/view.dart';
-
 class AdminProfileScreen extends StatelessWidget {
   const AdminProfileScreen({super.key});
 
@@ -127,72 +126,53 @@ class _AdminProfileContentState extends State<_AdminProfileContent> {
       onTap: () {
         FocusScope.of(context).unfocus();
       },
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              MYColors.gradientColor_3,
-              MYColors.gradientColor_2.withValues(alpha: 0.25),
-              MYColors.gradientColor_3,
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          body: Row(
-            children: [
-              CustomeSidebar(selectedMenuItem: selectedMenuItem),
-              Expanded(
-                child: BlocConsumer<AdminProfileCubit, AdminProfileState>(
-                  listener: (context, state) {
-                    if (state is AdminProfileLoaded) {
-                      _showSuccessSnackbar('Profile updated successfully!');
-                      _profilePictureKey.currentState?.clearImage();
-                    } else if (state is AdminProfileError) {
-                      _showErrorSnackbar(state.message);
-                    }
-                  },
-                  builder: (context, state) {
-                    if (state is AdminProfileLoading) {
-                      return const Center(
-                        child: CircularProgressIndicator(
-                          color: Color(0xFF2563EB),
-                        ),
-                      );
-                    } else if (state is AdminProfileError) {
-                      return Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.error_outline,
-                              size: 64,
-                              color: Colors.red.withOpacity(0.5),
-                            ),
-                            const SizedBox(height: 16),
-                            Text(
-                              state.message,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                color: Colors.red,
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    } else if (state is AdminProfileLoaded) {
-                      final user = state.profile.user;
-                      _initControllers(user);
-                      return _buildProfileContent(context, user: user);
-                    }
-                    return const Center(child: Text('Loading...'));
-                  },
+      child: ManagementScaffold(
+        selectedMenuItem: selectedMenuItem,
+        role: ManagementRole.admin,
+        child: BlocConsumer<AdminProfileCubit, AdminProfileState>(
+          listener: (context, state) {
+            if (state is AdminProfileLoaded) {
+              _showSuccessSnackbar('Profile updated successfully!');
+              _profilePictureKey.currentState?.clearImage();
+            } else if (state is AdminProfileError) {
+              _showErrorSnackbar(state.message);
+            }
+          },
+          builder: (context, state) {
+            if (state is AdminProfileLoading) {
+              return const Center(
+                child: CircularProgressIndicator(
+                  color: Color(0xFF2563EB),
                 ),
-              ),
-            ],
-          ),
+              );
+            } else if (state is AdminProfileError) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.error_outline,
+                      size: 64,
+                      color: Colors.red.withOpacity(0.5),
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      state.message,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            } else if (state is AdminProfileLoaded) {
+              final user = state.profile.user;
+              _initControllers(user);
+              return _buildProfileContent(context, user: user);
+            }
+            return const Center(child: Text('Loading...'));
+          },
         ),
       ),
     );

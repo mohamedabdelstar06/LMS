@@ -18,7 +18,8 @@ import '../../admin/courses/home_courses/model/model.dart';
 import '../../admin/courses/home_courses/state_managment/cubit.dart';
 import '../../admin/courses/home_courses/state_managment/states.dart';
 import '../../admin/courses/update_course/view.dart';
-import '../../admin/department/get_department/get_All_departments/view.dart';
+import 'package:lms/core/widgets/management/management_layout.dart';
+import 'package:lms/core/widgets/management/management_menu_config.dart';
 import '../../instructor/teacher_profile/view.dart';
 String buildProfileImageUrl(String? image) {
   if (image == null || image.isEmpty) return '';
@@ -88,40 +89,28 @@ class _CourseScreenState extends State<TeacherCourseScreen> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              MYColors.gradientColor_3,
-              MYColors.gradientColor_2.withValues(alpha: 0.25),
-              MYColors.gradientColor_3,
+      return ManagementScaffold(
+        selectedMenuItem: 'My Courses',
+        role: ManagementRole.instructor,
+        child: const Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                strokeWidth: 3,
+              ),
+              SizedBox(height: 20),
+              Text(
+                "Loading Courses...",
+                style: TextStyle(
+                  color: Colors.blue,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                  fontFamily: "inter",
+                ),
+              ),
             ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-        child: const Scaffold(
-          backgroundColor: Colors.transparent,
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
-                  strokeWidth: 3,
-                ),
-                SizedBox(height: 20),
-                Text(
-                  "Loading Courses...",
-                  style: TextStyle(
-                    color: Colors.blue,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: "inter",
-                  ),
-                ),
-              ],
-            ),
           ),
         ),
       );
@@ -134,21 +123,10 @@ class _CourseScreenState extends State<TeacherCourseScreen> {
 
     return BlocProvider(
       create: (context) => GetCoursesCubit()..getCourses(),
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              MYColors.gradientColor_3,
-              MYColors.gradientColor_2.withValues(alpha: 0.25),
-              MYColors.gradientColor_3,
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          body: BlocConsumer<GetCoursesCubit, GetCourseStates>(
+      child: ManagementScaffold(
+        selectedMenuItem: 'My Courses',
+        role: ManagementRole.instructor,
+        child: BlocConsumer<GetCoursesCubit, GetCourseStates>(
             listener: (context, state) {
               if (state is DeleteCourseSuccess) {
                 Navigator.of(context).pop();
@@ -525,7 +503,6 @@ class _CourseScreenState extends State<TeacherCourseScreen> {
             },
           ),
         ),
-      ),
     );
   }
 

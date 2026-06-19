@@ -1,113 +1,191 @@
 // ============================================================
-// quiz_repository.dart
+// quiz_repository.dart — all 13 endpoints, exact contract
 // ============================================================
 import 'package:dio/dio.dart';
+import 'package:lms/core/helpers/json_list_parser.dart';
 import 'package:lms/features/screens/quizes/quiz_model.dart';
 
 class QuizRepository {
+  QuizRepository(this._dio);
   final Dio _dio;
 
-  QuizRepository(this._dio);
-
-  // ── POST /api/courses/{courseId}/quizzes ──────────────────
+  // ── POST /api/courses/{courseId}/quizzes ───────────────────
   Future<QuizModel> createQuiz({
     required int courseId,
-    required Map<String, dynamic> data,
+    required QuizFormData data,
   }) async {
-    final res = await _dio.post('courses/$courseId/quizzes', data: data);
+    final res = await _dio.post(
+      'courses/$courseId/quizzes',
+      data: data.toJson(),
+    );
     return QuizModel.fromJson(res.data as Map<String, dynamic>);
   }
 
-  // ── GET /api/courses/{courseId}/quizzes ───────────────────
+  // ── GET /api/courses/{courseId}/quizzes ────────────────────
   Future<List<QuizModel>> getCourseQuizzes(int courseId) async {
     final res = await _dio.get('courses/$courseId/quizzes');
-    final list = res.data as List<dynamic>;
-    return list
-        .map((e) => QuizModel.fromJson(e as Map<String, dynamic>))
-        .toList();
+    return parseJsonObjectList(
+      res.data,
+      listKeys: const ['data', 'results', 'items', 'value', 'quizzes'],
+    ).map(QuizModel.fromJson).toList();
   }
 
-  // ── GET /api/quizzes/{id} ─────────────────────────────────
-  Future<QuizModel> getQuizById(int quizId) async {
+  // ── GET /api/quizzes/{id} ───────────────────────────────────
+  Future<QuizDetailModel> getQuizById(int quizId) async {
     final res = await _dio.get('quizzes/$quizId');
-    return QuizModel.fromJson(res.data as Map<String, dynamic>);
+    final data = res.data;
+    if (data is Map<String, dynamic>) {
+      return QuizDetailModel.fromJson(data);
+    }
+    if (data is List) {
+      return QuizDetailModel.fromJson(parseJsonObjectList(data).first);
+    }
+    throw StateError('Unexpected quiz detail response format');
   }
 
-  // ── PUT /api/quizzes/{id} ─────────────────────────────────
+  // ── PUT /api/quizzes/{id} ───────────────────────────────────
   Future<QuizModel> updateQuiz({
     required int quizId,
-    required Map<String, dynamic> data,
+    required QuizFormData data,
   }) async {
-    final res = await _dio.put('quizzes/$quizId', data: data);
+    final res = await _dio.put('quizzes/$quizId', data: data.toJson());
     return QuizModel.fromJson(res.data as Map<String, dynamic>);
   }
 
-  // ── DEL /api/quizzes/{id} ─────────────────────────────────
+  // ── DELETE /api/quizzes/{id} ─────────────────────────────────
   Future<void> deleteQuiz(int quizId) async {
     await _dio.delete('quizzes/$quizId');
   }
 
-  // ── POST /api/quizzes/generate ────────────────────────────
-  Future<QuizModel> generateQuiz(GenerateQuizRequest req) async {
-    final res = await _dio.post('quizzes/generate', data: req.toJson());
-    return QuizModel.fromJson(res.data as Map<String, dynamic>);
+  // ── POST /api/quizzes/generate  (multipart/form-data) ────────
+  Future<QuizModel> generateQuiz(
+    GenerateQuizRequest req, {
+    void Function(int sent, int total)? onSendProgress,
+  }) async {
+    final formData = FormData();
+    // Add scalar fields
+    formData.fields
+      ..add(MapEntry('CourseId', req.courseId.toString()))
+      ..add(MapEntry('QuestionTypes', req.questionTypes))
+      ..add(MapEntry('NumberOfQuestions', req.numberOfQuestions.toString()))
+      ..add(MapEntry('DifficultyLevel', req.difficultyLevel))
+      ..add(MapEntry('QuizScope', req.quizScope))
+      ..add(MapEntry('Title', req.title));
+    // Add repeated LectureIds
+    for (final lectureId in req.lectureIds) {
+      formData.fields.add(MapEntry('LectureIds', lectureId.toString()));
+    }
+    // Add optional fields
+    if (req.customPrompt.isNotEmpty) {
+      formData.fields.add(MapEntry('CustomPrompt', req.customPrompt));
+    }
+    if (req.targetSquadronId != null) {
+      formData.fields.add(
+        MapEntry('TargetSquadronId', req.targetSquadronId!.toString()),
+      );
+    }
+    // Add optional PDF file
+    final pdfBytes = req.importedPdfBytes;
+    if (pdfBytes != null && pdfBytes.isNotEmpty) {
+      formData.files.add(
+        MapEntry(
+          'ImportedPdf',
+          MultipartFile.fromBytes(
+            pdfBytes,
+            filename: req.importedPdfName ?? 'document.pdf',
+          ),
+        ),
+      );
+    }
+
+    final res = await _dio.post(
+      'quizzes/generate',
+      data: formData,
+      onSendProgress: onSendProgress,
+    );
+    final data = res.data;
+    if (data is Map<String, dynamic>) {
+      return QuizModel.fromJson(data);
+    }
+    if (data is List && data.isNotEmpty) {
+      return QuizModel.fromJson(parseJsonObjectList(data).first);
+    }
+    throw StateError('Unexpected quiz generate response format: $data');
   }
 
-  // ── GET /api/quizzes/{id}/take ────────────────────────────
+  // ── GET /api/quizzes/{id}/take ────────────────────────────────
   Future<QuizTakeSession> startQuiz(int quizId) async {
     final res = await _dio.get('quizzes/$quizId/take');
     return QuizTakeSession.fromJson(res.data as Map<String, dynamic>);
   }
 
-  // ── POST /api/quizzes/{id}/auto-save ─────────────────────
+  // ── POST /api/quizzes/{id}/auto-save ────────────────────────
   Future<void> autoSave({
     required int quizId,
-    required Map<String, dynamic> answers,
+    required List<QuizAnswer> answers,
   }) async {
-    await _dio.post('quizzes/$quizId/auto-save', data: answers);
+    await _dio.post(
+      'quizzes/$quizId/auto-save',
+      data: {'answers': answers.map((a) => a.toJson()).toList()},
+    );
   }
 
-  // ── POST /api/quizzes/{id}/submit ────────────────────────
+  // ── POST /api/quizzes/{id}/submit ───────────────────────────
   Future<QuizResult> submitQuiz({
     required int quizId,
-    required Map<String, dynamic> answers,
+    required List<QuizAnswer> answers,
   }) async {
-    final res = await _dio.post('quizzes/$quizId/submit', data: answers);
-    return QuizResult.fromJson(res.data as Map<String, dynamic>);
+    final res = await _dio.post(
+      'quizzes/$quizId/submit',
+      data: {'answers': answers.map((a) => a.toSubmitJson()).toList()},
+    );
+    final data = res.data;
+    if (data is Map<String, dynamic>) {
+      return QuizResult.fromJson(data);
+    }
+    return QuizResult.fromJson(parseJsonObjectList(data).first);
   }
 
-  // ── GET /api/quizzes/{id}/results ────────────────────────
+  // ── GET /api/quizzes/{id}/results  (admin: all submissions) ──
   Future<List<QuizResult>> getQuizResults(int quizId) async {
     final res = await _dio.get('quizzes/$quizId/results');
-    final list = res.data as List<dynamic>;
-    return list
-        .map((e) => QuizResult.fromJson(e as Map<String, dynamic>))
-        .toList();
+    return parseJsonObjectList(res.data).map(QuizResult.fromJson).toList();
   }
 
-  // ── GET /api/quizzes/{id}/my-result ──────────────────────
+  // ── GET /api/quizzes/{id}/my-result  (student: own result) ───
   Future<QuizResult> getMyResult(int quizId) async {
     final res = await _dio.get('quizzes/$quizId/my-result');
-    return QuizResult.fromJson(res.data as Map<String, dynamic>);
+    final data = res.data;
+    if (data is Map<String, dynamic>) {
+      return QuizResult.fromJson(data);
+    }
+    final list = parseJsonObjectList(data);
+    if (list.isEmpty) {
+      throw StateError('No quiz result found');
+    }
+    return QuizResult.fromJson(list.first);
   }
 
-  // ── POST /api/quizzes/{id}/grade ─────────────────────────
+  // ── POST /api/quizzes/{id}/grade  (manual grading) ───────────
   Future<void> gradeQuiz({
     required int quizId,
-    required Map<String, dynamic> grades,
+    required List<StudentAnswerForGrading> grades,
   }) async {
-    await _dio.post('quizzes/$quizId/grade', data: grades);
+    await _dio.post(
+      'quizzes/$quizId/grade',
+      data: {'grades': grades.map((g) => g.toGradeJson()).toList()},
+    );
   }
 
-  // ── POST /api/quizzes/{id}/translate ─────────────────────
-  Future<QuizModel> translateQuiz({
+  // ── POST /api/quizzes/{id}/translate ──────────────────────────
+  Future<QuizDetailModel> translateQuiz({
     required int quizId,
-    required String targetLanguage,
+    String targetLanguage = 'ar',
   }) async {
     final res = await _dio.post(
       'quizzes/$quizId/translate',
       data: {'targetLanguage': targetLanguage},
     );
-    return QuizModel.fromJson(res.data as Map<String, dynamic>);
+    return QuizDetailModel.fromJson(res.data as Map<String, dynamic>);
   }
 }

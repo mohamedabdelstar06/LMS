@@ -1,3 +1,4 @@
+import 'package:lms/core/helpers/api_url_helper.dart';
 import 'package:flutter/material.dart';
 
 import 'app_network_image_stub.dart'
@@ -29,16 +30,7 @@ class AppNetworkImage extends StatelessWidget {
   });
 
   static String? resolveImageUrl(String? url, {String? baseUrl}) {
-    if (url == null || url.isEmpty) return null;
-
-    final base = baseUrl ?? 'https://skylearn.runasp.net';
-
-    if (url.startsWith('http://') || url.startsWith('https://')) {
-      return url;
-    }
-
-    final path = url.startsWith('/') ? url : '/$url';
-    return '$base$path';
+    return ApiUrlHelper.resolveMediaUrl(url);
   }
 
   double get _w => width ?? size;

@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker_web/image_picker_web.dart';
-import 'package:lms/core/widgets/custome_sidebar.dart';
+import 'package:lms/core/widgets/management/management_layout.dart';
+import 'package:lms/core/widgets/management/management_menu_config.dart';
 import 'package:lms/features/screens/admin/courses/create_course/state_managment/cubit.dart';
 import 'package:lms/features/screens/admin/courses/create_course/state_managment/states.dart';
 import 'package:lms/features/screens/instructor/teacher_profile/view.dart';
@@ -304,52 +305,35 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      // appBar: CustomAppBar(),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              MYColors.gradientColor_3,
-              MYColors.gradientColor_2.withValues(alpha: 0.25),
-              MYColors.gradientColor_3,
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-        child: Row(
-          children: [
-            _buildSidebar(),
-            BlocConsumer<CreateCourseCubit, CreateCourseState>(
-              listener: (context, state) {
-                if (state is CreateCourseSuccess) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(state.message),
-                      backgroundColor: Colors.green,
-                    ),
-                  );
-                  _clearForm();
-                }
-                if (state is CreateCourseError) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(state.message),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
-                }
-              },
-              builder: (context, state) {
-                return SingleChildScrollView(
-                  padding: const EdgeInsets.all(40),
-                  child: Center(child: _buildFormContainer(state)),
-                );
-              },
-            ),
-          ],
-        ),
+    return ManagementScaffold(
+      selectedMenuItem: selectedMenuItem,
+      role: ManagementRole.instructor,
+      child: BlocConsumer<CreateCourseCubit, CreateCourseState>(
+        listener: (context, state) {
+          if (state is CreateCourseSuccess) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.green,
+              ),
+            );
+            _clearForm();
+          }
+          if (state is CreateCourseError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+        },
+        builder: (context, state) {
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(40),
+            child: Center(child: _buildFormContainer(state)),
+          );
+        },
       ),
     );
   }
