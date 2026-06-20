@@ -103,7 +103,7 @@ class LoginCubit extends Cubit<LoginState> {
           Navigator.pushReplacement(
             navigatorKey.currentContext!,
             MaterialPageRoute(
-              builder: (_) => const StudentCourseScreen(),
+              builder: (_) => const StudentDashboardScreen(),
             ),
           );
         } else if (model.user.role == "Instructor") {

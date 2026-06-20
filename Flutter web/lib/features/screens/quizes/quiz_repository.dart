@@ -9,11 +9,20 @@ class QuizRepository {
   QuizRepository(this._dio);
   final Dio _dio;
 
-  // ── POST /api/courses/{courseId}/quizzes ───────────────────
   Future<QuizModel> createQuiz({
     required int courseId,
     required QuizFormData data,
   }) async {
+    _dio.interceptors.add(
+      LogInterceptor(
+        request: true,
+        requestHeader: true,
+        requestBody: true,
+        responseBody: true,
+        responseHeader: false,
+        error: true,
+      ),
+    );
     final res = await _dio.post(
       'courses/$courseId/quizzes',
       data: data.toJson(),
@@ -21,7 +30,6 @@ class QuizRepository {
     return QuizModel.fromJson(res.data as Map<String, dynamic>);
   }
 
-  // ── GET /api/courses/{courseId}/quizzes ────────────────────
   Future<List<QuizModel>> getCourseQuizzes(int courseId) async {
     final res = await _dio.get('courses/$courseId/quizzes');
     return parseJsonObjectList(

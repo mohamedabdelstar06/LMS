@@ -1,7 +1,9 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lms/features/screens/student/dashboard_Appbar.dart';
 import 'package:lms/features/screens/student_dashboard_states.dart';
+import 'package:lms/features/screens/student/student_courses/view.dart';
 import 'student_dashboard_cubit.dart';
 
 // ── Palette ───────────────────────────────────────────────────────────────────
@@ -63,6 +65,17 @@ class _StudentDashboardViewState extends State<_StudentDashboardView>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: _kBg,
+      appBar: StudentDashboardAppBar(
+        onNavigateToGrades: () {
+          // Grades are scoped per-course, so send the student to pick a
+          // course first; that screen is responsible for opening
+          // CourseGradesScreen(courseId, courseName) once one is selected.
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const StudentCourseScreen()),
+          );
+        },
+      ),
       body: BlocConsumer<StudentDashboardCubit, StudentDashboardState>(
         listener: (_, state) {
           if (state is StudentDashboardLoaded) _fadeCtrl.forward(from: 0);
