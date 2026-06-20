@@ -21,7 +21,7 @@ import 'quiz_grading_screen.dart';
 Dio _buildDio() =>
     Dio(
       BaseOptions(
-        baseUrl: 'https://skylearn.runasp.net/api',
+        baseUrl: 'https://skylearn.runasp.net/api/',
         receiveDataWhenStatusError: true,
         connectTimeout: const Duration(seconds: 30),
         receiveTimeout: const Duration(seconds: 60),

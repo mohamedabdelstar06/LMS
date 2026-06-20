@@ -6,11 +6,10 @@ import 'package:lms/features/screens/admin/courses/course_details/assignments/as
 
 
 class AssignmentRepository {
-  final Dio _dio;
 
   AssignmentRepository(this._dio);
+  final Dio _dio;
 
-  // ── GET /api/courses/{courseId}/assignments ──────────────────
   Future<List<AssignmentModel>> getCourseAssignments(int courseId) async {
     final response = await _dio.get('courses/$courseId/assignments');
     final List data = response.data is List
@@ -19,13 +18,11 @@ class AssignmentRepository {
     return data.map((e) => AssignmentModel.fromJson(e)).toList();
   }
 
-  // ── GET /api/assignments/{id} ────────────────────────────────
   Future<AssignmentModel> getAssignmentById(int id) async {
     final response = await _dio.get('assignments/$id');
     return AssignmentModel.fromJson(response.data['data'] ?? response.data);
   }
 
-  // ── POST /api/courses/{courseId}/assignments ─────────────────
   Future<AssignmentModel> createAssignment({
     required int courseId,
     required String title,
@@ -61,15 +58,14 @@ class AssignmentRepository {
         ),
     ]);
 
-    // ✅ fromBytes — works on ALL Android versions, no path needed,
-    //    preserves the original filename the user chose
+   
     for (final file in files) {
       formData.files.add(
         MapEntry(
           'AssignmentFiles',
           MultipartFile.fromBytes(
             file.bytes,
-            filename: file.name, // ← real name, not base64
+            filename: file.name, 
             contentType: DioMediaType.parse(_mimeType(file.extension)),
           ),
         ),
@@ -91,7 +87,6 @@ class AssignmentRepository {
     return AssignmentModel.fromJson(response.data['data'] ?? response.data);
   }
 
-  // ── PUT /api/assignments/{id} ────────────────────────────────
   Future<AssignmentModel> updateAssignment({
     required int id,
     required int courseId,
@@ -144,12 +139,10 @@ class AssignmentRepository {
     return AssignmentModel.fromJson(response.data['data'] ?? response.data);
   }
 
-  // ── DELETE /api/assignments/{id} ─────────────────────────────
   Future<void> deleteAssignment(int id) async {
     await _dio.delete('assignments/$id');
   }
 
-  // ── POST /api/assignments/{id}/submit ────────────────────────
   Future<void> submitAssignment({
     required int assignmentId,
     required List<PickedFileData> files,
@@ -183,7 +176,6 @@ class AssignmentRepository {
     );
   }
 
-  // ── POST /api/assignments/{id}/grade/{studentId} ─────────────
   Future<void> gradeSubmission({
     required int assignmentId,
     required int studentId,
@@ -196,7 +188,6 @@ class AssignmentRepository {
     );
   }
 
-  // ── GET /api/assignments/{id}/submissions ────────────────────
   Future<List<SubmissionModel>> getSubmissions(int assignmentId) async {
     final response = await _dio.get('assignments/$assignmentId/submissions');
     final List data = response.data is List
@@ -205,7 +196,6 @@ class AssignmentRepository {
     return data.map((e) => SubmissionModel.fromJson(e)).toList();
   }
 
-  // ── Helpers ──────────────────────────────────────────────────
   String _mimeType(String ext) {
     const map = {
       'pdf': 'application/pdf',
@@ -230,13 +220,8 @@ class AssignmentRepository {
     return map[ext.toLowerCase()] ?? 'application/octet-stream';
   }
 }
-/// Wraps PlatformFile and guarantees bytes are loaded.
-/// Use this instead of dart:io File everywhere in the assignments feature.
-class PickedFileData {
-  final String name;        // original filename e.g. "ENSA_Module_4.pptx"
-  final String extension;   // e.g. "pptx"
-  final int sizeBytes;
-  final List<int> bytes;    // actual file content — always present
+
+class PickedFileData {   
 
   PickedFileData({
     required this.name,
@@ -244,8 +229,12 @@ class PickedFileData {
     required this.sizeBytes,
     required this.bytes,
   });
+  final String name;       
+  final String extension;   
+  final int sizeBytes;
+  final List<int> bytes;
 
-  /// Build from a FilePicker result that was loaded with withData: true
+
   static PickedFileData? fromPlatformFile(PlatformFile pf) {
     if (pf.bytes == null || pf.bytes!.isEmpty) return null;
     return PickedFileData(

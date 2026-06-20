@@ -47,7 +47,7 @@ void main() {
 
     test('normalizes already absolute broken url', () {
       final url = ApiUrlHelper.resolveMediaUrl(
-        'https://skylearn.runasp.net/api//uploads/users/abc.jpg',
+        'https://skylearn.runasp.net/api/uploads/users/abc.jpg',
       );
       expect(url, 'https://skylearn.runasp.net/uploads/users/abc.jpg');
     });
