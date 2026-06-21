@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lms/features/screens/student/student_courses/course_detail_model.dart';
 
-import '../../../../../core/cons/api_helper_resources/api_resources.dart';
-import '../../../../../core/helpers/cach_helper/shared_pref_helper.dart';
+import '../../../../core/cons/api_helper_resources/api_resources.dart';
+import '../../../../core/helpers/cach_helper/shared_pref_helper.dart';
+import 'course_detail_model.dart';
 import 'course_detail_states.dart';
 
 /// Fetches GET /api/Course/{id} — full course detail for the student-side
@@ -24,7 +24,7 @@ class CourseDetailCubit extends Cubit<CourseDetailState> {
       }
 
       final response = await dio.get(
-        "${ApiResources.apiUrl}/Course/$courseId",
+        "${ApiResources.apiUrl}Course/$courseId",
         options: Options(headers: {'Authorization': 'Bearer $token'}),
       );
 

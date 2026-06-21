@@ -13,11 +13,11 @@ import 'student_activities_grades_states.dart';
 const _kBg = Color(0xFFF0F6FF);
 const _kCard = Colors.white;
 const _kBlue = Color(0xFF2563EB);
-const _kBlueLight = Color(0xFFEFF6FF);
 const _kGreen = Color(0xFF10B981);
 const _kOrange = Color(0xFFF59E0B);
 const _kRed = Color(0xFFEF4444);
 const _kPurple = Color(0xFF7C3AED);
+const _kGrey = Color(0xFF94A3B8);
 const _kText = Color(0xFF0F172A);
 const _kSub = Color(0xFF64748B);
 const _kBorder = Color(0xFFE2E8F0);
@@ -60,7 +60,10 @@ class _GradesBody extends StatelessWidget {
             Text(
               courseName,
               style: const TextStyle(
-                  fontSize: 15, fontWeight: FontWeight.w800, color: _kText),
+                fontSize: 15,
+                fontWeight: FontWeight.w800,
+                color: _kText,
+              ),
             ),
             const Text(
               'My Grades',
@@ -80,7 +83,8 @@ class _GradesBody extends StatelessWidget {
         builder: (ctx, state) {
           if (state is CourseGradesLoading) {
             return const Center(
-                child: CircularProgressIndicator(color: _kBlue));
+              child: CircularProgressIndicator(color: _kBlue),
+            );
           }
           if (state is CourseGradesError) {
             return _ErrorView(
@@ -110,10 +114,7 @@ class _GradesContent extends StatelessWidget {
     final g = state.grades;
     return Column(
       children: [
-        // ── Overview Hero ──────────────────────────────────────
         _GradeHero(grades: g),
-
-        // ── Tab Bar ───────────────────────────────────────────
         Container(
           color: Colors.white,
           child: Row(
@@ -121,9 +122,8 @@ class _GradesContent extends StatelessWidget {
               final selected = state.activeTab == e.key;
               return Expanded(
                 child: GestureDetector(
-                  onTap: () => context
-                      .read<CourseGradesCubit>()
-                      .switchTab(e.key),
+                  onTap: () =>
+                      context.read<CourseGradesCubit>().switchTab(e.key),
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 200),
                     padding: const EdgeInsets.symmetric(vertical: 12),
@@ -151,19 +151,20 @@ class _GradesContent extends StatelessWidget {
           ),
         ),
         const Divider(height: 1, color: _kBorder),
-
-        // ── Tab Content ───────────────────────────────────────
         Expanded(
           child: AnimatedSwitcher(
             duration: const Duration(milliseconds: 250),
             child: state.activeTab == 0
                 ? _OverviewTab(grades: g, key: const ValueKey('overview'))
                 : state.activeTab == 1
-                    ? _QuizzesTab(
-                        quizzes: g.quizGrades, key: const ValueKey('quizzes'))
-                    : _AssignmentsTab(
-                        assignments: g.assignmentGrades,
-                        key: const ValueKey('assignments')),
+                ? _QuizzesTab(
+                    quizzes: g.quizGrades,
+                    key: const ValueKey('quizzes'),
+                  )
+                : _AssignmentsTab(
+                    assignments: g.assignmentGrades,
+                    key: const ValueKey('assignments'),
+                  ),
           ),
         ),
       ],
@@ -188,7 +189,9 @@ class _GradeHeroState extends State<_GradeHero>
   void initState() {
     super.initState();
     _ctrl = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 1200));
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    );
     _anim = CurvedAnimation(parent: _ctrl, curve: Curves.easeOutCubic);
     _ctrl.forward();
   }
@@ -201,6 +204,7 @@ class _GradeHeroState extends State<_GradeHero>
 
   Color get _gradeColor {
     final avg = widget.grades.overallAverage;
+    if (avg == 0) return _kGrey;
     if (avg >= 80) return _kGreen;
     if (avg >= 60) return _kOrange;
     return _kRed;
@@ -208,6 +212,7 @@ class _GradeHeroState extends State<_GradeHero>
 
   String get _gradeLabel {
     final avg = widget.grades.overallAverage;
+    if (avg == 0) return 'No grades yet';
     if (avg >= 90) return 'Excellent';
     if (avg >= 80) return 'Very Good';
     if (avg >= 70) return 'Good';
@@ -251,9 +256,11 @@ class _GradeHeroState extends State<_GradeHero>
                       Text(
                         _gradeLabel,
                         style: const TextStyle(
-                            fontSize: 9,
-                            fontWeight: FontWeight.w700,
-                            color: _kSub),
+                          fontSize: 9,
+                          fontWeight: FontWeight.w700,
+                          color: _kSub,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
                     ],
                   ),
@@ -271,19 +278,26 @@ class _GradeHeroState extends State<_GradeHero>
                   icon: Icons.quiz_rounded,
                   color: _kPurple,
                   label: 'Quiz Avg',
-                  value: '${g.quizAverage.toStringAsFixed(1)}%',
-                  sub: '${g.quizGrades.length} quizzes',
+                  value: g.quizAverage > 0
+                      ? '${g.quizAverage.toStringAsFixed(1)}%'
+                      : '—',
+                  sub:
+                      '${g.quizGrades.length} quizzes'
+                      ' (${g.pendingQuizzes} pending)',
                 ),
                 const SizedBox(height: 10),
                 _HeroStatRow(
                   icon: Icons.assignment_rounded,
                   color: _kBlue,
                   label: 'Assignment Avg',
-                  value: '${g.assignmentAverage.toStringAsFixed(1)}%',
-                  sub: '${g.assignmentGrades.length} assignments',
+                  value: g.assignmentAverage > 0
+                      ? '${g.assignmentAverage.toStringAsFixed(1)}%'
+                      : '—',
+                  sub:
+                      '${g.assignmentGrades.length} assignments'
+                      ' (${g.pendingAssignments} pending)',
                 ),
                 const SizedBox(height: 10),
-                // Mini comparison bar
                 _ComparisonBar(
                   quizAvg: g.quizAverage,
                   assignAvg: g.assignmentAverage,
@@ -328,19 +342,19 @@ class _HeroStatRow extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(label,
-                style: const TextStyle(fontSize: 11, color: _kSub)),
+            Text(label, style: const TextStyle(fontSize: 11, color: _kSub)),
             Row(
               children: [
-                Text(value,
-                    style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w800,
-                        color: color)),
+                Text(
+                  value,
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w800,
+                    color: color,
+                  ),
+                ),
                 const SizedBox(width: 6),
-                Text(sub,
-                    style: const TextStyle(
-                        fontSize: 10, color: _kSub)),
+                Text(sub, style: const TextStyle(fontSize: 10, color: _kSub)),
               ],
             ),
           ],
@@ -353,16 +367,17 @@ class _HeroStatRow extends StatelessWidget {
 class _ComparisonBar extends StatelessWidget {
   final double quizAvg;
   final double assignAvg;
-  const _ComparisonBar(
-      {required this.quizAvg, required this.assignAvg});
+  const _ComparisonBar({required this.quizAvg, required this.assignAvg});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Quiz vs Assignment',
-            style: TextStyle(fontSize: 10, color: _kSub)),
+        const Text(
+          'Quiz vs Assignment',
+          style: TextStyle(fontSize: 10, color: _kSub),
+        ),
         const SizedBox(height: 4),
         LayoutBuilder(
           builder: (_, c) => Stack(
@@ -387,9 +402,8 @@ class _ComparisonBar extends StatelessWidget {
                 height: 8,
                 width: c.maxWidth * (assignAvg / 100).clamp(0, 1) * 0.5,
                 margin: EdgeInsets.only(
-                    left: c.maxWidth *
-                        (quizAvg / 100).clamp(0, 1) *
-                        0.5),
+                  left: c.maxWidth * (quizAvg / 100).clamp(0, 1) * 0.5,
+                ),
                 decoration: BoxDecoration(
                   color: _kBlue.withOpacity(0.5),
                   borderRadius: BorderRadius.circular(4),
@@ -417,20 +431,20 @@ class _LegendDot extends StatelessWidget {
   const _LegendDot({required this.color, required this.label});
   @override
   Widget build(BuildContext context) => Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-              width: 8,
-              height: 8,
-              decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
-          const SizedBox(width: 4),
-          Text(label,
-              style: const TextStyle(fontSize: 9, color: _kSub)),
-        ],
-      );
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      Container(
+        width: 8,
+        height: 8,
+        decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+      ),
+      const SizedBox(width: 4),
+      Text(label, style: const TextStyle(fontSize: 9, color: _kSub)),
+    ],
+  );
 }
 
-// ── Gauge Ring Painter ────────────────────────────────────────
+// ── Gauge Ring ────────────────────────────────────────────────
 class _GaugeRingPainter extends CustomPainter {
   final double progress;
   final double animValue;
@@ -447,8 +461,6 @@ class _GaugeRingPainter extends CustomPainter {
     final cy = size.height / 2;
     final r = math.min(cx, cy) - 8;
     const sw = 10.0;
-
-    // Track
     canvas.drawCircle(
       Offset(cx, cy),
       r,
@@ -457,8 +469,6 @@ class _GaugeRingPainter extends CustomPainter {
         ..style = PaintingStyle.stroke
         ..strokeWidth = sw,
     );
-
-    // Progress arc
     canvas.drawArc(
       Rect.fromCircle(center: Offset(cx, cy), radius: r),
       -math.pi / 2,
@@ -485,29 +495,40 @@ class _OverviewTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final all = [
-      ...grades.quizGrades
-          .map((q) => _GradeEntry(
-                title: q.quizTitle,
-                type: 'Quiz',
-                percent: q.percent,
-                score: q.score,
-                maxScore: q.maxScore,
-                passed: q.passed,
-                date: q.submittedAt,
-              )),
-      ...grades.assignmentGrades
-          .map((a) => _GradeEntry(
-                title: a.assignmentTitle,
-                type: 'Assignment',
-                percent: a.percent,
-                score: a.score,
-                maxScore: a.maxScore,
-                passed: a.status == 'Graded' || a.percent >= 60,
-                date: a.submittedAt,
-                feedback: a.feedback,
-              )),
+      ...grades.quizGrades.map(
+        (q) => _GradeEntry(
+          title: q.quizTitle,
+          type: 'Quiz',
+          percent: q.percent,
+          score: q.score,
+          maxScore: q.maxScore,
+          passed: q.passed,
+          isGraded: q.isGraded,
+          status: q.status,
+          date: q.submittedAt,
+        ),
+      ),
+      ...grades.assignmentGrades.map(
+        (a) => _GradeEntry(
+          title: a.assignmentTitle,
+          type: 'Assignment',
+          percent: a.percent,
+          score: a.grade,
+          maxScore: a.maxGrade,
+          passed: a.passed,
+          isGraded: a.isGraded,
+          status: a.status,
+          date: a.submittedAt,
+          feedback: a.feedback,
+        ),
+      ),
     ];
-    all.sort((a, b) => b.percent.compareTo(a.percent));
+    // Sort: graded first (desc by percent), then pending
+    all.sort((a, b) {
+      if (a.isGraded && !b.isGraded) return -1;
+      if (!a.isGraded && b.isGraded) return 1;
+      return b.percent.compareTo(a.percent);
+    });
 
     if (all.isEmpty) {
       return const _EmptyGrades(message: 'No grades yet for this course');
@@ -519,8 +540,8 @@ class _OverviewTab extends StatelessWidget {
         _GradeDistributionChart(entries: all),
         const SizedBox(height: 16),
         ...all.asMap().entries.map(
-              (e) => _GradeItemCard(entry: e.value, index: e.key),
-            ),
+          (e) => _GradeItemCard(entry: e.value, index: e.key),
+        ),
       ],
     );
   }
@@ -542,19 +563,21 @@ class _QuizzesTab extends StatelessWidget {
         _QuizBarChart(quizzes: quizzes),
         const SizedBox(height: 16),
         ...quizzes.asMap().entries.map(
-              (e) => _GradeItemCard(
-                entry: _GradeEntry(
-                  title: e.value.quizTitle,
-                  type: 'Quiz',
-                  percent: e.value.percent,
-                  score: e.value.score,
-                  maxScore: e.value.maxScore,
-                  passed: e.value.passed,
-                  date: e.value.submittedAt,
-                ),
-                index: e.key,
-              ),
+          (e) => _GradeItemCard(
+            entry: _GradeEntry(
+              title: e.value.quizTitle,
+              type: 'Quiz',
+              percent: e.value.percent,
+              score: e.value.score,
+              maxScore: e.value.maxScore,
+              passed: e.value.passed,
+              isGraded: e.value.isGraded,
+              status: e.value.status,
+              date: e.value.submittedAt,
             ),
+            index: e.key,
+          ),
+        ),
       ],
     );
   }
@@ -574,20 +597,22 @@ class _AssignmentsTab extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       children: [
         ...assignments.asMap().entries.map(
-              (e) => _GradeItemCard(
-                entry: _GradeEntry(
-                  title: e.value.assignmentTitle,
-                  type: 'Assignment',
-                  percent: e.value.percent,
-                  score: e.value.score,
-                  maxScore: e.value.maxScore,
-                  passed: e.value.percent >= 60,
-                  date: e.value.submittedAt,
-                  feedback: e.value.feedback,
-                ),
-                index: e.key,
-              ),
+          (e) => _GradeItemCard(
+            entry: _GradeEntry(
+              title: e.value.assignmentTitle,
+              type: 'Assignment',
+              percent: e.value.percent,
+              score: e.value.grade,
+              maxScore: e.value.maxGrade,
+              passed: e.value.passed,
+              isGraded: e.value.isGraded,
+              status: e.value.status,
+              date: e.value.submittedAt,
+              feedback: e.value.feedback,
             ),
+            index: e.key,
+          ),
+        ),
       ],
     );
   }
@@ -598,9 +623,11 @@ class _GradeEntry {
   final String title;
   final String type;
   final double percent;
-  final double score;
+  final double? score; // nullable — not graded yet
   final double maxScore;
   final bool passed;
+  final bool isGraded;
+  final String status;
   final String? date;
   final String? feedback;
 
@@ -611,6 +638,8 @@ class _GradeEntry {
     required this.score,
     required this.maxScore,
     required this.passed,
+    required this.isGraded,
+    required this.status,
     this.date,
     this.feedback,
   });
@@ -634,7 +663,9 @@ class _GradeDistributionChartState extends State<_GradeDistributionChart>
   void initState() {
     super.initState();
     _ctrl = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 1000));
+      vsync: this,
+      duration: const Duration(milliseconds: 1000),
+    );
     _anim = CurvedAnimation(parent: _ctrl, curve: Curves.easeOutCubic);
     _ctrl.forward();
   }
@@ -647,16 +678,14 @@ class _GradeDistributionChartState extends State<_GradeDistributionChart>
 
   @override
   Widget build(BuildContext context) {
-    final excellent =
-        widget.entries.where((e) => e.percent >= 90).length;
-    final good = widget.entries
-        .where((e) => e.percent >= 70 && e.percent < 90)
-        .length;
-    final pass = widget.entries
-        .where((e) => e.percent >= 60 && e.percent < 70)
-        .length;
-    final fail = widget.entries.where((e) => e.percent < 60).length;
-    final total = widget.entries.length;
+    // Only graded entries count toward distribution
+    final graded = widget.entries.where((e) => e.isGraded).toList();
+    final excellent = graded.where((e) => e.percent >= 90).length;
+    final good = graded.where((e) => e.percent >= 70 && e.percent < 90).length;
+    final pass = graded.where((e) => e.percent >= 60 && e.percent < 70).length;
+    final fail = graded.where((e) => e.percent < 60).length;
+    final pending = widget.entries.where((e) => !e.isGraded).length;
+    final total = graded.length;
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -668,47 +697,74 @@ class _GradeDistributionChartState extends State<_GradeDistributionChart>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Row(
+          Row(
             children: [
-              Icon(Icons.bar_chart_rounded, color: _kBlue, size: 16),
-              SizedBox(width: 8),
-              Text('Grade Distribution',
-                  style: TextStyle(
-                      fontSize: 14,
+              const Icon(Icons.bar_chart_rounded, color: _kBlue, size: 16),
+              const SizedBox(width: 8),
+              const Text(
+                'Grade Distribution',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: _kText,
+                ),
+              ),
+              const Spacer(),
+              if (pending > 0)
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 3,
+                  ),
+                  decoration: BoxDecoration(
+                    color: _kOrange.withOpacity(0.12),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    '$pending pending',
+                    style: const TextStyle(
+                      fontSize: 10,
                       fontWeight: FontWeight.w700,
-                      color: _kText)),
+                      color: _kOrange,
+                    ),
+                  ),
+                ),
             ],
           ),
           const SizedBox(height: 16),
           Row(
             children: [
               _DistBar(
-                  label: 'Excellent',
-                  count: excellent,
-                  total: total,
-                  color: _kGreen,
-                  anim: _anim),
+                label: 'Excellent',
+                count: excellent,
+                total: total,
+                color: _kGreen,
+                anim: _anim,
+              ),
               const SizedBox(width: 8),
               _DistBar(
-                  label: 'Good',
-                  count: good,
-                  total: total,
-                  color: _kBlue,
-                  anim: _anim),
+                label: 'Good',
+                count: good,
+                total: total,
+                color: _kBlue,
+                anim: _anim,
+              ),
               const SizedBox(width: 8),
               _DistBar(
-                  label: 'Pass',
-                  count: pass,
-                  total: total,
-                  color: _kOrange,
-                  anim: _anim),
+                label: 'Pass',
+                count: pass,
+                total: total,
+                color: _kOrange,
+                anim: _anim,
+              ),
               const SizedBox(width: 8),
               _DistBar(
-                  label: 'Fail',
-                  count: fail,
-                  total: total,
-                  color: _kRed,
-                  anim: _anim),
+                label: 'Fail',
+                count: fail,
+                total: total,
+                color: _kRed,
+                anim: _anim,
+              ),
             ],
           ),
         ],
@@ -737,11 +793,14 @@ class _DistBar extends StatelessWidget {
     return Expanded(
       child: Column(
         children: [
-          Text('$count',
-              style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w800,
-                  color: color)),
+          Text(
+            '$count',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w800,
+              color: color,
+            ),
+          ),
           const SizedBox(height: 6),
           AnimatedBuilder(
             animation: anim,
@@ -755,8 +814,7 @@ class _DistBar extends StatelessWidget {
                     color: color,
                     borderRadius: BorderRadius.circular(4),
                     boxShadow: [
-                      BoxShadow(
-                          color: color.withOpacity(0.3), blurRadius: 6)
+                      BoxShadow(color: color.withOpacity(0.3), blurRadius: 6),
                     ],
                   ),
                 ),
@@ -764,9 +822,11 @@ class _DistBar extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 6),
-          Text(label,
-              style: const TextStyle(fontSize: 9, color: _kSub),
-              textAlign: TextAlign.center),
+          Text(
+            label,
+            style: const TextStyle(fontSize: 9, color: _kSub),
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );
@@ -790,7 +850,9 @@ class _QuizBarChartState extends State<_QuizBarChart>
   void initState() {
     super.initState();
     _ctrl = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 900));
+      vsync: this,
+      duration: const Duration(milliseconds: 900),
+    );
     _anim = CurvedAnimation(parent: _ctrl, curve: Curves.easeOutCubic);
     _ctrl.forward();
   }
@@ -817,11 +879,14 @@ class _QuizBarChartState extends State<_QuizBarChart>
             children: [
               Icon(Icons.show_chart_rounded, color: _kPurple, size: 16),
               SizedBox(width: 8),
-              Text('Quiz Performance',
-                  style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      color: _kText)),
+              Text(
+                'Quiz Performance',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: _kText,
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 16),
@@ -832,7 +897,9 @@ class _QuizBarChartState extends State<_QuizBarChart>
               builder: (_, __) => CustomPaint(
                 size: Size.infinite,
                 painter: _QuizBarPainter(
-                    quizzes: widget.quizzes, progress: _anim.value),
+                  quizzes: widget.quizzes,
+                  progress: _anim.value,
+                ),
               ),
             ),
           ),
@@ -854,47 +921,61 @@ class _QuizBarPainter extends CustomPainter {
     final gap = (size.width / quizzes.length) * 0.45;
     final h = size.height - 16;
 
+    // Passing threshold line at 60%
+    final passY = h - (0.6 * h);
+    canvas.drawLine(
+      Offset(0, passY),
+      Offset(size.width, passY),
+      Paint()
+        ..color = _kRed.withOpacity(0.2)
+        ..strokeWidth = 1
+        ..style = PaintingStyle.stroke,
+    );
+
     for (int i = 0; i < quizzes.length; i++) {
       final x = i * (barW + gap) + gap / 2;
-      final pct = quizzes[i].percent / 100;
-      final barH = pct * h * progress;
-      final color = pct >= 0.8
-          ? _kGreen
-          : pct >= 0.6
-              ? _kOrange
-              : _kRed;
+      final quiz = quizzes[i];
 
-      canvas.drawRRect(
-        RRect.fromRectAndRadius(
-          Rect.fromLTWH(x, h - barH, barW, barH),
-          const Radius.circular(4),
-        ),
-        Paint()
-          ..shader = LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [color, color.withOpacity(0.6)],
-          ).createShader(Rect.fromLTWH(x, h - barH, barW, barH)),
-      );
+      if (!quiz.isGraded) {
+        // Draw a dashed/grey bar for pending quizzes
+        canvas.drawRRect(
+          RRect.fromRectAndRadius(
+            Rect.fromLTWH(x, h - h * 0.15, barW, h * 0.15),
+            const Radius.circular(4),
+          ),
+          Paint()..color = _kGrey.withOpacity(0.3),
+        );
+      } else {
+        final pct = quiz.percent / 100;
+        final barH = pct * h * progress;
+        final color = pct >= 0.8
+            ? _kGreen
+            : pct >= 0.6
+            ? _kOrange
+            : _kRed;
 
-      // Passing line at 60%
-      final passY = h - (0.6 * h);
-      canvas.drawLine(
-        Offset(0, passY),
-        Offset(size.width, passY),
-        Paint()
-          ..color = _kRed.withOpacity(0.2)
-          ..strokeWidth = 1
-          ..style = PaintingStyle.stroke,
-      );
+        canvas.drawRRect(
+          RRect.fromRectAndRadius(
+            Rect.fromLTWH(x, h - barH, barW, barH),
+            const Radius.circular(4),
+          ),
+          Paint()
+            ..shader = LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [color, color.withOpacity(0.6)],
+            ).createShader(Rect.fromLTWH(x, h - barH, barW, barH)),
+        );
+      }
 
-      final label = quizzes[i].quizTitle.length > 5
-          ? quizzes[i].quizTitle.substring(0, 5)
-          : quizzes[i].quizTitle;
+      final label = quiz.quizTitle.length > 5
+          ? quiz.quizTitle.substring(0, 5)
+          : quiz.quizTitle;
       final tp = TextPainter(
         text: TextSpan(
-            text: label,
-            style: const TextStyle(fontSize: 8, color: _kSub)),
+          text: label,
+          style: const TextStyle(fontSize: 8, color: _kSub),
+        ),
         textDirection: TextDirection.ltr,
       )..layout();
       tp.paint(canvas, Offset(x + barW / 2 - tp.width / 2, h + 2));
@@ -902,8 +983,7 @@ class _QuizBarPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant _QuizBarPainter old) =>
-      old.progress != progress;
+  bool shouldRepaint(covariant _QuizBarPainter old) => old.progress != progress;
 }
 
 // ── Grade Item Card ───────────────────────────────────────────
@@ -925,14 +1005,20 @@ class _GradeItemCardState extends State<_GradeItemCard>
   void initState() {
     super.initState();
     _ctrl = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 350));
-    _slide = Tween<double>(begin: 20, end: 0)
-        .animate(CurvedAnimation(parent: _ctrl, curve: Curves.easeOutCubic));
+      vsync: this,
+      duration: const Duration(milliseconds: 350),
+    );
+    _slide = Tween<double>(
+      begin: 20,
+      end: 0,
+    ).animate(CurvedAnimation(parent: _ctrl, curve: Curves.easeOutCubic));
     _opacity = Tween<double>(begin: 0, end: 1).animate(_ctrl);
     Future.delayed(
-        Duration(milliseconds: (widget.index * 60).clamp(0, 300)), () {
-      if (mounted) _ctrl.forward();
-    });
+      Duration(milliseconds: (widget.index * 60).clamp(0, 300)),
+      () {
+        if (mounted) _ctrl.forward();
+      },
+    );
   }
 
   @override
@@ -941,13 +1027,13 @@ class _GradeItemCardState extends State<_GradeItemCard>
     super.dispose();
   }
 
-  Color get _typeColor =>
-      widget.entry.type == 'Quiz' ? _kPurple : _kBlue;
+  Color get _typeColor => widget.entry.type == 'Quiz' ? _kPurple : _kBlue;
   IconData get _typeIcon => widget.entry.type == 'Quiz'
       ? Icons.quiz_rounded
       : Icons.assignment_rounded;
 
   Color get _gradeColor {
+    if (!widget.entry.isGraded) return _kGrey;
     if (widget.entry.percent >= 80) return _kGreen;
     if (widget.entry.percent >= 60) return _kOrange;
     return _kRed;
@@ -992,8 +1078,7 @@ class _GradeItemCardState extends State<_GradeItemCard>
                             color: _typeColor.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: Icon(_typeIcon,
-                              color: _typeColor, size: 18),
+                          child: Icon(_typeIcon, color: _typeColor, size: 18),
                         ),
                         const SizedBox(width: 12),
                         Expanded(
@@ -1015,26 +1100,33 @@ class _GradeItemCardState extends State<_GradeItemCard>
                                 children: [
                                   Container(
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 6, vertical: 1),
+                                      horizontal: 6,
+                                      vertical: 1,
+                                    ),
                                     decoration: BoxDecoration(
                                       color: _typeColor.withOpacity(0.1),
-                                      borderRadius:
-                                          BorderRadius.circular(4),
+                                      borderRadius: BorderRadius.circular(4),
                                     ),
                                     child: Text(
                                       e.type,
                                       style: TextStyle(
-                                          fontSize: 9,
-                                          fontWeight: FontWeight.w700,
-                                          color: _typeColor),
+                                        fontSize: 9,
+                                        fontWeight: FontWeight.w700,
+                                        color: _typeColor,
+                                      ),
                                     ),
                                   ),
+                                  const SizedBox(width: 6),
+                                  // Status badge
+                                  _StatusBadge(status: e.status),
                                   if (e.date != null) ...[
                                     const SizedBox(width: 6),
                                     Text(
                                       _formatDate(e.date!),
                                       style: const TextStyle(
-                                          fontSize: 10, color: _kSub),
+                                        fontSize: 10,
+                                        color: _kSub,
+                                      ),
                                     ),
                                   ],
                                 ],
@@ -1043,55 +1135,81 @@ class _GradeItemCardState extends State<_GradeItemCard>
                           ),
                         ),
                         const SizedBox(width: 8),
-                        // Score circle
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 4),
-                              decoration: BoxDecoration(
-                                color: _gradeColor.withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Text(
-                                '${e.percent.toStringAsFixed(0)}%',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w900,
-                                  color: _gradeColor,
+                        // Score / status
+                        e.isGraded
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                      vertical: 4,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: _gradeColor.withOpacity(0.1),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Text(
+                                      '${e.percent.toStringAsFixed(0)}%',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w900,
+                                        color: _gradeColor,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 6,
+                                      vertical: 2,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: (e.passed ? _kGreen : _kRed)
+                                          .withOpacity(0.1),
+                                      borderRadius: BorderRadius.circular(6),
+                                    ),
+                                    child: Text(
+                                      e.passed ? '✓ Pass' : '✗ Fail',
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w700,
+                                        color: e.passed ? _kGreen : _kRed,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 6,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: _kGrey.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: const Text(
+                                  'Pending',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w700,
+                                    color: _kGrey,
+                                  ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(height: 4),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 6, vertical: 2),
-                              decoration: BoxDecoration(
-                                color: (e.passed ? _kGreen : _kRed)
-                                    .withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              child: Text(
-                                e.passed ? '✓ Pass' : '✗ Fail',
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w700,
-                                  color: e.passed ? _kGreen : _kRed,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
                       ],
                     ),
                   ),
-                  // Score bar
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(14, 0, 14, 10),
-                    child: _ScoreProgressBar(
-                        percent: e.percent / 100, color: _gradeColor),
-                  ),
+                  // Score bar (only if graded)
+                  if (e.isGraded)
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(14, 0, 14, 10),
+                      child: _ScoreProgressBar(
+                        percent: e.percent / 100,
+                        color: _gradeColor,
+                      ),
+                    ),
                   // Expanded feedback
                   if (_expanded && e.feedback != null && e.feedback!.isNotEmpty)
                     Container(
@@ -1107,16 +1225,20 @@ class _GradeItemCardState extends State<_GradeItemCard>
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Icon(Icons.feedback_rounded,
-                              size: 14, color: _kSub),
+                          const Icon(
+                            Icons.feedback_rounded,
+                            size: 14,
+                            color: _kSub,
+                          ),
                           const SizedBox(width: 8),
                           Expanded(
                             child: Text(
                               e.feedback!,
                               style: const TextStyle(
-                                  fontSize: 12,
-                                  color: _kSub,
-                                  height: 1.4),
+                                fontSize: 12,
+                                color: _kSub,
+                                height: 1.4,
+                              ),
                             ),
                           ),
                         ],
@@ -1137,8 +1259,7 @@ class _GradeItemCardState extends State<_GradeItemCard>
                           ),
                           Text(
                             _expanded ? 'Hide feedback' : 'View feedback',
-                            style: const TextStyle(
-                                fontSize: 10, color: _kSub),
+                            style: const TextStyle(fontSize: 10, color: _kSub),
                           ),
                         ],
                       ),
@@ -1162,6 +1283,50 @@ class _GradeItemCardState extends State<_GradeItemCard>
   }
 }
 
+// ── Status Badge ──────────────────────────────────────────────
+class _StatusBadge extends StatelessWidget {
+  final String status;
+  const _StatusBadge({required this.status});
+
+  @override
+  Widget build(BuildContext context) {
+    Color color;
+    String label;
+    switch (status) {
+      case 'Graded':
+        color = _kGreen;
+        label = 'Graded';
+        break;
+      case 'Submitted':
+        color = _kBlue;
+        label = 'Submitted';
+        break;
+      case 'InProgress':
+        color = _kOrange;
+        label = 'In Progress';
+        break;
+      default:
+        color = _kGrey;
+        label = status;
+    }
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          fontSize: 9,
+          fontWeight: FontWeight.w700,
+          color: color,
+        ),
+      ),
+    );
+  }
+}
+
 // ── Animated Score Bar ────────────────────────────────────────
 class _ScoreProgressBar extends StatefulWidget {
   final double percent;
@@ -1180,9 +1345,13 @@ class _ScoreProgressBarState extends State<_ScoreProgressBar>
   void initState() {
     super.initState();
     _ctrl = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 900));
-    _anim = Tween<double>(begin: 0, end: widget.percent.clamp(0, 1))
-        .animate(CurvedAnimation(parent: _ctrl, curve: Curves.easeOutCubic));
+      vsync: this,
+      duration: const Duration(milliseconds: 900),
+    );
+    _anim = Tween<double>(
+      begin: 0,
+      end: widget.percent.clamp(0, 1),
+    ).animate(CurvedAnimation(parent: _ctrl, curve: Curves.easeOutCubic));
     _ctrl.forward();
   }
 
@@ -1205,10 +1374,13 @@ class _ScoreProgressBarState extends State<_ScoreProgressBar>
               borderRadius: BorderRadius.circular(3),
             ),
           ),
-          // Passing threshold marker
           Positioned(
             left: c.maxWidth * 0.6 - 1,
-            child: Container(width: 2, height: 5, color: _kRed.withOpacity(0.4)),
+            child: Container(
+              width: 2,
+              height: 5,
+              color: _kRed.withOpacity(0.4),
+            ),
           ),
           AnimatedBuilder(
             animation: _anim,
@@ -1247,16 +1419,18 @@ class _EmptyGrades extends StatelessWidget {
               color: _kBlue.withOpacity(0.08),
               shape: BoxShape.circle,
             ),
-            child: const Icon(Icons.grade_rounded,
-                size: 36, color: _kBlue),
+            child: const Icon(Icons.grade_rounded, size: 36, color: _kBlue),
           ),
           const SizedBox(height: 14),
-          Text(message,
-              style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: _kSub),
-              textAlign: TextAlign.center),
+          Text(
+            message,
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: _kSub,
+            ),
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );
@@ -1276,9 +1450,11 @@ class _ErrorView extends StatelessWidget {
         children: [
           const Icon(Icons.error_outline_rounded, size: 48, color: _kRed),
           const SizedBox(height: 12),
-          Text(message,
-              style: const TextStyle(color: _kSub),
-              textAlign: TextAlign.center),
+          Text(
+            message,
+            style: const TextStyle(color: _kSub),
+            textAlign: TextAlign.center,
+          ),
           const SizedBox(height: 16),
           ElevatedButton.icon(
             onPressed: onRetry,
@@ -1288,7 +1464,8 @@ class _ErrorView extends StatelessWidget {
               backgroundColor: _kBlue,
               foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10)),
+                borderRadius: BorderRadius.circular(10),
+              ),
             ),
           ),
         ],

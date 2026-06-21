@@ -1,5 +1,4 @@
-import 'package:lms/features/screens/student/student_courses/course_detail_model.dart';
-
+import 'course_detail_model.dart';
 
 abstract class CourseDetailState {}
 

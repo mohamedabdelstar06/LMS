@@ -48,6 +48,7 @@ class _StudentDashboardViewState extends State<_StudentDashboardView>
   @override
   void initState() {
     super.initState();
+    
     _fadeCtrl = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 600),

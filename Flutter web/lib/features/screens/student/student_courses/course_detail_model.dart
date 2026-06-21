@@ -1,3 +1,6 @@
+import 'package:lms/features/screens/admin/courses/home_courses/model/model.dart'
+    as admin_courses;
+
 class CourseDetailModel {
   final int id;
   final String title;
@@ -66,14 +69,44 @@ class CourseDetailModel {
       lecturesCount: json['lecturesCount'] ?? 0,
       quizzesCount: json['quizzesCount'] ?? 0,
       assignmentsCount: json['assignmentsCount'] ?? 0,
-      progressPercentage:
-          (json['progressPercentage'] as num?)?.toDouble() ?? 0,
+      progressPercentage: (json['progressPercentage'] as num?)?.toDouble() ?? 0,
       lastAccessedAt: json['lastAccessedAt'] != null
           ? DateTime.tryParse(json['lastAccessedAt'])
           : null,
       instructor: json['instructor'] != null
           ? InstructorModel.fromJson(json['instructor'])
           : null,
+    );
+  }
+
+  /// Bridges this student-facing model to the admin-side [GetCoursesModel]
+  /// that `LectureCubit` / `LecturesScreen` expect. Both models come from
+  /// the exact same `GET /api/Course/{id}` payload, so this is a 1:1 field
+  /// mapping — no data loss, just satisfying a different constructor shape.
+  admin_courses.GetCoursesModel toGetCoursesModel() {
+    return admin_courses.GetCoursesModel(
+      id: id,
+      title: title,
+      description: description,
+      departmentId: departmentId,
+      departmentName: departmentName,
+      yearId: yearId,
+      yearName: yearName,
+      creditHours: creditHours,
+      enrolledStudentsCount: enrolledStudentsCount,
+      imageUrl: imageUrl,
+      instructorId: instructorId,
+      instructorName: instructorName,
+      // GetCoursesModel.createdAt is non-nullable — fall back to "now" in
+      // the (unexpected) case the API omitted it, rather than crashing.
+      createdAt: createdAt ?? DateTime.now(),
+      updatedAt: updatedAt,
+      lecturesCount: lecturesCount,
+      quizzesCount: quizzesCount,
+      assignmentsCount: assignmentsCount,
+      progressPercentage: progressPercentage,
+      lastAccessedAt: lastAccessedAt,
+      instructor: instructor?.toAdminInstructorModel(),
     );
   }
 }
@@ -100,6 +133,19 @@ class InstructorModel {
       email: json['email'] ?? '',
       city: json['city'],
       profileImageUrl: json['profileImageUrl'],
+    );
+  }
+
+  /// Maps to the admin-side `InstructorModel` (different class, same name,
+  /// defined in admin_courses model.dart) so it can be embedded inside the
+  /// converted [admin_courses.GetCoursesModel].
+  admin_courses.InstructorModel toAdminInstructorModel() {
+    return admin_courses.InstructorModel(
+      id: id,
+      fullName: fullName,
+      email: email,
+      city: city,
+      profileImageUrl: profileImageUrl,
     );
   }
 }

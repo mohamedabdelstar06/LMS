@@ -13,22 +13,14 @@ import 'package:lms/generated/assets.dart';
 import 'package:web/helpers.dart' as html;
 
 /// AppBar for the Student Dashboard screen.
-///
-/// Mirrors the visual language of [CoursesAppBar] (search field, notification
-/// bell, profile menu) while adding quick-access entry points to the
-/// student's Activities and Grades, since the dashboard itself has no
-/// navigation drawer of its own.
 class StudentDashboardAppBar extends StatelessWidget
     implements PreferredSizeWidget {
-
    StudentDashboardAppBar({super.key, this.onNavigateToGrades});
-  // Placeholder for user data. In the absence of a provided user data
-  // source, use an empty map to avoid undefined name errors. Callers may
-  // replace this with real data retrieval later.
+
   final Map<String, dynamic> userData = {};
+
   /// Called when the user taps the "Grades" quick-access button.
-  /// Typically used to navigate to a course picker, since grades are
-  /// scoped per-course.
+  /// If null, shows a dialog prompting the student to pick a course first.
   final VoidCallback? onNavigateToGrades;
 
   @override
@@ -67,51 +59,26 @@ class StudentDashboardAppBar extends StatelessWidget
           ],
         ),
         child: Row(
+          
           children: [
             // ── Title / greeting block ─────────────────────────
             if (!isCompact) ...[_DashboardTitle(), const SizedBox(width: 20)],
-
-            // ── Search ──────────────────────────────────────────
-            Expanded(
-              flex: isLargeScreen ? 2 : 1,
-              child: Container(
-                height: 50,
-                decoration: BoxDecoration(
-                  color: const Color(0xffF8FAFC),
-                  borderRadius: BorderRadius.circular(15),
-                  border: Border.all(color: const Color(0xffE2E8F0), width: 1),
-                ),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 15,
-                    ),
-                    hintText: 'Search...',
-                    hintStyle: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: 'inter',
-                      color: Color(0xFF64748B),
-                    ),
-                    prefixIcon: Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: SvgPicture.asset(
-                        Assets.courseSearchIcon,
-                        width: 20,
-                        height: 20,
-                        colorFilter: const ColorFilter.mode(
-                          Color(0xFF64748B),
-                          BlendMode.srcIn,
-                        ),
-                      ),
-                    ),
+            const Spacer(),
+            // ── Courses Button (replaces search bar) ───────────
+            _QuickAccessButton(
+              icon: Icons.menu_book_rounded,
+              label: 'Courses',
+              color: const Color(0xFF0D9488),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const StudentCourseScreen(),
                   ),
-                ),
-              ),
+                );
+              },
             ),
-            const SizedBox(width: 20),
+            const SizedBox(width: 10),
 
             // ── Quick access: Activities & Grades ──────────────
             if (!isCompact) ...[
@@ -129,34 +96,15 @@ class StudentDashboardAppBar extends StatelessWidget
                 },
               ),
               const SizedBox(width: 10),
-              _QuickAccessButton(
-                icon: Icons.grade_rounded,
-                label: 'Grades',
-                color: const Color(0xFF7C3AED),
-                onTap:
-                    onNavigateToGrades ??
-                    () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const StudentCourseScreen(),
-                        ),
-                      );
-                    },
-              ),
-              const SizedBox(width: 20),
-            ] else ...[
-              _CompactQuickAccessMenu(onNavigateToGrades: onNavigateToGrades),
-              const SizedBox(width: 12),
+              
             ],
+            const Spacer(),
 
             // ── Notifications + profile ────────────────────────
             FutureBuilder<String?>(
               future: TokenStorageHelper.getTokenSecure(),
               builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return const SizedBox.shrink();
-                }
+                if (!snapshot.hasData) return const SizedBox.shrink();
                 return NotificationBellButton(
                   token: snapshot.data!,
                   role: 'student',
@@ -171,7 +119,10 @@ class StudentDashboardAppBar extends StatelessWidget
     );
   }
 
-  Widget buildUserProfile(BuildContext context) {
+  /// Shows a dialog explaining that the student needs to pick a course
+  /// before viewing grades, then navigates to [StudentCourseScreen].
+  
+Widget buildUserProfile(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
@@ -217,22 +168,66 @@ class StudentDashboardAppBar extends StatelessWidget
     bool isOnline = true,
   }) {
     final size = radius * 2;
-    return Stack(
-      children: [
-        ClipOval(
-          child: SizedBox(
-            width: size,
-            height: size,
-            child: imageUrl != null && imageUrl.isNotEmpty
-                ? WebImage(url: imageUrl, width: size, height: size)
-                : avatarPlaceholder(size),
+    final indicatorSize = radius * 0.6;
+
+    return SizedBox(
+      // +indicatorSize/2 عشان الـ indicator مش يتقطع
+      width: size + indicatorSize / 2,
+      height: size + indicatorSize / 2,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          // ── Avatar ────────────────────────────────────────
+          ClipOval(
+            child: SizedBox(
+              width: size,
+              height: size,
+              child: (imageUrl != null && imageUrl.isNotEmpty)
+                  ? WebImage(url: imageUrl, width: size, height: size)
+                  : _avatarFallback(size),
+            ),
           ),
-        ),
-        onlineIndicator(isOnline: isOnline, size: radius / 2),
-      ],
+
+          // ── Online dot ────────────────────────────────────
+          if (isOnline)
+            Positioned(
+              bottom: 0,
+              right: 0,
+              child: Container(
+                width: indicatorSize,
+                height: indicatorSize,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.green,
+                  border: Border.all(color: Colors.white, width: 1.5),
+                ),
+              ),
+            ),
+        ],
+      ),
     );
   }
 
+  /// Fallback avatar عند غياب الصورة — حرف أول الاسم أو أيقونة.
+  Widget _avatarFallback(double size) {
+    final name = (userData['fullName'] as String?) ?? '';
+    final initial = name.isNotEmpty ? name[0].toUpperCase() : '?';
+    return Container(
+      width: size,
+      height: size,
+      color: const Color(0xFFE3F6FF),
+      alignment: Alignment.center,
+      child: Text(
+        initial,
+        style: TextStyle(
+          fontSize: size * 0.45,
+          fontWeight: FontWeight.w700,
+          color: const Color(0xFF175CD3),
+          fontFamily: 'inter',
+        ),
+      ),
+    );
+  }
   Widget avatarPlaceholder(double size) {
     return Container(
       width: size,
@@ -348,8 +343,7 @@ class StudentDashboardAppBar extends StatelessWidget
   }
 }
 
-/// Small "Dashboard" title + subtitle shown on wide screens, matching the
-/// AppBar's rounded container language.
+// ── Dashboard Title ───────────────────────────────────────────
 class _DashboardTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -401,9 +395,8 @@ class _DashboardTitle extends StatelessWidget {
   }
 }
 
-/// Pill-shaped quick-access button used for Activities / Grades shortcuts.
+// ── Quick Access Button ───────────────────────────────────────
 class _QuickAccessButton extends StatelessWidget {
-
   const _QuickAccessButton({
     required this.icon,
     required this.label,
@@ -459,8 +452,7 @@ class _QuickAccessButton extends StatelessWidget {
   }
 }
 
-/// Collapses Activities & Grades into a single icon-button menu on narrow
-/// screens, so the AppBar stays usable on mobile widths.
+// ── Compact Quick Access Menu ─────────────────────────────────
 class _CompactQuickAccessMenu extends StatelessWidget {
   const _CompactQuickAccessMenu({this.onNavigateToGrades});
   final VoidCallback? onNavigateToGrades;
@@ -479,7 +471,12 @@ class _CompactQuickAccessMenu extends StatelessWidget {
         color: Colors.white,
         icon: const Icon(Icons.apps_rounded, color: Color(0xFF2563EB)),
         onSelected: (value) {
-          if (value == 'activities') {
+          if (value == 'courses') {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const StudentCourseScreen()),
+            );
+          } else if (value == 'activities') {
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -487,17 +484,23 @@ class _CompactQuickAccessMenu extends StatelessWidget {
               ),
             );
           } else if (value == 'grades') {
-            if (onNavigateToGrades != null) {
-              onNavigateToGrades!();
-            } else {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const StudentCourseScreen()),
-              );
-            }
+            onNavigateToGrades?.call();
           }
         },
         itemBuilder: (context) => [
+          const PopupMenuItem<String>(
+            value: 'courses',
+            child: Row(
+              children: [
+                Icon(Icons.menu_book_rounded, color: Color(0xFF0D9488)),
+                SizedBox(width: 8),
+                Text(
+                  'Courses',
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                ),
+              ],
+            ),
+          ),
           const PopupMenuItem<String>(
             value: 'activities',
             child: Row(
@@ -530,8 +533,8 @@ class _CompactQuickAccessMenu extends StatelessWidget {
   }
 }
 
+// ── Web Image ─────────────────────────────────────────────────
 class WebImage extends StatelessWidget {
-
   WebImage({
     super.key,
     required this.url,
@@ -548,17 +551,14 @@ class WebImage extends StatelessWidget {
 
   void _register() {
     if (_registeredViews.contains(url)) return;
-
     ui.platformViewRegistry.registerViewFactory(url, (int _) {
       final img = html.ImageElement()
         ..src = url
         ..style.width = '100%'
         ..style.height = '100%'
         ..style.objectFit = 'cover';
-
       return img;
     });
-
     _registeredViews.add(url);
   }
 
