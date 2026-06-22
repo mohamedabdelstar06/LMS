@@ -28,7 +28,16 @@ namespace SkyLearnApi.Extentions
             {
                 options.SaveToken = true;
                 options.RequireHttpsMetadata = false;
-                
+
+                // CRITICAL FIX: Disable automatic claim type mapping.
+                // By default, ASP.NET Core JWT middleware maps short claim names
+                // (e.g. "role") to long XML schema URIs (ClaimTypes.Role).
+                // This also interferes with custom claims like "UserId" because
+                // the middleware's inbound claim transformer can rewrite or drop them.
+                // Setting MapInboundClaims = false preserves the exact claim names
+                // as they appear in the JWT token, so User.FindFirst("UserId") works.
+                options.MapInboundClaims = false;
+
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
@@ -43,8 +52,10 @@ namespace SkyLearnApi.Extentions
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.FromMinutes(5),
 
+                    // With MapInboundClaims = false, claim types stay as-is in the token.
+                    // The token uses ClaimTypes.Role (full URI) for roles, so this is correct.
                     RoleClaimType = ClaimTypes.Role,
-                    NameClaimType = ClaimTypes.NameIdentifier
+                    NameClaimType = ClaimTypes.Name
                 };
 
                 options.Events = new JwtBearerEvents

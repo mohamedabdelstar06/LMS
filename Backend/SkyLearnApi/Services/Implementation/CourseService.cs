@@ -118,13 +118,64 @@ namespace SkyLearnApi.Services.Implementations
 
         public async Task<CourseResponseDto?> GetByIdAsync(int id, int? userId = null, string? userRole = null)
         {
+            _logger.LogInformation("GetCourseById - CourseId: {CourseId}, UserId: {UserId}, Role: {Role}",
+                id, userId, userRole);
+
             var course = await _context.Courses
                 .Include(c => c.Department)
                 .Include(c => c.Year)
                 .Include(c => c.Instructor)
                 .FirstOrDefaultAsync(c => c.Id == id);
 
-            if (course == null) return null;
+            if (course == null)
+            {
+                _logger.LogWarning("GetCourseById: Course {CourseId} not found", id);
+                return null;
+            }
+
+            // Students can only view courses they are enrolled in
+            if (userRole == Roles.Student && userId.HasValue)
+            {
+                // Check automatic enrollment via academic year
+                var studentProfile = await _context.StudentProfiles
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(sp => sp.UserId == userId.Value);
+
+                if (studentProfile == null)
+                {
+                    _logger.LogWarning("GetCourseById: Student {UserId} has no profile - access denied to course {CourseId}",
+                        userId.Value, id);
+                    throw new UnauthorizedAccessException(
+                        "Your student profile was not found. Please contact an administrator.");
+                }
+
+                // Is the student in the course's year+department? (auto-enrollment)
+                bool autoEnrolled = studentProfile.YearId == course.YearId
+                                 && studentProfile.DepartmentId == course.DepartmentId;
+
+                // Is the student manually enrolled?
+                bool manuallyEnrolled = false;
+                if (!autoEnrolled)
+                {
+                    manuallyEnrolled = await _context.Enrollments
+                        .AnyAsync(e => e.StudentProfileId == studentProfile.Id
+                                    && e.CourseId == id);
+                }
+
+                if (!autoEnrolled && !manuallyEnrolled)
+                {
+                    _logger.LogWarning(
+                        "GetCourseById: Student {UserId} (YearId={YearId}, DeptId={DeptId}) is NOT enrolled in course {CourseId} (YearId={CourseYearId}) - access denied",
+                        userId.Value, studentProfile.YearId, studentProfile.DepartmentId,
+                        id, course.YearId);
+                    throw new UnauthorizedAccessException(
+                        "You are not enrolled in this course.");
+                }
+
+                _logger.LogInformation(
+                    "GetCourseById: Student {UserId} access granted to course {CourseId} (AutoEnrolled={Auto}, ManuallyEnrolled={Manual})",
+                    userId.Value, id, autoEnrolled, manuallyEnrolled);
+            }
 
             // Count includes: (1) students automatically enrolled via their academic year
             //                 (2) students manually enrolled via Enrollment endpoint from other years

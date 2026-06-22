@@ -45,8 +45,19 @@ namespace SkyLearnApi.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById(int id)
         {
+            // Log all claims for debugging
+            var allClaims = User.Claims.Select(c => $"{c.Type}={c.Value}").ToList();
+            Log.Debug("GetCourseById - Claims: {Claims}", string.Join("; ", allClaims));
+
             if (UserId == null)
+            {
+                Log.Warning("GetCourseById {CourseId}: Cannot extract UserId from token. User.Identity.IsAuthenticated={IsAuth}, Claims count={ClaimsCount}",
+                    id, User.Identity?.IsAuthenticated, User.Claims.Count());
                 return Unauthorized(new { message = "Invalid or missing authentication token" });
+            }
+
+            Log.Information("GetCourseById {CourseId} - UserId: {UserId}, Role: {Role}",
+                id, UserId, UserRole);
 
             try
             {
@@ -61,6 +72,8 @@ namespace SkyLearnApi.Controllers
             }
             catch (UnauthorizedAccessException ex)
             {
+                Log.Warning("GetCourseById {CourseId}: Access denied for UserId {UserId} (Role={Role}) - {Reason}",
+                    id, UserId, UserRole, ex.Message);
                 return StatusCode(403, new { message = ex.Message });
             }
         }

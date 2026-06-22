@@ -23,9 +23,19 @@ namespace SkyLearnApi.Controllers
         [Authorize(Roles = Roles.Student)]
         public async Task<IActionResult> GetMyCourses()
         {
+            Log.Information("GET my-courses - IsAuthenticated: {IsAuth}, Claims: {Claims}",
+                User.Identity?.IsAuthenticated,
+                string.Join("; ", User.Claims.Select(c => $"{c.Type}={c.Value}")));
+
             if (UserId == null)
+            {
+                Log.Warning("GET my-courses: Cannot extract UserId from token claims");
                 return Unauthorized(new { message = "Invalid token" });
+            }
+
+            Log.Information("GET my-courses - Fetching courses for UserId: {UserId}", UserId.Value);
             var courses = await _enrollmentService.GetStudentCoursesAsync(UserId.Value);
+            Log.Information("GET my-courses - Returning {Count} courses for UserId: {UserId}", courses.Count, UserId.Value);
             return Ok(courses);
         }
         [HttpPost]

@@ -177,27 +177,40 @@ namespace SkyLearnApi.Controllers
         [HttpGet("me")]
         public async Task<IActionResult> GetCurrentUserProfile()
         {
-            // Extract user ID from JWT claims
+            // Log all available claims for debugging
+            var allClaims = User.Claims.Select(c => $"{c.Type}={c.Value}").ToList();
+            Log.Debug("GET /me - IsAuthenticated: {IsAuth}, Claims: {Claims}",
+                User.Identity?.IsAuthenticated, string.Join("; ", allClaims));
+
+            // Extract user ID from JWT claims.
+            // With MapInboundClaims = false (set in JwtAuthenticationExtensions),
+            // the claim name is exactly "UserId" as written in JwtService.
             var userIdClaim = User.FindFirst("UserId")
-                           ?? User.FindFirst(ClaimTypes.NameIdentifier) 
-                           ?? User.FindFirst("sub") 
+                           ?? User.FindFirst(ClaimTypes.NameIdentifier)
+                           ?? User.FindFirst("sub")
                            ?? User.FindFirst("nameid");
 
             if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out var userId))
             {
-                return Unauthorized(new 
-                { 
+                Log.Warning("GET /me - Failed to extract UserId. IsAuthenticated={IsAuth}, AvailableClaims=[{Claims}]",
+                    User.Identity?.IsAuthenticated, string.Join("; ", allClaims));
+
+                return Unauthorized(new
+                {
                     message = "Invalid or missing user identity in token",
                     success = false
                 });
             }
 
+            Log.Information("GET /me - UserId: {UserId}, ClaimType: {ClaimType}", userId, userIdClaim.Type);
+
             var profile = await _authService.GetCurrentUserProfileAsync(userId);
 
             if (profile == null)
             {
-                return NotFound(new 
-                { 
+                Log.Warning("GET /me - Profile not found for UserId: {UserId}", userId);
+                return NotFound(new
+                {
                     message = "User profile not found",
                     success = false
                 });
