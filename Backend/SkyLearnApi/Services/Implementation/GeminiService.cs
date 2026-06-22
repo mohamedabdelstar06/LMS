@@ -14,7 +14,7 @@ namespace SkyLearnApi.Services.Implementation
             _httpClient = httpClient;
             _settings = settings.Value;
             _logger = logger;
-            _httpClient.Timeout = TimeSpan.FromSeconds(_settings.TimeoutSeconds);
+            _httpClient.Timeout = TimeSpan.FromSeconds(Math.Max(_settings.TimeoutSeconds, 600));
         }
 
         public async Task<string> SummarizeTextAsync(string content)
@@ -63,6 +63,13 @@ Respond in the same language as the spoken content.";
             return await CallGeminiAsync(prompt);
         }
 
+        public async Task<string> GenerateQuizQuestionsWithFileAsync(string prompt, string filePath, string contentType)
+        {
+            var mimeType = GetMimeType(filePath, contentType);
+            var fileUri = await UploadFileToGeminiAsync(filePath, mimeType);
+            return await CallGeminiWithFileUriAsync(prompt, fileUri, mimeType);
+        }
+
         public async Task<string> TranslateToArabicAsync(string content)
         {
             var prompt = $@"Translate the following educational content from English to Arabic. 
@@ -94,7 +101,7 @@ Content to translate:
                 generationConfig = new
                 {
                     temperature = 0.7,
-                    maxOutputTokens = 8192
+                    maxOutputTokens = 65536
                 }
             };
 

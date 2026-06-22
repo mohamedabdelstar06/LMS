@@ -6,6 +6,7 @@ namespace SkyLearnApi.Services.Interfaces
         Task<string> SummarizeFileAsync(string filePath, string contentType);
         Task<string> TranscribeFileAsync(string filePath, string contentType);
         Task<string> GenerateQuizQuestionsAsync(string prompt);
+        Task<string> GenerateQuizQuestionsWithFileAsync(string prompt, string filePath, string contentType);
         Task<string> TranslateToArabicAsync(string content);
     }
 }

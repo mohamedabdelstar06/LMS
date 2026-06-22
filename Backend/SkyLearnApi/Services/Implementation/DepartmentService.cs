@@ -90,6 +90,7 @@ namespace SkyLearnApi.Services.Implementations
                 Name = dto.Name,
                 Description = dto.Description,
                 HeadId = head.Id,
+                Head = head,
                 ImageUrl = imageUrl,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow

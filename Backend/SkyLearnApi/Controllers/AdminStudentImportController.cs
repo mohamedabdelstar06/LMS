@@ -1,4 +1,5 @@
 using SkyLearnApi.DTOs.Import;
+using SkyLearnApi.Services.Interfaces;
 
 namespace SkyLearnApi.Controllers
 {
@@ -15,14 +16,16 @@ namespace SkyLearnApi.Controllers
     public class AdminStudentImportController : ControllerBase
     {
         private readonly IStudentImportService _importService;
+        private readonly INotificationService _notificationService;
         // Maximum file size: 5 MB (sufficient for thousands of students)
         private const long MaxFileSizeBytes = 5 * 1024 * 1024;
         
         // Allowed file extensions
         private static readonly string[] AllowedExtensions = { ".csv" };
-        public AdminStudentImportController(IStudentImportService importService)
+        public AdminStudentImportController(IStudentImportService importService, INotificationService notificationService)
         {
             _importService = importService;
+            _notificationService = notificationService;
         }
         /// Import students from a CSV file.
         /// Expected CSV format (header row required):
@@ -81,6 +84,14 @@ namespace SkyLearnApi.Controllers
                 Log.Information(
                     "Admin bulk import completed: {Success}/{Total} students imported successfully",
                     result.SuccessCount, result.TotalRows);
+
+                if (int.TryParse(User.FindFirst("UserId")?.Value, out var adminId))
+                {
+                    await _notificationService.CreateNotificationAsync(adminId, 
+                        "Student Import Completed", 
+                        $"You have successfully added {result.SuccessCount} out of {result.TotalRows} students to the system.", 
+                        "System");
+                }
 
                 return Ok(result);
             }

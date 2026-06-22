@@ -18,5 +18,27 @@ namespace SkyLearnApi.DTOs.Quizzes
         public string? DifficultyLevel { get; set; }
         public int? SortOrder { get; set; }
         public bool? IsVisible { get; set; }
+        public List<UpdateQuizQuestionDto>? Questions { get; set; }
+    }
+
+    public class UpdateQuizQuestionDto
+    {
+        public int? Id { get; set; }
+        public string QuestionText { get; set; } = string.Empty;
+        public string QuestionType { get; set; } = "MCQ";
+        public decimal Marks { get; set; }
+        public string? DifficultyLevel { get; set; }
+        public string? Explanation { get; set; }
+        public string? SourceReference { get; set; }
+        public int SortOrder { get; set; }
+        public List<UpdateQuizOptionDto>? Options { get; set; }
+    }
+
+    public class UpdateQuizOptionDto
+    {
+        public int? Id { get; set; }
+        public string OptionText { get; set; } = string.Empty;
+        public bool IsCorrect { get; set; }
+        public int SortOrder { get; set; }
     }
 }

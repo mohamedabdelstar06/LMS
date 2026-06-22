@@ -61,14 +61,14 @@ namespace SkyLearnApi.Services.Implementation
                 if (!File.Exists(filePath))
                     throw new FileNotFoundException($"The lecture file could not be found: {filePath}");
 
-                var extractor = _textExtractors.FirstOrDefault(e => e.CanHandle(lecture.ContentType))
+                var extractor = _textExtractors.FirstOrDefault(e => e.CanHandle(lecture.ContentType ?? ""))
                     ?? throw new NotSupportedException($"No local text extractor found for content type: {lecture.ContentType}");
 
                 _logger.LogInformation("Extracting text using {ExtractorType}", extractor.GetType().Name);
-                var rawText = await extractor.ExtractTextAsync(filePath, lecture.ContentType);
+                var rawText = await extractor.ExtractTextAsync(filePath, lecture.ContentType ?? "");
 
-                var isAudioVideo = lecture.ContentType.StartsWith("video", StringComparison.OrdinalIgnoreCase) ||
-                                   lecture.ContentType.StartsWith("audio", StringComparison.OrdinalIgnoreCase);
+                var isAudioVideo = (lecture.ContentType ?? "").StartsWith("video", StringComparison.OrdinalIgnoreCase) ||
+                                   (lecture.ContentType ?? "").StartsWith("audio", StringComparison.OrdinalIgnoreCase);
 
                 if (isAudioVideo)
                 {

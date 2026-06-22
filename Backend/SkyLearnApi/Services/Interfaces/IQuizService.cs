@@ -9,7 +9,7 @@ namespace SkyLearnApi.Services.Interfaces
         Task<QuizResponseDto?> GetByIdAsync(int id, int userId, string userRole);
         Task<QuizResponseDto?> UpdateAsync(int id, UpdateQuizDto dto, int userId);
         Task<bool> DeleteAsync(int id, int userId);
-        Task<QuizResponseDto> GenerateWithAiAsync(GenerateQuizDto dto, int userId);
+        Task<object> GenerateWithAiAsync(GenerateQuizDto dto, int userId);
         Task<QuizTakeResponseDto> TakeQuizAsync(int quizId, int studentId);
         Task<QuizResultResponseDto> SubmitQuizAsync(int quizId, SubmitQuizDto dto, int studentId);
         Task<QuizStudentResultsDto> GetQuizResultsAsync(int quizId, int userId, string userRole);

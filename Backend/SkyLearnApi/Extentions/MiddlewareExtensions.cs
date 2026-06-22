@@ -1,4 +1,4 @@
-﻿using Hangfire;
+using Hangfire;
 using Serilog;
 using SkyLearnApi.Middleware;
 using SkyLearnApi.Hubs;
@@ -25,7 +25,7 @@ namespace SkyLearnApi.Extentions
                 
                 options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
                 {
-                    diagnosticContext.Set("RequestHost", httpContext.Request.Host.Value);
+                    diagnosticContext.Set("RequestHost", httpContext.Request.Host.Value ?? "unknown");
                     diagnosticContext.Set("RequestScheme", httpContext.Request.Scheme);
                     diagnosticContext.Set("RequestPath", httpContext.Request.Path.ToString());
                     diagnosticContext.Set("RemoteIP", httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown");

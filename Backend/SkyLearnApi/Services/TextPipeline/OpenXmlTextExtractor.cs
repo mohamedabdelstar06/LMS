@@ -26,7 +26,7 @@ namespace SkyLearnApi.Services.TextPipeline
                 {
                     using (WordprocessingDocument wordDoc = WordprocessingDocument.Open(filePath, false))
                     {
-                        var body = wordDoc.MainDocumentPart?.Document.Body;
+                        var body = wordDoc.MainDocumentPart?.Document?.Body;
                         if (body != null)
                         {
                             foreach (var para in body.Elements<Paragraph>())

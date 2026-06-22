@@ -29,5 +29,6 @@ namespace SkyLearnApi.DTOs.Quizzes
         public int CreatedById { get; set; }
         public string CreatedByName { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; }
+        public List<QuestionResponseDto> Questions { get; set; } = new();
     }
 }

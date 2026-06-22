@@ -414,13 +414,13 @@ namespace SkyLearnApi.Services.Implementation
             {
                 // USER EXISTS - Update their information (wasUpdate = true)
                 var updateError = await UpdateExistingUserAsync(rowNumber, rowData, existingUser, departmentId, yearId, squadronId, existingNationalIds);
-                return (updateError, wasUpdate: true);
+                return (updateError, true);
             }
             else
             {
                 // NEW USER - Create from scratch (wasUpdate = false)
                 var createError = await CreateNewUserAsync(rowNumber, rowData, departmentId, yearId, squadronId, existingEmails, existingNationalIds);
-                return (createError, wasUpdate: false);
+                return (createError, false);
             }
         }
 

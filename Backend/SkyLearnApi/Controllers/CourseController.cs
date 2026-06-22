@@ -5,7 +5,7 @@ namespace SkyLearnApi.Controllers
     /// Students use the Enrollment/my-courses endpoint to see their courses.
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = Roles.AdminOrInstructor)]
+    [Authorize]
     public class CourseController : ControllerBase
     {
         private readonly ICourseService _courseService;
@@ -22,6 +22,7 @@ namespace SkyLearnApi.Controllers
             User.FindFirst(ClaimTypes.Role)?.Value ?? User.FindFirst("role")?.Value;
 
         [HttpGet]
+        [Authorize(Roles = Roles.AdminOrInstructor)]
         public async Task<IActionResult> GetAll(
             [FromQuery] string? search,
             [FromQuery] int? departmentId,
@@ -65,6 +66,7 @@ namespace SkyLearnApi.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = Roles.AdminOrInstructor)]
         public async Task<IActionResult> Create([FromForm] CourseRequestDto dto)
         {
             if (UserId == null)
@@ -86,6 +88,7 @@ namespace SkyLearnApi.Controllers
         }
 
         [HttpPut("{id:int}")]
+        [Authorize(Roles = Roles.AdminOrInstructor)]
         public async Task<IActionResult> Update(int id, [FromForm] CourseRequestDto dto)
         {
             if (UserId == null)
@@ -113,6 +116,7 @@ namespace SkyLearnApi.Controllers
         }
 
         [HttpDelete("{id:int}")]
+        [Authorize(Roles = Roles.AdminOrInstructor)]
         public async Task<IActionResult> Delete(int id)
         {
             if (UserId == null)

@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace SkyLearnApi.Middleware
 {
@@ -62,9 +62,7 @@ namespace SkyLearnApi.Middleware
                     DbUpdateException dbEx => (
                         StatusCodes.Status400BadRequest,
                         "Database Error",
-                        _env.IsDevelopment()
-                            ? $"Database error: {dbEx.InnerException?.Message ?? dbEx.Message}"
-                            : "A database error occurred. Please check your data and try again."
+                        $"Database error: {dbEx.InnerException?.Message ?? dbEx.Message}"
                     ),
 
                     InvalidOperationException => (

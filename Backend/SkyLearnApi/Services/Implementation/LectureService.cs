@@ -101,6 +101,12 @@ catch (Exception ex)
                 $"A new lecture '{lecture.Title}' has been added to '{course.Title}'.",
                 "NewLecture", lecture.Id);
 
+            // Notify the creator
+            await _notificationService.CreateNotificationAsync(userId,
+                "Lecture Created Successfully",
+                $"You have successfully created the lecture '{lecture.Title}' in '{course.Title}'.",
+                "System", lecture.Id);
+
             return await MapToResponseDto(lecture);
         }
 
@@ -327,8 +333,8 @@ catch (Exception ex)
             if (!File.Exists(filePath))
                 throw new ArgumentException($"The lecture file could not be found on the server.");
 
-            var isAudioVideo = lecture.ContentType.StartsWith("video", StringComparison.OrdinalIgnoreCase) || 
-                               lecture.ContentType.StartsWith("audio", StringComparison.OrdinalIgnoreCase);
+            var isAudioVideo = (lecture.ContentType ?? "").StartsWith("video", StringComparison.OrdinalIgnoreCase) || 
+                               (lecture.ContentType ?? "").StartsWith("audio", StringComparison.OrdinalIgnoreCase);
 
             var estimatedMinutes = isAudioVideo ? 25 : 5; // Long estimated default buffer times
             
@@ -361,8 +367,8 @@ catch (Exception ex)
                 CourseId = lecture.CourseId,
                 Title = lecture.Title,
                 Description = lecture.Description,
-                ContentType = lecture.ContentType,
-                FileUrl = lecture.FileUrl,
+                ContentType = lecture.ContentType ?? "",
+                FileUrl = lecture.FileUrl ?? "",
                 AdditionalFileUrls = lecture.AdditionalFileUrls,
                 ThumbnailUrl = lecture.ThumbnailUrl,
                 HasSummary = !string.IsNullOrEmpty(lecture.AiSummary),

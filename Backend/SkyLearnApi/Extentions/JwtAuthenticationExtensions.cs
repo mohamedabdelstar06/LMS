@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Security.Claims;
@@ -67,7 +67,8 @@ namespace SkyLearnApi.Extentions
                         var error = context.Exception.Message;
                         Log.Warning("JWT Authentication failed: {Error}", error);
                         
-                        context.Response.Headers.Append("X-Auth-Error", error);
+                        var cleanError = error.Replace("\r", " ").Replace("\n", " ");
+                        context.Response.Headers.Append("X-Auth-Error", cleanError);
                         return Task.CompletedTask;
                     },
                     OnTokenValidated = context =>

@@ -178,7 +178,8 @@ namespace SkyLearnApi.Controllers
         public async Task<IActionResult> GetCurrentUserProfile()
         {
             // Extract user ID from JWT claims
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier) 
+            var userIdClaim = User.FindFirst("UserId")
+                           ?? User.FindFirst(ClaimTypes.NameIdentifier) 
                            ?? User.FindFirst("sub") 
                            ?? User.FindFirst("nameid");
 
@@ -215,7 +216,8 @@ namespace SkyLearnApi.Controllers
         [HttpPatch("me")]
         public async Task<IActionResult> UpdateProfile([FromForm] UpdateProfileRequestDto dto)
         {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier) 
+            var userIdClaim = User.FindFirst("UserId")
+                           ?? User.FindFirst(ClaimTypes.NameIdentifier) 
                            ?? User.FindFirst("sub") 
                            ?? User.FindFirst("nameid");
 

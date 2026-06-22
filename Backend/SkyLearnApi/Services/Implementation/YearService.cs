@@ -161,7 +161,7 @@ namespace SkyLearnApi.Services.Implementation
             if (year.Department == null) 
                  await _db.Entry(year).Reference(y => y.Department).LoadAsync();
 
-            if (year.Department.Name != dto.DepartmentName)
+            if (year.Department?.Name != dto.DepartmentName)
             {
                  var department = await _db.Departments.FirstOrDefaultAsync(d => d.Name == dto.DepartmentName);
                  if (department == null)
@@ -170,10 +170,10 @@ namespace SkyLearnApi.Services.Implementation
                  year.DepartmentId = department.Id;
             }
 
-            if (dto.Name != year.Name || year.Department.Name != dto.DepartmentName)
+            if (dto.Name != year.Name || year.Department?.Name != dto.DepartmentName)
             {
                  var targetDeptId = year.DepartmentId; // Default to current dept
-                 if (year.Department.Name != dto.DepartmentName)
+                 if (year.Department?.Name != dto.DepartmentName)
                  {
                      // Already resolved department above, but getting ID again for clarity or reusing local var if I had refactored better.
                      // The code above updates year.DepartmentId. Let's rely on that.

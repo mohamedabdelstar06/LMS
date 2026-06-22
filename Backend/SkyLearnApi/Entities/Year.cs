@@ -6,10 +6,10 @@ namespace SkyLearnApi.Entities
         public string Name { get; set; } = string.Empty;
         public string? Description { get; set; }
         public int DepartmentId { get; set; }
-        public Department Department { get; set; }
+        public required Department Department { get; set; }
         public ICollection<Course> Courses { get; set; } = new List<Course>();
         public int CreatedById { get; set; }
-        public ApplicationUser CreatedBy { get; set; }      
+        public required ApplicationUser CreatedBy { get; set; }      
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }       
         public int TotalCourses { get; set; } = 0;

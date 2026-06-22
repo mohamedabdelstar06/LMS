@@ -68,6 +68,12 @@ namespace SkyLearnApi.Services.Implementation
                 $"A new assignment '{assignment.Title}' has been added to '{course.Title}'. DeadLine: {dto.DeadLineDate:g}",
                 "NewAssignment", assignment.Id);
 
+            // Notify the creator
+            await _notificationService.CreateNotificationAsync(userId,
+                "Assignment Created Successfully",
+                $"You have successfully created the assignment '{assignment.Title}' in '{course.Title}'.",
+                "System", assignment.Id);
+
             return MapToResponseDto(assignment);
         }
 

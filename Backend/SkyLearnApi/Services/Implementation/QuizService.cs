@@ -1,4 +1,5 @@
 using SkyLearnApi.DTOs.Quizzes;
+using Hangfire;
 
 namespace SkyLearnApi.Services.Implementation
 {
@@ -10,9 +11,11 @@ namespace SkyLearnApi.Services.Implementation
         private readonly INotificationService _notificationService;
         private readonly IWebHostEnvironment _env;
         private readonly ILogger<QuizService> _logger;
+        private readonly Hangfire.IBackgroundJobClient _backgroundJobClient;
 
         public QuizService(AppDbContext context, IGeminiService geminiService, IActivityService activityService,
-            INotificationService notificationService, IWebHostEnvironment env, ILogger<QuizService> logger)
+            INotificationService notificationService, IWebHostEnvironment env, ILogger<QuizService> logger,
+            Hangfire.IBackgroundJobClient backgroundJobClient)
         {
             _context = context;
             _geminiService = geminiService;
@@ -20,6 +23,7 @@ namespace SkyLearnApi.Services.Implementation
             _notificationService = notificationService;
             _env = env;
             _logger = logger;
+            _backgroundJobClient = backgroundJobClient;
         }
 
         public async Task<QuizResponseDto> CreateAsync(int courseId, CreateQuizDto dto, int userId)
@@ -89,6 +93,10 @@ namespace SkyLearnApi.Services.Implementation
 
             _context.Quizzes.Add(quiz);
             await _context.SaveChangesAsync();
+            
+            // Fetch the user so the CreatedByName is populated in the response
+            var createdByUser = await _context.Users.FindAsync(userId);
+            quiz.CreatedBy = createdByUser!;
 
             _logger.LogInformation("Quiz created successfully. QuizId: {QuizId}, CourseId: {CourseId}, Title: {Title}, TotalMarks: {TotalMarks}",
                 quiz.Id, courseId, quiz.Title, quiz.TotalMarks);
@@ -103,6 +111,12 @@ namespace SkyLearnApi.Services.Implementation
                 (dto.DeadLineDate.HasValue ? $" DeadLine: {dto.DeadLineDate.Value:g}" : ""),
                 "NewQuiz", quiz.Id);
 
+            // Notify the creator
+            await _notificationService.CreateNotificationAsync(userId,
+                "Quiz Created Successfully",
+                $"You have successfully created the quiz '{quiz.Title}' in '{course.Title}'.",
+                "System", quiz.Id);
+
             return MapToResponseDto(quiz, course.Title);
         }
 
@@ -113,7 +127,7 @@ namespace SkyLearnApi.Services.Implementation
                 .Where(q => q.CourseId == courseId)
                 .Include(q => q.CreatedBy)
                 .Include(q => q.TargetSquadron)
-                .Include(q => q.Questions)
+                .Include(q => q.Questions) // Still include Questions to get QuestionCount correctly
                 .OrderBy(q => q.SortOrder)
                 .AsQueryable();
 
@@ -121,7 +135,7 @@ namespace SkyLearnApi.Services.Implementation
                 query = query.Where(q => q.IsVisible && q.QuizScope == "Course");
 
             var quizzes = await query.ToListAsync();
-            return quizzes.Select(q => MapToResponseDto(q, course?.Title ?? "")).ToList();
+            return quizzes.Select(q => MapToResponseDto(q, course?.Title ?? "", false)).ToList();
         }
 
         public async Task<QuizResponseDto?> GetByIdAsync(int id, int userId, string userRole)
@@ -130,6 +144,7 @@ namespace SkyLearnApi.Services.Implementation
                 .Include(q => q.CreatedBy)
                 .Include(q => q.TargetSquadron)
                 .Include(q => q.Questions)
+                    .ThenInclude(q => q.Options)
                 .Include(q => q.Course)
                 .FirstOrDefaultAsync(q => q.Id == id);
 
@@ -141,7 +156,13 @@ namespace SkyLearnApi.Services.Implementation
 
         public async Task<QuizResponseDto?> UpdateAsync(int id, UpdateQuizDto dto, int userId)
         {
-            var quiz = await _context.Quizzes.Include(q => q.Course).FirstOrDefaultAsync(q => q.Id == id);
+            var quiz = await _context.Quizzes
+                .Include(q => q.Course)
+                .Include(q => q.CreatedBy)
+                .Include(q => q.TargetSquadron)
+                .Include(q => q.Questions)
+                    .ThenInclude(q => q.Options)
+                .FirstOrDefaultAsync(q => q.Id == id);
             if (quiz == null) return null;
 
             if (dto.Title != null) quiz.Title = dto.Title;
@@ -160,6 +181,132 @@ namespace SkyLearnApi.Services.Implementation
             if (dto.DifficultyLevel != null) quiz.DifficultyLevel = dto.DifficultyLevel;
             if (dto.SortOrder.HasValue) quiz.SortOrder = dto.SortOrder.Value;
             if (dto.IsVisible.HasValue) quiz.IsVisible = dto.IsVisible.Value;
+
+            if (dto.Questions != null)
+            {
+                var matchedQuestions = new Dictionary<UpdateQuizQuestionDto, Question>();
+                var usedExistingQuestionIds = new HashSet<int>();
+
+                foreach (var qDto in dto.Questions)
+                {
+                    Question? existingQ = null;
+                    if (qDto.Id.HasValue && qDto.Id.Value > 0)
+                    {
+                        existingQ = quiz.Questions.FirstOrDefault(q => q.Id == qDto.Id.Value);
+                    }
+                    
+                    if (existingQ == null)
+                    {
+                        existingQ = quiz.Questions.FirstOrDefault(q => q.SortOrder == qDto.SortOrder && !usedExistingQuestionIds.Contains(q.Id));
+                    }
+
+                    if (existingQ != null)
+                    {
+                        matchedQuestions[qDto] = existingQ;
+                        usedExistingQuestionIds.Add(existingQ.Id);
+                    }
+                }
+
+                var questionsToRemove = quiz.Questions.Where(q => !usedExistingQuestionIds.Contains(q.Id)).ToList();
+                
+                foreach(var qRemove in questionsToRemove)
+                {
+                    quiz.TotalMarks -= qRemove.Marks;
+                    _context.Questions.Remove(qRemove);
+                }
+
+                foreach (var qDto in dto.Questions)
+                {
+                    if (matchedQuestions.TryGetValue(qDto, out var existingQ))
+                    {
+                        quiz.TotalMarks = quiz.TotalMarks - existingQ.Marks + qDto.Marks;
+                        
+                        existingQ.QuestionText = qDto.QuestionText;
+                        existingQ.QuestionType = qDto.QuestionType;
+                        existingQ.Marks = qDto.Marks;
+                        if (qDto.DifficultyLevel != null) existingQ.DifficultyLevel = qDto.DifficultyLevel;
+                        existingQ.Explanation = qDto.Explanation;
+                        existingQ.SourceReference = qDto.SourceReference;
+                        existingQ.SortOrder = qDto.SortOrder;
+
+                        if (qDto.Options != null)
+                        {
+                            var matchedOptions = new Dictionary<UpdateQuizOptionDto, QuestionOption>();
+                            var usedOptionIds = new HashSet<int>();
+
+                            foreach (var oDto in qDto.Options)
+                            {
+                                QuestionOption? existingO = null;
+                                if (oDto.Id.HasValue && oDto.Id.Value > 0)
+                                {
+                                    existingO = existingQ.Options.FirstOrDefault(o => o.Id == oDto.Id.Value);
+                                }
+                                if (existingO == null)
+                                {
+                                    existingO = existingQ.Options.FirstOrDefault(o => o.SortOrder == oDto.SortOrder && !usedOptionIds.Contains(o.Id));
+                                }
+
+                                if (existingO != null)
+                                {
+                                    matchedOptions[oDto] = existingO;
+                                    usedOptionIds.Add(existingO.Id);
+                                }
+                            }
+
+                            var optionsToRemove = existingQ.Options.Where(o => !usedOptionIds.Contains(o.Id)).ToList();
+                            _context.QuestionOptions.RemoveRange(optionsToRemove);
+
+                            foreach(var oDto in qDto.Options)
+                            {
+                                if (matchedOptions.TryGetValue(oDto, out var existingO))
+                                {
+                                    existingO.OptionText = oDto.OptionText;
+                                    existingO.IsCorrect = oDto.IsCorrect;
+                                    existingO.SortOrder = oDto.SortOrder;
+                                }
+                                else
+                                {
+                                    existingQ.Options.Add(new QuestionOption
+                                    {
+                                        OptionText = oDto.OptionText,
+                                        IsCorrect = oDto.IsCorrect,
+                                        SortOrder = oDto.SortOrder
+                                    });
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        var newQuestion = new Question
+                        {
+                            QuestionText = qDto.QuestionText,
+                            QuestionType = qDto.QuestionType,
+                            Marks = qDto.Marks,
+                            DifficultyLevel = qDto.DifficultyLevel ?? "Medium",
+                            Explanation = qDto.Explanation,
+                            SourceReference = qDto.SourceReference,
+                            SortOrder = qDto.SortOrder
+                        };
+
+                        if (qDto.Options != null)
+                        {
+                            foreach (var oDto in qDto.Options)
+                            {
+                                newQuestion.Options.Add(new QuestionOption
+                                {
+                                    OptionText = oDto.OptionText,
+                                    IsCorrect = oDto.IsCorrect,
+                                    SortOrder = oDto.SortOrder
+                                });
+                            }
+                        }
+
+                        quiz.Questions.Add(newQuestion);
+                        quiz.TotalMarks += qDto.Marks;
+                    }
+                }
+            }
 
             quiz.UpdatedAt = DateTime.UtcNow;
             await _context.SaveChangesAsync();
@@ -187,99 +334,9 @@ namespace SkyLearnApi.Services.Implementation
             return true;
         }
 
-        public async Task<QuizResponseDto> GenerateWithAiAsync(GenerateQuizDto dto, int userId)
+        public async Task<object> GenerateWithAiAsync(GenerateQuizDto dto, int userId)
         {
-            // Build the source content for AI
-            var sourceContent = new StringBuilder();
-
-            if (dto.LectureIds != null && dto.LectureIds.Any())
-            {
-                var lectures = await _context.Lectures
-                    .Where(l => dto.LectureIds.Contains(l.Id))
-                    .ToListAsync();
-
-                foreach (var lecture in lectures)
-                {
-                    sourceContent.AppendLine($"--- Lecture: {lecture.Title} ---");
-                    if (!string.IsNullOrEmpty(lecture.Transcript))
-                        sourceContent.AppendLine(lecture.Transcript);
-                    else if (!string.IsNullOrEmpty(lecture.AiSummary))
-                        sourceContent.AppendLine(lecture.AiSummary);
-                    else if (!string.IsNullOrEmpty(lecture.FileUrl))
-                    {
-                        var filePath = Path.Combine(_env.WebRootPath, lecture.FileUrl.TrimStart('/'));
-                        if (File.Exists(filePath))
-                        {
-                            var summary = await _geminiService.SummarizeFileAsync(filePath, lecture.ContentType);
-                            lecture.AiSummary = summary;
-                            lecture.SummaryGeneratedAt = DateTime.UtcNow;
-                            sourceContent.AppendLine(summary);
-                        }
-                    }
-                }
-            }
-
-            if (dto.ImportedPdf != null)
-            {
-                var tempPath = await FileHelper.SaveFileAsync(dto.ImportedPdf, "temp", _env);
-                var fullPath = Path.Combine(_env.WebRootPath, tempPath.TrimStart('/'));
-                var pdfContent = await _geminiService.SummarizeFileAsync(fullPath, "Pdf");
-                sourceContent.AppendLine("--- Imported PDF ---");
-                sourceContent.AppendLine(pdfContent);
-                FileHelper.DeleteFile(tempPath, _env);
-            }
-
-            var questionTypes = dto.QuestionTypes ?? "MCQ";
-            var prompt = $@"Based on the following educational content, generate exactly {dto.NumberOfQuestions} questions.
-
-Question types required: {questionTypes}
-Difficulty level: {dto.DifficultyLevel}
-
-Source material:
-{sourceContent}
-
-{(string.IsNullOrEmpty(dto.CustomPrompt) ? "" : $"Additional instructions: {dto.CustomPrompt}")}
-
-For each question provide:
-1. questionText - The question text in English
-2. questionType - One of: MCQ, Written, TrueFalse
-3. marks - Points (1-5 based on difficulty)
-4. difficultyLevel - Easy, Medium, or Hard
-5. explanation - Why the correct answer is correct, referencing the source
-6. sourceReference - Page number or topic reference from the source
-7. options - For MCQ: exactly 4 options. For TrueFalse: True and False options. Each with text and isCorrect boolean. For Written: empty array.
-
-Return ONLY a valid JSON array with this exact schema, no markdown formatting:
-[{{
-  ""questionText"": ""..."",
-  ""questionType"": ""MCQ"",
-  ""marks"": 2,
-  ""difficultyLevel"": ""Medium"",
-  ""explanation"": ""..."",
-  ""sourceReference"": ""..."",
-  ""options"": [
-    {{ ""text"": ""..."", ""isCorrect"": false }},
-    {{ ""text"": ""..."", ""isCorrect"": true }},
-    {{ ""text"": ""..."", ""isCorrect"": false }},
-    {{ ""text"": ""..."", ""isCorrect"": false }}
-  ]
-}}]";
-
-            var aiResponse = await _geminiService.GenerateQuizQuestionsAsync(prompt);
-
-            // Parse AI response
-            var cleanJson = aiResponse.Trim();
-            if (cleanJson.StartsWith("```"))
-            {
-                cleanJson = cleanJson.Substring(cleanJson.IndexOf('['));
-                cleanJson = cleanJson.Substring(0, cleanJson.LastIndexOf(']') + 1);
-            }
-
-            var generatedQuestions = JsonSerializer.Deserialize<List<AiGeneratedQuestion>>(cleanJson,
-                new JsonSerializerOptions { PropertyNameCaseInsensitive = true })
-                ?? throw new Exception("Failed to parse AI-generated questions.");
-
-            // Create the quiz
+            // Validate course
             var courseId = dto.CourseId ?? (dto.LectureIds?.Any() == true
                 ? await _context.Lectures.Where(l => l.Id == dto.LectureIds.First()).Select(l => l.CourseId).FirstOrDefaultAsync()
                 : 0);
@@ -290,70 +347,59 @@ Return ONLY a valid JSON array with this exact schema, no markdown formatting:
             var course = await _context.Courses.FindAsync(courseId)
                 ?? throw new ArgumentException("Course not found.");
 
+            // Handle imported PDF: save to temp storage so the background job can read it
+            string? tempPdfPath = null;
+            if (dto.ImportedPdf != null)
+                tempPdfPath = await FileHelper.SaveFileAsync(dto.ImportedPdf, "temp", _env);
+
+            // Serialize generation parameters into the quiz shell
+            var jobParams = new AiQuizJobParams
+            {
+                LectureIds = dto.LectureIds,
+                TempPdfPath = tempPdfPath,
+                QuestionTypes = dto.QuestionTypes,
+                NumberOfQuestions = dto.NumberOfQuestions,
+                DifficultyLevel = dto.DifficultyLevel,
+                CustomPrompt = dto.CustomPrompt
+            };
+
+            // Create a pending quiz shell (IsVisible = false, no questions yet)
             var quiz = new Quiz
             {
                 CourseId = courseId,
                 Title = dto.Title ?? $"AI Quiz - {DateTime.UtcNow:yyyy-MM-dd HH:mm}",
-                Description = $"AI-generated quiz with {dto.NumberOfQuestions} questions",
+                Description = $"⏳ AI is generating {dto.NumberOfQuestions} questions. Please wait...",
                 IsAiGenerated = true,
-                AiPromptUsed = dto.CustomPrompt,
+                AiPromptUsed = JsonSerializer.Serialize(jobParams), // temp: store job params
                 DifficultyLevel = dto.DifficultyLevel,
                 QuizScope = dto.QuizScope,
                 TargetSquadronId = dto.TargetSquadronId,
-                GradingMode = questionTypes.Contains("Written") ? "Mixed" : "Auto",
+                GradingMode = (dto.QuestionTypes ?? "").Contains("Written") ? "Mixed" : "Auto",
                 SourceLectureIds = dto.LectureIds != null ? JsonSerializer.Serialize(dto.LectureIds) : null,
                 CreatedById = userId,
                 TotalMarks = 0,
+                IsVisible = false, // Hidden from students until admin reviews & publishes
                 ShowCorrectAnswers = true,
                 ShowExplanations = true
             };
 
-            int sortOrder = 0;
-            foreach (var gq in generatedQuestions)
-            {
-                var question = new Question
-                {
-                    QuestionText = gq.QuestionText,
-                    QuestionType = gq.QuestionType,
-                    Marks = gq.Marks,
-                    DifficultyLevel = gq.DifficultyLevel,
-                    Explanation = gq.Explanation,
-                    SourceReference = gq.SourceReference,
-                    SortOrder = sortOrder++
-                };
-
-                if (gq.Options != null)
-                {
-                    int optSort = 0;
-                    foreach (var opt in gq.Options)
-                    {
-                        question.Options.Add(new QuestionOption
-                        {
-                            OptionText = opt.Text,
-                            IsCorrect = opt.IsCorrect,
-                            SortOrder = optSort++
-                        });
-                    }
-                }
-
-                quiz.Questions.Add(question);
-                quiz.TotalMarks += gq.Marks;
-            }
-
             _context.Quizzes.Add(quiz);
             await _context.SaveChangesAsync();
 
-            _logger.LogInformation("AI quiz generated. QuizId: {QuizId}, Questions: {Count}, TotalMarks: {TotalMarks}",
-                quiz.Id, generatedQuestions.Count, quiz.TotalMarks);
+            _logger.LogInformation("AI Quiz shell created. QuizId: {QuizId}. Enqueueing background job.", quiz.Id);
 
-            await _activityService.TrackEntityActionAsync(ActivityActions.QuizGeneratedByAI, "Quiz", quiz.Id, userId,
-                $"AI-generated quiz '{quiz.Title}' with {generatedQuestions.Count} questions");
-             await _notificationService.NotifyEnrolledStudentsAsync(courseId,
-                "New Quiz Available",
-                $"A new quiz '{quiz.Title}' has been added to '{course.Title}'.",
-                "NewQuiz", quiz.Id);
+            // Enqueue background job (no HTTP timeout risk)
+            _backgroundJobClient.Enqueue<AiQuizGeneratorJob>(j => j.ProcessGenerateAsync(quiz.Id, userId));
 
-            return MapToResponseDto(quiz, course.Title);
+            // Return immediate response to client
+            return new
+            {
+                quizId = quiz.Id,
+                title = quiz.Title,
+                status = "Pending",
+                message = $"⏳ AI is generating your quiz '{quiz.Title}' in the background. You will receive an in-app notification and email when it's ready. The quiz will be hidden from students until you manually make it visible.",
+                estimatedMinutes = 2
+            };
         }
 
         public async Task<QuizTakeResponseDto> TakeQuizAsync(int quizId, int studentId)
@@ -796,7 +842,7 @@ Return ONLY a valid JSON array with this exact schema, no markdown formatting:
             };
         }
 
-        private static QuizResponseDto MapToResponseDto(Quiz quiz, string courseName)
+        private static QuizResponseDto MapToResponseDto(Quiz quiz, string courseName, bool includeQuestions = true)
         {
             return new QuizResponseDto
             {
@@ -826,7 +872,29 @@ Return ONLY a valid JSON array with this exact schema, no markdown formatting:
                 IsVisible = quiz.IsVisible,
                 CreatedById = quiz.CreatedById,
                 CreatedByName = quiz.CreatedBy?.FullName ?? "",
-                CreatedAt = quiz.CreatedAt
+                CreatedAt = quiz.CreatedAt,
+                Questions = includeQuestions ? (quiz.Questions?.Select(q => new QuestionResponseDto
+                {
+                    Id = q.Id,
+                    QuizId = q.QuizId,
+                    QuestionText = q.QuestionText,
+                    QuestionTextAr = q.QuestionTextAr,
+                    QuestionType = q.QuestionType,
+                    Marks = q.Marks,
+                    DifficultyLevel = q.DifficultyLevel,
+                    Explanation = q.Explanation,
+                    SourceReference = q.SourceReference,
+                    SortOrder = q.SortOrder,
+                    ImageUrl = q.ImageUrl,
+                    Options = q.Options?.Select(o => new QuestionOptionResponseDto
+                    {
+                        Id = o.Id,
+                        OptionText = o.OptionText,
+                        OptionTextAr = o.OptionTextAr,
+                        IsCorrect = o.IsCorrect,
+                        SortOrder = o.SortOrder
+                    }).ToList() ?? new List<QuestionOptionResponseDto>()
+                }).ToList() ?? new List<QuestionResponseDto>()) : new List<QuestionResponseDto>()
             };
         }
 
