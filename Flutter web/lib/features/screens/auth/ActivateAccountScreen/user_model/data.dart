@@ -1,7 +1,4 @@
 class ActivateUserModel {
-  final String message;
-  final String expiresIn;
-  final ActivateUser user;
 
   ActivateUserModel({
     required this.message,
@@ -16,16 +13,12 @@ class ActivateUserModel {
       user: ActivateUser.fromJson(json['user']),
     );
   }
+  final String message;
+  final String expiresIn;
+  final ActivateUser user;
 }
 
 class ActivateUser {
-  final int id;
-  final String email;
-  final String fullName;
-  final String role;
-  final String? nationalId;
-  final String? accountStatus;
-  final String? profileImageUrl;
 
   ActivateUser({
     required this.id,
@@ -48,4 +41,11 @@ class ActivateUser {
       profileImageUrl: json['profileImageUrl'],
     );
   }
+  final int id;
+  final String email;
+  final String fullName;
+  final String role;
+  final String? nationalId;
+  final String? accountStatus;
+  final String? profileImageUrl;
 }

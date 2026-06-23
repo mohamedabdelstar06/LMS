@@ -27,9 +27,6 @@ import 'dart:html' as html;
 
 
 class WebImage extends StatelessWidget {
-  final String url;
-  final double width;
-  final double height;
 
   const WebImage({
     super.key,
@@ -37,6 +34,9 @@ class WebImage extends StatelessWidget {
     required this.width,
     required this.height,
   });
+  final String url;
+  final double width;
+  final double height;
 
   @override
   Widget build(BuildContext context) {
@@ -78,8 +78,8 @@ class _ProfileScreenState extends State<TeacherProfileScreen> {
   String? hoveredMenuItem;
   bool isLogoutHovered = false;
   bool isProfilePictureHovered = false;
-  String selectedStartYear = "2020";
-  String selectedEndYear = "2025";
+  String selectedStartYear = '2020';
+  String selectedEndYear = '2025';
 
   bool isStartExpanded = false;
   bool isEndExpanded = false;
@@ -179,9 +179,9 @@ class _ProfileScreenState extends State<TeacherProfileScreen> {
   }
 
   String _formatDate(DateTime date) {
-    return "${date.day.toString()}/"
-        "${date.month.toString()}/"
-        "${date.year}";
+    return '${date.day.toString()}/'
+        '${date.month.toString()}/'
+        '${date.year}';
   }
 
   @override
@@ -220,7 +220,6 @@ class _ProfileScreenState extends State<TeacherProfileScreen> {
       width: 250,
       margin: const EdgeInsetsDirectional.only(
         start: 30,
-        end: 0,
         top: 50,
         bottom: 50,
       ),
@@ -346,7 +345,6 @@ class _ProfileScreenState extends State<TeacherProfileScreen> {
                 color: isHovered && !isSelected
                     ? const Color(0xFF2563EB).withOpacity(0.3)
                     : Colors.transparent,
-                width: 1,
               ),
             ),
             child: Row(
@@ -428,14 +426,13 @@ class _ProfileScreenState extends State<TeacherProfileScreen> {
               color: isLogoutHovered
                   ? const Color(0xFFEF4444).withOpacity(0.3)
                   : Colors.transparent,
-              width: 1,
             ),
           ),
-          child: Row(
+          child: const Row(
             children: [
-              Icon(Icons.logout, color: const Color(0xFFEF4444), size: 20),
-              const SizedBox(width: 12),
-              const Text(
+              Icon(Icons.logout, color: Color(0xFFEF4444), size: 20),
+              SizedBox(width: 12),
+              Text(
                 'Logout',
                 style: TextStyle(
                   color: Color(0xFFEF4444),
@@ -455,7 +452,7 @@ class _ProfileScreenState extends State<TeacherProfileScreen> {
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           constraints: const BoxConstraints(maxWidth: 1132),
           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 30),
           decoration: BoxDecoration(
@@ -473,7 +470,6 @@ class _ProfileScreenState extends State<TeacherProfileScreen> {
           child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 40),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Text(
                   'Your Profile',
@@ -522,7 +518,7 @@ class _ProfileScreenState extends State<TeacherProfileScreen> {
                   'Date of Birth',
                   dobController,
                   dobFocus,
-                  user.dateOfBirth ?? "Select Date",
+                  user.dateOfBirth ?? 'Select Date',
                 ),
                 const SizedBox(height: 16),
                 _buildDropdownField(
@@ -689,7 +685,7 @@ class _ProfileScreenState extends State<TeacherProfileScreen> {
         height: 100,
         fit: BoxFit.cover,
         errorBuilder: (context, error, stackTrace) {
-          print("Error loading image: $error");
+          print('Error loading image: $error');
           return Image.asset(
             Assets.logo,
             width: 100,
@@ -792,7 +788,7 @@ class _ProfileScreenState extends State<TeacherProfileScreen> {
           children: [
             AnimatedDefaultTextStyle(
               duration: const Duration(milliseconds: 200),
-              style: TextStyle(
+              style: const TextStyle(
                 fontWeight: FontWeight.w600,
                 color: Color(0xFF2563EB),
               ),
@@ -1021,7 +1017,7 @@ class _ProfileScreenState extends State<TeacherProfileScreen> {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: const Color(0xFFE2E8F0), width: 1),
+              border: Border.all(color: const Color(0xFFE2E8F0)),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.1),
@@ -1087,7 +1083,7 @@ class _ProfileScreenState extends State<TeacherProfileScreen> {
     return BlocConsumer<TeacherProfileCubit, TeacherProfileState>(
       listener: (context, state) {
         if (state is TeacherProfileLoaded) {
-          _showSuccessSnackbar("Profile updated successfully!");
+          _showSuccessSnackbar('Profile updated successfully!');
           setState(() {
             _webImage = null;
             _selectedImage = null;
@@ -1097,7 +1093,7 @@ class _ProfileScreenState extends State<TeacherProfileScreen> {
         }
       },
       builder: (context, state) {
-        bool isLoading = state is TeacherProfileLoading;
+        final bool isLoading = state is TeacherProfileLoading;
 
         return InkWell(
           onTap: isLoading
@@ -1129,7 +1125,7 @@ class _ProfileScreenState extends State<TeacherProfileScreen> {
               width: 470,
               height: 45,
               decoration: BoxDecoration(
-                gradient: LinearGradient(
+                gradient: const LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
@@ -1141,7 +1137,7 @@ class _ProfileScreenState extends State<TeacherProfileScreen> {
               ),
               child: Center(
                 child: isLoading
-                    ? Row(
+                    ? const Row(
                   mainAxisAlignment:
                   MainAxisAlignment.center,
                   children: [
@@ -1158,27 +1154,27 @@ class _ProfileScreenState extends State<TeacherProfileScreen> {
                     ),
                     SizedBox(width: 10),
                     Text(
-                      "Saving...",
+                      'Saving...',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight:
                         FontWeight.w600,
-                        fontFamily: "inter",
+                        fontFamily: 'inter',
                         color: Colors.white,
                       ),
                     ),
                   ],
                 )
-                    : Row(
+                    : const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
 
                     Text(
-                      "Save Changes",
+                      'Save Changes',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
-                        fontFamily: "inter",
+                        fontFamily: 'inter',
                         color: Colors.white,
                       ),
                     ),
@@ -1199,9 +1195,9 @@ class _ProfileScreenState extends State<TeacherProfileScreen> {
 }
 
 class DateRangeSelector extends StatelessWidget {
-  final List<String> years = [for (int y = 1980; y <= 2030; y++) y.toString()];
 
    DateRangeSelector({super.key});
+  final List<String> years = [for (int y = 1980; y <= 2030; y++) y.toString()];
 
   @override
   Widget build(BuildContext context) {
@@ -1209,7 +1205,7 @@ class DateRangeSelector extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          "Start / End Date",
+          'Start / End Date',
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
@@ -1220,9 +1216,9 @@ class DateRangeSelector extends StatelessWidget {
 
         Row(
           children: [
-            Expanded(child: _buildDropdown("2020")),
+            Expanded(child: _buildDropdown('2020')),
             const SizedBox(width: 16),
-            Expanded(child: _buildDropdown("2025")),
+            Expanded(child: _buildDropdown('2025')),
           ],
         ),
       ],

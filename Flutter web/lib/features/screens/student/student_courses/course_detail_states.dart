@@ -7,11 +7,11 @@ class CourseDetailInitial extends CourseDetailState {}
 class CourseDetailLoading extends CourseDetailState {}
 
 class CourseDetailSuccess extends CourseDetailState {
-  final CourseDetailModel course;
   CourseDetailSuccess(this.course);
+  final CourseDetailModel course;
 }
 
 class CourseDetailError extends CourseDetailState {
-  final String message;
   CourseDetailError(this.message);
+  final String message;
 }

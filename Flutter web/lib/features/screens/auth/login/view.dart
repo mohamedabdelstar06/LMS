@@ -23,7 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final usernameController = TextEditingController(
 
   );
-  final passwordController = TextEditingController(text: "Admin@123");
+  final passwordController = TextEditingController(text: 'Admin@123');
 
   @override
   void initState() {
@@ -79,31 +79,30 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                       Row(
                         mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            "Welcome Back",
+                            'Welcome Back',
                             style: TextStyle(
-                              color: Color(0xFF175cd3).withValues(alpha: 0.86),
+                              color: const Color(0xFF175cd3).withValues(alpha: 0.86),
                               fontSize: 32,
                               fontWeight: FontWeight.w700,
-                              fontFamily: "inter",
+                              fontFamily: 'inter',
                             ),
                           ),
-                          SizedBox(width: 5),
+                          const SizedBox(width: 5),
                           Image.asset(Assets.iconsHand),
                         ],
                       ),
-                      Text(
-                        "Enter your details below to access your courses and progress.",
+                      const Text(
+                        'Enter your details below to access your courses and progress.',
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
-                          fontFamily: "inter",
+                          fontFamily: 'inter',
                           color: Color(0xFF545F70),
                         ),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 32,
@@ -119,22 +118,22 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(height: 20),
-                            Text(
-                              "Email",
+                            const SizedBox(height: 20),
+                            const Text(
+                              'Email',
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
-                                fontFamily: "inter",
+                                fontFamily: 'inter',
                                 color: Color(0xFF175CD3),
                               ),
                             ),
-                            SizedBox(height: 8),
+                            const SizedBox(height: 8),
                             TextFormField(
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
-                                fontFamily: "inter",
+                                fontFamily: 'inter',
                                 color: Colors.black87.withValues(alpha: 0.6),
                               ),
                               readOnly: true,
@@ -144,23 +143,23 @@ class _LoginScreenState extends State<LoginScreen> {
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
-                                contentPadding: EdgeInsets.symmetric(
+                                contentPadding: const EdgeInsets.symmetric(
                                   horizontal: 16,
                                 ),
 
                               ),
                             ),
-                            SizedBox(height: 9),
-                            Text(
-                              "Password",
+                            const SizedBox(height: 9),
+                            const Text(
+                              'Password',
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
-                                fontFamily: "inter",
+                                fontFamily: 'inter',
                                 color: Color(0xFF175CD3),
                               ),
                             ),
-                            SizedBox(height: 8),
+                            const SizedBox(height: 8),
                             TextFormField(
                               controller: passwordController,
                               obscureText: isObscure,
@@ -177,27 +176,27 @@ class _LoginScreenState extends State<LoginScreen> {
                                         ? Icons.visibility_outlined
                                         : Icons.visibility_off_outlined,
                                     size: 17,
-                                    color: Color(0xFF99A1AF),
+                                    color: const Color(0xFF99A1AF),
                                   ),
                                 ),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
-                                contentPadding: EdgeInsets.symmetric(
+                                contentPadding: const EdgeInsets.symmetric(
                                   horizontal: 16,
                                 ),
-                                hintText: "Enter your password",
+                                hintText: 'Enter your password',
 
-                                hintStyle: TextStyle(
+                                hintStyle: const TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w400,
-                                  fontFamily: "inter",
+                                  fontFamily: 'inter',
                                   color: Color(0xFF08303D),
                                 ),
                               ),
                             ),
 
-                            SizedBox(height: 22),
+                            const SizedBox(height: 22),
 
                             BlocBuilder<LoginCubit, LoginState>(
                               bloc: loginCubit,
@@ -222,7 +221,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       width: 470,
                                       height: 45,
                                       decoration: BoxDecoration(
-                                        gradient: LinearGradient(
+                                        gradient: const LinearGradient(
                                           begin: Alignment.topLeft,
                                           end: Alignment.bottomRight,
                                           colors: [
@@ -234,7 +233,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       ),
                                       child: Center(
                                         child: isLoading
-                                            ? Row(
+                                            ? const Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.center,
                                                 children: [
@@ -251,23 +250,23 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   ),
                                                   SizedBox(width: 10),
                                                   Text(
-                                                    "Logging in...",
+                                                    'Logging in...',
                                                     style: TextStyle(
                                                       fontSize: 16,
                                                       fontWeight:
                                                           FontWeight.w600,
-                                                      fontFamily: "inter",
+                                                      fontFamily: 'inter',
                                                       color: Colors.white,
                                                     ),
                                                   ),
                                                 ],
                                               )
-                                            : Text(
-                                                "Login",
+                                            : const Text(
+                                                'Login',
                                                 style: TextStyle(
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.w600,
-                                                  fontFamily: "inter",
+                                                  fontFamily: 'inter',
                                                   color: Colors.white,
                                                 ),
                                               ),

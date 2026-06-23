@@ -53,8 +53,8 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
   bool isUsersExpanded = false;
   bool isCourseExpanded = false;
 
-  String selectedUserName = "Select user";
-  String selectedCourseName = "Select Course";
+  String selectedUserName = 'Select user';
+  String selectedCourseName = 'Select Course';
 
   String selectedMenuItem = 'Add Enrollment';
   String? hoveredMenuItem;
@@ -149,7 +149,6 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
       width: 250,
       margin: const EdgeInsetsDirectional.only(
         start: 40,
-        end: 0,
         top: 50,
         bottom: 50,
       ),
@@ -232,7 +231,7 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
             () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => CreateDepartmentPage()),
+                MaterialPageRoute(builder: (context) => const CreateDepartmentPage()),
               );
             },
           ),
@@ -244,7 +243,7 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
             () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => CreateYearPage()),
+                MaterialPageRoute(builder: (context) => const CreateYearPage()),
               );
             },
           ),
@@ -263,7 +262,7 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
             () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => CreateNewCoursePage()),
+                MaterialPageRoute(builder: (context) => const CreateNewCoursePage()),
               );
             },
           ),
@@ -275,7 +274,7 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
             () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => CreateSquadronsPage()),
+                MaterialPageRoute(builder: (context) => const CreateSquadronsPage()),
               );
             },
           ),
@@ -287,7 +286,7 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
             () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => GetUsersPage()),
+                MaterialPageRoute(builder: (context) => const GetUsersPage()),
               );
             },
           ),
@@ -299,7 +298,7 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
             () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => DepartmentsScreen()),
+                MaterialPageRoute(builder: (context) => const DepartmentsScreen()),
               );
             },
           ),
@@ -311,7 +310,7 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
             () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => YearsScreen()),
+                MaterialPageRoute(builder: (context) => const YearsScreen()),
               );
             },
           ),
@@ -324,7 +323,7 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
             () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => ImportStudentsScreen()),
+                MaterialPageRoute(builder: (context) => const ImportStudentsScreen()),
               );
             },
           ),
@@ -381,7 +380,6 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
                 color: isHovered && !isSelected
                     ? const Color(0xFF2563EB).withOpacity(0.3)
                     : Colors.transparent,
-                width: 1,
               ),
             ),
             child: Row(
@@ -463,14 +461,13 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
               color: isLogoutHovered
                   ? const Color(0xFFEF4444).withOpacity(0.3)
                   : Colors.transparent,
-              width: 1,
             ),
           ),
-          child: Row(
+          child: const Row(
             children: [
-              Icon(Icons.logout, color: const Color(0xFFEF4444), size: 20),
-              const SizedBox(width: 12),
-              const Text(
+              Icon(Icons.logout, color: Color(0xFFEF4444), size: 20),
+              SizedBox(width: 12),
+              Text(
                 'Logout',
                 style: TextStyle(
                   color: Color(0xFFEF4444),
@@ -496,11 +493,11 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "User Name",
+          'User Name',
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
-            fontFamily: "inter",
+            fontFamily: 'inter',
             color: Colors.blue[900],
           ),
         ),
@@ -587,7 +584,7 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
                       children: [
                         Expanded(
                           child: Text(
-                            "${user.fullName} (${user.role})",
+                            '${user.fullName} (${user.role})',
                             style: const TextStyle(
                               fontSize: 14,
                               color: Color(0xFF1E293B),
@@ -622,11 +619,11 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Course Name",
+          'Course Name',
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
-            fontFamily: "inter",
+            fontFamily: 'inter',
             color: Colors.blue[900],
           ),
         ),
@@ -702,7 +699,7 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
                     child: Center(
                       child: Text(
-                        "No courses already created ",
+                        'No courses already created ',
                         style: TextStyle(
                           color: Colors.red[600],
                           fontSize: 14,
@@ -787,7 +784,7 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
                             return Padding(
                               padding: const EdgeInsets.only(top: 30),
                               child: Text(
-                                "Error: ${UsersStateDrop.message}",
+                                'Error: ${UsersStateDrop.message}',
                                 style: const TextStyle(color: Colors.red),
                               ),
                             );
@@ -797,11 +794,11 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
                             if (UsersStateDrop.users.isEmpty) {
                               return const Padding(
                                 padding: EdgeInsets.only(top: 30),
-                                child: Text("No users found"),
+                                child: Text('No users found'),
                               );
                             }
 
-                            List<UserLiteModel> users = UsersStateDrop.users
+                            final List<UserLiteModel> users = UsersStateDrop.users
                                 .whereType<UserLiteModel>()
                                 .toList();
 
@@ -846,7 +843,7 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
                             return Padding(
                               padding: const EdgeInsets.only(top: 30),
                               child: Text(
-                                "Error: ${courseState.message}",
+                                'Error: ${courseState.message}',
                                 style: const TextStyle(color: Colors.red),
                               ),
                             );
@@ -856,11 +853,11 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
                             if (courseState.courses.isEmpty) {
                               return const Padding(
                                 padding: EdgeInsets.only(top: 30),
-                                child: Text("No courses found"),
+                                child: Text('No courses found'),
                               );
                             }
 
-                            List<GetCoursesModel> courses = courseState.courses
+                            final List<GetCoursesModel> courses = courseState.courses
                                 .whereType<GetCoursesModel>()
                                 .toList();
 
@@ -924,7 +921,7 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
 
                   if (state is EnrollmentLoaded) {
                     if (state.enrollments.isEmpty) {
-                      return const Text("No enrollments yet");
+                      return const Text('No enrollments yet');
                     }
 
                     return ListView.separated(
@@ -937,7 +934,7 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
 
                         return ListTile(
                           key: ValueKey(
-                            "${enrollment.userId}-${enrollment.courseId}",
+                            '${enrollment.userId}-${enrollment.courseId}',
                           ),
                           title: Text(enrollment.userName),
                           subtitle: Text(enrollment.courseName),
@@ -966,7 +963,7 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
   }
 
   Widget _buildActionButtons(EnrollmentState state) {
-    bool isLoading = state is EnrollmentLoading;
+    final bool isLoading = state is EnrollmentLoading;
     return Row(
       children: [
         Expanded(
@@ -976,21 +973,21 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
                 ? null
                 : () {
                     if (_formKey.currentState!.validate()) {
-                      if (selectedUserName == "Select User" ||
+                      if (selectedUserName == 'Select User' ||
                           selectedUserName.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text("Please select a user Name"),
+                            content: Text('Please select a user Name'),
                             backgroundColor: Colors.red,
                           ),
                         );
                         return;
                       }
-                      if (selectedCourseName == "Select course" ||
+                      if (selectedCourseName == 'Select course' ||
                           selectedCourseName.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text("Please select a course Name"),
+                            content: Text('Please select a course Name'),
                             backgroundColor: Colors.red,
                           ),
                         );
@@ -1032,7 +1029,7 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
                           ),
                           SizedBox(width: 12),
                           Text(
-                            "Adding Enrollment...",
+                            'Adding Enrollment...',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
@@ -1042,7 +1039,7 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
                         ],
                       )
                     : const Text(
-                        "Add Enrollment",
+                        'Add Enrollment',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,

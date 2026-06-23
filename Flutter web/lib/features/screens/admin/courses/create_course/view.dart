@@ -80,7 +80,7 @@ class DashboardScreen extends StatelessWidget {
 
       child: Scaffold(
 backgroundColor: Colors.transparent,
-        appBar: CustomAppBar(),
+        appBar: const CustomAppBar(),
         body: ScrollConfiguration(
           behavior:
           MyCustomScrollBehavior(),
@@ -117,11 +117,10 @@ class CoursesManagementContent extends StatelessWidget {
 
       padding: const EdgeInsets.fromLTRB(100.0, 40.0, 100.0, 40.0),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Container(
             width: double.infinity,
-            padding: EdgeInsets.all(24),
+            padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
               color: Colors.white70.withValues(alpha: 0.3),
               borderRadius: BorderRadius.circular(20),
@@ -129,12 +128,11 @@ class CoursesManagementContent extends StatelessWidget {
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.05),
                   blurRadius: 20,
-                  spreadRadius: 0,
-                  offset: Offset(0, 10),
+                  offset: const Offset(0, 10),
                 ),
               ],
             ),
-            child: Column(
+            child: const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
@@ -146,12 +144,12 @@ class CoursesManagementContent extends StatelessWidget {
                           Row(
                             children: [
                               Text(
-                                "Courses Management",
+                                'Courses Management',
                                 style: TextStyle(
                                   color: Color(0xff175CD3),
                                   fontSize: 30,
                                   fontWeight: FontWeight.w700,
-                                  fontFamily: "inter",
+                                  fontFamily: 'inter',
                                 ),
                               ),
                               SizedBox(width: 8),
@@ -159,11 +157,11 @@ class CoursesManagementContent extends StatelessWidget {
                           ),
                           SizedBox(height: 8),
                           Text(
-                            "Manage, create, and organize your platform courses.",
+                            'Manage, create, and organize your platform courses.',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w400,
-                              fontFamily: "inter",
+                              fontFamily: 'inter',
                               color: Color(0xFF64748B),
                             ),
                           ),
@@ -192,12 +190,12 @@ class CoursesManagementContent extends StatelessWidget {
 }
 
 class Course {
+
+  Course(this.title, this.instructor, this.students, this.color);
   final String title;
   final String instructor;
   final int students;
   final Color color;
-
-  Course(this.title, this.instructor, this.students, this.color);
 }
 
 class CourseListSection extends StatefulWidget {
@@ -267,7 +265,6 @@ class _CourseListSectionState extends State<CourseListSection> {
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(
                       color: primaryColor.withOpacity(0.2),
-                      width: 1,
                     ),
                   ),
                   child: Icon(
@@ -287,7 +284,7 @@ class _CourseListSectionState extends State<CourseListSection> {
                 ),
                 const SizedBox(height: 8),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 40.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 40.0),
                   child: Text(
                     "You haven't created any courses yet. Start building your first course to make content available for your learners",
                     textAlign: TextAlign.center,
@@ -304,14 +301,14 @@ class _CourseListSectionState extends State<CourseListSection> {
                   onPressed: () {
                    Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => AddCourseScreen()));
+                      MaterialPageRoute(builder: (context) => const AddCourseScreen()));
                   },
 
                   icon: const Icon(Icons.add, size: 20),
                   label: const Text(
                     'Add New Course',
                     style: TextStyle(
-                      fontFamily: "inter",
+                      fontFamily: 'inter',
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                     ),
@@ -393,9 +390,9 @@ class _CourseListSectionState extends State<CourseListSection> {
 }
 
 class CourseCard extends StatelessWidget {
-  final Course course;
 
   const CourseCard({super.key, required this.course});
+  final Course course;
 
   @override
   Widget build(BuildContext context) {
@@ -404,7 +401,7 @@ class CourseCard extends StatelessWidget {
       shadowColor: course.color.withOpacity(0.15),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: course.color.withOpacity(0.4), width: 1),
+        side: BorderSide(color: course.color.withOpacity(0.4)),
       ),
       child: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -488,7 +485,7 @@ class FeatureCardsRow extends StatelessWidget {
               radius: 28,
               backgroundColor: circleBg,
               child: Image(
-                image: AssetImage("assets/icons/create_course_icon.png"),
+                image: AssetImage('assets/icons/create_course_icon.png'),
                 width: 20,
                 height: 20,
               ),
@@ -506,7 +503,7 @@ class FeatureCardsRow extends StatelessWidget {
               radius: 28,
               backgroundColor: circleBg,
               child: Image(
-                image: AssetImage("assets/icons/person icon.png"),
+                image: AssetImage('assets/icons/person icon.png'),
                 width: 20,
                 height: 20,
               ),
@@ -525,7 +522,7 @@ class FeatureCardsRow extends StatelessWidget {
               radius: 28,
               backgroundColor: circleBg,
               child: Image(
-                image: AssetImage("assets/icons/performance icon.png"),
+                image: AssetImage('assets/icons/performance icon.png'),
                 width: 20,
                 height: 20,
               ),
@@ -540,10 +537,6 @@ class FeatureCardsRow extends StatelessWidget {
 }
 
 class FeatureCard extends StatefulWidget {
-  final Widget iconWidget;
-  final String title;
-  final String description;
-  final Color card_color;
 
   const FeatureCard({
     super.key,
@@ -552,6 +545,10 @@ class FeatureCard extends StatefulWidget {
     required this.description,
     required this.card_color,
   });
+  final Widget iconWidget;
+  final String title;
+  final String description;
+  final Color card_color;
 
   @override
   State<FeatureCard> createState() => _FeatureCardState();

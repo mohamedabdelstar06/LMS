@@ -29,10 +29,10 @@ class _Sky {
 // ───────────────────────────────────────────────────────────────────────────────
 
 class LogCard extends StatefulWidget {
-  final ActivityLog log;
-  final int index;
 
   const LogCard({super.key, required this.log, required this.index});
+  final ActivityLog log;
+  final int index;
 
   @override
   State<LogCard> createState() => _LogCardState();
@@ -277,10 +277,10 @@ class _LogCardState extends State<LogCard> with SingleTickerProviderStateMixin {
 
 // ─── Event Tag ─────────────────────────────────────────────────────────────────
 class _EventTag extends StatelessWidget {
-  final String eventName;
-  final Color color;
 
   const _EventTag({required this.eventName, required this.color});
+  final String eventName;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -326,8 +326,8 @@ class _EventTag extends StatelessWidget {
 
 // ─── IP Chip ───────────────────────────────────────────────────────────────────
 class _IpChip extends StatefulWidget {
-  final String ip;
   const _IpChip({required this.ip});
+  final String ip;
 
   @override
   State<_IpChip> createState() => _IpChipState();
@@ -393,10 +393,10 @@ class _IpChipState extends State<_IpChip> {
 
 // ─── Origin Badge ──────────────────────────────────────────────────────────────
 class _OriginBadge extends StatelessWidget {
-  final String origin;
-  final IconData icon;
 
   const _OriginBadge({required this.origin, required this.icon});
+  final String origin;
+  final IconData icon;
 
   @override
   Widget build(BuildContext context) {
@@ -432,10 +432,6 @@ class _OriginBadge extends StatelessWidget {
 
 // ─── Stats Card ────────────────────────────────────────────────────────────────
 class StatsCard extends StatelessWidget {
-  final String label;
-  final String value;
-  final IconData icon;
-  final Color color;
 
   const StatsCard({
     super.key,
@@ -444,6 +440,10 @@ class StatsCard extends StatelessWidget {
     required this.icon,
     required this.color,
   });
+  final String label;
+  final String value;
+  final IconData icon;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -502,10 +502,6 @@ class StatsCard extends StatelessWidget {
 
 // ─── Filter Chip ───────────────────────────────────────────────────────────────
 class FilterChipWidget extends StatefulWidget {
-  final String label;
-  final bool selected;
-  final Color color;
-  final VoidCallback onTap;
 
   const FilterChipWidget({
     super.key,
@@ -514,6 +510,10 @@ class FilterChipWidget extends StatefulWidget {
     required this.color,
     required this.onTap,
   });
+  final String label;
+  final bool selected;
+  final Color color;
+  final VoidCallback onTap;
 
   @override
   State<FilterChipWidget> createState() => _FilterChipWidgetState();

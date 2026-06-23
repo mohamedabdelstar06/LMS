@@ -2,26 +2,6 @@ import 'package:lms/features/screens/admin/courses/home_courses/model/model.dart
     as admin_courses;
 
 class CourseDetailModel {
-  final int id;
-  final String title;
-  final String description;
-  final int departmentId;
-  final String departmentName;
-  final int yearId;
-  final String yearName;
-  final int creditHours;
-  final int enrolledStudentsCount;
-  final String imageUrl;
-  final int instructorId;
-  final String instructorName;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
-  final int lecturesCount;
-  final int quizzesCount;
-  final int assignmentsCount;
-  final double progressPercentage;
-  final DateTime? lastAccessedAt;
-  final InstructorModel? instructor;
 
   CourseDetailModel({
     required this.id,
@@ -78,6 +58,26 @@ class CourseDetailModel {
           : null,
     );
   }
+  final int id;
+  final String title;
+  final String description;
+  final int departmentId;
+  final String departmentName;
+  final int yearId;
+  final String yearName;
+  final int creditHours;
+  final int enrolledStudentsCount;
+  final String imageUrl;
+  final int instructorId;
+  final String instructorName;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final int lecturesCount;
+  final int quizzesCount;
+  final int assignmentsCount;
+  final double progressPercentage;
+  final DateTime? lastAccessedAt;
+  final InstructorModel? instructor;
 
   /// Bridges this student-facing model to the admin-side [GetCoursesModel]
   /// that `LectureCubit` / `LecturesScreen` expect. Both models come from
@@ -112,11 +112,6 @@ class CourseDetailModel {
 }
 
 class InstructorModel {
-  final int id;
-  final String fullName;
-  final String email;
-  final String? city;
-  final String? profileImageUrl;
 
   InstructorModel({
     required this.id,
@@ -135,6 +130,11 @@ class InstructorModel {
       profileImageUrl: json['profileImageUrl'],
     );
   }
+  final int id;
+  final String fullName;
+  final String email;
+  final String? city;
+  final String? profileImageUrl;
 
   /// Maps to the admin-side `InstructorModel` (different class, same name,
   /// defined in admin_courses model.dart) so it can be embedded inside the

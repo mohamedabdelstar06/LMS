@@ -24,7 +24,7 @@ import 'get_user_model/view.dart';
 Uint8List? _webImage;
 String selectedMenuItem = 'Create Users';
 String? hoveredMenuItem;
-String selectedGender = "gender";
+String selectedGender = 'gender';
 String selectedCity = 'Select City';
 bool isLogoutHovered = false;
 bool isProfilePictureHovered = false;
@@ -65,10 +65,10 @@ final List<String> cities = [
 ];
 
 class UpdateUserScreen extends StatefulWidget {
-  final int userId;
-  final GetUserModel user;
 
   const UpdateUserScreen({super.key, required this.userId, required this.user});
+  final int userId;
+  final GetUserModel user;
 
   @override
   State<UpdateUserScreen> createState() => _ProfileScreenState();
@@ -90,11 +90,11 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
   String? selectedCity;
   String? selectedRole;
   String? selectedDepartmentId;
-  String selectedDepartmentName = "Select Department";
+  String selectedDepartmentName = 'Select Department';
   String? selectedYearId;
-  String selectedYearName = "Select Year";
+  String selectedYearName = 'Select Year';
   String? selectedSquadronId;
-  String selectedSquadronName = "Select Squadron";
+  String selectedSquadronName = 'Select Squadron';
   DateTime? selectedDateOfBirth;
   List<YearModel> availableYears = [];
   bool isCityExpanded = false;
@@ -284,10 +284,10 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
       selectedYearId = user.academicInfo?.year?.id.toString();
       selectedSquadronId = user.academicInfo?.squadron?.id.toString();
       selectedDepartmentName =
-          user.academicInfo?.department?.name ?? "Select Department";
-      selectedYearName = user.academicInfo?.year?.name ?? "Select Year";
+          user.academicInfo?.department?.name ?? 'Select Department';
+      selectedYearName = user.academicInfo?.year?.name ?? 'Select Year';
       selectedSquadronName =
-          user.academicInfo?.squadron?.name ?? "Select Squadron";
+          user.academicInfo?.squadron?.name ?? 'Select Squadron';
     }
     setState(() {});
   }
@@ -297,7 +297,7 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           constraints: const BoxConstraints(maxWidth: 1132),
           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 30),
           decoration: BoxDecoration(
@@ -325,7 +325,6 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 40),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const Text(
                     'Update User',
@@ -348,7 +347,7 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                     fullNameController,
                     fullNameFocus,
                     Icons.person,
-                    "",
+                    '',
                   ),
                   const SizedBox(height: 16),
                   _buildTextField(
@@ -356,7 +355,7 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                     emailController,
                     emailFocus,
                     Icons.email,
-                    "mohamed@gmail.com",
+                    'mohamed@gmail.com',
                   ),
                   const SizedBox(height: 16),
                   _buildTextField(
@@ -364,7 +363,7 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                     nationalIdController,
                     nationalIdFocus,
                     Icons.badge,
-                    "3040105050096",
+                    '3040105050096',
                   ),
                   const SizedBox(height: 16),
                   _buildTextField(
@@ -372,14 +371,14 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                     genderController,
                     genderFocus,
                     Icons.badge,
-                    "Male",
+                    'Male',
                   ),
                   const SizedBox(height: 16),
                   _buildDateField(
                     'Date of Birth',
                     dobController,
                     dobFocus,
-                    "Select Date",
+                    'Select Date',
                   ),
                   const SizedBox(height: 16),
                   _buildStringDropdownField(
@@ -429,7 +428,7 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                           return Padding(
                             padding: const EdgeInsets.only(top: 16, bottom: 16),
                             child: Text(
-                              "Error: ${departmentState.message}",
+                              'Error: ${departmentState.message}',
                               style: const TextStyle(color: Colors.red),
                             ),
                           );
@@ -439,11 +438,11 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                           if (departmentState.departments.isEmpty) {
                             return const Padding(
                               padding: EdgeInsets.only(top: 16, bottom: 16),
-                              child: Text("No departments found"),
+                              child: Text('No departments found'),
                             );
                           }
 
-                          List<GetDepartmentModel> departments = departmentState
+                          final List<GetDepartmentModel> departments = departmentState
                               .departments
                               .whereType<GetDepartmentModel>()
                               .toList();
@@ -459,7 +458,7 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                                     selectedDepartmentId = chosenDep.id
                                         .toString();
                                     availableYears = chosenDep.years;
-                                    selectedYearName = "Select Year";
+                                    selectedYearName = 'Select Year';
                                     selectedYearId = null;
                                     selectedDepartmentName = chosenDep.name;
                                     isDepartmentExpanded = false;
@@ -492,7 +491,7 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                           return Padding(
                             padding: const EdgeInsets.only(bottom: 16),
                             child: Text(
-                              "Error: ${yearState.message}",
+                              'Error: ${yearState.message}',
                               style: const TextStyle(color: Colors.red),
                             ),
                           );
@@ -502,7 +501,7 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                           if (yearState.years.isEmpty) {
                             return const Padding(
                               padding: EdgeInsets.only(bottom: 16),
-                              child: Text("No years found"),
+                              child: Text('No years found'),
                             );
                           }
 
@@ -545,7 +544,7 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                           return Padding(
                             padding: const EdgeInsets.only(bottom: 16),
                             child: Text(
-                              "Error: ${squadronState.message}",
+                              'Error: ${squadronState.message}',
                               style: const TextStyle(color: Colors.red),
                             ),
                           );
@@ -555,11 +554,11 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                           if (squadronState.squadrons.isEmpty) {
                             return const Padding(
                               padding: EdgeInsets.only(bottom: 16),
-                              child: Text("No Squadrons found"),
+                              child: Text('No Squadrons found'),
                             );
                           }
 
-                          List<SquadronModel> squadrons = squadronState
+                          final List<SquadronModel> squadrons = squadronState
                               .squadrons
                               .whereType<SquadronModel>()
                               .toList();
@@ -604,7 +603,7 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
                                       content: Text(
-                                        "Please select date of birth",
+                                        'Please select date of birth',
                                       ),
                                     ),
                                   );
@@ -612,20 +611,20 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                                 }
 
                                 final userData = {
-                                  "email": emailController.text,
-                                  "fullName": fullNameController.text,
-                                  "nationalId": nationalIdController.text,
-                                  "gender": genderController.text,
-                                  "dateOfBirth": selectedDateOfBirth
+                                  'email': emailController.text,
+                                  'fullName': fullNameController.text,
+                                  'nationalId': nationalIdController.text,
+                                  'gender': genderController.text,
+                                  'dateOfBirth': selectedDateOfBirth
                                       ?.toIso8601String(),
-                                  "city": selectedCity,
-                                  "role": selectedRole,
+                                  'city': selectedCity,
+                                  'role': selectedRole,
                                   if (selectedRole == 'Student')
-                                    "departmentId": selectedDepartmentId,
+                                    'departmentId': selectedDepartmentId,
                                   if (selectedRole == 'Student')
-                                    "yearId": selectedYearId,
+                                    'yearId': selectedYearId,
                                   if (selectedRole == 'Student')
-                                    "squadronId": selectedSquadronId,
+                                    'squadronId': selectedSquadronId,
                                 };
 
                                 context.read<GetUsersCubit>().updateUser(
@@ -647,7 +646,7 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                               width: 470,
                               height: 45,
                               decoration: BoxDecoration(
-                                gradient: LinearGradient(
+                                gradient: const LinearGradient(
                                   begin: Alignment.topLeft,
                                   end: Alignment.bottomRight,
                                   colors: [
@@ -659,7 +658,7 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                               ),
                               child: Center(
                                 child: isLoading
-                                    ? Row(
+                                    ? const Row(
                                   mainAxisAlignment:
                                   MainAxisAlignment.center,
                                   children: [
@@ -676,23 +675,23 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                                     ),
                                     SizedBox(width: 10),
                                     Text(
-                                      "Saving changes...",
+                                      'Saving changes...',
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight:
                                         FontWeight.w600,
-                                        fontFamily: "inter",
+                                        fontFamily: 'inter',
                                         color: Colors.white,
                                       ),
                                     ),
                                   ],
                                 )
-                                    : Text(
-                                  "Save Changes",
+                                    : const Text(
+                                  'Save Changes',
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600,
-                                    fontFamily: "inter",
+                                    fontFamily: 'inter',
                                     color: Colors.white,
                                   ),
                                 ),
@@ -722,9 +721,9 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          "Year Name",
-          style: const TextStyle(
+        const Text(
+          'Year Name',
+          style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w600,
             color: Color(0xFF2563EB),
@@ -802,7 +801,7 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
                     child: Center(
                       child: Text(
-                        "No years already created for this department",
+                        'No years already created for this department',
                         style: TextStyle(
                           color: Colors.red[600],
                           fontSize: 14,
@@ -862,9 +861,9 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          "Department Name",
-          style: const TextStyle(
+        const Text(
+          'Department Name',
+          style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w600,
             color: Color(0xFF2563EB),
@@ -953,7 +952,7 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                       children: [
                         Expanded(
                           child: Text(
-                            "${department.name} (${department.headName})",
+                            '${department.name} (${department.headName})',
                             style: const TextStyle(
                               fontSize: 14,
                               color: Color(0xFF1E293B),
@@ -987,9 +986,9 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          "Squadron Name",
-          style: const TextStyle(
+        const Text(
+          'Squadron Name',
+          style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w600,
             color: Color(0xFF2563EB),
@@ -1078,7 +1077,7 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                       children: [
                         Expanded(
                           child: Text(
-                            "${squadron.name} (${squadron.studentCount})",
+                            '${squadron.name} (${squadron.studentCount})',
                             style: const TextStyle(
                               fontSize: 14,
                               color: Color(0xFF1E293B),
@@ -1575,7 +1574,7 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                 onTap: () async {
                   final DateTime? picked = await showDatePicker(
                     context: context,
-                    initialDate: DateTime(1975, 9, 1),
+                    initialDate: DateTime(1975, 9),
                     firstDate: DateTime(1900),
                     lastDate: DateTime.now(),
                     builder: (context, child) {
@@ -1694,7 +1693,7 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: const Color(0xFFE2E8F0), width: 1),
+              border: Border.all(color: const Color(0xFFE2E8F0)),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.1),
@@ -1758,9 +1757,9 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
 }
 
 class DateRangeSelector extends StatelessWidget {
-  final List<String> years = [for (int y = 1980; y <= 2030; y++) y.toString()];
 
   DateRangeSelector({super.key});
+  final List<String> years = [for (int y = 1980; y <= 2030; y++) y.toString()];
 
   @override
   Widget build(BuildContext context) {
@@ -1768,7 +1767,7 @@ class DateRangeSelector extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          "Start / End Date",
+          'Start / End Date',
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
@@ -1779,9 +1778,9 @@ class DateRangeSelector extends StatelessWidget {
 
         Row(
           children: [
-            Expanded(child: _buildDropdown("2020")),
+            Expanded(child: _buildDropdown('2020')),
             const SizedBox(width: 16),
-            Expanded(child: _buildDropdown("2025")),
+            Expanded(child: _buildDropdown('2025')),
           ],
         ),
       ],
@@ -1822,7 +1821,7 @@ class ToggleButtonActiveOrDeactive extends StatefulWidget {
 
 class _ActiveSwitchRowState extends State<ToggleButtonActiveOrDeactive> {
   bool isActive = true;
-  String status = "Active";
+  String status = 'Active';
 
   @override
   Widget build(BuildContext context) {
@@ -1844,12 +1843,12 @@ class _ActiveSwitchRowState extends State<ToggleButtonActiveOrDeactive> {
             setState(() {
               isActive = value;
 
-              status = isActive ? "Active" : "Inactive";
+              status = isActive ? 'Active' : 'Inactive';
 
               if (isActive) {
-                print("Value stored: Active");
+                print('Value stored: Active');
               } else {
-                print("Value deleted / set to Inactive");
+                print('Value deleted / set to Inactive');
               }
             });
           },

@@ -1,17 +1,4 @@
 class AssignmentModel {
-  final int id;
-  final int courseId;
-  final String title;
-  final String description;
-  final String instructions;
-  final int maxGrade;
-  final bool allowLateSubmission;
-  final bool isVisible;
-  final int? targetSquadronId;
-  final List<AssignmentFileModel> files;
-  final DateTime? startDate;
-  final DateTime? deadlineDate;
-  final int submissionsCount;
 
   AssignmentModel({
     required this.id,
@@ -52,6 +39,19 @@ class AssignmentModel {
       submissionsCount: json['submissionsCount'] ?? 0,
     );
   }
+  final int id;
+  final int courseId;
+  final String title;
+  final String description;
+  final String instructions;
+  final int maxGrade;
+  final bool allowLateSubmission;
+  final bool isVisible;
+  final int? targetSquadronId;
+  final List<AssignmentFileModel> files;
+  final DateTime? startDate;
+  final DateTime? deadlineDate;
+  final int submissionsCount;
 
   Map<String, dynamic> toJson() => {
     'id': id,
@@ -67,9 +67,6 @@ class AssignmentModel {
 }
 
 class AssignmentFileModel {
-  final int? id;
-  final String? fileName;
-  final String? fileUrl;
 
   AssignmentFileModel({this.id, this.fileName, this.fileUrl});
 
@@ -80,17 +77,12 @@ class AssignmentFileModel {
       fileUrl: json['fileUrl'],
     );
   }
+  final int? id;
+  final String? fileName;
+  final String? fileUrl;
 }
 
 class SubmissionModel {
-  final int id;
-  final int assignmentId;
-  final int studentId;
-  final String studentName;
-  final List<AssignmentFileModel> files;
-  final int? grade;
-  final String? feedback;
-  final DateTime submittedAt;
 
   SubmissionModel({
     required this.id,
@@ -118,13 +110,17 @@ class SubmissionModel {
           DateTime.tryParse(json['submittedAt'] ?? '') ?? DateTime.now(),
     );
   }
+  final int id;
+  final int assignmentId;
+  final int studentId;
+  final String studentName;
+  final List<AssignmentFileModel> files;
+  final int? grade;
+  final String? feedback;
+  final DateTime submittedAt;
 }
 
 class UploadFileProgress {
-  final String fileName;
-  double progress;
-  bool isCompleted;
-  bool hasError;
 
   UploadFileProgress({
     required this.fileName,
@@ -132,6 +128,10 @@ class UploadFileProgress {
     this.isCompleted = false,
     this.hasError = false,
   });
+  final String fileName;
+  double progress;
+  bool isCompleted;
+  bool hasError;
 
   UploadFileProgress copyWith({
     double? progress,

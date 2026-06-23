@@ -18,7 +18,7 @@ class StudentProfileCubit extends Cubit<StudentProfileState> {
     try {
       final token = await TokenStorageHelper.getTokenSecure();
       if (token == null || token.isEmpty) {
-        emit(StudentProfileError(message: "Unauthorized, token missing"));
+        emit(StudentProfileError(message: 'Unauthorized, token missing'));
         return;
       }
 
@@ -39,11 +39,11 @@ class StudentProfileCubit extends Cubit<StudentProfileState> {
         );
       } else {
         emit(StudentProfileError(
-          message: response.data["message"] ?? "Failed to load profile",
+          message: response.data['message'] ?? 'Failed to load profile',
         ));
       }
     } catch (e) {
-      emit(StudentProfileError(message: "Unexpected error: $e"));
+      emit(StudentProfileError(message: 'Unexpected error: $e'));
     }
   }
 
@@ -58,7 +58,7 @@ class StudentProfileCubit extends Cubit<StudentProfileState> {
     try {
       final token = await TokenStorageHelper.getTokenSecure();
       if (token == null || token.isEmpty) {
-        emit(StudentProfileError(message: "Unauthorized"));
+        emit(StudentProfileError(message: 'Unauthorized'));
         return;
       }
 
@@ -70,11 +70,11 @@ class StudentProfileCubit extends Cubit<StudentProfileState> {
       ));
 
       final formData = FormData.fromMap({
-        if (city != null) "city": city,
+        if (city != null) 'city': city,
         if (dateOfBirth != null)
-          "dateOfBirth":
+          'dateOfBirth':
           DateFormat('yyyy-MM-dd').format(dateOfBirth),
-        if (photo != null) "profileImage": photo,
+        if (photo != null) 'profileImage': photo,
       });
 
       final response = await dio.patch(
@@ -86,12 +86,12 @@ class StudentProfileCubit extends Cubit<StudentProfileState> {
         final model = StudentProfileModel.fromJson(response.data);
         emit(StudentProfileLoaded(profile: model));
       } else {
-        emit(StudentProfileError(message: "Failed to update profile"));
+        emit(StudentProfileError(message: 'Failed to update profile'));
       }
     } on DioException catch (e) {
       emit(
         StudentProfileError(
-          message: e.response?.data["message"] ?? "Update failed",
+          message: e.response?.data['message'] ?? 'Update failed',
         ),
       );
     }
@@ -103,6 +103,6 @@ class StudentProfileCubit extends Cubit<StudentProfileState> {
 
 
   String formatUiDate(DateTime date) {
-    return DateFormat("dd/MM/yyyy").format(date);
+    return DateFormat('dd/MM/yyyy').format(date);
   }
 }

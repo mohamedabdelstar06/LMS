@@ -27,7 +27,7 @@ class CreateUserCubit extends Cubit<CreateState> {
         String? squadronId,
       }) async {
     if (emailController.text.trim().isEmpty || fullNameController.text.trim().isEmpty) {
-      emit(CreateUserErrorState("Please fill all required fields"));
+      emit(CreateUserErrorState('Please fill all required fields'));
       return;
     }
 
@@ -36,26 +36,26 @@ class CreateUserCubit extends Cubit<CreateState> {
     try {
       final token = await TokenStorageHelper.getTokenSecure();
       if (token == null || token.isEmpty) {
-        emit(CreateUserErrorState("Authentication required. Please login first.", statusCode: 401));
+        emit(CreateUserErrorState('Authentication required. Please login first.', statusCode: 401));
         return;
       }
 
       final formData = FormData.fromMap({
-        "Email": emailController.text.trim(),
-        "FullName": fullNameController.text.trim(),
-        "NationalId": nationalIdController.text.trim(),
-        "City": city,
-        "Gender": genderController.text.trim(),
-        "Role": role,
-        "DateOfBirth": dateOfBirth.toIso8601String(),
-        if (role == "Student"&&departmentId != null) "DepartmentId": departmentId,
-        if ( role == "Student"&&yearId != null) "YearId": yearId,
-        if ( role == "Student"&&squadronId != null) "SquadronId": squadronId,
+        'Email': emailController.text.trim(),
+        'FullName': fullNameController.text.trim(),
+        'NationalId': nationalIdController.text.trim(),
+        'City': city,
+        'Gender': genderController.text.trim(),
+        'Role': role,
+        'DateOfBirth': dateOfBirth.toIso8601String(),
+        if (role == 'Student'&&departmentId != null) 'DepartmentId': departmentId,
+        if ( role == 'Student'&&yearId != null) 'YearId': yearId,
+        if ( role == 'Student'&&squadronId != null) 'SquadronId': squadronId,
         if (profileImageBytes != null)
           'ImageFile': MultipartFile.fromBytes(
             profileImageBytes,
             filename: 'profile_${DateTime.now().millisecondsSinceEpoch}.jpg',
-            contentType: MediaType("image", "jpeg"),
+            contentType: MediaType('image', 'jpeg'),
           ),
       });
 
@@ -66,7 +66,7 @@ class CreateUserCubit extends Cubit<CreateState> {
       )).post(
         ApiResources.createUserEndPoint,
         options: Options(
-          headers: {"Authorization": "Bearer $token"},
+          headers: {'Authorization': 'Bearer $token'},
         ),
         data: formData,
       );
@@ -76,14 +76,14 @@ class CreateUserCubit extends Cubit<CreateState> {
         await UserStorageHelper.saveCreatedUserData(model);
         emit(CreateUserSuccessState(
           statusCode: response.statusCode,
-          message: response.data?["message"] ?? "User Created Successfully",
+          message: response.data?['message'] ?? 'User Created Successfully',
         ));
       } else {
-        final errorMsg = response.data?["message"] ?? "Failed to create user";
+        final errorMsg = response.data?['message'] ?? 'Failed to create user';
         emit(CreateUserErrorState(errorMsg, statusCode: response.statusCode));
       }
     } on DioException catch (e) {
-      final errorMsg = e.response?.data['message'] ?? e.message ?? "Connection Error";
+      final errorMsg = e.response?.data['message'] ?? e.message ?? 'Connection Error';
       emit(CreateUserErrorState(errorMsg));
     } catch (e) {
       emit(CreateUserErrorState(e.toString()));

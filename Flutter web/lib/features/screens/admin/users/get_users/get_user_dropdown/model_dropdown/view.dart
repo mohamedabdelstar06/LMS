@@ -1,8 +1,4 @@
 class UserLiteModel {
-  final int id;
-  final String fullName;
-  final String role;
-  final String? imageUrl;
 
   UserLiteModel({
     required this.id,
@@ -19,4 +15,8 @@ class UserLiteModel {
       imageUrl: json['profileImageUrl'],
     );
   }
+  final int id;
+  final String fullName;
+  final String role;
+  final String? imageUrl;
 }

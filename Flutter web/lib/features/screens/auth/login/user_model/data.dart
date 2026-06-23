@@ -3,10 +3,6 @@
 import '../../../../../generated/assets.dart';
 
 class UserModel {
-  String message;
-  String token;
-  String expiresIn;
-  User user;
 
   UserModel({
     required this.message,
@@ -25,6 +21,10 @@ class UserModel {
           : User.empty(),
     );
   }
+  String message;
+  String token;
+  String expiresIn;
+  User user;
 
   Map<String, dynamic> toJson() {
     return {
@@ -37,13 +37,6 @@ class UserModel {
 }
 
 class User {
-  int id;
-  String fullName;
-  String email;
-  String role;
-  String gender;
-  String city;
-  String profileImageUrl;
 
   User({
     required this.id,
@@ -71,18 +64,6 @@ class User {
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'fullName': fullName,
-      'email': email,
-      'role': role,
-      'gender': gender,
-      'city': city,
-      'profileImageUrl': profileImageUrl,
-    };
-  }
-
   factory User.empty() {
     return User(
       id: 0,
@@ -93,5 +74,24 @@ class User {
       city: '',
       profileImageUrl: '',
     );
+  }
+  int id;
+  String fullName;
+  String email;
+  String role;
+  String gender;
+  String city;
+  String profileImageUrl;
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'fullName': fullName,
+      'email': email,
+      'role': role,
+      'gender': gender,
+      'city': city,
+      'profileImageUrl': profileImageUrl,
+    };
   }
 }

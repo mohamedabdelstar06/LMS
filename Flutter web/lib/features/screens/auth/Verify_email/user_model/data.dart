@@ -1,7 +1,4 @@
 class UserStatusModel {
-  final String? email;
-  final bool exists;
-  final bool isActivated;
 
   UserStatusModel({
     this.email,
@@ -16,4 +13,7 @@ class UserStatusModel {
       isActivated: json['isActivated'] ?? false,
     );
   }
+  final String? email;
+  final bool exists;
+  final bool isActivated;
 }

@@ -4,12 +4,6 @@ import 'package:lms/core/widgets/management/management_menu_config.dart';
 import 'package:lms/generated/assets.dart';
 
 class ManagementSidebar extends StatefulWidget {
-  final String selectedMenuItem;
-  final ManagementRole role;
-  final bool isCollapsed;
-  final bool showCollapseToggle;
-  final VoidCallback? onToggleCollapse;
-  final VoidCallback? onNavigate;
 
   const ManagementSidebar({
     super.key,
@@ -20,6 +14,12 @@ class ManagementSidebar extends StatefulWidget {
     this.onToggleCollapse,
     this.onNavigate,
   });
+  final String selectedMenuItem;
+  final ManagementRole role;
+  final bool isCollapsed;
+  final bool showCollapseToggle;
+  final VoidCallback? onToggleCollapse;
+  final VoidCallback? onNavigate;
 
   @override
   State<ManagementSidebar> createState() => _ManagementSidebarState();
@@ -65,7 +65,7 @@ class _ManagementSidebarState extends State<ManagementSidebar> {
       decoration: const BoxDecoration(
         color: Color(0xFF0F172A),
         border: Border(
-          right: BorderSide(color: Color(0xFF1E293B), width: 1),
+          right: BorderSide(color: Color(0xFF1E293B)),
         ),
       ),
       child: Column(
@@ -100,7 +100,7 @@ class _ManagementSidebarState extends State<ManagementSidebar> {
       ),
       decoration: const BoxDecoration(
         border: Border(
-          bottom: BorderSide(color: Color(0xFF1E293B), width: 1),
+          bottom: BorderSide(color: Color(0xFF1E293B)),
         ),
       ),
       child: Row(
@@ -349,7 +349,7 @@ class _ManagementSidebarState extends State<ManagementSidebar> {
           height: 44,
           decoration: const BoxDecoration(
             border: Border(
-              top: BorderSide(color: Color(0xFF1E293B), width: 1),
+              top: BorderSide(color: Color(0xFF1E293B)),
             ),
           ),
           child: Row(

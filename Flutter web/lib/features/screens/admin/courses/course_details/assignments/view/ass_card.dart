@@ -2,11 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:lms/features/screens/admin/courses/course_details/assignments/assignment_model.dart';
 
 class AssignmentCard extends StatelessWidget {
-  final AssignmentModel assignment;
-  final VoidCallback onTap;
-  final VoidCallback onEdit;
-  final VoidCallback onDelete;
-  final VoidCallback? onViewSubmissions;
 
   const AssignmentCard({
     super.key,
@@ -16,6 +11,11 @@ class AssignmentCard extends StatelessWidget {
     required this.onDelete,
     this.onViewSubmissions,
   });
+  final AssignmentModel assignment;
+  final VoidCallback onTap;
+  final VoidCallback onEdit;
+  final VoidCallback onDelete;
+  final VoidCallback? onViewSubmissions;
 
   @override
   Widget build(BuildContext context) {
@@ -192,11 +192,11 @@ class AssignmentCard extends StatelessWidget {
                     ),
                   if (assignment.files.isNotEmpty) const SizedBox(width: 8),
                   if (assignment.allowLateSubmission)
-                    _MetaChip(
+                    const _MetaChip(
                       icon: Icons.schedule_rounded,
                       label: 'Late allowed',
-                      color: const Color(0xFFF59E0B),
-                      bg: const Color(0xFFFEF3C7),
+                      color: Color(0xFFF59E0B),
+                      bg: Color(0xFFFEF3C7),
                     ),
                   const Spacer(),
                   if (!assignment.isVisible)
@@ -238,10 +238,6 @@ class AssignmentCard extends StatelessWidget {
 }
 
 class _MetaChip extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final Color color;
-  final Color bg;
 
   const _MetaChip({
     required this.icon,
@@ -249,6 +245,10 @@ class _MetaChip extends StatelessWidget {
     required this.color,
     required this.bg,
   });
+  final IconData icon;
+  final String label;
+  final Color color;
+  final Color bg;
 
   @override
   Widget build(BuildContext context) {

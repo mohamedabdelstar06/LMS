@@ -23,8 +23,12 @@ class _QuizGradingScreenState extends State<QuizGradingScreen> {
 
   @override
   void dispose() {
-    for (final c in _marksCtrls.values) c.dispose();
-    for (final c in _feedbackCtrls.values) c.dispose();
+    for (final c in _marksCtrls.values) {
+      c.dispose();
+    }
+    for (final c in _feedbackCtrls.values) {
+      c.dispose();
+    }
     super.dispose();
   }
 

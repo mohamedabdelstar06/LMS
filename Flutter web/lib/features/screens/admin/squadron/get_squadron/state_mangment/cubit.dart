@@ -15,17 +15,17 @@ class SquadronsCubitDrop extends Cubit<GetSquadronsState> {
     try {
       final token = await TokenStorageHelper.getTokenSecure();
       if (token == null || token.isEmpty) {
-        emit(GetSquadronsError("Unauthorized: Please login again."));
+        emit(const GetSquadronsError('Unauthorized: Please login again.'));
         return;
       }
 
       final dio = Dio();
       final response = await dio.get(
-        "${ApiResources.apiUrl}${ApiResources.squadronEndPoint}",
+        '${ApiResources.apiUrl}${ApiResources.squadronEndPoint}',
         options: Options(
           headers: {
-            "Authorization": "Bearer $token",
-            "Content-Type": "application/json",
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'application/json',
           },
         ),
       );
@@ -38,20 +38,20 @@ class SquadronsCubitDrop extends Cubit<GetSquadronsState> {
 
         emit(GetSquadronsLoaded(squadrons));
       } else {
-        emit(GetSquadronsError("Failed to load squadrons. Status: ${response.statusCode}"));
+        emit(GetSquadronsError('Failed to load squadrons. Status: ${response.statusCode}'));
       }
     } on DioException catch (e) {
-      String errorMessage = "Failed to load squadrons";
+      String errorMessage = 'Failed to load squadrons';
       if (e.response != null) {
-        errorMessage = "Server Error: ${e.response?.statusCode} - ${e.response?.statusMessage}";
+        errorMessage = 'Server Error: ${e.response?.statusCode} - ${e.response?.statusMessage}';
       } else if (e.type == DioExceptionType.connectionTimeout) {
-        errorMessage = "Connection timeout. Please check your internet.";
+        errorMessage = 'Connection timeout. Please check your internet.';
       } else if (e.type == DioExceptionType.connectionError) {
-        errorMessage = "Connection Error. Please check the API URL or your network.";
+        errorMessage = 'Connection Error. Please check the API URL or your network.';
       }
       emit(GetSquadronsError(errorMessage));
     } catch (e) {
-      emit(GetSquadronsError("An unexpected error occurred."));
+      emit(const GetSquadronsError('An unexpected error occurred.'));
     }
   }
 }

@@ -11,6 +11,10 @@ import 'student_activities_grades_states.dart';
 
 // ── Activities Cubit ──────────────────────────────────────────
 class StudentActivitiesCubit extends Cubit<StudentActivitiesState> {
+
+  StudentActivitiesCubit({Dio? dio})
+      : _dio = dio ?? Dio(),
+        super(StudentActivitiesInitial());
   final Dio _dio;
 
   String? _activeType;
@@ -19,10 +23,6 @@ class StudentActivitiesCubit extends Cubit<StudentActivitiesState> {
   String? _search;
   int _currentPage = 1;
   static const int _pageSize = 20;
-
-  StudentActivitiesCubit({Dio? dio})
-      : _dio = dio ?? Dio(),
-        super(StudentActivitiesInitial());
 
   Future<void> load({
     int? courseId,
@@ -124,11 +124,11 @@ class StudentActivitiesCubit extends Cubit<StudentActivitiesState> {
 
 // ── Grades Cubit ──────────────────────────────────────────────
 class CourseGradesCubit extends Cubit<CourseGradesState> {
-  final Dio _dio;
 
   CourseGradesCubit({Dio? dio})
       : _dio = dio ?? Dio(),
         super(CourseGradesInitial());
+  final Dio _dio;
 
   Future<void> loadGrades(int courseId) async {
     emit(CourseGradesLoading());

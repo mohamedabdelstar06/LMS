@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ProgressCard extends StatefulWidget {
-  const ProgressCard({required this.progress});
+  const ProgressCard({super.key, required this.progress});
   final double progress;
 
   @override
@@ -126,7 +126,7 @@ class ProgressCardState extends State<ProgressCard>
 
 class ProgressMilestones extends StatelessWidget {
   const ProgressMilestones(
-      {required this.progress, required this.color});
+      {super.key, required this.progress, required this.color});
   final double progress;
   final Color color;
 

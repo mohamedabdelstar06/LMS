@@ -53,7 +53,6 @@ class StudentDashboardAppBar extends StatelessWidget
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 20,
-              spreadRadius: 0,
               offset: const Offset(0, 10),
             ),
           ],
@@ -128,15 +127,13 @@ Widget buildUserProfile(BuildContext context) {
       decoration: BoxDecoration(
         color: const Color(0xffF8FAFC),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xffE2E8F0), width: 1),
+        border: Border.all(color: const Color(0xffE2E8F0)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           webProfileAvatar(
             imageUrl: buildProfileImageUrl(userData['profileImageUrl']),
-            radius: 16,
-            isOnline: true,
           ),
           const SizedBox(width: 8),
           Text(
@@ -454,8 +451,8 @@ class _QuickAccessButton extends StatelessWidget {
 
 // ── Compact Quick Access Menu ─────────────────────────────────
 class _CompactQuickAccessMenu extends StatelessWidget {
-  const _CompactQuickAccessMenu({this.onNavigateToGrades});
   final VoidCallback? onNavigateToGrades;
+  const _CompactQuickAccessMenu({Key? key, this.onNavigateToGrades}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

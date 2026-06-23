@@ -13,9 +13,9 @@ import '../get_year/get_All_years/state_mangement/states.dart';
 import '../get_year/get_All_years/view.dart';
 
 class EditYearScreen extends StatelessWidget {
-  final GetAllYearModel year;
 
   const EditYearScreen({super.key, required this.year});
+  final GetAllYearModel year;
 
   @override
   Widget build(BuildContext context) {
@@ -81,16 +81,12 @@ class _CreateYearScreenState extends State<UpdateYearScreen> {
     selectedEndDate = year.endDate;
 
 
-    if (year.startDate != null) {
-      dobStartController.text =
-      '${year.startDate!.day}/${year.startDate!.month}/${year.startDate!.year}';
-    }
-
-    if (year.endDate != null) {
-      dobEndController.text =
-      '${year.endDate!.day}/${year.endDate!.month}/${year.endDate!.year}';
-    }
-
+    dobStartController.text =
+    '${year.startDate!.day}/${year.startDate!.month}/${year.startDate!.year}';
+  
+    dobEndController.text =
+    '${year.endDate!.day}/${year.endDate!.month}/${year.endDate!.year}';
+  
     _isInitialized = true;
   }
 
@@ -259,7 +255,7 @@ class _CreateYearScreenState extends State<UpdateYearScreen> {
       children: [
         Text(
           label,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w600,
             color: Color(0xFF2563EB),
@@ -405,7 +401,7 @@ class _CreateYearScreenState extends State<UpdateYearScreen> {
       child: TweenAnimationBuilder(
         duration: const Duration(milliseconds: 600),
         tween: Tween<double>(begin: 0, end: 1),
-        builder: (context, double value, child) {
+        builder: (context, value, child) {
           return Opacity(
             opacity: value,
             child: Transform.translate(
@@ -600,7 +596,7 @@ class _CreateYearScreenState extends State<UpdateYearScreen> {
                         },
                       ),
                     ),
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
                     Expanded(
                       child: _buildDateField(
                         'End date',

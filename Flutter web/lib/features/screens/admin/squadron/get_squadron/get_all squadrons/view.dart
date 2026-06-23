@@ -122,7 +122,6 @@ class _SquadronsScreenState extends State<GetSquadronPage> {
                                   border: Border(
                                     bottom: BorderSide(
                                       color: Color(0xFFE2E8F0),
-                                      width: 1,
                                     ),
                                   ),
                                 ),
@@ -1011,7 +1010,7 @@ class _SquadronsScreenState extends State<GetSquadronPage> {
             ? Colors.white
             : const Color(0xFFF8FAFC),
         border: const Border(
-          bottom: BorderSide(color: Color(0xFFE2E8F0), width: 1),
+          bottom: BorderSide(color: Color(0xFFE2E8F0)),
         ),
       ),
       children: [
@@ -1099,7 +1098,6 @@ class _SquadronsScreenState extends State<GetSquadronPage> {
         TableCell(
           verticalAlignment: TableCellVerticalAlignment.middle,
           child: Align(
-            alignment: Alignment.center,
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 12),
 

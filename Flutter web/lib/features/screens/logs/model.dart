@@ -1,14 +1,4 @@
 class ActivityLog {
-  final int id;
-  final DateTime time;
-  final String userFullName;
-  final String? affectedUser;
-  final String eventContext;
-  final String component;
-  final String eventName;
-  final String description;
-  final String origin;
-  final String ipAddress;
 
   ActivityLog({
     required this.id,
@@ -37,16 +27,19 @@ class ActivityLog {
       ipAddress: json['ipAddress'] ?? '',
     );
   }
+  final int id;
+  final DateTime time;
+  final String userFullName;
+  final String? affectedUser;
+  final String eventContext;
+  final String component;
+  final String eventName;
+  final String description;
+  final String origin;
+  final String ipAddress;
 }
 
 class ActivityLogsResponse {
-  final List<ActivityLog> logs;
-  final int totalCount;
-  final int pageNumber;
-  final int pageSize;
-  final int totalPages;
-  final bool hasNextPage;
-  final bool hasPreviousPage;
 
   ActivityLogsResponse({
     required this.logs,
@@ -69,4 +62,11 @@ class ActivityLogsResponse {
       hasPreviousPage: json['hasPreviousPage'],
     );
   }
+  final List<ActivityLog> logs;
+  final int totalCount;
+  final int pageNumber;
+  final int pageSize;
+  final int totalPages;
+  final bool hasNextPage;
+  final bool hasPreviousPage;
 }

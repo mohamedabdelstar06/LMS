@@ -11,18 +11,18 @@ class DashboardInitial extends DashboardState {}
 class DashboardLoading extends DashboardState {}
 
 class DashboardLoaded extends DashboardState {
-  final DashboardStatsModel stats;
-  final DashboardOverviewModel overview;
 
   const DashboardLoaded({required this.stats, required this.overview});
+  final DashboardStatsModel stats;
+  final DashboardOverviewModel overview;
 
   @override
   List<Object?> get props => [stats, overview];
 }
 
 class DashboardError extends DashboardState {
-  final String message;
   const DashboardError(this.message);
+  final String message;
 
   @override
   List<Object?> get props => [message];

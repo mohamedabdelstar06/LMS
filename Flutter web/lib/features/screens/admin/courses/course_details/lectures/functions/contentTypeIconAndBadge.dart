@@ -29,7 +29,7 @@ class ContentTypeIcon extends StatelessWidget {
 }
 
 class ContentTypeBadge extends StatelessWidget {
-  const ContentTypeBadge(this.type);
+  const ContentTypeBadge(this.type, {super.key});
   final String type;
 
   Color get _color {

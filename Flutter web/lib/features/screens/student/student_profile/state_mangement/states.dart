@@ -8,17 +8,17 @@ class StudentProfileInitial extends StudentProfileState {}
 class StudentProfileLoading extends StudentProfileState {}
 
 class StudentProfileLoaded extends StudentProfileState {
-  final StudentProfileModel profile;
   StudentProfileLoaded({required this.profile});
+  final StudentProfileModel profile;
 }
 
 class StudentProfileError extends StudentProfileState {
-  final String message;
   StudentProfileError({required this.message});
+  final String message;
 }
 class StudentProfileUpdating extends StudentProfileState {}
 
 class StudentProfileUpdated extends StudentProfileState {
-  final StudentProfileModel profile;
   StudentProfileUpdated({required this.profile});
+  final StudentProfileModel profile;
 }

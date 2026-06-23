@@ -117,7 +117,7 @@ class _AdminProfileContentState extends State<_AdminProfileContent> {
   }
 
   String _formatDate(DateTime date) {
-    return "${date.day.toString()}/${date.month.toString()}/${date.year}";
+    return '${date.day.toString()}/${date.month.toString()}/${date.year}';
   }
 
   @override
@@ -258,7 +258,7 @@ class _AdminProfileContentState extends State<_AdminProfileContent> {
                       user.dateOfBirth != null && user.dateOfBirth!.isNotEmpty
                       ? DateTime.parse(user.dateOfBirth!)
                       : null,
-                  onDateSelected: (DateTime? date) {
+                  onDateSelected: (date) {
                     if (date != null) {
                       setState(() {
                         selectedDate = date;
@@ -328,11 +328,11 @@ class _AdminProfileContentState extends State<_AdminProfileContent> {
                     ),
                     SizedBox(width: 10),
                     Text(
-                      "Saving...",
+                      'Saving...',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
-                        fontFamily: "inter",
+                        fontFamily: 'inter',
                         color: Colors.white,
                       ),
                     ),
@@ -342,11 +342,11 @@ class _AdminProfileContentState extends State<_AdminProfileContent> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      "Save Changes",
+                      'Save Changes',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
-                        fontFamily: "inter",
+                        fontFamily: 'inter',
                         color: Colors.white,
                       ),
                     ),

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:lms/features/screens/admin/courses/course_details/assignments/assignment_model.dart';
 
 class FileUploadProgressList extends StatelessWidget {
-  final List<UploadFileProgress> progresses;
 
   const FileUploadProgressList({super.key, required this.progresses});
+  final List<UploadFileProgress> progresses;
 
   @override
   Widget build(BuildContext context) {
@@ -49,8 +49,8 @@ class FileUploadProgressList extends StatelessWidget {
 }
 
 class _FileProgressTile extends StatelessWidget {
-  final UploadFileProgress progress;
   const _FileProgressTile({required this.progress});
+  final UploadFileProgress progress;
 
   String get _fileIcon {
     final ext = progress.fileName.split('.').last.toLowerCase();

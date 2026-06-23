@@ -11,8 +11,8 @@ import '../../../../core/cons/Colors/app_colors.dart';
 import 'student_quiz_model.dart';
 
 class QuizTakeScreen extends StatefulWidget {
-  final String quizTitle;
   const QuizTakeScreen({super.key, required this.quizTitle});
+  final String quizTitle;
 
   @override
   State<QuizTakeScreen> createState() => _QuizTakeScreenState();
@@ -227,13 +227,6 @@ class _QuizTakeScreenState extends State<QuizTakeScreen> {
 }
 
 class _TopBar extends StatelessWidget {
-  final String title;
-  final bool isResumed;
-  final bool isAutoSaving;
-  final Duration? remaining;
-  final String Function(Duration) formatDuration;
-  final double maxWidth;
-  final double horizontalPadding;
 
   const _TopBar({
     required this.title,
@@ -244,6 +237,13 @@ class _TopBar extends StatelessWidget {
     required this.maxWidth,
     required this.horizontalPadding,
   });
+  final String title;
+  final bool isResumed;
+  final bool isAutoSaving;
+  final Duration? remaining;
+  final String Function(Duration) formatDuration;
+  final double maxWidth;
+  final double horizontalPadding;
 
   @override
   Widget build(BuildContext context) {
@@ -339,11 +339,6 @@ class _TopBar extends StatelessWidget {
 }
 
 class _QuestionNav extends StatelessWidget {
-  final int total;
-  final int currentIndex;
-  final List<bool> answeredFlags;
-  final List<bool> flaggedFlags;
-  final void Function(int) onSelect;
 
   const _QuestionNav({
     required this.total,
@@ -352,6 +347,11 @@ class _QuestionNav extends StatelessWidget {
     required this.flaggedFlags,
     required this.onSelect,
   });
+  final int total;
+  final int currentIndex;
+  final List<bool> answeredFlags;
+  final List<bool> flaggedFlags;
+  final void Function(int) onSelect;
 
   @override
   Widget build(BuildContext context) {
@@ -409,13 +409,6 @@ class _QuestionNav extends StatelessWidget {
 }
 
 class _QuestionCard extends StatelessWidget {
-  final QuizTakeQuestion question;
-  final int index;
-  final int total;
-  final QuizAnswerDraft? answer;
-  final void Function(int optionId) onSelectOption;
-  final void Function(String text) onWrittenChanged;
-  final VoidCallback onToggleFlag;
 
   const _QuestionCard({
     required this.question,
@@ -426,6 +419,13 @@ class _QuestionCard extends StatelessWidget {
     required this.onWrittenChanged,
     required this.onToggleFlag,
   });
+  final QuizTakeQuestion question;
+  final int index;
+  final int total;
+  final QuizAnswerDraft? answer;
+  final void Function(int optionId) onSelectOption;
+  final void Function(String text) onWrittenChanged;
+  final VoidCallback onToggleFlag;
 
   @override
   Widget build(BuildContext context) {
@@ -547,10 +547,10 @@ class _QuestionCard extends StatelessWidget {
 }
 
 class _OptionTile extends StatelessWidget {
+  const _OptionTile({required this.option, required this.isSelected, required this.onTap});
   final QuizTakeOption option;
   final bool isSelected;
   final VoidCallback onTap;
-  const _OptionTile({required this.option, required this.isSelected, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -608,14 +608,6 @@ class _OptionTile extends StatelessWidget {
 }
 
 class _NavigationButtons extends StatelessWidget {
-  final bool isFirst;
-  final bool isLast;
-  final int answeredCount;
-  final int totalCount;
-  final bool isSubmitting;
-  final VoidCallback onPrevious;
-  final VoidCallback onNext;
-  final VoidCallback onSubmit;
 
   const _NavigationButtons({
     required this.isFirst,
@@ -627,6 +619,14 @@ class _NavigationButtons extends StatelessWidget {
     required this.onNext,
     required this.onSubmit,
   });
+  final bool isFirst;
+  final bool isLast;
+  final int answeredCount;
+  final int totalCount;
+  final bool isSubmitting;
+  final VoidCallback onPrevious;
+  final VoidCallback onNext;
+  final VoidCallback onSubmit;
 
   @override
   Widget build(BuildContext context) {

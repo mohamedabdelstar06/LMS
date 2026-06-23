@@ -21,10 +21,10 @@ String buildImageUrl(String? image) {
 }
 
 class CourseDetailsScreen extends StatelessWidget {
-  final int courseId;
-  final CourseEnrollmentModel? preview;
 
   const CourseDetailsScreen({super.key, required this.courseId, this.preview});
+  final int courseId;
+  final CourseEnrollmentModel? preview;
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +36,8 @@ class CourseDetailsScreen extends StatelessWidget {
 }
 
 class _CourseDetailsView extends StatelessWidget {
-  final CourseEnrollmentModel? preview;
   const _CourseDetailsView({this.preview});
+  final CourseEnrollmentModel? preview;
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +109,7 @@ class _CourseDetailsView extends StatelessWidget {
       return _ErrorState(message: state.message, onRetry: () {});
     }
 
-    CourseDetailModel? course = state is CourseDetailSuccess
+    final CourseDetailModel? course = state is CourseDetailSuccess
         ? state.course
         : null;
 
@@ -179,8 +179,8 @@ class _CourseDetailsView extends StatelessWidget {
 
 // ── Back Row ──────────────────────────────────────────────────
 class _BackRow extends StatelessWidget {
-  final String? title;
   const _BackRow({this.title});
+  final String? title;
 
   @override
   Widget build(BuildContext context) {
@@ -230,15 +230,6 @@ class _BackRow extends StatelessWidget {
 
 // ── Course Header Card ────────────────────────────────────────
 class _CourseHeaderCard extends StatelessWidget {
-  final String title;
-  final String description;
-  final String imageUrl;
-  final int creditHours;
-  final String instructorName;
-  final int enrolledCount;
-  final String? profileImageUrl;
-  final double? progressPercentage;
-  final bool isLargeScreen;
 
   const _CourseHeaderCard({
     required this.title,
@@ -251,6 +242,15 @@ class _CourseHeaderCard extends StatelessWidget {
     this.progressPercentage,
     required this.isLargeScreen,
   });
+  final String title;
+  final String description;
+  final String imageUrl;
+  final int creditHours;
+  final String instructorName;
+  final int enrolledCount;
+  final String? profileImageUrl;
+  final double? progressPercentage;
+  final bool isLargeScreen;
 
   @override
   Widget build(BuildContext context) {
@@ -418,9 +418,9 @@ class _CourseHeaderCard extends StatelessWidget {
 }
 
 class _InfoChip extends StatelessWidget {
+  const _InfoChip({required this.icon, required this.label});
   final IconData icon;
   final String label;
-  const _InfoChip({required this.icon, required this.label});
 
   @override
   Widget build(BuildContext context) {
@@ -453,14 +453,6 @@ class _InfoChip extends StatelessWidget {
 
 // ── Explore Grid ──────────────────────────────────────────────
 class _ExploreGrid extends StatelessWidget {
-  final int courseId;
-  final String courseTitle;
-  final CourseDetailModel? course;
-  final int? assignmentsCount;
-  final int? quizzesCount;
-  final int? lecturesCount;
-  final bool isLargeScreen;
-  final bool isLoadingCounts;
 
   const _ExploreGrid({
     required this.courseId,
@@ -472,6 +464,14 @@ class _ExploreGrid extends StatelessWidget {
     required this.isLargeScreen,
     required this.isLoadingCounts,
   });
+  final int courseId;
+  final String courseTitle;
+  final CourseDetailModel? course;
+  final int? assignmentsCount;
+  final int? quizzesCount;
+  final int? lecturesCount;
+  final bool isLargeScreen;
+  final bool isLoadingCounts;
 
   @override
   Widget build(BuildContext context) {
@@ -588,13 +588,6 @@ class _ExploreGrid extends StatelessWidget {
 
 // ── Explore Card ──────────────────────────────────────────────
 class _ExploreCard extends StatefulWidget {
-  final String title;
-  final String subtitle;
-  final IconData icon;
-  final List<Color> gradientColors;
-  final int? count;
-  final bool isLoadingCount;
-  final VoidCallback onTap;
 
   const _ExploreCard({
     required this.title,
@@ -605,6 +598,13 @@ class _ExploreCard extends StatefulWidget {
     required this.isLoadingCount,
     required this.onTap,
   });
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final List<Color> gradientColors;
+  final int? count;
+  final bool isLoadingCount;
+  final VoidCallback onTap;
 
   @override
   State<_ExploreCard> createState() => _ExploreCardState();
@@ -748,9 +748,9 @@ class _ExploreCardState extends State<_ExploreCard> {
 
 // ── Error State ───────────────────────────────────────────────
 class _ErrorState extends StatelessWidget {
+  const _ErrorState({required this.message, required this.onRetry});
   final String message;
   final VoidCallback onRetry;
-  const _ErrorState({required this.message, required this.onRetry});
 
   @override
   Widget build(BuildContext context) {

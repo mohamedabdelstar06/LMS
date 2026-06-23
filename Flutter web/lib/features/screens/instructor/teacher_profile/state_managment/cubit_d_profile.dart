@@ -20,7 +20,7 @@ class TeacherProfileCubit extends Cubit<TeacherProfileState> {
       final token = await TokenStorageHelper.getTokenSecure();
 
       if (token == null || token.isEmpty) {
-        emit( TeacherProfileError(message: "You are not authorized. Token missing."));
+        emit( TeacherProfileError(message: 'You are not authorized. Token missing.'));
         return;
       }
 
@@ -37,20 +37,20 @@ class TeacherProfileCubit extends Cubit<TeacherProfileState> {
         emit(TeacherProfileLoaded(profile: model));
       } else {
         emit(TeacherProfileError(
-            message: response.data["message"] ?? "Failed to load profile"));
+            message: response.data['message'] ?? 'Failed to load profile'));
       }
     } on DioException catch (e) {
-      String errorMessage = "Something went wrong";
+      String errorMessage = 'Something went wrong';
 
       if (e.response != null && e.response?.data is Map) {
-        errorMessage = e.response?.data["message"] ?? errorMessage;
+        errorMessage = e.response?.data['message'] ?? errorMessage;
       } else if (e.type == DioExceptionType.connectionTimeout) {
-        errorMessage = "Connection timeout, please try again";
+        errorMessage = 'Connection timeout, please try again';
       }
 
       emit(TeacherProfileError(message: errorMessage));
     } catch (e) {
-      emit(TeacherProfileError(message: "Unexpected error: $e"));
+      emit(TeacherProfileError(message: 'Unexpected error: $e'));
     }
   }
   Future<void> updateProfile({
@@ -63,7 +63,7 @@ class TeacherProfileCubit extends Cubit<TeacherProfileState> {
     try {
       final token = await TokenStorageHelper.getTokenSecure();
       if (token == null || token.isEmpty) {
-        emit(TeacherProfileError(message: "Unauthorized"));
+        emit(TeacherProfileError(message: 'Unauthorized'));
         return;
       }
 
@@ -75,11 +75,11 @@ class TeacherProfileCubit extends Cubit<TeacherProfileState> {
       ));
 
       final formData = FormData.fromMap({
-        if (city != null) "city": city,
+        if (city != null) 'city': city,
         if (dateOfBirth != null)
-          "dateOfBirth":
+          'dateOfBirth':
           DateFormat('yyyy-MM-dd').format(dateOfBirth),
-        if (photo != null) "profileImage": photo,
+        if (photo != null) 'profileImage': photo,
       });
 
       final response = await dio.patch(
@@ -91,12 +91,12 @@ class TeacherProfileCubit extends Cubit<TeacherProfileState> {
         final model = parseTeacherProfileResponse(response.data);
         emit(TeacherProfileLoaded(profile: model));
       } else {
-        emit(TeacherProfileError(message: "Failed to update profile"));
+        emit(TeacherProfileError(message: 'Failed to update profile'));
       }
     } on DioException catch (e) {
       emit(
         TeacherProfileError(
-          message: e.response?.data["message"] ?? "Update failed",
+          message: e.response?.data['message'] ?? 'Update failed',
         ),
       );
     }

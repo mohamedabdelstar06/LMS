@@ -14,16 +14,16 @@ class GetCourseInitial extends GetCourseStates {}
 class GetCourseLoading extends GetCourseStates {}
 
 class GetCourseSuccess extends GetCourseStates {
-  final List<GetCoursesModel> courses;
   const GetCourseSuccess(this.courses);
+  final List<GetCoursesModel> courses;
 
   @override
   List<Object?> get props => [courses];
 }
 
 class GetCourseError extends GetCourseStates {
-  final String message;
   const GetCourseError(this.message);
+  final String message;
 
   @override
   List<Object?> get props => [message];
@@ -32,16 +32,16 @@ class GetCourseError extends GetCourseStates {
 class DeleteCourseLoading extends GetCourseStates {}
 
 class DeleteCourseSuccess extends GetCourseStates {
-  final String message;
   const DeleteCourseSuccess(this.message);
+  final String message;
 
   @override
   List<Object?> get props => [message];
 }
 
 class DeleteCourseError extends GetCourseStates {
-  final String message;
   const DeleteCourseError(this.message);
+  final String message;
 
   @override
   List<Object?> get props => [message];
@@ -50,16 +50,16 @@ class DeleteCourseError extends GetCourseStates {
 class GetCourseByIdLoading extends GetCourseStates {}
 
 class GetCourseByIdSuccess extends GetCourseStates {
-  final GetCoursesModel course;
   const GetCourseByIdSuccess(this.course);
+  final GetCoursesModel course;
 
   @override
   List<Object?> get props => [course];
 }
 
 class GetCourseByIdError extends GetCourseStates {
-  final String message;
   const GetCourseByIdError(this.message);
+  final String message;
 
   @override
   List<Object?> get props => [message];
@@ -68,9 +68,9 @@ class GetCourseByIdError extends GetCourseStates {
 class UpdateCourseLoading extends GetCourseStates {}
 
 class UpdateCourseSuccess extends GetCourseStates {
+  UpdateCourseSuccess(this.message) : timestamp = DateTime.now();
   final String message;
   final DateTime timestamp;
-  UpdateCourseSuccess(this.message) : timestamp = DateTime.now();
 
   @override
   List<Object?> get props => [message, timestamp];

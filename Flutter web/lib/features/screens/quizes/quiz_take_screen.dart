@@ -188,7 +188,7 @@ class _QuizTakeScreenState extends State<QuizTakeScreen> {
                 height: 4,
                 color: Colors.grey.shade100,
                 child: FractionallySizedBox(
-                  widthFactor: ((_currentPage + 1) / questions.length),
+                  widthFactor: (_currentPage + 1) / questions.length,
                   alignment: Alignment.centerLeft,
                   child: Container(decoration: const BoxDecoration(gradient: LinearGradient(colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)]))),
                 ),

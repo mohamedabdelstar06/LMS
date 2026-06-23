@@ -1,14 +1,6 @@
 import 'package:intl/intl.dart';
 
 class Department {
-  final int id;
-  final String name;
-  final String description;
-  final String? imageUrl;
-  final int headId;
-  final String headName;
-  final String createdAt;
-  final String updatedAt;
 
   Department({
     required this.id,
@@ -21,12 +13,6 @@ class Department {
     required this.updatedAt,
   });
 
-  static String formatDate(String? dateStr) {
-    if (dateStr == null || dateStr.isEmpty) return '';
-    DateTime date = DateTime.parse(dateStr);
-    return DateFormat('dd/MM/yyyy').format(date);
-  }
-
   factory Department.fromJson(Map<String, dynamic> json) => Department(
     id: json['id'] ?? 0,
     name: json['name'] ?? '',
@@ -37,6 +23,20 @@ class Department {
     createdAt: formatDate(json['createdAt']),
     updatedAt: formatDate(json['updatedAt']),
   );
+  final int id;
+  final String name;
+  final String description;
+  final String? imageUrl;
+  final int headId;
+  final String headName;
+  final String createdAt;
+  final String updatedAt;
+
+  static String formatDate(String? dateStr) {
+    if (dateStr == null || dateStr.isEmpty) return '';
+    final DateTime date = DateTime.parse(dateStr);
+    return DateFormat('dd/MM/yyyy').format(date);
+  }
 
   Map<String, dynamic> toJson() => {
     'id': id,

@@ -19,10 +19,10 @@ import '../../year/get_year/state_managment/cubit.dart';
 import '../../year/get_year/state_managment/states.dart';
 
 class UpdateNewCoursePage extends StatefulWidget {
-  // final GetCoursesModel courseModel;
-  final int courseId;
 
   const UpdateNewCoursePage({super.key, required this.courseId});
+  // final GetCoursesModel courseModel;
+  final int courseId;
 
   @override
   State<UpdateNewCoursePage> createState() => _UpdateNewCoursePageState();
@@ -53,7 +53,7 @@ class _UpdateNewCoursePageState extends State<UpdateNewCoursePage> {
 
     nameController.text = course.title ?? '';
     descriptionController.text = course.description ?? '';
-    creditHoursController.text = course.creditHours?.toString() ?? '';
+    creditHoursController.text = course.creditHours.toString() ?? '';
 
     selectedDepartmentName = course.departmentName;
     selectedYearName = course.yearName;
@@ -245,9 +245,9 @@ class _UpdateNewCoursePageState extends State<UpdateNewCoursePage> {
                   ),
                 ],
               )
-            : Column(
+            : const Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
+                children: [
                   Icon(
                     Icons.cloud_upload_outlined,
                     size: 48,
@@ -766,7 +766,7 @@ class _UpdateNewCoursePageState extends State<UpdateNewCoursePage> {
                                   );
                                 }
 
-                                List<GetDepartmentModel> departments =
+                                final List<GetDepartmentModel> departments =
                                     departmentState.departments
                                         .whereType<GetDepartmentModel>()
                                         .toList();
@@ -831,7 +831,7 @@ class _UpdateNewCoursePageState extends State<UpdateNewCoursePage> {
                             }
 
                             // ignore: unused_local_variable
-                            List<GetYearModel> years = yearState.years
+                            final List<GetYearModel> years = yearState.years
                                 .whereType<GetYearModel>()
                                 .toList();
 
@@ -874,7 +874,7 @@ class _UpdateNewCoursePageState extends State<UpdateNewCoursePage> {
   }
 
   Widget _buildActionButtons(GetCourseStates state, int id) {
-    bool isLoading = state is UpdateCourseLoading;
+    final bool isLoading = state is UpdateCourseLoading;
     return Row(
       children: [
         Expanded(

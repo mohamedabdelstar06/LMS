@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import '../../../../../../../core/cons/Colors/app_colors.dart';
 
 class LoadingScreenDetails extends StatelessWidget {
-  const LoadingScreenDetails();
+  const LoadingScreenDetails({super.key});
 
   @override
   Widget build(BuildContext context) {

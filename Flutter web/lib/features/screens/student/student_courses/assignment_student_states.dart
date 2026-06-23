@@ -9,37 +9,37 @@ class AssignmentStudentInitial extends AssignmentStudentState {}
 class AssignmentListLoading extends AssignmentStudentState {}
 
 class AssignmentListSuccess extends AssignmentStudentState {
-  final List<StudentAssignmentModel> assignments;
   AssignmentListSuccess(this.assignments);
+  final List<StudentAssignmentModel> assignments;
 }
 
 class AssignmentListError extends AssignmentStudentState {
-  final String message;
   AssignmentListError(this.message);
+  final String message;
 }
 
 // ── Detail ───────────────────────────────────────────
 class AssignmentDetailLoading extends AssignmentStudentState {}
 
 class AssignmentDetailSuccess extends AssignmentStudentState {
-  final StudentAssignmentModel assignment;
   AssignmentDetailSuccess(this.assignment);
+  final StudentAssignmentModel assignment;
 }
 
 class AssignmentDetailError extends AssignmentStudentState {
-  final String message;
   AssignmentDetailError(this.message);
+  final String message;
 }
 
 // ── Submission ───────────────────────────────────────
-class AssignmentSubmitting extends AssignmentStudentState {
-  final double progress; // 0.0 - 1.0
+class AssignmentSubmitting extends AssignmentStudentState { // 0.0 - 1.0
   AssignmentSubmitting(this.progress);
+  final double progress;
 }
 
 class AssignmentSubmitSuccess extends AssignmentStudentState {}
 
 class AssignmentSubmitError extends AssignmentStudentState {
-  final String message;
   AssignmentSubmitError(this.message);
+  final String message;
 }

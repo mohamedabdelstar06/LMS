@@ -5,12 +5,12 @@ import '../model/model.dart';
 import 'comments_state.dart';
 
 class CommentsCubit extends Cubit<CommentsState> {
-  final CommentsRepository _repo;
-  final int lectureId;
 
   CommentsCubit({required CommentsRepository repo, required this.lectureId})
       : _repo = repo,
         super(CommentsInitial());
+  final CommentsRepository _repo;
+  final int lectureId;
 
   Future<void> loadComments() async {
     emit(CommentsLoading());

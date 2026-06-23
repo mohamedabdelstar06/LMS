@@ -15,7 +15,7 @@ Widget buildTextField(
         children: [
           AnimatedDefaultTextStyle(
             duration: const Duration(milliseconds: 200),
-            style: TextStyle(
+            style: const TextStyle(
               fontWeight: FontWeight.w600,
               color: Color(0xFF2563EB),
             ),

@@ -490,7 +490,7 @@ class _InfoCard extends StatelessWidget {
                   icon: Icons.label_outline_rounded,
                   label: typeLabel,
                   color: typeColor),
-              _Chip(
+              const _Chip(
                   icon: Icons.open_in_browser_rounded,
                   label: 'Native Browser',
                   color: _Sky.amber),
@@ -558,7 +558,7 @@ class _SidePanel extends StatelessWidget {
               label: 'Type',
               value: type == FileType.video ? 'Video' : 'Audio'),
           const SizedBox(height: 10),
-          _DetailRow(
+          const _DetailRow(
               icon: Icons.open_in_browser_rounded,
               label: 'Player',
               value: 'Native Browser'),

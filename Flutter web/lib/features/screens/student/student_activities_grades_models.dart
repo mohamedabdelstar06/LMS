@@ -4,16 +4,6 @@
 
 // ── Activity Model ────────────────────────────────────────────
 class StudentActivity {
-  final int id;
-  final String title;
-  final String activityType;
-  final String status;
-  final String courseTitle;
-  final int? courseId;
-  final String? dueDate;
-  final String? completedAt;
-  final double? score;
-  final double? maxScore;
 
   const StudentActivity({
     required this.id,
@@ -40,6 +30,16 @@ class StudentActivity {
     score: j['score'] != null ? (j['score']).toDouble() : null,
     maxScore: j['maxScore'] != null ? (j['maxScore']).toDouble() : null,
   );
+  final int id;
+  final String title;
+  final String activityType;
+  final String status;
+  final String courseTitle;
+  final int? courseId;
+  final String? dueDate;
+  final String? completedAt;
+  final double? score;
+  final double? maxScore;
 
   double? get scorePercent =>
       (score != null && maxScore != null && maxScore! > 0)
@@ -48,11 +48,6 @@ class StudentActivity {
 }
 
 class StudentActivitiesPage {
-  final List<StudentActivity> items;
-  final int totalCount;
-  final int page;
-  final int pageSize;
-  final int totalPages;
 
   const StudentActivitiesPage({
     required this.items,
@@ -72,6 +67,11 @@ class StudentActivitiesPage {
         pageSize: j['pageSize'] ?? 20,
         totalPages: j['totalPages'] ?? 0,
       );
+  final List<StudentActivity> items;
+  final int totalCount;
+  final int page;
+  final int pageSize;
+  final int totalPages;
 }
 
 // ── Grades Models ─────────────────────────────────────────────
@@ -79,19 +79,6 @@ class StudentActivitiesPage {
 /// Matches API:
 /// { quizId, quizTitle, score, maxScore, scorePercent, status, submittedAt }
 class QuizGradeItem {
-  final int quizId;
-  final String quizTitle;
-
-  /// Nullable — null means the quiz hasn't been submitted/graded yet.
-  final double? score;
-  final double maxScore;
-
-  /// Nullable — null when status is InProgress (not submitted).
-  final double? scorePercent;
-
-  /// e.g. "Graded", "InProgress"
-  final String status;
-  final String? submittedAt;
 
   const QuizGradeItem({
     required this.quizId,
@@ -114,6 +101,19 @@ class QuizGradeItem {
     status: j['status'] ?? '',
     submittedAt: j['submittedAt'],
   );
+  final int quizId;
+  final String quizTitle;
+
+  /// Nullable — null means the quiz hasn't been submitted/graded yet.
+  final double? score;
+  final double maxScore;
+
+  /// Nullable — null when status is InProgress (not submitted).
+  final double? scorePercent;
+
+  /// e.g. "Graded", "InProgress"
+  final String status;
+  final String? submittedAt;
 
   /// Returns [scorePercent] if available, otherwise 0.
   double get percent => scorePercent ?? 0;
@@ -128,17 +128,6 @@ class QuizGradeItem {
 /// Matches API:
 /// { assignmentId, assignmentTitle, grade, maxGrade, status, submittedAt }
 class AssignmentGradeItem {
-  final int assignmentId;
-  final String assignmentTitle;
-
-  /// Nullable — null means not graded yet.
-  final double? grade;
-  final double maxGrade;
-
-  /// e.g. "Submitted", "Graded", "Pending"
-  final String status;
-  final String? submittedAt;
-  final String? feedback;
 
   const AssignmentGradeItem({
     required this.assignmentId,
@@ -160,6 +149,17 @@ class AssignmentGradeItem {
         submittedAt: j['submittedAt'],
         feedback: j['feedback'],
       );
+  final int assignmentId;
+  final String assignmentTitle;
+
+  /// Nullable — null means not graded yet.
+  final double? grade;
+  final double maxGrade;
+
+  /// e.g. "Submitted", "Graded", "Pending"
+  final String status;
+  final String? submittedAt;
+  final String? feedback;
 
   /// Percentage (0–100). Returns 0 if not graded yet.
   double get percent =>
@@ -173,10 +173,6 @@ class AssignmentGradeItem {
 
 // ── CourseGrades ──────────────────────────────────────────────
 class CourseGrades {
-  final int courseId;
-  final String courseName;
-  final List<QuizGradeItem> quizGrades;
-  final List<AssignmentGradeItem> assignmentGrades;
 
   const CourseGrades({
     required this.courseId,
@@ -195,6 +191,10 @@ class CourseGrades {
         .map((e) => AssignmentGradeItem.fromJson(e))
         .toList(),
   );
+  final int courseId;
+  final String courseName;
+  final List<QuizGradeItem> quizGrades;
+  final List<AssignmentGradeItem> assignmentGrades;
 
   // ── Averages consider only graded items ──────────────────────
 

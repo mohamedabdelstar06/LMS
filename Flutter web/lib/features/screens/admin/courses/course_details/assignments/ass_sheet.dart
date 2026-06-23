@@ -15,8 +15,8 @@ import 'package:lms/features/screens/admin/squadron/get_squadron/state_mangment/
 // ─────────────────────────────────────────────────────────────
 
 class AssignmentFormSheet extends StatefulWidget {
-  final AssignmentModel? existing;
   const AssignmentFormSheet({super.key, this.existing});
+  final AssignmentModel? existing;
 
   @override
   State<AssignmentFormSheet> createState() => _AssignmentFormSheetState();
@@ -43,7 +43,7 @@ class _AssignmentFormSheetState extends State<AssignmentFormSheet> {
   SquadronModel? _selectedSquadron;
 
   // Files
-  List<PickedFileData> _pickedFiles = [];
+  final List<PickedFileData> _pickedFiles = [];
 
   bool get isEditing => widget.existing != null;
 
@@ -89,7 +89,6 @@ class _AssignmentFormSheetState extends State<AssignmentFormSheet> {
     try {
       final result = await FilePicker.platform.pickFiles(
         allowMultiple: true,
-        type: FileType.any,
         withData: true,
       );
       if (result == null || result.files.isEmpty) return;
@@ -129,8 +128,6 @@ class _AssignmentFormSheetState extends State<AssignmentFormSheet> {
         data: Theme.of(ctx).copyWith(
           colorScheme: const ColorScheme.light(
             primary: Color(0xFF2563EB),
-            onPrimary: Colors.white,
-            surface: Colors.white,
           ),
         ),
         child: child!,
@@ -236,7 +233,7 @@ class _AssignmentFormSheetState extends State<AssignmentFormSheet> {
       padding: const EdgeInsets.fromLTRB(20, 16, 12, 14),
       decoration: const BoxDecoration(
         color: Colors.white,
-        border: Border(bottom: BorderSide(color: Color(0xFFEEF2F8), width: 1)),
+        border: Border(bottom: BorderSide(color: Color(0xFFEEF2F8))),
       ),
       child: Row(
         children: [
@@ -356,8 +353,9 @@ class _AssignmentFormSheetState extends State<AssignmentFormSheet> {
                     enabled: !uploading,
                     validator: (v) {
                       final n = int.tryParse(v ?? '');
-                      if (n == null || n <= 0)
+                      if (n == null || n <= 0) {
                         return 'Enter a valid number > 0';
+                      }
                       if (n > 1000) return 'Max grade cannot exceed 1000';
                       return null;
                     },
@@ -686,10 +684,6 @@ class _AssignmentFormSheetState extends State<AssignmentFormSheet> {
 // ════════════════════════════════════════════════════════════
 
 class _SheetScaffold extends StatelessWidget {
-  final ScrollController scrollController;
-  final Widget header;
-  final Widget child;
-  final Widget submitBar;
 
   const _SheetScaffold({
     required this.scrollController,
@@ -697,6 +691,10 @@ class _SheetScaffold extends StatelessWidget {
     required this.child,
     required this.submitBar,
   });
+  final ScrollController scrollController;
+  final Widget header;
+  final Widget child;
+  final Widget submitBar;
 
   @override
   Widget build(BuildContext context) {
@@ -731,13 +729,6 @@ class _SheetScaffold extends StatelessWidget {
 // ── Collapsible section card ─────────────────────────────────
 
 class _Section extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final Color color;
-  final bool expanded;
-  final VoidCallback onToggle;
-  final List<Widget> children;
-  final String? badge;
 
   const _Section({
     required this.icon,
@@ -748,6 +739,13 @@ class _Section extends StatelessWidget {
     required this.children,
     this.badge,
   });
+  final IconData icon;
+  final String title;
+  final Color color;
+  final bool expanded;
+  final VoidCallback onToggle;
+  final List<Widget> children;
+  final String? badge;
 
   @override
   Widget build(BuildContext context) {
@@ -852,8 +850,8 @@ class _Section extends StatelessWidget {
 // ── Field label ──────────────────────────────────────────────
 
 class _FieldLabel extends StatelessWidget {
-  final String text;
   const _FieldLabel(this.text);
+  final String text;
 
   @override
   Widget build(BuildContext context) {
@@ -872,13 +870,6 @@ class _FieldLabel extends StatelessWidget {
 // ── Date field ───────────────────────────────────────────────
 
 class _DateField extends StatelessWidget {
-  final String label;
-  final IconData icon;
-  final DateTime? value;
-  final bool enabled;
-  final bool isDeadline;
-  final VoidCallback onTap;
-  final String? Function(String?)? validator;
 
   const _DateField({
     required this.label,
@@ -889,6 +880,13 @@ class _DateField extends StatelessWidget {
     this.isDeadline = false,
     this.validator,
   });
+  final String label;
+  final IconData icon;
+  final DateTime? value;
+  final bool enabled;
+  final bool isDeadline;
+  final VoidCallback onTap;
+  final String? Function(String?)? validator;
 
   String get _display {
     if (value == null) return 'Select date';
@@ -987,9 +985,9 @@ class _DateField extends StatelessWidget {
 // ── Duration chip ────────────────────────────────────────────
 
 class _DurationChip extends StatelessWidget {
+  const _DurationChip({required this.start, required this.end});
   final DateTime start;
   final DateTime end;
-  const _DurationChip({required this.start, required this.end});
 
   @override
   Widget build(BuildContext context) {
@@ -1027,15 +1025,15 @@ class _DurationChip extends StatelessWidget {
 // ── Squadron dropdown ────────────────────────────────────────
 
 class _SquadronDropdown extends StatelessWidget {
-  final SquadronModel? selected;
-  final bool enabled;
-  final ValueChanged<SquadronModel?> onChanged;
 
   const _SquadronDropdown({
     required this.selected,
     required this.enabled,
     required this.onChanged,
   });
+  final SquadronModel? selected;
+  final bool enabled;
+  final ValueChanged<SquadronModel?> onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -1092,7 +1090,6 @@ class _SquadronDropdown extends StatelessWidget {
                   items: [
                     // "All squadrons" option
                     DropdownMenuItem<SquadronModel?>(
-                      value: null,
                       child: Row(
                         children: [
                           Container(
@@ -1241,8 +1238,8 @@ class _DropShimmer extends StatelessWidget {
 }
 
 class _DropError extends StatelessWidget {
-  final String message;
   const _DropError({required this.message});
+  final String message;
 
   @override
   Widget build(BuildContext context) {
@@ -1272,15 +1269,15 @@ class _DropError extends StatelessWidget {
 // ── Visibility toggle (segmented style) ─────────────────────
 
 class _VisibilityToggle extends StatelessWidget {
-  final bool isVisible;
-  final bool enabled;
-  final ValueChanged<bool> onChanged;
 
   const _VisibilityToggle({
     required this.isVisible,
     required this.enabled,
     required this.onChanged,
   });
+  final bool isVisible;
+  final bool enabled;
+  final ValueChanged<bool> onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -1324,13 +1321,6 @@ class _VisibilityToggle extends StatelessWidget {
 }
 
 class _VisOption extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final String sublabel;
-  final bool selected;
-  final Color color;
-  final VoidCallback? onTap;
-  final bool isFirst;
 
   const _VisOption({
     required this.icon,
@@ -1341,6 +1331,13 @@ class _VisOption extends StatelessWidget {
     required this.onTap,
     required this.isFirst,
   });
+  final IconData icon;
+  final String label;
+  final String sublabel;
+  final bool selected;
+  final Color color;
+  final VoidCallback? onTap;
+  final bool isFirst;
 
   @override
   Widget build(BuildContext context) {
@@ -1406,15 +1403,6 @@ class _VisOption extends StatelessWidget {
 // ── Generic toggle tile ──────────────────────────────────────
 
 class _ToggleTile extends StatelessWidget {
-  final String title;
-  final String subtitle;
-  final IconData icon;
-  final bool value;
-  final bool enabled;
-  final Color activeColor;
-  final Color activeBg;
-  final Color activeBorder;
-  final ValueChanged<bool> onChanged;
 
   const _ToggleTile({
     required this.title,
@@ -1427,6 +1415,15 @@ class _ToggleTile extends StatelessWidget {
     required this.activeBorder,
     required this.onChanged,
   });
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final bool value;
+  final bool enabled;
+  final Color activeColor;
+  final Color activeBg;
+  final Color activeBorder;
+  final ValueChanged<bool> onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -1487,8 +1484,8 @@ class _ToggleTile extends StatelessWidget {
 // ── File drop zone ───────────────────────────────────────────
 
 class _FileDropZone extends StatelessWidget {
-  final VoidCallback onTap;
   const _FileDropZone({required this.onTap});
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -1503,7 +1500,6 @@ class _FileDropZone extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: const Color(0xFFFED7AA),
-            style: BorderStyle.solid,
           ),
         ),
         child: Column(
@@ -1545,9 +1541,9 @@ class _FileDropZone extends StatelessWidget {
 // ── Picked file tile ─────────────────────────────────────────
 
 class _PickedFileTile extends StatelessWidget {
+  const _PickedFileTile({required this.file, required this.onRemove});
   final PickedFileData file;
   final VoidCallback onRemove;
-  const _PickedFileTile({required this.file, required this.onRemove});
 
   @override
   Widget build(BuildContext context) {

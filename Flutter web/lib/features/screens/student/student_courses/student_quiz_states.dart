@@ -9,13 +9,13 @@ class StudentQuizInitial extends StudentQuizState {}
 class QuizListLoading extends StudentQuizState {}
 
 class QuizListSuccess extends StudentQuizState {
-  final List<StudentQuizListItem> quizzes;
   QuizListSuccess(this.quizzes);
+  final List<StudentQuizListItem> quizzes;
 }
 
 class QuizListError extends StudentQuizState {
-  final String message;
   QuizListError(this.message);
+  final String message;
 }
 
 // ── Pre-check (deciding whether to resume or start fresh) ────
@@ -25,11 +25,6 @@ class QuizPrecheckLoading extends StudentQuizState {}
 class QuizSessionLoading extends StudentQuizState {}
 
 class QuizSessionActive extends StudentQuizState {
-  final QuizTakeSession session;
-  final Map<int, QuizAnswerDraft> answers;
-  final bool isResumed;
-  final bool isAutoSaving;
-  final bool isSubmitting;
 
   QuizSessionActive({
     required this.session,
@@ -38,6 +33,11 @@ class QuizSessionActive extends StudentQuizState {
     this.isAutoSaving = false,
     this.isSubmitting = false,
   });
+  final QuizTakeSession session;
+  final Map<int, QuizAnswerDraft> answers;
+  final bool isResumed;
+  final bool isAutoSaving;
+  final bool isSubmitting;
 
   QuizSessionActive copyWith({
     Map<int, QuizAnswerDraft>? answers,
@@ -55,19 +55,19 @@ class QuizSessionActive extends StudentQuizState {
 }
 
 class QuizSessionError extends StudentQuizState {
-  final String message;
   QuizSessionError(this.message);
+  final String message;
 }
 
 // ── Result ───────────────────────────────────────────
 class QuizResultLoading extends StudentQuizState {}
 
 class QuizResultLoaded extends StudentQuizState {
-  final StudentQuizResult result;
   QuizResultLoaded(this.result);
+  final StudentQuizResult result;
 }
 
 class QuizResultError extends StudentQuizState {
-  final String message;
   QuizResultError(this.message);
+  final String message;
 }

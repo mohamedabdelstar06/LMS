@@ -84,7 +84,7 @@ class _EditSquadronScreenState extends State<EditSquadronScreen> {
         TextFormField(
           controller: controller,
           maxLines: maxLines,
-          validator: (v) => v!.isEmpty ? "Field Required" : null,
+          validator: (v) => v!.isEmpty ? 'Field Required' : null,
           decoration: _inputStyle(label),
         ),
       ],
@@ -131,7 +131,7 @@ class _EditSquadronScreenState extends State<EditSquadronScreen> {
                     ),
                     SizedBox(width: 12),
                     Text(
-                      "Updating Squadron...",
+                      'Updating Squadron...',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -141,7 +141,7 @@ class _EditSquadronScreenState extends State<EditSquadronScreen> {
                   ],
                 )
                     : const Text(
-                  "Update Squadron",
+                  'Update Squadron',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
@@ -180,13 +180,13 @@ class _EditSquadronScreenState extends State<EditSquadronScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                "Edit Squadron",
+                'Edit Squadron',
                 style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 32),
-              _buildField("Squadron Name", nameController),
+              _buildField('Squadron Name', nameController),
               const SizedBox(height: 24),
-              _buildField("Description", descriptionController, maxLines: 4),
+              _buildField('Description', descriptionController, maxLines: 4),
               const SizedBox(height: 40),
               _buildActionButton(isLoading, squadron),
             ],

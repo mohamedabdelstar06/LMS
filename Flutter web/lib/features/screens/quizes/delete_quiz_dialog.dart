@@ -272,9 +272,9 @@ class _DeleteQuizDialogState extends State<DeleteQuizDialog>
                               ),
                               elevation: _confirmed ? 2 : 0,
                             ),
-                            child: Row(
+                            child: const Row(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
+                              children: [
                                 Icon(Icons.delete_forever_rounded, size: 18),
                                 SizedBox(width: 6),
                                 Text('Delete Forever',

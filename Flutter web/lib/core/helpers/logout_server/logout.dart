@@ -55,7 +55,7 @@ class LogoutServer {
                Icon(Icons.logout, color: Colors.red.withValues(alpha: 0.6), size: 60),
               const SizedBox(height: 10),
               const Text(
-                "Confirm Logout",
+                'Confirm Logout',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 22,
@@ -64,7 +64,7 @@ class LogoutServer {
               ),
               const SizedBox(height: 8),
               const Text(
-                "Are you sure you want to logout?",
+                'Are you sure you want to logout?',
                 style: TextStyle(color: Colors.white70, fontSize: 16),
                 textAlign: TextAlign.center,
               ),
@@ -83,7 +83,7 @@ class LogoutServer {
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: const Text("No"),
+                    child: const Text('No'),
                   ),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
@@ -98,7 +98,7 @@ class LogoutServer {
                       await _showLoadingAndHandleLogout(token);
 
                     },
-                    child: const Text("Yes"),
+                    child: const Text('Yes'),
                   ),
                 ],
               ),
@@ -126,10 +126,10 @@ class LogoutServer {
       final err = result['error'];
       debugPrint('Error is => " $err');
       ScaffoldMessenger.of(navigatorKey.currentContext!).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text(
             'Error:- Check Your Connection',
-            style: const TextStyle(fontSize: 16, color: Colors.white),
+            style: TextStyle(fontSize: 16, color: Colors.white),
           ),
           backgroundColor: Colors.redAccent,
         ),
@@ -156,7 +156,7 @@ class LogoutServer {
               Expanded(
                 child: Text(
                   message,
-                  style: TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 16),
                 ),
               ),
             ],
@@ -179,7 +179,7 @@ class LogoutServer {
 
       Navigator.pushAndRemoveUntil(
         navigatorKey.currentContext!,
-        MaterialPageRoute(builder: (_) => LoginScreen()),
+        MaterialPageRoute(builder: (_) => const LoginScreen()),
             (route) => false,
       );
     } else {
@@ -208,7 +208,7 @@ class LogoutServer {
         receiveTimeout: const Duration(seconds: 10),
       ));
 
-      String endpoint = "${ApiResources.apiUrl}${ApiResources.logoutEndPoint}";
+      final String endpoint = '${ApiResources.apiUrl}${ApiResources.logoutEndPoint}';
 
       final response = await dio.post(
         endpoint,

@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 
 class AdminActionButton extends StatelessWidget {
-  final IconData icon;
-  final Color color;
-  final String tooltip;
-  final VoidCallback onPressed;
 
   const AdminActionButton({
     super.key,
@@ -13,6 +9,10 @@ class AdminActionButton extends StatelessWidget {
     required this.tooltip,
     required this.onPressed,
   });
+  final IconData icon;
+  final Color color;
+  final String tooltip;
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class AdminActionButton extends StatelessWidget {
           decoration: BoxDecoration(
             color: color.withOpacity(0.1),
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: color.withOpacity(0.2), width: 1),
+            border: Border.all(color: color.withOpacity(0.2)),
           ),
           child: Icon(icon, size: 16, color: color),
         ),

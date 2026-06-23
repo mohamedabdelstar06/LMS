@@ -20,11 +20,11 @@ class ImportStudentsCubit extends Cubit<ImportStudentsState> {
       final token = await TokenStorageHelper.getTokenSecure();
 
       if (token == null) {
-        emit(ImportStudentsError("Unauthorized: No token found"));
+        emit(ImportStudentsError('Unauthorized: No token found'));
         return;
       }
 
-      FormData formData = FormData.fromMap({
+      final FormData formData = FormData.fromMap({
         'file': MultipartFile.fromBytes(
           fileBytes,
           filename: fileName,
@@ -32,12 +32,12 @@ class ImportStudentsCubit extends Cubit<ImportStudentsState> {
       });
 
       final response = await dio.post(
-        "${ApiResources.apiUrl}${ApiResources.importStudentsEndPoint}",
+        '${ApiResources.apiUrl}${ApiResources.importStudentsEndPoint}',
         data: formData,
         options: Options(
           headers: {
-            "Authorization": "Bearer $token",
-            "Content-Type": "multipart/form-data",
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'multipart/form-data',
           },
         ),
       );

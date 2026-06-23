@@ -37,7 +37,7 @@ class LecturesScreen extends StatefulWidget {
 }
 
 class _LecturesScreenState extends State<LecturesScreen> {
-  bool _sidebarCollapsed = false;
+  final bool _sidebarCollapsed = false;
   String _searchQuery = '';
   String _filterType = 'All';
   final TextEditingController _searchCtrl = TextEditingController();

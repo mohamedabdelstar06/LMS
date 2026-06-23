@@ -18,7 +18,7 @@ class ActivitesTapbarScreen extends StatelessWidget {
       ),
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 8.0),
-        children: [
+        children: const [
           ActivitySection(
             title: 'Assignments',
             icon: Icons.assignment,
@@ -87,33 +87,29 @@ class ActivitesTapbarScreen extends StatelessWidget {
           ActivitySection(
             title: 'Glossaries',
             icon: Icons.book,
-            initiallyExpanded: false,
             children: [
-              const EmptySection(message: 'No glossaries available'),
+              EmptySection(message: 'No glossaries available'),
             ],
           ),
           ActivitySection(
             title: 'Quizzes',
             icon: Icons.quiz,
-            initiallyExpanded: false,
             children: [
-              const EmptySection(message: 'No quizzes available'),
+              EmptySection(message: 'No quizzes available'),
             ],
           ),
           ActivitySection(
             title: 'Resources',
             icon: Icons.real_estate_agent_rounded,
-            initiallyExpanded: false,
             children: [
-              const EmptySection(message: 'No Resources available'),
+              EmptySection(message: 'No Resources available'),
             ],
           ),
           ActivitySection(
             title: 'Workshops',
             icon: Icons.work_history,
-            initiallyExpanded: false,
             children: [
-              const EmptySection(message: 'No Workshops available'),
+              EmptySection(message: 'No Workshops available'),
             ],
           ),
         ],
@@ -123,10 +119,6 @@ class ActivitesTapbarScreen extends StatelessWidget {
 }
 
 class ActivitySection extends StatefulWidget {
-  final String title;
-  final IconData icon;
-  final List<Widget> children;
-  final bool initiallyExpanded;
 
   const ActivitySection({
     super.key,
@@ -135,6 +127,10 @@ class ActivitySection extends StatefulWidget {
     required this.children,
     this.initiallyExpanded = false,
   });
+  final String title;
+  final IconData icon;
+  final List<Widget> children;
+  final bool initiallyExpanded;
 
   @override
   State<ActivitySection> createState() => _ActivitySectionState();
@@ -246,7 +242,6 @@ class _ActivitySectionState extends State<ActivitySection>
               ),
             ),
             SizeTransition(
-              axis: Axis.vertical,
               sizeFactor: _expandAnimation,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -261,12 +256,6 @@ class _ActivitySectionState extends State<ActivitySection>
 }
 
 class AssignmentItem extends StatelessWidget {
-  final String title;
-  final String status;
-  final String dueDate;
-  final IconData statusIcon;
-  final Color statusColor;
-  final String imageUrl;
 
   const AssignmentItem({
     super.key,
@@ -277,6 +266,12 @@ class AssignmentItem extends StatelessWidget {
     required this.statusColor,
     required this.imageUrl,
   });
+  final String title;
+  final String status;
+  final String dueDate;
+  final IconData statusIcon;
+  final Color statusColor;
+  final String imageUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -441,13 +436,6 @@ class AssignmentItem extends StatelessWidget {
 }
 
 class DatabaseItem extends StatelessWidget {
-  final String title;
-  final String dueDate;
-  final String entries;
-  final String myEntries;
-  final String comments;
-  final String grade;
-  final String imageUrl;
 
   const DatabaseItem({
     super.key,
@@ -459,6 +447,13 @@ class DatabaseItem extends StatelessWidget {
     required this.grade,
     required this.imageUrl,
   });
+  final String title;
+  final String dueDate;
+  final String entries;
+  final String myEntries;
+  final String comments;
+  final String grade;
+  final String imageUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -643,12 +638,12 @@ class DatabaseItem extends StatelessWidget {
 }
 
 class EmptySection extends StatelessWidget {
-  final String message;
 
   const EmptySection({
     super.key,
     required this.message,
   });
+  final String message;
 
   @override
   Widget build(BuildContext context) {

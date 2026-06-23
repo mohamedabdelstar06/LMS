@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class DepartmentChip extends StatelessWidget {
-  const DepartmentChip({required this.label});
+  const DepartmentChip({super.key, required this.label});
   final String label;
 
   @override

@@ -1,14 +1,4 @@
 class AllUsersResponseModel {
-  final List<GetUserModel> users;
-  final int totalPages;
-  final int pageNumber;
-  final int pageSize;
-  final bool hasNextPage;
-  final bool hasPreviousPage;
-  final int totalCount;
-  final int totalAdmins;
-  final int totalInstructors;
-  final int totalStudents;
 
   AllUsersResponseModel({
     required this.users,
@@ -41,6 +31,16 @@ class AllUsersResponseModel {
       totalStudents: json['totalStudents'] ?? 0,
     );
   }
+  final List<GetUserModel> users;
+  final int totalPages;
+  final int pageNumber;
+  final int pageSize;
+  final bool hasNextPage;
+  final bool hasPreviousPage;
+  final int totalCount;
+  final int totalAdmins;
+  final int totalInstructors;
+  final int totalStudents;
 
   Map<String, dynamic> toJson() {
     return {
@@ -85,21 +85,6 @@ class AllUsersResponseModel {
 }
 
 class GetUserModel {
-  final int id;
-  final String email;
-  final String fullName;
-  final String role;
-  final String? nationalId;
-  final String? dateOfBirth;
-  final String? gender;
-  final String? city;
-  final String? profileImageUrl;
-  final String accountStatus;
-  final bool emailConfirmed;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final DateTime? lastLoginAt;
-  final AcademicInfoModel? academicInfo;
 
   GetUserModel({
     required this.id,
@@ -142,6 +127,21 @@ class GetUserModel {
           : null,
     );
   }
+  final int id;
+  final String email;
+  final String fullName;
+  final String role;
+  final String? nationalId;
+  final String? dateOfBirth;
+  final String? gender;
+  final String? city;
+  final String? profileImageUrl;
+  final String accountStatus;
+  final bool emailConfirmed;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final DateTime? lastLoginAt;
+  final AcademicInfoModel? academicInfo;
 
   Map<String, dynamic> toJson() {
     return {
@@ -215,10 +215,6 @@ class GetUserModel {
 }
 
 class AcademicInfoModel {
-  final SimpleItemModel? department;
-  final SimpleItemModel? year;
-  final SimpleItemModel? squadron;
-  final int? admissionYear;
 
   AcademicInfoModel({
     this.department,
@@ -241,6 +237,10 @@ class AcademicInfoModel {
       admissionYear: json['admissionYear'] as int?,
     );
   }
+  final SimpleItemModel? department;
+  final SimpleItemModel? year;
+  final SimpleItemModel? squadron;
+  final int? admissionYear;
 
   Map<String, dynamic> toJson() {
     return {
@@ -253,14 +253,14 @@ class AcademicInfoModel {
 }
 
 class SimpleItemModel {
-  final int id;
-  final String name;
 
   SimpleItemModel({required this.id, required this.name});
 
   factory SimpleItemModel.fromJson(Map<String, dynamic> json) {
     return SimpleItemModel(id: json['id'] as int, name: json['name'] as String);
   }
+  final int id;
+  final String name;
 
   Map<String, dynamic> toJson() {
     return {'id': id, 'name': name};

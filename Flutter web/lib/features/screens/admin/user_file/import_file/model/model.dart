@@ -1,11 +1,5 @@
 
 class ImportStudentsResponseModel {
-  final int totalRows;
-  final int successCount;
-  final int createdCount;
-  final int updatedCount;
-  final int failedCount;
-  final List<ImportError> errors;
 
   ImportStudentsResponseModel({
     required this.totalRows,
@@ -29,12 +23,15 @@ class ImportStudentsResponseModel {
           [],
     );
   }
+  final int totalRows;
+  final int successCount;
+  final int createdCount;
+  final int updatedCount;
+  final int failedCount;
+  final List<ImportError> errors;
 }
 
 class ImportError {
-  final int rowNumber;
-  final String email;
-  final String error;
 
   ImportError({
     required this.rowNumber,
@@ -49,4 +46,7 @@ class ImportError {
       error: json['error'] ?? '',
     );
   }
+  final int rowNumber;
+  final String email;
+  final String error;
 }

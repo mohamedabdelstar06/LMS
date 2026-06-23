@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ErrorScreen extends StatelessWidget {
-  const ErrorScreen({required this.message});
+  const ErrorScreen({super.key, required this.message});
   final String message;
 
   @override

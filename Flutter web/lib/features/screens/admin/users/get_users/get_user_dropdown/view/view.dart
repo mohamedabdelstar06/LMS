@@ -27,7 +27,7 @@ class _AssignDepartmentHeadScreenState extends State<AssignDepartmentHeadScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Assign Department Head"),
+        title: const Text('Assign Department Head'),
         backgroundColor: const Color(0xFF1849A9),
       ),
       body: Padding(
@@ -36,7 +36,7 @@ class _AssignDepartmentHeadScreenState extends State<AssignDepartmentHeadScreen>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              "Select Admin / Instructor",
+              'Select Admin / Instructor',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
@@ -49,7 +49,7 @@ class _AssignDepartmentHeadScreenState extends State<AssignDepartmentHeadScreen>
                 } else if (state is UsersLoadedState) {
                   final users = state.users;
                   if (users.isEmpty) {
-                    return const Center(child: Text("No admins or instructors found"));
+                    return const Center(child: Text('No admins or instructors found'));
                   }
                   return DropdownButtonFormField<String>(
                     initialValue: selectedUserId,
@@ -62,7 +62,7 @@ class _AssignDepartmentHeadScreenState extends State<AssignDepartmentHeadScreen>
                         borderSide: BorderSide.none,
                       ),
                     ),
-                    hint: const Text("Select a user"),
+                    hint: const Text('Select a user'),
                     items: users.map((user) {
                       return DropdownMenuItem<String>(
                         value: user.id.toString(),
@@ -78,7 +78,7 @@ class _AssignDepartmentHeadScreenState extends State<AssignDepartmentHeadScreen>
                             ),
                             const SizedBox(width: 12),
                             Expanded(
-                              child: Text("${user.fullName} (${user.role})",
+                              child: Text('${user.fullName} (${user.role})',
                                   style: const TextStyle(fontSize: 14)),
                             ),
                           ],
@@ -101,7 +101,7 @@ class _AssignDepartmentHeadScreenState extends State<AssignDepartmentHeadScreen>
                   ? null
                   : () {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("Selected user id: $selectedUserId")),
+                  SnackBar(content: Text('Selected user id: $selectedUserId')),
                 );
               },
               style: ElevatedButton.styleFrom(
@@ -111,7 +111,7 @@ class _AssignDepartmentHeadScreenState extends State<AssignDepartmentHeadScreen>
               ),
               child: const Center(
                 child: Text(
-                  "Assign Head",
+                  'Assign Head',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
                 ),
               ),

@@ -23,7 +23,7 @@ class CourseDetailsCubit extends Cubit<CourseDetailsState> {
         'Course/$courseId',
         options: Options(
           headers: {
-            'Authorization': "Bearer $token",
+            'Authorization': 'Bearer $token',
           },
         ),
       );

@@ -7,11 +7,11 @@ import 'package:lms/features/screens/admin/Notifications_model.dart';
 // Replace with your actual token helper import
 
 class NotificationCubit extends Cubit<NotificationState> {
-  final NotificationRepository _repository;
 
   NotificationCubit({NotificationRepository? repository})
     : _repository = repository ?? NotificationRepository(),
       super(NotificationInitial());
+  final NotificationRepository _repository;
 
   int _currentPage = 1;
   static const int _pageSize = 20;
@@ -48,7 +48,6 @@ class NotificationCubit extends Cubit<NotificationState> {
       final response = await _repository.getNotifications(
         token: token,
         pageNumber: _currentPage,
-        pageSize: _pageSize,
         isRead: isRead,
         type: type,
       );
@@ -92,7 +91,6 @@ class NotificationCubit extends Cubit<NotificationState> {
       final response = await _repository.getNotifications(
         token: token,
         pageNumber: _currentPage,
-        pageSize: _pageSize,
         isRead: isRead,
         type: type,
       );
@@ -159,7 +157,7 @@ class NotificationCubit extends Cubit<NotificationState> {
       _allItems = _allItems.map((n) {
         if (n.id == notificationId) {
           _unreadCount++;
-          return n.copyWith(isRead: false, readAt: null);
+          return n.copyWith(isRead: false);
         }
         return n;
       }).toList();

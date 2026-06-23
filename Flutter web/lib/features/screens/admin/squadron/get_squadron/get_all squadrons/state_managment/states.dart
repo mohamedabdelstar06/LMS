@@ -13,18 +13,18 @@ class AllSquadronInitial extends AllSquadronState {}
 class AllSquadronLoading extends AllSquadronState {}
 
 class AllSquadronLoaded extends AllSquadronState {
-  final List<SquadronModel> squadrons;
 
   const AllSquadronLoaded(this.squadrons);
+  final List<SquadronModel> squadrons;
 
   @override
   List<Object?> get props => [squadrons];
 }
 
 class AllSquadronError extends AllSquadronState {
-  final String message;
 
   const AllSquadronError(this.message);
+  final String message;
 
   @override
   List<Object?> get props => [message];
@@ -32,33 +32,33 @@ class AllSquadronError extends AllSquadronState {
 class GetSquadronByIdLoading extends AllSquadronState {}
 
 class GetSquadronByIdLoaded extends AllSquadronState {
-  final SquadronModel squadron;
 
   const GetSquadronByIdLoaded(this.squadron);
+  final SquadronModel squadron;
 }
 
 class UpdateSquadronLoading extends AllSquadronState {}
 
 class UpdateSquadronSuccess extends AllSquadronState {
-  final String message;
 
   const UpdateSquadronSuccess(this.message);
+  final String message;
 }
 
 class UpdateSquadronError extends AllSquadronState {
-  final String message;
 
   const UpdateSquadronError(this.message);
+  final String message;
 }
 class DeleteSquadronLoading extends AllSquadronState {}
 
 class DeleteSquadronSuccess extends AllSquadronState {
-  final String message;
   const DeleteSquadronSuccess(this.message);
+  final String message;
 }
 class DeleteSquadronError extends AllSquadronState {
-  final String message;
   const DeleteSquadronError(this.message);
+  final String message;
 }
 
 

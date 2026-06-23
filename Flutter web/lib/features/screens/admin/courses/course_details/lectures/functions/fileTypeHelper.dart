@@ -1,6 +1,5 @@
 import 'dart:html' as html;
 
-import 'package:lms/core/cons/api_helper_resources/api_resources.dart';
 
 const String _baseUrl = 'https://skylearn.runasp.net';
 

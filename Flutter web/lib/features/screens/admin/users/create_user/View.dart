@@ -29,7 +29,7 @@ import 'State_managment/Create_user_state.dart';
 Uint8List? _webImage;
 String selectedMenuItem = 'Create Users';
 String? hoveredMenuItem;
-String selectedGender = "gender";
+String selectedGender = 'gender';
 String selectedCity = 'Select City';
 bool isLogoutHovered = false;
 bool isProfilePictureHovered = false;
@@ -105,9 +105,9 @@ class _ProfileScreenState extends State<CreateUserScreen> {
   final TextEditingController yearController = TextEditingController();
   final TextEditingController squadronController = TextEditingController();
 
-  String selectedDepartmentName = "Select Department";
-  String selectedYearName = "Select Year";
-  String selectedSquadronName = "Select Squadron";
+  String selectedDepartmentName = 'Select Department';
+  String selectedYearName = 'Select Year';
+  String selectedSquadronName = 'Select Squadron';
 
   String? selectedDepartmentId;
   String? selectedYearId;
@@ -116,7 +116,7 @@ class _ProfileScreenState extends State<CreateUserScreen> {
   List<GetDepartmentModel> availableDepartments = [];
   List<YearModel> availableYears = [];
 
-  String selectedRole = "Select Role";
+  String selectedRole = 'Select Role';
   bool isDepartmentExpanded = false;
   bool isYearExpanded = false;
   bool isSquadronExpanded = false;
@@ -145,11 +145,11 @@ class _ProfileScreenState extends State<CreateUserScreen> {
     dobController.clear();
 
     setState(() {
-      selectedDepartmentName = "Select Department";
-      selectedYearName = "Select Year";
-      selectedSquadronName = "Select Squadron";
+      selectedDepartmentName = 'Select Department';
+      selectedYearName = 'Select Year';
+      selectedSquadronName = 'Select Squadron';
       selectedCity = 'Select City';
-      selectedRole = "Select Role";
+      selectedRole = 'Select Role';
       selectedDepartmentId = null;
       selectedYearId = null;
       selectedSquadronId = null;
@@ -186,7 +186,7 @@ class _ProfileScreenState extends State<CreateUserScreen> {
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           constraints: const BoxConstraints(maxWidth: 1132),
           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 30),
           decoration: BoxDecoration(
@@ -216,7 +216,6 @@ class _ProfileScreenState extends State<CreateUserScreen> {
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 40),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const Text(
                     'New User',
@@ -239,7 +238,7 @@ class _ProfileScreenState extends State<CreateUserScreen> {
                     fullNameController,
                     fullNameFocus,
                     Icons.person,
-                    "Mohamed Mofeed",
+                    'Mohamed Mofeed',
                   ),
                   const SizedBox(height: 16),
                   _buildTextField(
@@ -247,7 +246,7 @@ class _ProfileScreenState extends State<CreateUserScreen> {
                     emailController,
                     emailFocus,
                     Icons.email,
-                    "mohamed@gmail.com",
+                    'mohamed@gmail.com',
                   ),
                   const SizedBox(height: 16),
                   _buildTextField(
@@ -255,7 +254,7 @@ class _ProfileScreenState extends State<CreateUserScreen> {
                     nationalIdController,
                     nationalIdFocus,
                     Icons.badge,
-                    "3040105050096",
+                    '3040105050096',
                   ),
                   const SizedBox(height: 16),
                   _buildTextField(
@@ -263,14 +262,14 @@ class _ProfileScreenState extends State<CreateUserScreen> {
                     genderController,
                     genderFocus,
                     Icons.badge,
-                    "Male",
+                    'Male',
                   ),
                   const SizedBox(height: 16),
                   _buildDateField(
                     'Date of Birth',
                     dobController,
                     dobFocus,
-                    "Select Date",
+                    'Select Date',
                   ),
                   const SizedBox(height: 16),
                   _buildStringDropdownField(
@@ -291,7 +290,7 @@ class _ProfileScreenState extends State<CreateUserScreen> {
                     value: selectedRole,
                     onChanged: (role) {
                       setState(() {
-                        selectedRole = role ?? "Select Role";
+                        selectedRole = role ?? 'Select Role';
                         if (selectedRole != 'Student') {
                           selectedDepartmentId = null;
                           selectedYearId = null;
@@ -322,7 +321,7 @@ class _ProfileScreenState extends State<CreateUserScreen> {
                         return Padding(
                           padding: const EdgeInsets.only(top: 16, bottom: 16),
                           child: Text(
-                            "Error: ${departmentState.message}",
+                            'Error: ${departmentState.message}',
                             style: const TextStyle(color: Colors.red),
                           ),
                         );
@@ -332,11 +331,11 @@ class _ProfileScreenState extends State<CreateUserScreen> {
                         if (departmentState.departments.isEmpty) {
                           return const Padding(
                             padding: EdgeInsets.only(top: 16, bottom: 16),
-                            child: Text("No departments found"),
+                            child: Text('No departments found'),
                           );
                         }
 
-                        List<GetDepartmentModel> departments =
+                        final List<GetDepartmentModel> departments =
                         departmentState.departments
                             .whereType<GetDepartmentModel>()
                             .toList();
@@ -351,7 +350,7 @@ class _ProfileScreenState extends State<CreateUserScreen> {
                                     setState(() {
                                       selectedDepartmentId = chosenDep.id.toString();
                                       availableYears = chosenDep.years;
-                                      selectedYearName = "Select Year";
+                                      selectedYearName = 'Select Year';
                                       selectedYearId = null;
                                       selectedDepartmentName = chosenDep.name;
                                       isDepartmentExpanded = false;
@@ -383,7 +382,7 @@ class _ProfileScreenState extends State<CreateUserScreen> {
                           return Padding(
                             padding: const EdgeInsets.only(bottom: 16),
                             child: Text(
-                              "Error: ${yearState.message}",
+                              'Error: ${yearState.message}',
                               style: const TextStyle(color: Colors.red),
                             ),
                           );
@@ -393,7 +392,7 @@ class _ProfileScreenState extends State<CreateUserScreen> {
                           if (yearState.years.isEmpty) {
                             return const Padding(
                               padding: EdgeInsets.only(bottom: 16),
-                              child: Text("No years found"),
+                              child: Text('No years found'),
                             );
                           }
 
@@ -436,7 +435,7 @@ class _ProfileScreenState extends State<CreateUserScreen> {
                           return Padding(
                             padding: const EdgeInsets.only(bottom: 16),
                             child: Text(
-                              "Error: ${squadronState.message}",
+                              'Error: ${squadronState.message}',
                               style: const TextStyle(color: Colors.red),
                             ),
                           );
@@ -446,11 +445,11 @@ class _ProfileScreenState extends State<CreateUserScreen> {
                           if (squadronState.squadrons.isEmpty) {
                             return const Padding(
                               padding: EdgeInsets.only(bottom: 16),
-                              child: Text("No Squadrons found"),
+                              child: Text('No Squadrons found'),
                             );
                           }
 
-                          List<SquadronModel> squadrons =
+                          final List<SquadronModel> squadrons =
                               squadronState.squadrons
                                   .whereType<SquadronModel>()
                                   .toList();
@@ -500,7 +499,7 @@ class _ProfileScreenState extends State<CreateUserScreen> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        state.message ?? "User Created Successfully",
+                                        state.message ?? 'User Created Successfully',
                                         style: const TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w600,
@@ -508,7 +507,7 @@ class _ProfileScreenState extends State<CreateUserScreen> {
                                       ),
                                       if (state.statusCode != null)
                                         Text(
-                                          "Status Code: ${state.statusCode}",
+                                          'Status Code: ${state.statusCode}',
                                           style: const TextStyle(
                                             fontSize: 12,
                                             fontWeight: FontWeight.w400,
@@ -559,7 +558,7 @@ class _ProfileScreenState extends State<CreateUserScreen> {
                                       ),
                                       if (state.statusCode != null)
                                         Text(
-                                          "Status Code: ${state.statusCode}",
+                                          'Status Code: ${state.statusCode}',
                                           style: const TextStyle(
                                             fontSize: 12,
                                             fontWeight: FontWeight.w400,
@@ -597,7 +596,7 @@ class _ProfileScreenState extends State<CreateUserScreen> {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text(
-                                    "Please select date of birth",
+                                    'Please select date of birth',
                                   ),
                                 ),
                               );
@@ -644,7 +643,7 @@ class _ProfileScreenState extends State<CreateUserScreen> {
                               ),
                               child: Center(
                                 child: isLoading
-                                    ? Row(
+                                    ? const Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     SizedBox(
@@ -659,22 +658,22 @@ class _ProfileScreenState extends State<CreateUserScreen> {
                                     ),
                                     SizedBox(width: 10),
                                     Text(
-                                      "Creating User...",
+                                      'Creating User...',
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w600,
-                                        fontFamily: "inter",
+                                        fontFamily: 'inter',
                                         color: Colors.white,
                                       ),
                                     ),
                                   ],
                                 )
                                     : const Text(
-                                  "Create User",
+                                  'Create User',
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600,
-                                    fontFamily: "inter",
+                                    fontFamily: 'inter',
                                     color: Colors.white,
                                   ),
                                 ),
@@ -705,9 +704,9 @@ class _ProfileScreenState extends State<CreateUserScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          "Year Name",
-          style: const TextStyle(
+        const Text(
+          'Year Name',
+          style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w600,
             color: Color(0xFF2563EB),
@@ -785,7 +784,7 @@ class _ProfileScreenState extends State<CreateUserScreen> {
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: Center(
                 child: Text(
-                  "No years already created for this department",
+                  'No years already created for this department',
                   style: TextStyle(
                     color: Colors.red[600],
                     fontSize: 14,
@@ -845,9 +844,9 @@ class _ProfileScreenState extends State<CreateUserScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          "Department Name",
-          style: const TextStyle(
+        const Text(
+          'Department Name',
+          style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w600,
             color: Color(0xFF2563EB),
@@ -936,7 +935,7 @@ class _ProfileScreenState extends State<CreateUserScreen> {
                       children: [
                         Expanded(
                           child: Text(
-                            "${department.name} (${department.headName})",
+                            '${department.name} (${department.headName})',
                             style: const TextStyle(
                               fontSize: 14,
                               color: Color(0xFF1E293B),
@@ -970,9 +969,9 @@ class _ProfileScreenState extends State<CreateUserScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          "Squadron Name",
-          style: const TextStyle(
+        const Text(
+          'Squadron Name',
+          style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w600,
             color: Color(0xFF2563EB),
@@ -1061,7 +1060,7 @@ class _ProfileScreenState extends State<CreateUserScreen> {
                       children: [
                         Expanded(
                           child: Text(
-                            "${squadron.name} (${squadron.studentCount})",
+                            '${squadron.name} (${squadron.studentCount})',
                             style: const TextStyle(
                               fontSize: 14,
                               color: Color(0xFF1E293B),
@@ -1557,7 +1556,7 @@ class _ProfileScreenState extends State<CreateUserScreen> {
                 onTap: () async {
                   final DateTime? picked = await showDatePicker(
                     context: context,
-                    initialDate: DateTime(1975, 9, 1),
+                    initialDate: DateTime(1975, 9),
                     firstDate: DateTime(1900),
                     lastDate: DateTime.now(),
                     builder: (context, child) {
@@ -1676,7 +1675,7 @@ class _ProfileScreenState extends State<CreateUserScreen> {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: const Color(0xFFE2E8F0), width: 1),
+              border: Border.all(color: const Color(0xFFE2E8F0)),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.1),
@@ -1826,9 +1825,9 @@ class _ProfileScreenState extends State<CreateUserScreen> {
 }
 
 class DateRangeSelector extends StatelessWidget {
-  final List<String> years = [for (int y = 1980; y <= 2030; y++) y.toString()];
 
    DateRangeSelector({super.key});
+  final List<String> years = [for (int y = 1980; y <= 2030; y++) y.toString()];
 
   @override
   Widget build(BuildContext context) {
@@ -1836,7 +1835,7 @@ class DateRangeSelector extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          "Start / End Date",
+          'Start / End Date',
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
@@ -1847,9 +1846,9 @@ class DateRangeSelector extends StatelessWidget {
 
         Row(
           children: [
-            Expanded(child: _buildDropdown("2020")),
+            Expanded(child: _buildDropdown('2020')),
             const SizedBox(width: 16),
-            Expanded(child: _buildDropdown("2025")),
+            Expanded(child: _buildDropdown('2025')),
           ],
         ),
       ],
@@ -1890,7 +1889,7 @@ class ToggleButtonActiveOrDeactive extends StatefulWidget {
 
 class _ActiveSwitchRowState extends State<ToggleButtonActiveOrDeactive> {
   bool isActive = true;
-  String status = "Active";
+  String status = 'Active';
 
   @override
   Widget build(BuildContext context) {
@@ -1912,12 +1911,12 @@ class _ActiveSwitchRowState extends State<ToggleButtonActiveOrDeactive> {
             setState(() {
               isActive = value;
 
-              status = isActive ? "Active" : "Inactive";
+              status = isActive ? 'Active' : 'Inactive';
 
               if (isActive) {
-                print("Value stored: Active");
+                print('Value stored: Active');
               } else {
-                print("Value deleted / set to Inactive");
+                print('Value deleted / set to Inactive');
               }
             });
           },

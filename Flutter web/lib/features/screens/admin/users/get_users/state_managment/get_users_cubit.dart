@@ -9,8 +9,8 @@ import '../get_user_model/view.dart';
 import 'get_users_state.dart';
 
 class GetUsersCubit extends Cubit<GetUsersState> {
-Dio dio = Dio();
   GetUsersCubit() : super(GetUsersInitial());
+Dio dio = Dio();
 
   Future<void> fetchUsers({
     int page = 1,
@@ -29,7 +29,7 @@ Dio dio = Dio();
       }
 
       final response = await dio.get(
-        "${ApiResources.apiUrl}${ApiResources.getUsersEndPoint}",
+        '${ApiResources.apiUrl}${ApiResources.getUsersEndPoint}',
         queryParameters: {
           'pageNumber': page,
           'pageSize': 10,
@@ -46,7 +46,7 @@ Dio dio = Dio();
 
       if (response.statusCode != 200 ||
           response.data is! Map<String, dynamic>) {
-        emit(GetUsersError('Invalid response from server'));
+        emit(const GetUsersError('Invalid response from server'));
         return;
       }
 
@@ -117,7 +117,7 @@ Dio dio = Dio();
       final token = await TokenStorageHelper.getTokenSecure();
 
       if (token == null || token.isEmpty) {
-        emit(const GetUsersError("Unauthorized: Please login again."));
+        emit(const GetUsersError('Unauthorized: Please login again.'));
         return;
       }
       final response = await dio.delete(
@@ -126,7 +126,7 @@ Dio dio = Dio();
       );
 
       if (response.statusCode == 200) {
-        emit(DeactivateUserSuccess('User deactivated successfully'));
+        emit(const DeactivateUserSuccess('User deactivated successfully'));
         await fetchUsers();
       }
     } on DioException catch (e) {
@@ -171,11 +171,9 @@ Dio dio = Dio();
     String sortBy = 'createdAt',
   }) async {
     await fetchUsers(
-      page: 1,
       searchQuery: searchQuery,
       filterStatus: filterStatus,
       sortBy: sortBy,
-      order: 'desc',
     );
   }
 
@@ -212,7 +210,7 @@ Dio dio = Dio();
       final token = await TokenStorageHelper.getTokenSecure();
 
       if (token == null || token.isEmpty) {
-        emit(const GetUsersError("Unauthorized: Please login again."));
+        emit(const GetUsersError('Unauthorized: Please login again.'));
         return;
       }
 
@@ -227,7 +225,7 @@ Dio dio = Dio();
       );
 
       if (response.statusCode == 200 || response.statusCode == 204) {
-        emit(DeleteUserSuccess('User deleted successfully'));
+        emit(const DeleteUserSuccess('User deleted successfully'));
 
         if (currentState is GetUsersLoaded) {
           await fetchUsers(
@@ -239,7 +237,7 @@ Dio dio = Dio();
           );
         }
       } else {
-        emit(DeleteUserError('Failed to delete user'));
+        emit(const DeleteUserError('Failed to delete user'));
 
         if (currentState is GetUsersLoaded) {
           emit(currentState);
@@ -269,22 +267,22 @@ Dio dio = Dio();
   }
 
   Future<void> getUserById(int userId) async {
-    emit(GetUserByIdLoading());
+    emit(const GetUserByIdLoading());
 
     try {
       final token = await TokenStorageHelper.getTokenSecure();
 
       if (token == null || token.isEmpty) {
-        emit(const GetUserByIdError("Unauthorized: Please login again."));
+        emit(const GetUserByIdError('Unauthorized: Please login again.'));
         return;
       }
 
       final response = await dio.get(
-        "${ApiResources.apiUrl}${ApiResources.getUsersEndPoint}/$userId",
+        '${ApiResources.apiUrl}${ApiResources.getUsersEndPoint}/$userId',
         options: Options(
           headers: {
-            "Authorization": "Bearer $token",
-            "Content-Type": "application/json",
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'application/json',
           },
         ),
       );
@@ -295,18 +293,18 @@ Dio dio = Dio();
       } else {
         emit(
           GetUserByIdError(
-            "Failed to load user. Status: ${response.statusCode}",
+            'Failed to load user. Status: ${response.statusCode}',
           ),
         );
       }
     } on DioException catch (e) {
       emit(
         GetUserByIdError(
-          e.response?.data?['message'] ?? e.message ?? "Connection error",
+          e.response?.data?['message'] ?? e.message ?? 'Connection error',
         ),
       );
     } catch (e) {
-      emit(GetUserByIdError("Unexpected error: $e"));
+      emit(GetUserByIdError('Unexpected error: $e'));
     }
   }
 
@@ -319,18 +317,18 @@ Dio dio = Dio();
     try {
       final token = await TokenStorageHelper.getTokenSecure();
       if (token == null || token.isEmpty) {
-        emit(const UpdateUsersError("Unauthorized: Please login again."));
+        emit(const UpdateUsersError('Unauthorized: Please login again.'));
         return;
       }
       final dio = Dio();
 
       final response = await dio.put(
-        "${ApiResources.apiUrl}${ApiResources.getUsersEndPoint}/$userId",
+        '${ApiResources.apiUrl}${ApiResources.getUsersEndPoint}/$userId',
         data: userData,
         options: Options(
           headers: {
-            "Authorization": "Bearer $token",
-            "Content-Type": "application/json",
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'application/json',
           },
         ),
       );
@@ -338,14 +336,14 @@ Dio dio = Dio();
       if (response.statusCode == 200 || response.statusCode == 204) {
         emit(
           UpdateUsersSuccess(
-            "User updated successfully",
+            'User updated successfully',
             statusCode: response.statusCode,
           ),
         );
       } else {
         emit(
           UpdateUsersError(
-            "Failed to update user",
+            'Failed to update user',
             statusCode: response.statusCode,
           ),
         );
@@ -355,12 +353,12 @@ Dio dio = Dio();
         UpdateUsersError(
           e.response?.data?['message'] ??
               e.message ??
-              "Error while updating user",
+              'Error while updating user',
           statusCode: e.response?.statusCode,
         ),
       );
     } catch (e) {
-      emit(UpdateUsersError("Unexpected error: $e"));
+      emit(UpdateUsersError('Unexpected error: $e'));
     }
   }
 }

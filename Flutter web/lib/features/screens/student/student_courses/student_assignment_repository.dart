@@ -12,12 +12,10 @@ class StudentAssignmentRepository {
   Future<String> _authHeaderOrThrow() async {
     dio.interceptors.add(
       LogInterceptor(
-        request: true,
         requestHeader: true,
         requestBody: true,
         responseBody: true,
         responseHeader: false,
-        error: true,
       ),
     );
     final token = await TokenStorageHelper.getTokenSecure();
@@ -33,12 +31,10 @@ class StudentAssignmentRepository {
   Future<List<StudentAssignmentModel>> getCourseAssignments(int courseId) async {
     dio.interceptors.add(
       LogInterceptor(
-        request: true,
         requestHeader: true,
         requestBody: true,
         responseBody: true,
         responseHeader: false,
-        error: true,
       ),
     );
     final token = await _authHeaderOrThrow();
@@ -59,12 +55,10 @@ class StudentAssignmentRepository {
   Future<StudentAssignmentModel> getAssignmentById(int id) async {
     dio.interceptors.add(
       LogInterceptor(
-        request: true,
         requestHeader: true,
         requestBody: true,
         responseBody: true,
         responseHeader: false,
-        error: true,
       ),
     );
     final token = await _authHeaderOrThrow();

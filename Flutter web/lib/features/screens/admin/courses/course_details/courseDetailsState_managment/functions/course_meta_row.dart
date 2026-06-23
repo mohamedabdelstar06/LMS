@@ -4,7 +4,7 @@ import '../../../home_courses/model/model.dart';
 import 'meta_tag.dart';
 
 class CourseMetaRow extends StatelessWidget {
-  const CourseMetaRow({required this.course});
+  const CourseMetaRow({super.key, required this.course});
   final GetCoursesModel course;
 
   @override

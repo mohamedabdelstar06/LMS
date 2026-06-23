@@ -23,19 +23,19 @@ class DepartmentCubit extends Cubit<DepartmentState> {
 
       final token = await TokenStorageHelper.getTokenSecure();
       if (token == null || token.isEmpty) {
-        emit(DepartmentError("You are not authorized. Token missing."));
+        emit(DepartmentError('You are not authorized. Token missing.'));
         return;
       }
 
       final formData = FormData.fromMap({
-        "name": fullNameController.text.trim(),
-        "description": descriptionController.text.trim(),
-        "headName": headName,
+        'name': fullNameController.text.trim(),
+        'description': descriptionController.text.trim(),
+        'headName': headName,
         if (imageBytes != null)
-          "image": MultipartFile.fromBytes(
+          'image': MultipartFile.fromBytes(
             imageBytes,
-            filename: "department.png",
-            contentType: MediaType("image", "png"),
+            filename: 'department.png',
+            contentType: MediaType('image', 'png'),
           ),
       });
 
@@ -43,17 +43,17 @@ class DepartmentCubit extends Cubit<DepartmentState> {
         ApiResources.createDepartmentEndPoint,
         data: formData,
         options: Options(
-          headers: {"Authorization": "Bearer $token"},
+          headers: {'Authorization': 'Bearer $token'},
         ),
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        emit(DepartmentSuccess("Department created successfully"));
+        emit(DepartmentSuccess('Department created successfully'));
       } else {
-        emit(DepartmentError("Failed: ${response.statusMessage}"));
+        emit(DepartmentError('Failed: ${response.statusMessage}'));
       }
     } on DioException catch (e) {
-      final errorMsg = e.response?.data['message'] ?? e.message ?? "Connection Error";
+      final errorMsg = e.response?.data['message'] ?? e.message ?? 'Connection Error';
       emit(DepartmentError(errorMsg));
     } catch (e) {
       emit(DepartmentError(e.toString()));

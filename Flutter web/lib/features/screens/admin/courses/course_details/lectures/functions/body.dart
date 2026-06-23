@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../get_all_courses/model/model.dart';
 import '../../../home_courses/model/model.dart';
 import '../model/model.dart';
 import '../state_managment/lectures_cubit.dart';

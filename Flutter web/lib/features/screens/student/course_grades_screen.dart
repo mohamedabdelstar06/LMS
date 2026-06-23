@@ -24,13 +24,13 @@ const _kBorder = Color(0xFFE2E8F0);
 
 // ── Entry ─────────────────────────────────────────────────────
 class CourseGradesScreen extends StatelessWidget {
-  final int courseId;
-  final String courseName;
   const CourseGradesScreen({
     super.key,
     required this.courseId,
     required this.courseName,
   });
+  final int courseId;
+  final String courseName;
 
   @override
   Widget build(BuildContext context) {
@@ -42,9 +42,9 @@ class CourseGradesScreen extends StatelessWidget {
 }
 
 class _GradesBody extends StatelessWidget {
+  const _GradesBody({required this.courseName, required this.courseId});
   final String courseName;
   final int courseId;
-  const _GradesBody({required this.courseName, required this.courseId});
 
   @override
   Widget build(BuildContext context) {
@@ -104,8 +104,8 @@ class _GradesBody extends StatelessWidget {
 
 // ── Main Content ──────────────────────────────────────────────
 class _GradesContent extends StatelessWidget {
-  final CourseGradesLoaded state;
   const _GradesContent({required this.state});
+  final CourseGradesLoaded state;
 
   static const _tabs = ['Overview', 'Quizzes', 'Assignments'];
 
@@ -174,8 +174,8 @@ class _GradesContent extends StatelessWidget {
 
 // ── Grade Hero ────────────────────────────────────────────────
 class _GradeHero extends StatefulWidget {
-  final CourseGrades grades;
   const _GradeHero({required this.grades});
+  final CourseGrades grades;
   @override
   State<_GradeHero> createState() => _GradeHeroState();
 }
@@ -312,11 +312,6 @@ class _GradeHeroState extends State<_GradeHero>
 }
 
 class _HeroStatRow extends StatelessWidget {
-  final IconData icon;
-  final Color color;
-  final String label;
-  final String value;
-  final String sub;
   const _HeroStatRow({
     required this.icon,
     required this.color,
@@ -324,6 +319,11 @@ class _HeroStatRow extends StatelessWidget {
     required this.value,
     required this.sub,
   });
+  final IconData icon;
+  final Color color;
+  final String label;
+  final String value;
+  final String sub;
 
   @override
   Widget build(BuildContext context) {
@@ -365,9 +365,9 @@ class _HeroStatRow extends StatelessWidget {
 }
 
 class _ComparisonBar extends StatelessWidget {
+  const _ComparisonBar({required this.quizAvg, required this.assignAvg});
   final double quizAvg;
   final double assignAvg;
-  const _ComparisonBar({required this.quizAvg, required this.assignAvg});
 
   @override
   Widget build(BuildContext context) {
@@ -413,10 +413,10 @@ class _ComparisonBar extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 4),
-        Row(
+        const Row(
           children: [
             _LegendDot(color: _kPurple, label: 'Quizzes'),
-            const SizedBox(width: 12),
+            SizedBox(width: 12),
             _LegendDot(color: _kBlue, label: 'Assignments'),
           ],
         ),
@@ -426,9 +426,9 @@ class _ComparisonBar extends StatelessWidget {
 }
 
 class _LegendDot extends StatelessWidget {
+  const _LegendDot({required this.color, required this.label});
   final Color color;
   final String label;
-  const _LegendDot({required this.color, required this.label});
   @override
   Widget build(BuildContext context) => Row(
     mainAxisSize: MainAxisSize.min,
@@ -446,14 +446,14 @@ class _LegendDot extends StatelessWidget {
 
 // ── Gauge Ring ────────────────────────────────────────────────
 class _GaugeRingPainter extends CustomPainter {
-  final double progress;
-  final double animValue;
-  final Color color;
   const _GaugeRingPainter({
     required this.progress,
     required this.animValue,
     required this.color,
   });
+  final double progress;
+  final double animValue;
+  final Color color;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -489,8 +489,8 @@ class _GaugeRingPainter extends CustomPainter {
 
 // ── Overview Tab ──────────────────────────────────────────────
 class _OverviewTab extends StatelessWidget {
-  final CourseGrades grades;
   const _OverviewTab({required this.grades, super.key});
+  final CourseGrades grades;
 
   @override
   Widget build(BuildContext context) {
@@ -549,8 +549,8 @@ class _OverviewTab extends StatelessWidget {
 
 // ── Quizzes Tab ───────────────────────────────────────────────
 class _QuizzesTab extends StatelessWidget {
-  final List<QuizGradeItem> quizzes;
   const _QuizzesTab({required this.quizzes, super.key});
+  final List<QuizGradeItem> quizzes;
 
   @override
   Widget build(BuildContext context) {
@@ -585,8 +585,8 @@ class _QuizzesTab extends StatelessWidget {
 
 // ── Assignments Tab ───────────────────────────────────────────
 class _AssignmentsTab extends StatelessWidget {
-  final List<AssignmentGradeItem> assignments;
   const _AssignmentsTab({required this.assignments, super.key});
+  final List<AssignmentGradeItem> assignments;
 
   @override
   Widget build(BuildContext context) {
@@ -620,16 +620,6 @@ class _AssignmentsTab extends StatelessWidget {
 
 // ── Grade Entry ───────────────────────────────────────────────
 class _GradeEntry {
-  final String title;
-  final String type;
-  final double percent;
-  final double? score; // nullable — not graded yet
-  final double maxScore;
-  final bool passed;
-  final bool isGraded;
-  final String status;
-  final String? date;
-  final String? feedback;
 
   const _GradeEntry({
     required this.title,
@@ -643,12 +633,22 @@ class _GradeEntry {
     this.date,
     this.feedback,
   });
+  final String title;
+  final String type;
+  final double percent;
+  final double? score; // nullable — not graded yet
+  final double maxScore;
+  final bool passed;
+  final bool isGraded;
+  final String status;
+  final String? date;
+  final String? feedback;
 }
 
 // ── Grade Distribution Chart ──────────────────────────────────
 class _GradeDistributionChart extends StatefulWidget {
-  final List<_GradeEntry> entries;
   const _GradeDistributionChart({required this.entries});
+  final List<_GradeEntry> entries;
   @override
   State<_GradeDistributionChart> createState() =>
       _GradeDistributionChartState();
@@ -774,11 +774,6 @@ class _GradeDistributionChartState extends State<_GradeDistributionChart>
 }
 
 class _DistBar extends StatelessWidget {
-  final String label;
-  final int count;
-  final int total;
-  final Color color;
-  final Animation<double> anim;
   const _DistBar({
     required this.label,
     required this.count,
@@ -786,6 +781,11 @@ class _DistBar extends StatelessWidget {
     required this.color,
     required this.anim,
   });
+  final String label;
+  final int count;
+  final int total;
+  final Color color;
+  final Animation<double> anim;
 
   @override
   Widget build(BuildContext context) {
@@ -835,8 +835,8 @@ class _DistBar extends StatelessWidget {
 
 // ── Quiz Bar Chart ────────────────────────────────────────────
 class _QuizBarChart extends StatefulWidget {
-  final List<QuizGradeItem> quizzes;
   const _QuizBarChart({required this.quizzes});
+  final List<QuizGradeItem> quizzes;
   @override
   State<_QuizBarChart> createState() => _QuizBarChartState();
 }
@@ -910,9 +910,9 @@ class _QuizBarChartState extends State<_QuizBarChart>
 }
 
 class _QuizBarPainter extends CustomPainter {
+  const _QuizBarPainter({required this.quizzes, required this.progress});
   final List<QuizGradeItem> quizzes;
   final double progress;
-  const _QuizBarPainter({required this.quizzes, required this.progress});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -988,9 +988,9 @@ class _QuizBarPainter extends CustomPainter {
 
 // ── Grade Item Card ───────────────────────────────────────────
 class _GradeItemCard extends StatefulWidget {
+  const _GradeItemCard({required this.entry, required this.index});
   final _GradeEntry entry;
   final int index;
-  const _GradeItemCard({required this.entry, required this.index});
   @override
   State<_GradeItemCard> createState() => _GradeItemCardState();
 }
@@ -1215,9 +1215,9 @@ class _GradeItemCardState extends State<_GradeItemCard>
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: _kBg,
-                        borderRadius: const BorderRadius.only(
+                        borderRadius: BorderRadius.only(
                           bottomLeft: Radius.circular(14),
                           bottomRight: Radius.circular(14),
                         ),
@@ -1285,8 +1285,8 @@ class _GradeItemCardState extends State<_GradeItemCard>
 
 // ── Status Badge ──────────────────────────────────────────────
 class _StatusBadge extends StatelessWidget {
-  final String status;
   const _StatusBadge({required this.status});
+  final String status;
 
   @override
   Widget build(BuildContext context) {
@@ -1329,9 +1329,9 @@ class _StatusBadge extends StatelessWidget {
 
 // ── Animated Score Bar ────────────────────────────────────────
 class _ScoreProgressBar extends StatefulWidget {
+  const _ScoreProgressBar({required this.percent, required this.color});
   final double percent;
   final Color color;
-  const _ScoreProgressBar({required this.percent, required this.color});
   @override
   State<_ScoreProgressBar> createState() => _ScoreProgressBarState();
 }
@@ -1403,8 +1403,8 @@ class _ScoreProgressBarState extends State<_ScoreProgressBar>
 
 // ── Empty & Error ─────────────────────────────────────────────
 class _EmptyGrades extends StatelessWidget {
-  final String message;
   const _EmptyGrades({required this.message});
+  final String message;
 
   @override
   Widget build(BuildContext context) {
@@ -1438,9 +1438,9 @@ class _EmptyGrades extends StatelessWidget {
 }
 
 class _ErrorView extends StatelessWidget {
+  const _ErrorView({required this.message, required this.onRetry});
   final String message;
   final VoidCallback onRetry;
-  const _ErrorView({required this.message, required this.onRetry});
 
   @override
   Widget build(BuildContext context) {

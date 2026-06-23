@@ -10,12 +10,12 @@ class GetCourseStudentInitial extends GetCourseStudentState {}
 class GetCourseStudentLoading extends GetCourseStudentState {}
 
 class GetCourseStudentSuccess extends GetCourseStudentState {
-  final List<CourseEnrollmentModel> courses;
   GetCourseStudentSuccess(this.courses);
+  final List<CourseEnrollmentModel> courses;
 }
 
 class GetCourseStudentError extends GetCourseStudentState {
-  final String message;
   GetCourseStudentError(this.message);
+  final String message;
 }
 

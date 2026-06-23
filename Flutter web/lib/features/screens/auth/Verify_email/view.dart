@@ -20,7 +20,7 @@ class _LoginScreenState extends State<VerifyScreen>
     with SingleTickerProviderStateMixin {
   final formKey = GlobalKey<FormState>();
   final usernameController = TextEditingController(
-    text: "mohamedabdelstar06@gmail.com",
+    text: 'mohamedabdelstar06@gmail.com',
   );
 
   late final AnimationController _animCtrl;
@@ -96,31 +96,30 @@ class _LoginScreenState extends State<VerifyScreen>
                         children: [
                           Row(
                             mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Text(
-                                "Welcome Back",
+                                'Welcome Back',
                                 style: TextStyle(
-                                  color: Color(0xFF175cd3).withValues(alpha: 0.86),
+                                  color: const Color(0xFF175cd3).withValues(alpha: 0.86),
                                   fontSize: 32,
                                   fontWeight: FontWeight.w700,
-                                  fontFamily: "inter",
+                                  fontFamily: 'inter',
                                 ),
                               ),
-                              SizedBox(width: 5),
+                              const SizedBox(width: 5),
                               Image.asset(Assets.iconsHand),
                             ],
                           ),
-                          Text(
-                            "Enter your email address to check your account and continue.",
+                          const Text(
+                            'Enter your email address to check your account and continue.',
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
-                              fontFamily: "inter",
+                              fontFamily: 'inter',
                               color: Color(0xFF545F70),
                             ),
                           ),
-                          SizedBox(height: 20),
+                          const SizedBox(height: 20),
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 17),
                 
@@ -134,24 +133,24 @@ class _LoginScreenState extends State<VerifyScreen>
                 
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                SizedBox(height: 20),
-                                Text(
-                                  "Email",
+                                const SizedBox(height: 20),
+                                const Text(
+                                  'Email',
                                   style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w400,
-                                    fontFamily: "inter",
+                                    fontFamily: 'inter',
                                     color: Color(0xFF175CD3),
                                   ),
                                 ),
-                                SizedBox(height: 8),
+                                const SizedBox(height: 8),
                                 TextFormField(validator: (value) {
                                   if (value == null || value.trim().isEmpty) {
-                                    return "Email is required";
+                                    return 'Email is required';
                                   }
                 
-                                  if (!value.trim().endsWith("@gmail.com")) {
-                                    return "Email must contain @gmail.com";
+                                  if (!value.trim().endsWith('@gmail.com')) {
+                                    return 'Email must contain @gmail.com';
                                   }
                 
                                   return null;
@@ -162,19 +161,19 @@ class _LoginScreenState extends State<VerifyScreen>
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(12),
                                     ),
-                                    contentPadding: EdgeInsets.symmetric(
+                                    contentPadding: const EdgeInsets.symmetric(
                                       horizontal: 16,
                                     ),
-                                    hintText: "Enter your Email",
-                                    hintStyle: TextStyle(
+                                    hintText: 'Enter your Email',
+                                    hintStyle: const TextStyle(
                                       fontSize: 12,
                                       fontWeight: FontWeight.w400,
-                                      fontFamily: "inter",
+                                      fontFamily: 'inter',
                                       color: Color(0xFF08303D),
                                     ),
                                   ),
                                 ),
-                                SizedBox(height: 24),
+                                const SizedBox(height: 24),
                 
                 
                                 BlocBuilder<VerifyCubit, VerifyState>(
@@ -201,7 +200,7 @@ class _LoginScreenState extends State<VerifyScreen>
                                                 width: 470,
                                                 height: 45,
                                                 decoration: BoxDecoration(
-                                                  gradient: LinearGradient(
+                                                  gradient: const LinearGradient(
                                                     begin: Alignment.topLeft,
                                                     end: Alignment.bottomRight,
                                                     colors: [
@@ -213,7 +212,7 @@ class _LoginScreenState extends State<VerifyScreen>
                                                 ),
                                                 child: Center(
                                                   child: isLoading
-                                                      ? Row(
+                                                      ? const Row(
                                                     mainAxisAlignment: MainAxisAlignment.center,
                                                     children: [
                                                       SizedBox(
@@ -226,22 +225,22 @@ class _LoginScreenState extends State<VerifyScreen>
                                                       ),
                                                       SizedBox(width: 10),
                                                       Text(
-                                                        "Verifying Email...",
+                                                        'Verifying Email...',
                                                         style: TextStyle(
                                                           fontSize: 16,
                                                           fontWeight: FontWeight.w600,
-                                                          fontFamily: "inter",
+                                                          fontFamily: 'inter',
                                                           color: Colors.white,
                                                         ),
                                                       ),
                                                     ],
                                                   )
-                                                      : Text(
-                                                    "Continue",
+                                                      : const Text(
+                                                    'Continue',
                                                     style: TextStyle(
                                                       fontSize: 16,
                                                       fontWeight: FontWeight.w600,
-                                                      fontFamily: "inter",
+                                                      fontFamily: 'inter',
                                                       color: Colors.white,
                                                     ),
                                                   ),

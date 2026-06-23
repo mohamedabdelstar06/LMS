@@ -1,19 +1,4 @@
 class CommentModel {
-  final int id;
-  final int activityId;
-  final int userId;
-  final String userFullName;
-  final String userProfileImageUrl;
-  final String userRole;
-  final String content;
-  final int? parentCommentId;
-  final int likeCount;
-  final bool isLikedByCurrentUser;
-  final bool isOwner;
-  final DateTime createdAt;
-  final DateTime? updatedAt;
-  final bool isDeleted;
-  final List<CommentModel> replies;
 
   CommentModel({
     required this.id,
@@ -53,6 +38,21 @@ class CommentModel {
         .toList() ??
         [],
   );
+  final int id;
+  final int activityId;
+  final int userId;
+  final String userFullName;
+  final String userProfileImageUrl;
+  final String userRole;
+  final String content;
+  final int? parentCommentId;
+  final int likeCount;
+  final bool isLikedByCurrentUser;
+  final bool isOwner;
+  final DateTime createdAt;
+  final DateTime? updatedAt;
+  final bool isDeleted;
+  final List<CommentModel> replies;
 
   CommentModel copyWith({
     int? likeCount,

@@ -47,7 +47,6 @@ class CommentSuperEngine {
 
     if (renderObject is RenderBox && renderObject.attached) {
       final vp = RenderAbstractViewport.of(renderObject);
-      if (vp == null) return false;
 
       final offset = vp.getOffsetToReveal(renderObject, 0.0).offset;
 
@@ -59,8 +58,8 @@ class CommentSuperEngine {
 }
 
 class _CommentNode {
-  final VoidCallback rebuild;
-  final BuildContext context;
 
   _CommentNode(this.rebuild, this.context);
+  final VoidCallback rebuild;
+  final BuildContext context;
 }

@@ -391,9 +391,9 @@ class _ParticipantListScreenState extends State<ParticipantListScreen> {
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      IconButton(
+                      const IconButton(
                         onPressed: null,
-                        icon: const Icon(Icons.chevron_left),
+                        icon: Icon(Icons.chevron_left),
                         color: Colors.grey,
                       ),
                       Container(
@@ -407,9 +407,9 @@ class _ParticipantListScreenState extends State<ParticipantListScreen> {
                           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                         ),
                       ),
-                      IconButton(
+                      const IconButton(
                         onPressed: null,
-                        icon: const Icon(Icons.chevron_right),
+                        icon: Icon(Icons.chevron_right),
                         color: Colors.grey,
                       ),
                     ],
@@ -425,14 +425,6 @@ class _ParticipantListScreenState extends State<ParticipantListScreen> {
 }
 
 class Participant {
-  final int id;
-  final String firstName;
-  final String lastName;
-  final String role;
-  final String group;
-  final String lastAccess;
-  final double weight;
-  final String avatarUrl;
 
   Participant({
     required this.id,
@@ -444,12 +436,17 @@ class Participant {
     required this.weight,
     required this.avatarUrl,
   });
+  final int id;
+  final String firstName;
+  final String lastName;
+  final String role;
+  final String group;
+  final String lastAccess;
+  final double weight;
+  final String avatarUrl;
 }
 
 class ParticipantListItem extends StatelessWidget {
-  final Participant participant;
-  final bool isSelected;
-  final Function(bool) onSelectedChanged;
 
   const ParticipantListItem({
     super.key,
@@ -457,6 +454,9 @@ class ParticipantListItem extends StatelessWidget {
     required this.isSelected,
     required this.onSelectedChanged,
   });
+  final Participant participant;
+  final bool isSelected;
+  final Function(bool) onSelectedChanged;
 
   @override
   Widget build(BuildContext context) {

@@ -8,19 +8,19 @@ import 'package:lms/features/screens/admin/courses/course_details/assignments/st
 
 
 class AssignmentCubit extends Cubit<AssignmentState> {
-  final AssignmentRepository _repository;
-  final int courseId;
 
   AssignmentCubit({
     required AssignmentRepository repository,
     required this.courseId,
   }) : _repository = repository,
        super(const AssignmentState());
+  final AssignmentRepository _repository;
+  final int courseId;
 
   // ── Load ────────────────────────────────────────────────────
 
   Future<void> loadAssignments() async {
-    emit(state.copyWith(status: AssignmentStatus.loading, errorMessage: null));
+    emit(state.copyWith(status: AssignmentStatus.loading));
     try {
       final list = await _repository.getCourseAssignments(courseId);
       emit(state.copyWith(status: AssignmentStatus.success, assignments: list));
@@ -57,7 +57,6 @@ class AssignmentCubit extends Cubit<AssignmentState> {
         actionStatus: AssignmentActionStatus.loading,
         uploadProgresses: progresses,
         isUploadingFiles: files.isNotEmpty,
-        actionError: null,
       ),
     );
 
@@ -128,7 +127,6 @@ class AssignmentCubit extends Cubit<AssignmentState> {
         actionStatus: AssignmentActionStatus.loading,
         uploadProgresses: progresses,
         isUploadingFiles: newFiles.isNotEmpty,
-        actionError: null,
       ),
     );
 
@@ -183,7 +181,6 @@ class AssignmentCubit extends Cubit<AssignmentState> {
     emit(
       state.copyWith(
         actionStatus: AssignmentActionStatus.loading,
-        actionError: null,
       ),
     );
     try {
@@ -221,7 +218,6 @@ class AssignmentCubit extends Cubit<AssignmentState> {
         actionStatus: AssignmentActionStatus.loading,
         uploadProgresses: progresses,
         isUploadingFiles: true,
-        actionError: null,
       ),
     );
 
@@ -262,7 +258,6 @@ class AssignmentCubit extends Cubit<AssignmentState> {
     emit(
       state.copyWith(
         actionStatus: AssignmentActionStatus.loading,
-        actionError: null,
       ),
     );
     try {
@@ -289,7 +284,6 @@ class AssignmentCubit extends Cubit<AssignmentState> {
     emit(
       state.copyWith(
         actionStatus: AssignmentActionStatus.loading,
-        actionError: null,
       ),
     );
     try {
@@ -345,7 +339,6 @@ class AssignmentCubit extends Cubit<AssignmentState> {
   void resetActionStatus() => emit(
     state.copyWith(
       actionStatus: AssignmentActionStatus.idle,
-      actionError: null,
     ),
   );
 

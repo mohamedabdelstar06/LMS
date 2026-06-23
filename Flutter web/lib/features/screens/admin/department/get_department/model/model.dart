@@ -1,13 +1,4 @@
 class GetDepartmentModel {
-  final int id;
-  final String name;
-  final String description;
-  final String? imageUrl;
-  final int headId;
-  final String headName;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final List<YearModel> years;
 
   GetDepartmentModel({
     required this.id,
@@ -60,6 +51,15 @@ class GetDepartmentModel {
       );
     }
   }
+  final int id;
+  final String name;
+  final String description;
+  final String? imageUrl;
+  final int headId;
+  final String headName;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final List<YearModel> years;
 
   Map<String, dynamic> toJson() {
     return {
@@ -106,10 +106,6 @@ class GetDepartmentModel {
 }
 
 class YearModel {
-  final int id;
-  final String name;
-  final DateTime startDate;
-  final DateTime endDate;
 
   YearModel({
     required this.id,
@@ -144,6 +140,10 @@ class YearModel {
       );
     }
   }
+  final int id;
+  final String name;
+  final DateTime startDate;
+  final DateTime endDate;
 
   Map<String, dynamic> toJson() {
     return {

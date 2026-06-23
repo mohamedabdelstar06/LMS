@@ -18,12 +18,12 @@ class GetCourseCubit extends Cubit<GetCourseStates> {
     try {
       final token = await TokenStorageHelper.getTokenSecure();
       if (token == null || token.isEmpty) {
-        emit(GetCourseError("You are not authorized. Token missing."));
+        emit(const GetCourseError('You are not authorized. Token missing.'));
         return;
       }
 
       final response = await dio.get(
-        "${ApiResources.apiUrl}${ApiResources.getCourseEndPoint}",
+        '${ApiResources.apiUrl}${ApiResources.getCourseEndPoint}',
         options: Options(
           headers: {
             'Authorization': 'Bearer $token',
@@ -41,15 +41,15 @@ class GetCourseCubit extends Cubit<GetCourseStates> {
 
         emit(GetCourseSuccess(courses));
       } else if (response.statusCode == 401) {
-        emit(GetCourseError("Unauthorized. Please login again."));
+        emit(const GetCourseError('Unauthorized. Please login again.'));
       } else {
-        emit(GetCourseError("Failed to load courses"));
+        emit(const GetCourseError('Failed to load courses'));
       }
     } on DioException catch (e) {
       if (e.response?.statusCode == 401) {
-        emit(GetCourseError("Unauthorized. Please login again."));
+        emit(const GetCourseError('Unauthorized. Please login again.'));
       } else {
-        emit(GetCourseError(e.message ?? "Something went wrong"));
+        emit(GetCourseError(e.message ?? 'Something went wrong'));
       }
     } catch (e) {
       emit(GetCourseError(e.toString()));

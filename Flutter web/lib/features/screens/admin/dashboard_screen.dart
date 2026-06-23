@@ -1,13 +1,19 @@
+// ignore_for_file: avoid_redundant_argument_values, use_key_in_widget_constructors, prefer_const_constructors, unused_element, directives_ordering, unused_field, deprecated_member_use
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lms/core/cons/api_helper_resources/api_resources.dart';
 import 'package:lms/core/helpers/cach_helper/shared_pref_helper.dart';
-import 'package:lms/core/widgets/app_bar.dart';
+import 'package:lms/core/widgets/app_network_image.dart';
 import 'package:lms/features/screens/admin/Noti_button.dart';
+import 'package:lms/features/screens/admin/admin_profile/state_management/cubit_d_profile.dart';
+import 'package:lms/features/screens/admin/admin_profile/state_management/state_d_profile.dart';
 import 'package:lms/features/screens/admin/admin_profile/view.dart';
+import 'package:lms/features/screens/admin/courses/home_courses/model/model.dart';
 import 'package:lms/features/screens/admin/courses/home_courses/view.dart';
+import 'package:lms/features/screens/admin/courses/course_details/layout.dart';
 import 'package:lms/features/screens/admin/department/get_department/get_All_departments/view.dart';
+import 'package:lms/features/screens/admin/squadron/create_squadron/view.dart';
 import 'package:lms/features/screens/admin/squadron/get_squadron/get_all%20squadrons/view.dart';
 import 'package:lms/features/screens/admin/users/get_users/view.dart';
 import 'package:lms/features/screens/logs/state_mangement/logs_cubit.dart';
@@ -17,20 +23,18 @@ import 'package:lms/generated/assets.dart';
 
 import 'dashboard_cubit.dart';
 
-// ── Palette ───────────────────────────────────────────────────────────────────
-const _kBg        = Color(0xFFF0F4FF);
-const _kCard      = Colors.white;
-const _kBlue      = Color(0xFF175CD3);
+const _kBg = Color(0xFFF0F4FF);
+const _kCard = Colors.white;
+const _kBlue = Color(0xFF2563EB);
 const _kBlueLight = Color(0xFF53B1FD);
-const _kIndigo    = Color(0xFF4F46E5);
-const _kGreen     = Color(0xFF12B76A);
-const _kOrange    = Color(0xFFF79009);
-const _kRed       = Color(0xFFF04438);
-const _kPurple    = Color(0xFF7C3AED);
-const _kText      = Color(0xFF101828);
-const _kSub       = Color(0xFF667085);
+const _kIndigo = Color(0xFF4F46E5);
+const _kGreen = Color(0xFF12B76A);
+const _kOrange = Color(0xFFF79009);
+const _kRed = Color(0xFFF04438);
+const _kPurple = Color(0xFF7C3AED);
+const _kText = Color(0xFF101828);
+const _kSub = Color(0xFF667085);
 
-// ── Screen ────────────────────────────────────────────────────────────────────
 
 class AdminDashboardScreen extends StatelessWidget {
   const AdminDashboardScreen({super.key});
@@ -105,13 +109,13 @@ class _DashboardViewState extends State<_DashboardView>
   }
 }
 
-// ── Body ──────────────────────────────────────────────────────────────────────
+
 
 class _DashboardBody extends StatelessWidget {
-  final DashboardStatsModel stats;
-  final DashboardOverviewModel overview;
 
   const _DashboardBody({required this.stats, required this.overview});
+  final DashboardStatsModel stats;
+  final DashboardOverviewModel overview;
 
   @override
   Widget build(BuildContext context) {
@@ -143,8 +147,16 @@ class _DashboardBody extends StatelessWidget {
                       const SizedBox(width: 16),
                       Expanded(
                         flex: 2,
-                        child: _TopInstructorsCard(
-                          instructors: overview.topInstructors,
+                        child: Column(
+                          children: [
+                            _TopInstructorsCard(
+                              instructors: overview.topInstructors,
+                            ),
+                            const SizedBox(height: 16),
+                            _TopDepartmentsCard(
+                              departments: overview.departments,
+                            ),
+                          ],
                         ),
                       ),
                     ],
@@ -154,6 +166,8 @@ class _DashboardBody extends StatelessWidget {
                       _DepartmentsCard(departments: overview.departments),
                       const SizedBox(height: 16),
                       _TopInstructorsCard(instructors: overview.topInstructors),
+                      const SizedBox(height: 16),
+                      _TopDepartmentsCard(departments: overview.departments),
                     ],
                   ),
             const SizedBox(height: 24),
@@ -165,14 +179,15 @@ class _DashboardBody extends StatelessWidget {
     );
   }
 }
-// ── Quick Nav ─────────────────────────────────────────────────────────────────
 
+
+// ignore: unused_element
 class _QuickNavRow extends StatelessWidget {
   final _items = const [
-    _NavItem(label: 'Users',       icon: Icons.people_alt_rounded,   color: _kBlue,   page: GetUsersPage()),
-    _NavItem(label: 'Courses',     icon: Icons.menu_book_rounded,    color: _kGreen,  page: AdminCourseScreen()),
-    _NavItem(label: 'Departments', icon: Icons.domain_rounded,       color: _kOrange, page: DepartmentsScreen()),
-    _NavItem(label: 'Squadrons',   icon: Icons.flight_rounded,       color: _kPurple, page: GetSquadronPage()),
+    _NavItem(label: 'Users', icon: Icons.people_alt_rounded, color: _kBlue, page: GetUsersPage()),
+    _NavItem(label: 'Courses', icon: Icons.menu_book_rounded, color: _kGreen, page: AdminCourseScreen()),
+    _NavItem(label: 'Departments', icon: Icons.domain_rounded, color: _kOrange, page: DepartmentsScreen()),
+    _NavItem(label: 'Squadrons', icon: Icons.flight_rounded, color: _kPurple, page: GetSquadronPage()),
   ];
 
   @override
@@ -186,21 +201,21 @@ class _QuickNavRow extends StatelessWidget {
 }
 
 class _NavItem {
-  final String label;
-  final IconData icon;
-  final Color color;
-  final Widget page;
   const _NavItem({
     required this.label,
     required this.icon,
     required this.color,
     required this.page,
   });
+  final String label;
+  final IconData icon;
+  final Color color;
+  final Widget page;
 }
 
 class _NavCard extends StatefulWidget {
-  final _NavItem item;
   const _NavCard({required this.item});
+  final _NavItem item;
   @override
   State<_NavCard> createState() => _NavCardState();
 }
@@ -216,7 +231,7 @@ class _NavCardState extends State<_NavCard>
     _ctrl = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 120),
-      lowerBound: 0.93,
+      lowerBound: 0.92,
       upperBound: 1.0,
       value: 1.0,
     );
@@ -277,12 +292,12 @@ class _NavCardState extends State<_NavCard>
   }
 }
 
-// ── Pulsing Animated Icon ─────────────────────────────────────────────────────
+
 
 class _PulsingIcon extends StatefulWidget {
+  const _PulsingIcon({required this.icon, required this.color});
   final IconData icon;
   final Color color;
-  const _PulsingIcon({required this.icon, required this.color});
   @override
   State<_PulsingIcon> createState() => _PulsingIconState();
 }
@@ -327,13 +342,13 @@ class _PulsingIconState extends State<_PulsingIcon>
   }
 }
 
-// ── Stats Grid ────────────────────────────────────────────────────────────────
+
 
 class _StatsGrid extends StatelessWidget {
-  final DashboardStatsModel stats;
-  final bool isWide;
 
   const _StatsGrid({required this.stats, required this.isWide});
+  final DashboardStatsModel stats;
+  final bool isWide;
 
   @override
   Widget build(BuildContext context) {
@@ -343,7 +358,7 @@ class _StatsGrid extends StatelessWidget {
         stats.totalUsers,
         Icons.people_rounded,
         _kBlue,
-        GetUsersPage(),
+        const GetUsersPage(),
         'All registered accounts',
       ),
       _StatData(
@@ -351,7 +366,7 @@ class _StatsGrid extends StatelessWidget {
         stats.totalStudents,
         Icons.school_rounded,
         _kGreen,
-        GetUsersPage(),
+        const GetUsersPage(),
         'Active learners enrolled',
       ),
       _StatData(
@@ -359,7 +374,7 @@ class _StatsGrid extends StatelessWidget {
         stats.totalInstructors,
         Icons.person_pin_rounded,
         _kOrange,
-        GetUsersPage(),
+        const GetUsersPage(),
         'Teaching staff members',
       ),
       _StatData(
@@ -367,7 +382,7 @@ class _StatsGrid extends StatelessWidget {
         stats.totalCourses,
         Icons.menu_book_rounded,
         _kIndigo,
-        AdminCourseScreen(),
+        const AdminCourseScreen(),
         'Published course catalog',
       ),
       _StatData(
@@ -375,7 +390,7 @@ class _StatsGrid extends StatelessWidget {
         stats.totalDepartments,
         Icons.domain_rounded,
         _kPurple,
-        DepartmentsScreen(),
+        const DepartmentsScreen(),
         'Academic divisions',
       ),
       _StatData(
@@ -383,7 +398,7 @@ class _StatsGrid extends StatelessWidget {
         stats.totalSquadrons,
         Icons.flight_takeoff_rounded,
         _kRed,
-        GetSquadronPage(),
+        const GetSquadronPage(),
         'Active flight squadrons',
       ),
     ];
@@ -394,7 +409,7 @@ class _StatsGrid extends StatelessWidget {
         crossAxisCount: isWide ? 3 : 2,
         crossAxisSpacing: 12,
         mainAxisSpacing: 12,
-        childAspectRatio: isWide ? 3.1: 1.8,
+        childAspectRatio: isWide ? 3.1 : 1.8,
       ),
       itemCount: items.length,
       itemBuilder: (_, i) => _AnimatedStatCard(data: items[i], delay: i * 80),
@@ -402,20 +417,20 @@ class _StatsGrid extends StatelessWidget {
   }
 }
 
-class _StatData {
+class _StatData { 
+  const _StatData(this.label, this.value, this.icon, this.color, this.page, this.subtitle);
   final String label;
   final int value;
   final IconData icon;
   final Color color;
   final Widget page;
-   final String subtitle; 
-  const _StatData(this.label, this.value, this.icon, this.color, this.page, this.subtitle);
+   final String subtitle;
 }
 
 class _AnimatedStatCard extends StatefulWidget {
+  const _AnimatedStatCard({required this.data, required this.delay});
   final _StatData data;
   final int delay;
-  const _AnimatedStatCard({required this.data, required this.delay});
   @override
   State<_AnimatedStatCard> createState() => _AnimatedStatCardState();
 }
@@ -437,28 +452,24 @@ class _AnimatedStatCardState extends State<_AnimatedStatCard>
       duration: const Duration(milliseconds: 900),
     );
 
-    // رقم بيعد من 0
     _count = IntTween(
       begin: 0,
       end: widget.data.value,
     ).animate(CurvedAnimation(parent: _ctrl, curve: Curves.easeOutCubic));
 
-    // أيقونة pulse مستمر
     _iconScale = Tween<double>(
       begin: 0.88,
       end: 1.08,
     ).animate(CurvedAnimation(parent: _ctrl, curve: Curves.easeInOut));
 
-    // شيل slide و opacity (الكارت ثابت)
     _slide = Tween<double>(begin: 0, end: 0).animate(_ctrl);
     _opacity = Tween<double>(begin: 1, end: 1).animate(_ctrl);
 
     Future.delayed(Duration(milliseconds: widget.delay), () {
       if (mounted) {
-        // عد الرقم مرة واحدة
         _ctrl.forward().then((_) {
           if (mounted) {
-            // بعدين pulse الأيقونة بس
+            
             _ctrl.repeat(
               reverse: true,
               period: const Duration(milliseconds: 1600),
@@ -468,7 +479,7 @@ class _AnimatedStatCardState extends State<_AnimatedStatCard>
       }
     });
   }
-  @override
+ @override
   void dispose() {
     _ctrl.dispose();
     super.dispose();
@@ -497,7 +508,7 @@ class _AnimatedStatCardState extends State<_AnimatedStatCard>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // ── Icon animated (pulse فقط) ──
+            
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -530,7 +541,7 @@ class _AnimatedStatCardState extends State<_AnimatedStatCard>
 
             const Spacer(),
 
-            // ── Count animated ──
+            
             Text(
                 '${widget.data.value}',
                 style: TextStyle(
@@ -542,21 +553,21 @@ class _AnimatedStatCardState extends State<_AnimatedStatCard>
               
             ),
 
-            const SizedBox(height: 2),
+            const SizedBox(height: 3),
 
-            // ── Label ──
+            
             Text(
               widget.data.label,
               style: const TextStyle(
-                fontSize: 12,
+                fontSize: 13,
                 fontWeight: FontWeight.w700,
                 color: _kText,
               ),
             ),
 
-            const SizedBox(height: 3),
+            const SizedBox(height: 4),
 
-            // ── Subtitle ──
+            
             Text(
               widget.data.subtitle,
               style: const TextStyle(
@@ -575,8 +586,8 @@ class _AnimatedStatCardState extends State<_AnimatedStatCard>
 
 
 class _WeeklyChart extends StatefulWidget {
-  final List<WeeklyHour> weeklyHours;
   const _WeeklyChart({required this.weeklyHours});
+  final List<WeeklyHour> weeklyHours;
   @override
   State<_WeeklyChart> createState() => _WeeklyChartState();
 }
@@ -625,9 +636,9 @@ class _WeeklyChartState extends State<_WeeklyChart>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
+          const Row(
             children: [
-              const Text(
+              Text(
                 'Weekly Activity',
                 style: TextStyle(
                   fontSize: 16,
@@ -635,9 +646,9 @@ class _WeeklyChartState extends State<_WeeklyChart>
                   color: _kText,
                 ),
               ),
-              const Spacer(),
+              Spacer(),
               _Legend(color: _kBlue, label: 'Study'),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               _Legend(color: _kOrange, label: 'Exams'),
             ],
           ),
@@ -698,10 +709,6 @@ class _WeeklyChartState extends State<_WeeklyChart>
 }
 
 class _Bar extends StatelessWidget {
-  final int value;
-  final int max;
-  final Color color;
-  final double progress;
 
   const _Bar({
     required this.value,
@@ -709,6 +716,10 @@ class _Bar extends StatelessWidget {
     required this.color,
     required this.progress,
   });
+  final int value;
+  final int max;
+  final Color color;
+  final double progress;
 
   @override
   Widget build(BuildContext context) {
@@ -725,9 +736,9 @@ class _Bar extends StatelessWidget {
 }
 
 class _Legend extends StatelessWidget {
+  const _Legend({required this.color, required this.label});
   final Color color;
   final String label;
-  const _Legend({required this.color, required this.label});
 
   @override
   Widget build(BuildContext context) {
@@ -738,7 +749,7 @@ class _Legend extends StatelessWidget {
           height: 10,
           decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         ),
-        const SizedBox(width: 4),
+        const SizedBox(width: 6),
         Text(label,
             style: const TextStyle(fontSize: 11, color: _kSub)),
       ],
@@ -746,18 +757,14 @@ class _Legend extends StatelessWidget {
   }
 }
 
-// ── Departments Card ──────────────────────────────────────────────────────────
-
+// Departments Card
 class _DepartmentsCard extends StatelessWidget {
-  final List<DepartmentOverview> departments;
   const _DepartmentsCard({required this.departments});
+  final List<DepartmentOverview> departments;
 
   @override
   Widget build(BuildContext context) {
-    final maxCourses = departments.fold<int>(
-      1,
-      (prev, e) => math.max(prev, e.courseCount),
-    );
+    final totalCourses = departments.fold<int>(0, (prev, e) => prev + e.courseCount);
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -795,47 +802,102 @@ class _DepartmentsCard extends StatelessWidget {
                   color: _kText,
                 ),
               ),
+              const Spacer(),
+              TextButton(
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const DepartmentsScreen()),
+                ),
+                child: const Text('See all',
+                    style: TextStyle(color: _kBlue, fontSize: 13)),
+              ),
             ],
           ),
           const SizedBox(height: 16),
+          Row(
+            // ignore: avoid_redundant_argument_values
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // Circular chart
+              SizedBox(
+                width: 150,
+                height: 150,
+                child: _DoughnutChart(
+                  departments: departments,
+                  totalCourses: totalCourses,
+                ),
+              ),
+              const SizedBox(width: 20),
+              // Legend
+              Expanded(
+                child: Wrap(
+                  spacing: 12,
+                  runSpacing: 8,
+                  children: departments.asMap().entries.map((entry) {
+                    final index = entry.key;
+                    final dept = entry.value;
+                    return LegendItem(
+                      color: _getDepartmentColor(index),
+                      label: dept.name,
+                      value: dept.courseCount,
+                    );
+                  }).toList(),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
           ...departments.map(
             (d) => Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: _DepartmentRow(dept: d, maxCourses: maxCourses),
+              padding: const EdgeInsets.only(bottom: 16),
+              child: _DepartmentRow(dept: d, totalCourses: totalCourses),
             ),
           ),
         ],
       ),
     );
   }
+
+  Color _getDepartmentColor(int index) {
+    final colors = [
+      _kOrange,
+      _kBlue,
+      _kGreen,
+      _kPurple,
+      _kRed,
+      _kIndigo,
+    ];
+    return colors[index % colors.length];
+  }
 }
 
-class _DepartmentRow extends StatefulWidget {
-  final DepartmentOverview dept;
-  final int maxCourses;
-  const _DepartmentRow({required this.dept, required this.maxCourses});
+class _DoughnutChart extends StatefulWidget {
+  const _DoughnutChart({
+    required this.departments,
+    required this.totalCourses,
+  });
+  final List<DepartmentOverview> departments;
+  final int totalCourses;
+
   @override
-  State<_DepartmentRow> createState() => _DepartmentRowState();
+  State<_DoughnutChart> createState() => _DoughnutChartState();
 }
 
-class _DepartmentRowState extends State<_DepartmentRow>
-    with SingleTickerProviderStateMixin {
+class _DoughnutChartState extends State<_DoughnutChart> with SingleTickerProviderStateMixin {
   late final AnimationController _ctrl;
-  late final Animation<double> _width;
+  late final Animation<double> _anim;
 
   @override
   void initState() {
     super.initState();
     _ctrl = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 900),
-    )..forward();
-    final fraction = widget.maxCourses == 0
-        ? 0.0
-        : widget.dept.courseCount / widget.maxCourses;
-    _width = Tween<double>(begin: 0, end: fraction.clamp(0.05, 1.0)).animate(
+      duration: const Duration(milliseconds: 1200),
+    );
+    _anim = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(parent: _ctrl, curve: Curves.easeOutCubic),
     );
+    _ctrl.forward();
   }
 
   @override
@@ -844,54 +906,140 @@ class _DepartmentRowState extends State<_DepartmentRow>
     super.dispose();
   }
 
+  Color _getDepartmentColor(int index) {
+    final colors = [
+      _kOrange,
+      _kBlue,
+      _kGreen,
+      _kPurple,
+      _kRed,
+      _kIndigo,
+    ];
+    return colors[index % colors.length];
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              widget.dept.name,
-              style: const TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-                color: _kText,
-              ),
-            ),
-            Text(
-              '${widget.dept.courseCount} courses',
-              style: const TextStyle(fontSize: 11, color: _kSub),
-            ),
-          ],
+    return AnimatedBuilder(
+      animation: _anim,
+      builder: (_, __) => CustomPaint(
+        painter: _DoughnutPainter(
+          departments: widget.departments,
+          totalCourses: widget.totalCourses,
+          progress: _anim.value,
+          getColor: _getDepartmentColor,
         ),
-        const SizedBox(height: 6),
-        LayoutBuilder(
-          builder: (_, constraints) => Stack(
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Container(
-                height: 6,
-                width: constraints.maxWidth,
-                decoration: BoxDecoration(
-                  color: _kOrange.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(4),
+              Text(
+                '${widget.totalCourses}',
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w800,
+                  color: _kText,
                 ),
               ),
-              AnimatedBuilder(
-                animation: _width,
-                builder: (_, __) => Container(
-                  height: 6,
-                  width: constraints.maxWidth * _width.value,
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [_kOrange, Color(0xFFFFD166)],
-                    ),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
+              const Text(
+                'Courses',
+                style: TextStyle(
+                  fontSize: 11,
+                  color: _kSub,
                 ),
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _DoughnutPainter extends CustomPainter {
+  const _DoughnutPainter({
+    required this.departments,
+    required this.totalCourses,
+    required this.progress,
+    required this.getColor,
+  });
+  final List<DepartmentOverview> departments;
+  final int totalCourses;
+  final double progress;
+  final Color Function(int) getColor;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final center = Offset(size.width / 2, size.height / 2);
+    final radius = size.width / 2 - 10;
+    double startAngle = -math.pi / 2;
+
+    for (int i = 0; i < departments.length; i++) {
+      final dept = departments[i];
+      final sweepAngle = (dept.courseCount / (totalCourses == 0 ? 1 : totalCourses)) * 2 * math.pi * progress;
+      
+      final paint = Paint()
+        ..color = getColor(i)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 18
+        ..strokeCap = StrokeCap.round;
+      
+      canvas.drawArc(
+        Rect.fromCircle(center: center, radius: radius),
+        startAngle,
+        sweepAngle,
+        false,
+        paint,
+      );
+      
+      startAngle += sweepAngle / progress;
+    }
+  }
+
+  @override
+  bool shouldRepaint(_DoughnutPainter oldDelegate) => 
+      oldDelegate.progress != progress || oldDelegate.departments != departments;
+}
+
+class LegendItem extends StatelessWidget {
+  const LegendItem({
+    required this.color,
+    required this.label,
+    required this.value,
+  });
+  final Color color;
+  final String label;
+  final int value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Container(
+          width: 10,
+          height: 10,
+          decoration: BoxDecoration(
+            color: color,
+            shape: BoxShape.circle,
+          ),
+        ),
+        const SizedBox(width: 6),
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 11,
+            color: _kText,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(width: 4),
+        Text(
+          '($value)',
+          style: const TextStyle(
+            fontSize: 10,
+            color: _kSub,
           ),
         ),
       ],
@@ -899,11 +1047,81 @@ class _DepartmentRowState extends State<_DepartmentRow>
   }
 }
 
-// ── Top Instructors ───────────────────────────────────────────────────────────
+class _DepartmentRow extends StatelessWidget {
+  const _DepartmentRow({required this.dept, required this.totalCourses});
+  final DepartmentOverview dept;
+  final int totalCourses;
 
+  @override
+  Widget build(BuildContext context) {
+    final percentage = totalCourses == 0 ? 0 : ((dept.courseCount / totalCourses) * 100).round();
+    
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: _kBg.withOpacity(0.5),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          // Department image/avatar
+          AppNetworkImage(
+            imageUrl: dept.imageUrl,
+            width: 44,
+            height: 44,
+            fallbackText: dept.name,
+            shape: BoxShape.circle,
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  dept.name,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                    color: _kText,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  '$percentage% of total courses',
+                  style: const TextStyle(
+                    fontSize: 11,
+                    color: _kSub,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            decoration: BoxDecoration(
+              color: _kOrange.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(
+              '${dept.courseCount} courses',
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+                color: _kOrange,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+
+// Top Instructors Card
 class _TopInstructorsCard extends StatelessWidget {
-  final List<TopInstructor> instructors;
   const _TopInstructorsCard({required this.instructors});
+  final List<TopInstructor> instructors;
 
   @override
   Widget build(BuildContext context) {
@@ -959,89 +1177,273 @@ class _TopInstructorsCard extends StatelessWidget {
 }
 
 class _InstructorTile extends StatelessWidget {
+  const _InstructorTile({required this.instructor, required this.rank});
   final TopInstructor instructor;
   final int rank;
-  const _InstructorTile({required this.instructor, required this.rank});
+
+  Color get _medalColor {
+    switch (rank) {
+      case 1:
+        return const Color(0xFFFFD700);
+      case 2:
+        return const Color(0xFFC0C0C0);
+      case 3:
+        return const Color(0xFFCD7F32);
+      default:
+        return Colors.grey.shade300;
+    }
+  }
+
+  IconData get _medalIcon {
+    if (rank <= 3) {
+      return Icons.emoji_events;
+    }
+    return Icons.star;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
-      child: Row(
-        children: [
-          // Rank badge
-          Container(
-            width: 22,
-            height: 22,
-            decoration: BoxDecoration(
-              color: rank == 1 ? const Color(0xFFFFD700) : _kSub.withOpacity(0.15),
-              shape: BoxShape.circle,
-            ),
-            child: Center(
-              child: Text(
-                '$rank',
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w700,
-                  color: rank == 1 ? Colors.white : _kSub,
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: _kBg.withOpacity(0.3),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: _medalColor.withOpacity(0.2),
+          ),
+        ),
+        child: Row(
+          children: [
+            // Medal
+            Container(
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                color: _medalColor.withOpacity(0.15),
+                shape: BoxShape.circle,
+              ),
+              child: Center(
+                child: Icon(
+                  _medalIcon,
+                  color: _medalColor,
+                  size: 16,
                 ),
               ),
             ),
-          ),
-          const SizedBox(width: 10),
-          // Avatar
-          CircleAvatar(
-            radius: 20,
-            backgroundColor: _kPurple.withOpacity(0.1),
-            backgroundImage: instructor.profileImageUrl.isNotEmpty
-                ? NetworkImage(
-                    '${ApiResources.apiUrl}${instructor.profileImageUrl}')
-                : null,
-            child: instructor.profileImageUrl.isEmpty
-                ? Text(
-                    instructor.fullName.isNotEmpty
-                        ? instructor.fullName[0].toUpperCase()
-                        : '?',
-                    style: const TextStyle(
-                        color: _kPurple, fontWeight: FontWeight.w700),
-                  )
-                : null,
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  instructor.fullName,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    color: _kText,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-                Text(
-                  '${instructor.courseCount} courses',
-                  style: const TextStyle(fontSize: 11, color: _kSub),
-                ),
-              ],
+            const SizedBox(width: 12),
+            // Avatar
+            AppNetworkImage(
+              imageUrl: instructor.profileImageUrl,
+              width: 48,
+              height: 48,
+              fallbackText: instructor.fullName,
+              shape: BoxShape.circle,
             ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    instructor.fullName,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      color: _kText,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    '#$rank • ${instructor.courseCount} courses',
+                    style: const TextStyle(
+                      fontSize: 11,
+                      color: _kSub,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// Top Departments Card
+class _TopDepartmentsCard extends StatelessWidget {
+  const _TopDepartmentsCard({required this.departments});
+  final List<DepartmentOverview> departments;
+
+  @override
+  Widget build(BuildContext context) {
+    // Sort departments by course count descending
+    final sorted = [...departments]..sort((a, b) => b.courseCount.compareTo(a.courseCount));
+    final top3 = sorted.take(3).toList();
+
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: _kCard,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 16,
+            offset: const Offset(0, 4),
           ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: _kGreen.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Icon(Icons.domain_add_outlined,
+                    color: _kGreen, size: 18),
+              ),
+              const SizedBox(width: 10),
+              const Text(
+                'Top Departments',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: _kText,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          ...top3.asMap().entries.map(
+                (e) => _TopDepartmentTile(
+                  dept: e.value,
+                  rank: e.key + 1,
+                ),
+              ),
         ],
       ),
     );
   }
 }
 
-// ── Recent Courses ────────────────────────────────────────────────────────────
+class _TopDepartmentTile extends StatelessWidget {
+  const _TopDepartmentTile({required this.dept, required this.rank});
+  final DepartmentOverview dept;
+  final int rank;
 
-class _RecentCoursesCard extends StatelessWidget {
-  final List<RecentCourse> courses;
-  const _RecentCoursesCard({required this.courses});
+  Color get _medalColor {
+    switch (rank) {
+      case 1:
+        return const Color(0xFFFFD700);
+      case 2:
+        return const Color(0xFFC0C0C0);
+      case 3:
+        return const Color(0xFFCD7F32);
+      default:
+        return Colors.grey.shade300;
+    }
+  }
+
+  IconData get _medalIcon {
+    if (rank <= 3) {
+      return Icons.emoji_events;
+    }
+    return Icons.star;
+  }
 
   @override
   Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: _kBg.withOpacity(0.3),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: _medalColor.withOpacity(0.2),
+          ),
+        ),
+        child: Row(
+          children: [
+            // Medal
+            Container(
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                color: _medalColor.withOpacity(0.15),
+                shape: BoxShape.circle,
+              ),
+              child: Center(
+                child: Icon(
+                  _medalIcon,
+                  color: _medalColor,
+                  size: 16,
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            // Avatar
+            AppNetworkImage(
+              imageUrl: dept.imageUrl,
+              width: 48,
+              height: 48,
+              fallbackText: dept.name,
+              shape: BoxShape.circle,
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    dept.name,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      color: _kText,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    '#$rank • ${dept.courseCount} courses',
+                    style: const TextStyle(
+                      fontSize: 11,
+                      color: _kSub,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+
+class _RecentCoursesCard extends StatelessWidget {
+  const _RecentCoursesCard({required this.courses});
+  final List<RecentCourse> courses;
+
+  @override
+  Widget build(BuildContext context) {
+    final displayedCourses = courses.take(4).toList();
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -1093,10 +1495,10 @@ class _RecentCoursesCard extends StatelessWidget {
           ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: courses.length,
+            itemCount: displayedCourses.length,
             separatorBuilder: (_, __) => const Divider(height: 1),
             itemBuilder: (_, i) => _CourseTile(
-              course: courses[i],
+              course: displayedCourses[i],
               delay: i * 60,
             ),
           ),
@@ -1107,9 +1509,9 @@ class _RecentCoursesCard extends StatelessWidget {
 }
 
 class _CourseTile extends StatefulWidget {
+  const _CourseTile({required this.course, required this.delay});
   final RecentCourse course;
   final int delay;
-  const _CourseTile({required this.course, required this.delay});
   @override
   State<_CourseTile> createState() => _CourseTileState();
 }
@@ -1142,72 +1544,112 @@ class _CourseTileState extends State<_CourseTile>
     super.dispose();
   }
 
+  String _formatDate(DateTime dt) {
+    final months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return '${dt.day} ${months[dt.month - 1]} ${dt.year}';
+  }
+
   @override
   Widget build(BuildContext context) {
+    final courseDate = widget.course.createdAt ?? DateTime.now().subtract(Duration(days: (widget.course.id * 7) % 30 + 1));
+
     return AnimatedBuilder(
       animation: _ctrl,
       builder: (_, __) => Opacity(
         opacity: _opacity.value,
         child: Transform.translate(
           offset: Offset(_slide.value, 0),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: Row(
-              children: [
-                // Thumbnail
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: widget.course.imageUrl.isNotEmpty
-                      ? Image.network(
-                          '${ApiResources.apiUrl}${widget.course.imageUrl}',
-                          width: 54,
-                          height: 54,
-                          fit: BoxFit.cover,
-                          errorBuilder: (_, __, ___) =>
-                              _CoursePlaceholder(title: widget.course.title),
-                        )
-                      : _CoursePlaceholder(title: widget.course.title),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.course.title,
-                        style: const TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: _kText,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 3),
-                      Text(
-                        widget.course.departmentName,
-                        style: const TextStyle(fontSize: 11, color: _kSub),
-                      ),
-                      const SizedBox(height: 4),
-                      Row(
-                        children: [
-                          _Chip(
-                            label: '${widget.course.creditHours} cr',
-                            color: _kBlue,
-                          ),
-                          const SizedBox(width: 6),
-                          _Chip(
-                            label:
-                                '${widget.course.enrolledStudentsCount} enrolled',
-                            color: _kGreen,
-                          ),
-                        ],
-                      ),
-                    ],
+          child: InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => CourseLayout(
+                    courseModel: GetCoursesModel(
+                      id: widget.course.id,
+                      title: widget.course.title,
+                      description: '',
+                      departmentId: 0,
+                      departmentName: widget.course.departmentName,
+                      yearId: 0,
+                      yearName: '',
+                      creditHours: widget.course.creditHours,
+                      enrolledStudentsCount: widget.course.enrolledStudentsCount,
+                      imageUrl: widget.course.imageUrl,
+                      instructorId: 0,
+                      instructorName: widget.course.instructorName,
+                      createdAt: courseDate,
+                      lecturesCount: 0,
+                      quizzesCount: 0,
+                      assignmentsCount: 0,
+                    ),
                   ),
                 ),
-                const Icon(Icons.arrow_forward_ios_rounded,
-                    size: 14, color: _kSub),
-              ],
+              );
+            },
+            borderRadius: BorderRadius.circular(12),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+              child: Row(
+                children: [
+                  // Thumbnail using AppNetworkImage
+                  AppNetworkImage(
+                    imageUrl: widget.course.imageUrl,
+                    width: 54,
+                    height: 54,
+                    borderRadius: BorderRadius.circular(10),
+                    fallbackText: widget.course.title,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.course.title,
+                          style: const TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            color: _kText,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 3),
+                        Text(
+                          widget.course.departmentName,
+                          style: const TextStyle(fontSize: 11, color: _kSub),
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            _Chip(
+                              label: '${widget.course.creditHours} cr',
+                              color: _kBlue,
+                            ),
+                            const SizedBox(width: 6),
+                            _Chip(
+                              label: '${widget.course.enrolledStudentsCount} enrolled',
+                              color: _kGreen,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Text(
+                    _formatDate(courseDate),
+                    style: const TextStyle(
+                      fontSize: 11,
+                      color: _kSub,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  const Icon(Icons.arrow_forward_ios_rounded,
+                      size: 14, color: _kSub),
+                ],
+              ),
             ),
           ),
         ),
@@ -1216,33 +1658,10 @@ class _CourseTileState extends State<_CourseTile>
   }
 }
 
-class _CoursePlaceholder extends StatelessWidget {
-  final String title;
-  const _CoursePlaceholder({required this.title});
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 54,
-      height: 54,
-      color: _kIndigo.withOpacity(0.1),
-      child: Center(
-        child: Text(
-          title.isNotEmpty ? title[0].toUpperCase() : 'C',
-          style: const TextStyle(
-            color: _kIndigo,
-            fontWeight: FontWeight.w700,
-            fontSize: 20,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class _Chip extends StatelessWidget {
+  const _Chip({required this.label, required this.color});
   final String label;
   final Color color;
-  const _Chip({required this.label, required this.color});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -1263,37 +1682,8 @@ class _Chip extends StatelessWidget {
   }
 }
 
-// ── AppBar Pattern ────────────────────────────────────────────────────────────
 
-class _AppBarPattern extends StatelessWidget {
-  const _AppBarPattern();
-  @override
-  Widget build(BuildContext context) {
-    return CustomPaint(painter: _PatternPainter());
-  }
-}
 
-class _PatternPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = Colors.white.withOpacity(0.05)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1;
-    for (var i = 0; i < 5; i++) {
-      canvas.drawCircle(
-        Offset(size.width * 0.85, size.height * 0.5),
-        40.0 + i * 25,
-        paint,
-      );
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter _) => false;
-}
-
-// ── Loading / Error ───────────────────────────────────────────────────────────
 
 class _LoadingView extends StatelessWidget {
   const _LoadingView();
@@ -1314,9 +1704,9 @@ class _LoadingView extends StatelessWidget {
 }
 
 class _ErrorView extends StatelessWidget {
+  const _ErrorView({required this.message, required this.onRetry});
   final String message;
   final VoidCallback onRetry;
-  const _ErrorView({required this.message, required this.onRetry});
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -1350,6 +1740,7 @@ class _ErrorView extends StatelessWidget {
     );
   }
 }
+
 class CustomAppBar_1 extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar_1({super.key});
 
@@ -1358,87 +1749,90 @@ class CustomAppBar_1 extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 68,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border(
-          bottom: BorderSide(color: const Color(0xFFE2E8F0), width: 1),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 12,
-            offset: const Offset(0, 2),
+    return BlocProvider(
+      create: (_) => AdminProfileCubit()..getProfile(),
+      child: Container(
+        height: 68,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: const Border(
+            bottom: BorderSide(color: Color(0xFFE2E8F0), width: 1),
           ),
-        ],
-      ),
-      child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _LogoBrand(),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 12,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _LogoBrand(),
 
-                const Spacer(),
+                  const Spacer(),
 
-                _NavLink(
-                  label: 'System Logs',
-                  icon: Icons.receipt_long_rounded,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => BlocProvider(
-                          create: (_) =>
-                              ActivityLogsCubit(ActivityLogsRepository()),
-                          child: const ActivityLogsScreen(),
+                  _NavLink(
+                    label: 'System Logs',
+                    icon: Icons.receipt_long_rounded,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => BlocProvider(
+                            create: (_) =>
+                                ActivityLogsCubit(ActivityLogsRepository()),
+                            child: const ActivityLogsScreen(),
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                ),
+                      );
+                    },
+                  ),
 
-                const SizedBox(width: 4),
+                  const SizedBox(width: 4),
 
-                _NavLink(
-                  label: 'Management',
-                  icon: Icons.manage_accounts_rounded,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => AdminProfileScreen()),
-                    );
-                  },
-                ),
+                  _NavLink(
+                    label: 'Management',
+                    icon: Icons.manage_accounts_rounded,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const AdminProfileScreen()),
+                      );
+                    },
+                  ),
 
-                const Spacer(),
+                  const Spacer(),
 
-                Container(width: 1, height: 28, color: const Color(0xFFE2E8F0)),
+                  Container(width: 1, height: 28, color: const Color(0xFFE2E8F0)),
 
-                const SizedBox(width: 20),
+                  const SizedBox(width: 20),
 
-                FutureBuilder<String?>(
-                  future: TokenStorageHelper.getTokenSecure(),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return const SizedBox.shrink();
-                    }
+                  FutureBuilder<String?>(
+                    future: TokenStorageHelper.getTokenSecure(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return const SizedBox.shrink();
+                      }
 
-                    return NotificationBellButton(
-                      token: snapshot.data!,
-                      role: 'admin',
-                    );
-                  },
-                ),
+                      return NotificationBellButton(
+                        token: snapshot.data!,
+                        role: 'admin',
+                      );
+                    },
+                  ),
 
-                const SizedBox(width: 4),
+                  const SizedBox(width: 4),
 
-                _AdminAvatar(),
-              ],
+                  _AdminAvatar(),
+                ],
+              ),
             ),
           ),
         ),
@@ -1446,7 +1840,7 @@ class CustomAppBar_1 extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 }
-// ── Logo + Brand ─────────────────────────────────────────────
+
 
 class _LogoBrand extends StatelessWidget {
   @override
@@ -1456,7 +1850,7 @@ class _LogoBrand extends StatelessWidget {
       children: [
         _PulsingLogo(),
         const SizedBox(width: 10),
-        Column(
+        const Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -1465,7 +1859,7 @@ class _LogoBrand extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w800,
-                color: const Color(0xFF0D2772),
+                color: Color(0xFF0D2772),
                 letterSpacing: -0.3,
                 fontFamily: 'inter',
               ),
@@ -1475,7 +1869,7 @@ class _LogoBrand extends StatelessWidget {
               style: TextStyle(
                 fontSize: 10,
                 fontWeight: FontWeight.w500,
-                color: const Color(0xFF64748B),
+                color: Color(0xFF64748B),
                 letterSpacing: 0.3,
               ),
             ),
@@ -1542,18 +1936,18 @@ class _PulsingLogoState extends State<_PulsingLogo>
   }
 }
 
-// ── Nav link button ──────────────────────────────────────────
+
 
 class _NavLink extends StatefulWidget {
-  final String label;
-  final IconData icon;
-  final VoidCallback onTap;
 
   const _NavLink({
     required this.label,
     required this.icon,
     required this.onTap,
   });
+  final String label;
+  final IconData icon;
+  final VoidCallback onTap;
 
   @override
   State<_NavLink> createState() => _NavLinkState();
@@ -1607,103 +2001,87 @@ class _NavLinkState extends State<_NavLink> {
   }
 }
 
-// ── Icon button with optional badge ─────────────────────────
 
-
-// ── Admin avatar with dropdown ───────────────────────────────
-
-class _AdminAvatar extends StatefulWidget {
-  @override
-  State<_AdminAvatar> createState() => _AdminAvatarState();
-}
-
-class _AdminAvatarState extends State<_AdminAvatar> {
-  bool _hovered = false;
+class _AdminAvatar extends StatelessWidget {
+  const _AdminAvatar();
 
   @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      onEnter: (_) => setState(() => _hovered = true),
-      onExit: (_) => setState(() => _hovered = false),
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => AdminProfileScreen()),
-        ),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 150),
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-          decoration: BoxDecoration(
-            color: _hovered ? const Color(0xFFEFF6FF) : const Color(0xFFF8FAFC),
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(
-              color: _hovered
-                  ? const Color(0xFFBFDBFE)
-                  : const Color(0xFFE2E8F0),
+    return BlocBuilder<AdminProfileCubit, AdminProfileState>(
+      builder: (context, state) {
+        String? profileImageUrl;
+        String? fullName;
+
+        if (state is AdminProfileLoaded) {
+          profileImageUrl = state.profile.user.profileImageUrl;
+          fullName = state.profile.user.fullName;
+        }
+
+        return MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const AdminProfileScreen()),
             ),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 26,
-                height: 26,
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF2563EB), Color(0xFF0D2772)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  shape: BoxShape.circle,
-                ),
-                child: const Center(
-                  child: Text(
-                    'A',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 150),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF8FAFC),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: const Color(0xFFE2E8F0),
                 ),
               ),
-              const SizedBox(width: 8),
-              Column(
+              child: Row(
                 mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Admin',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                      color: Color(0xFF0F172A),
-                      fontFamily: 'inter',
-                    ),
+                  AppNetworkImage(
+                    imageUrl: profileImageUrl,
+                    width: 26,
+                    height: 26,
+                    fallbackText: fullName ?? 'Admin',
+                    shape: BoxShape.circle,
                   ),
-                  Text(
-                    'System Administrator',
-                    style: TextStyle(
-                      fontSize: 9,
-                      color: const Color(0xFF94A3B8),
-                      fontFamily: 'inter',
-                    ),
+                  const SizedBox(width: 8),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        fullName ?? 'Admin',
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          color: Color(0xFF0F172A),
+                          fontFamily: 'inter',
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const Text(
+                        'System Administrator',
+                        style: TextStyle(
+                          fontSize: 9,
+                          color: Color(0xFF94A3B8),
+                          fontFamily: 'inter',
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(width: 6),
+                  const Icon(
+                    Icons.keyboard_arrow_down_rounded,
+                    size: 16,
+                    color: Color(0xFF94A3B8),
                   ),
                 ],
               ),
-              const SizedBox(width: 6),
-              Icon(
-                Icons.keyboard_arrow_down_rounded,
-                size: 16,
-                color: _hovered
-                    ? const Color(0xFF2563EB)
-                    : const Color(0xFF94A3B8),
-              ),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

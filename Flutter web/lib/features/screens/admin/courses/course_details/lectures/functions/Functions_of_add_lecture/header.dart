@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../model/model.dart';
 
 class Header extends StatelessWidget {
-  const Header({required this.isEdit, required this.lecture});
+  const Header({super.key, required this.isEdit, required this.lecture});
   final bool isEdit;
   final LectureModel? lecture;
 

@@ -5,7 +5,7 @@ import 'package:lms/features/screens/admin/courses/course_details/courseDetailsS
 import '../../../home_courses/model/model.dart';
 
 class StatsRow extends StatelessWidget {
-  const StatsRow({required this.course});
+  const StatsRow({super.key, required this.course});
   final GetCoursesModel course;
 
   @override

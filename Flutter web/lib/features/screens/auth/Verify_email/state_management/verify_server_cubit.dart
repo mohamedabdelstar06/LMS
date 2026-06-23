@@ -17,7 +17,7 @@ class VerifyCubit extends Cubit<VerifyState> {
 
   String? _validateEmail(String email) {
     if (email.isEmpty) {
-      return "Email is required";
+      return 'Email is required';
     }
 
     // if (!email.endsWith("@gmail.com")) {
@@ -55,7 +55,7 @@ class VerifyCubit extends Cubit<VerifyState> {
       final response = await dio.post(
         ApiResources.verifyUserEmailEndPoint,
         data: {
-          "email": email,
+          'email': email,
         },
       );
 
@@ -72,7 +72,7 @@ class VerifyCubit extends Cubit<VerifyState> {
 
         if (!model.exists) {
           _showSnackBar(
-            message: "This email is not registered in the system",
+            message: 'This email is not registered in the system',
             isError: true,
           );
           return;
@@ -97,7 +97,7 @@ class VerifyCubit extends Cubit<VerifyState> {
       } else {
         emit(VerifyErrorState());
         _showSnackBar(
-          message: "Verification failed, please try again",
+          message: 'Verification failed, please try again',
           isError: true,
         );
       }
@@ -111,32 +111,32 @@ class VerifyCubit extends Cubit<VerifyState> {
 
         switch (statusCode) {
           case 400:
-            errorMessage = "Invalid email format";
+            errorMessage = 'Invalid email format';
             break;
           case 404:
-            errorMessage = "Email not found";
+            errorMessage = 'Email not found';
             break;
           case 500:
-            errorMessage = "Server error, please try again later";
+            errorMessage = 'Server error, please try again later';
             break;
           default:
             errorMessage =
-                e.response?.data["message"] ?? "Verification failed";
+                e.response?.data['message'] ?? 'Verification failed';
         }
       } else if (e.type == DioExceptionType.connectionTimeout ||
           e.type == DioExceptionType.sendTimeout) {
-        errorMessage = "Connection timeout, please check your internet";
+        errorMessage = 'Connection timeout, please check your internet';
       } else if (e.type == DioExceptionType.connectionError) {
-        errorMessage = "No internet connection";
+        errorMessage = 'No internet connection';
       } else {
-        errorMessage = "Unexpected error occurred";
+        errorMessage = 'Unexpected error occurred';
       }
 
       _showSnackBar(message: errorMessage, isError: true);
     } catch (e) {
       emit(VerifyErrorState());
       _showSnackBar(
-        message: "Unexpected error: ${e.toString()}",
+        message: 'Unexpected error: ${e.toString()}',
         isError: true,
       );
     }

@@ -139,11 +139,11 @@ class _ActivityLogsScreenState extends State<ActivityLogsScreen> {
             border: const Border(
               bottom: BorderSide(color: _Sky.border, width: 1.2),
             ),
-            boxShadow: [
+            boxShadow: const [
               BoxShadow(
                 color: _Sky.blue2,
                 blurRadius: 20,
-                offset: const Offset(0, 4),
+                offset: Offset(0, 4),
               ),
             ],
           ),
@@ -248,7 +248,6 @@ class _ActivityLogsScreenState extends State<ActivityLogsScreen> {
           filled: true,
           fillColor: _Sky.surfaceAlt,
           contentPadding: const EdgeInsets.symmetric(
-            vertical: 0,
             horizontal: 16,
           ),
           border: OutlineInputBorder(
@@ -316,7 +315,7 @@ class _ActivityLogsScreenState extends State<ActivityLogsScreen> {
               ),
             ],
           ),
-          child: Center(child: const Icon(Icons.arrow_back_ios, color: _Sky.blue1, size: 20)),
+          child: const Center(child: Icon(Icons.arrow_back_ios, color: _Sky.blue1, size: 20)),
         ),
       ),
     );
@@ -391,7 +390,7 @@ class _ActivityLogsScreenState extends State<ActivityLogsScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 12),
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.7),
-        border: const Border(bottom: BorderSide(color: _Sky.border, width: 1)),
+        border: const Border(bottom: BorderSide(color: _Sky.border)),
       ),
       child: Row(
         children: [
@@ -476,12 +475,13 @@ class _ActivityLogsScreenState extends State<ActivityLogsScreen> {
         if (state is ActivityLogsLoading) return _buildLoadingView();
         if (state is ActivityLogsError) return _buildErrorView(state.message);
         if (state is ActivityLogsLoaded) return _buildLogsList(state);
-        if (state is ActivityLogsLoadingMore)
+        if (state is ActivityLogsLoadingMore) {
           return _buildLogsList(
             null,
             loadingMore: true,
             logs: state.currentLogs,
           );
+        }
         return const SizedBox.shrink();
       },
     );
@@ -712,10 +712,6 @@ class _ActivityLogsScreenState extends State<ActivityLogsScreen> {
 }
 
 class _LightStatsCard extends StatelessWidget {
-  final String label;
-  final String value;
-  final IconData icon;
-  final Color color;
 
   const _LightStatsCard({
     required this.label,
@@ -723,6 +719,10 @@ class _LightStatsCard extends StatelessWidget {
     required this.icon,
     required this.color,
   });
+  final String label;
+  final String value;
+  final IconData icon;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -758,7 +758,7 @@ class _LightStatsCard extends StatelessWidget {
               children: [
                 Text(
                   value,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: _Sky.textPrimary,
                     fontSize: 18,
                     fontWeight: FontWeight.w800,
@@ -779,10 +779,6 @@ class _LightStatsCard extends StatelessWidget {
 }
 
 class _LightFilterChip extends StatefulWidget {
-  final String label;
-  final bool selected;
-  final Color color;
-  final VoidCallback onTap;
 
   const _LightFilterChip({
     required this.label,
@@ -790,6 +786,10 @@ class _LightFilterChip extends StatefulWidget {
     required this.color,
     required this.onTap,
   });
+  final String label;
+  final bool selected;
+  final Color color;
+  final VoidCallback onTap;
 
   @override
   State<_LightFilterChip> createState() => _LightFilterChipState();

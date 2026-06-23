@@ -3,14 +3,6 @@ import 'package:flutter/material.dart';
 /// Maps notification `type` string → visual config.
 /// Extend this as new types are added in the backend.
 class NotificationTypeConfig {
-  final Color unreadBackground;
-  final Color readBackground;
-  final Color unreadBorder;
-  final Color readBorder;
-  final Color iconBackground;
-  final Color iconColor;
-  final IconData icon;
-  final String label;
 
   const NotificationTypeConfig({
     required this.unreadBackground,
@@ -22,6 +14,14 @@ class NotificationTypeConfig {
     required this.icon,
     required this.label,
   });
+  final Color unreadBackground;
+  final Color readBackground;
+  final Color unreadBorder;
+  final Color readBorder;
+  final Color iconBackground;
+  final Color iconColor;
+  final IconData icon;
+  final String label;
 }
 
 class NotificationStyles {

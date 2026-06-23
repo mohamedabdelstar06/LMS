@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 class SectionLabel extends StatelessWidget {
-  const SectionLabel({required this.label});
+  const SectionLabel({super.key, required this.label});
   final String label;
 
   @override

@@ -8,14 +8,14 @@ import 'package:lms/features/screens/admin/Notifications_model.dart';
 
 
 class NotificationsSheet extends StatefulWidget {
-  final String token;
-  final String role;
 
   const NotificationsSheet({
     super.key,
     required this.token,
     required this.role,
   });
+  final String token;
+  final String role;
 
   @override
   State<NotificationsSheet> createState() => _NotificationsSheetState();
@@ -324,7 +324,7 @@ class _NotificationsSheetState extends State<NotificationsSheet> {
 
     List<NotificationModel> items = [];
     bool hasMore = false;
-    Set<int> markingIds = {};
+    final Set<int> markingIds = {};
 
     if (state is NotificationLoaded) {
       items = state.items;
@@ -406,10 +406,10 @@ class _NotificationsSheetState extends State<NotificationsSheet> {
               color: const Color(0xFFF1F5F9),
               borderRadius: BorderRadius.circular(20),
             ),
-            child: Icon(
+            child: const Icon(
               Icons.notifications_off_rounded,
               size: 36,
-              color: const Color(0xFFCBD5E1),
+              color: Color(0xFFCBD5E1),
             ),
           ),
           const SizedBox(height: 16),
@@ -439,11 +439,6 @@ class _NotificationsSheetState extends State<NotificationsSheet> {
 
 // ── Filter chip ──────────────────────────────────────────────────────────────
 class _FilterChip extends StatelessWidget {
-  final String label;
-  final IconData? icon;
-  final bool selected;
-  final Color accent;
-  final VoidCallback onTap;
 
   const _FilterChip({
     required this.label,
@@ -452,6 +447,11 @@ class _FilterChip extends StatelessWidget {
     required this.accent,
     required this.onTap,
   });
+  final String label;
+  final IconData? icon;
+  final bool selected;
+  final Color accent;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {

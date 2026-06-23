@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../../core/widgets/loading_screen.dart';
 import '../home_courses/model/model.dart';
 import 'courseDetailsState_managment/course_details_cubit.dart';
 import 'courseDetailsState_managment/course_details_state.dart';

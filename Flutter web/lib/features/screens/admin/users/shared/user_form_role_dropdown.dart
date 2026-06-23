@@ -2,25 +2,25 @@ import 'package:flutter/material.dart';
 
 final List<Map<String, dynamic>> kUserRoles = [
   {
-    "name": "Admin",
-    "icon": Icons.admin_panel_settings,
-    "color": Colors.redAccent,
+    'name': 'Admin',
+    'icon': Icons.admin_panel_settings,
+    'color': Colors.redAccent,
   },
-  {"name": "Instructor", "icon": Icons.school, "color": Colors.orangeAccent},
-  {"name": "Student", "icon": Icons.person, "color": Colors.blueAccent},
+  {'name': 'Instructor', 'icon': Icons.school, 'color': Colors.orangeAccent},
+  {'name': 'Student', 'icon': Icons.person, 'color': Colors.blueAccent},
 ];
 
 /// Role dropdown that notifies parent immediately on change (no global state).
 /// Use value + onChanged for controlled, reactive updates.
 class UserFormRoleDropdown extends StatefulWidget {
-  final String value;
-  final ValueChanged<String?> onChanged;
 
   const UserFormRoleDropdown({
     super.key,
     required this.value,
     required this.onChanged,
   });
+  final String value;
+  final ValueChanged<String?> onChanged;
 
   @override
   State<UserFormRoleDropdown> createState() => _UserFormRoleDropdownState();
@@ -99,7 +99,7 @@ class _UserFormRoleDropdownState extends State<UserFormRoleDropdown> {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: const Color(0xFFE2E8F0), width: 1),
+              border: Border.all(color: const Color(0xFFE2E8F0)),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.1),
@@ -115,7 +115,7 @@ class _UserFormRoleDropdownState extends State<UserFormRoleDropdown> {
               itemCount: kUserRoles.length,
               itemBuilder: (context, index) {
                 final option = kUserRoles[index];
-                final roleName = option["name"] as String;
+                final roleName = option['name'] as String;
                 final isSelected = roleName == widget.value;
                 return MouseRegion(
                   cursor: SystemMouseCursors.click,
@@ -130,7 +130,7 @@ class _UserFormRoleDropdownState extends State<UserFormRoleDropdown> {
                         vertical: 12,
                       ),
                       color: isSelected
-                          ? (option["color"] as Color).withOpacity(0.1)
+                          ? (option['color'] as Color).withOpacity(0.1)
                           : Colors.transparent,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -139,9 +139,9 @@ class _UserFormRoleDropdownState extends State<UserFormRoleDropdown> {
                             children: [
                               CircleAvatar(
                                 radius: 12,
-                                backgroundColor: option["color"] as Color,
+                                backgroundColor: option['color'] as Color,
                                 child: Icon(
-                                  option["icon"] as IconData,
+                                  option['icon'] as IconData,
                                   color: Colors.white,
                                   size: 14,
                                 ),
@@ -152,7 +152,7 @@ class _UserFormRoleDropdownState extends State<UserFormRoleDropdown> {
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: isSelected
-                                      ? option["color"] as Color
+                                      ? option['color'] as Color
                                       : const Color(0xFF1E293B),
                                   fontWeight:
                                       isSelected ? FontWeight.w600 : FontWeight.w400,
@@ -163,7 +163,7 @@ class _UserFormRoleDropdownState extends State<UserFormRoleDropdown> {
                           if (isSelected)
                             Icon(
                               Icons.check,
-                              color: option["color"] as Color,
+                              color: option['color'] as Color,
                               size: 18,
                             ),
                         ],
@@ -180,9 +180,9 @@ class _UserFormRoleDropdownState extends State<UserFormRoleDropdown> {
 
   IconData _getIconForRole(String role) {
     final found = kUserRoles.cast<Map<String, dynamic>>().firstWhere(
-          (r) => r["name"] == role,
-          orElse: () => {"icon": Icons.person, "color": Colors.grey},
+          (r) => r['name'] == role,
+          orElse: () => {'icon': Icons.person, 'color': Colors.grey},
         );
-    return found["icon"] as IconData;
+    return found['icon'] as IconData;
   }
 }

@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:lms/features/screens/admin/courses/course_details/lectures/functions/smallBadge.dart';
 
 import '../../../home_courses/model/model.dart';
 import '../model/model.dart';
-import 'actionButton.dart';
 import 'add_ViewDialog.dart';
-import 'contentTypeIconAndBadge.dart';
 import 'fileTypeHelper.dart';
-import 'metaChip.dart';
 
 class LectureTile extends StatefulWidget {
   const LectureTile({

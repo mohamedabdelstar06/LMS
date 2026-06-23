@@ -5,9 +5,9 @@ import '../model.dart';
 import 'logs_state.dart';
 
 class ActivityLogsCubit extends Cubit<ActivityLogsState> {
-  final ActivityLogsRepository _repository;
 
   ActivityLogsCubit(this._repository) : super(ActivityLogsInitial());
+  final ActivityLogsRepository _repository;
 
   String? _activeComponent;
   String? _activeOrigin;
@@ -65,14 +65,13 @@ class ActivityLogsCubit extends Cubit<ActivityLogsState> {
     try {
       final token = await TokenStorageHelper.getTokenSecure();
       if (token == null || token.isEmpty) {
-        emit(ActivityLogsError("Unauthorized: Please login again."));
+        emit(ActivityLogsError('Unauthorized: Please login again.'));
         return;
       }
 
       final response = await _repository.fetchLogs(
         token: token,
         pageNumber: _currentPage,
-        pageSize: 20,
         component: _activeComponent,
         origin: _activeOrigin,
         search: _searchQuery,

@@ -150,7 +150,7 @@ void loadImageProfile() async {
       return SafeArea(
         child: Column(
           children: [
-            CoursesAppBar()
+            const CoursesAppBar()
         /*    Container(
               width: double.infinity,
               constraints: BoxConstraints(
@@ -271,7 +271,6 @@ FutureBuilder<String?>(
                             BoxShadow(
                               color: Colors.black.withValues(alpha: 0.05),
                               blurRadius: 20,
-                              spreadRadius: 0,
                               offset: const Offset(0, 10),
                             ),
                           ],
@@ -347,7 +346,6 @@ FutureBuilder<String?>(
                             BoxShadow(
                               color: Colors.grey.withValues(alpha: 0.15),
                               blurRadius: 20,
-                              spreadRadius: 0,
                               offset: const Offset(0, 8),
                             ),
                           ],
@@ -375,7 +373,6 @@ FutureBuilder<String?>(
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               addAutomaticKeepAlives: false,
-                              addRepaintBoundaries: true,
                               addSemanticIndexes: false,
                               cacheExtent: 0,
                               gridDelegate:
@@ -588,13 +585,13 @@ FutureBuilder<String?>(
 }
 
 class _CourseCardWidget extends StatefulWidget {
-  final CourseEnrollmentModel courseModel;
-  final int index;
 
   const _CourseCardWidget({
     required this.courseModel,
     required this.index,
   });
+  final CourseEnrollmentModel courseModel;
+  final int index;
 
   @override
   State<_CourseCardWidget> createState() => _CourseCardWidgetState();
@@ -645,38 +642,32 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
                     color: Colors.grey.withValues(alpha: 0.1),
-                    width: 1,
                   ),
           boxShadow: isHovered ? [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.25),
               blurRadius: 20,
-              spreadRadius: 0,
               offset: const Offset(0, 12),
             ),
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.15),
               blurRadius: 10,
-              spreadRadius: 0,
               offset: const Offset(0, 6),
             ),
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.08),
               blurRadius: 5,
-              spreadRadius: 0,
               offset: const Offset(0, 3),
             ),
           ] : [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.08),
               blurRadius: 15,
-              spreadRadius: 0,
               offset: const Offset(0, 4),
             ),
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.04),
               blurRadius: 6,
-              spreadRadius: 0,
               offset: const Offset(0, 1),
             ),
           ],
@@ -860,9 +851,6 @@ Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const
   }
 }
 class WebImage extends StatelessWidget {
-  final String url;
-  final double width;
-  final double height;
 
   WebImage({
     super.key,
@@ -872,6 +860,9 @@ class WebImage extends StatelessWidget {
   }) {
     _register();
   }
+  final String url;
+  final double width;
+  final double height;
 
   static final Set<String> _registeredViews = {};
 
@@ -933,7 +924,6 @@ class CoursesAppBar extends StatelessWidget implements PreferredSizeWidget {
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 20,
-              spreadRadius: 0,
               offset: const Offset(0, 10),
             ),
           ],
@@ -947,7 +937,7 @@ class CoursesAppBar extends StatelessWidget implements PreferredSizeWidget {
                 decoration: BoxDecoration(
                   color: const Color(0xffF8FAFC),
                   borderRadius: BorderRadius.circular(15),
-                  border: Border.all(color: const Color(0xffE2E8F0), width: 1),
+                  border: Border.all(color: const Color(0xffE2E8F0)),
                 ),
                 child: TextFormField(
                   decoration: InputDecoration(
@@ -1024,7 +1014,7 @@ class CoursesAppBar extends StatelessWidget implements PreferredSizeWidget {
           decoration: BoxDecoration(
             color: const Color(0xffF8FAFC),
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: const Color(0xffE2E8F0), width: 1),
+            border: Border.all(color: const Color(0xffE2E8F0)),
           ),
           child: const Row(
             mainAxisSize: MainAxisSize.min,

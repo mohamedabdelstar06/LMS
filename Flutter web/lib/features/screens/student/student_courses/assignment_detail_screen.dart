@@ -22,8 +22,8 @@ String _fileNameFromUrl(String url) {
 }
 
 class AssignmentDetailScreen extends StatelessWidget {
-  final int assignmentId;
   const AssignmentDetailScreen({super.key, required this.assignmentId});
+  final int assignmentId;
 
   @override
   Widget build(BuildContext context) {
@@ -35,8 +35,8 @@ class AssignmentDetailScreen extends StatelessWidget {
 }
 
 class _AssignmentDetailView extends StatefulWidget {
-  final int assignmentId;
   const _AssignmentDetailView({required this.assignmentId});
+  final int assignmentId;
 
   @override
   State<_AssignmentDetailView> createState() => _AssignmentDetailViewState();
@@ -82,7 +82,7 @@ class _AssignmentDetailViewState extends State<_AssignmentDetailView> {
         );
 
     if (ok && mounted) {
-      setState(() => _pickedFiles.clear());
+      setState(_pickedFiles.clear);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('✅ Assignment submitted successfully'),
@@ -277,7 +277,7 @@ class _AssignmentDetailViewState extends State<_AssignmentDetailView> {
           assignment: assignment,
           pickedFiles: _pickedFiles,
           isSubmitting: isSubmitting,
-          submitProgress: isSubmitting ? (state).progress : 0,
+          submitProgress: isSubmitting ? state.progress : 0,
           onPickFiles: _pickFiles,
           onRemoveFile: _removeFile,
           onSubmit: () => _submit(context),
@@ -288,8 +288,8 @@ class _AssignmentDetailViewState extends State<_AssignmentDetailView> {
 }
 
 class _DetailHeaderCard extends StatelessWidget {
-  final StudentAssignmentModel assignment;
   const _DetailHeaderCard({required this.assignment});
+  final StudentAssignmentModel assignment;
 
   @override
   Widget build(BuildContext context) {
@@ -383,10 +383,10 @@ class _DetailHeaderCard extends StatelessWidget {
 }
 
 class _HeaderStat extends StatelessWidget {
+  const _HeaderStat({required this.icon, required this.label, required this.value});
   final IconData icon;
   final String label;
   final String value;
-  const _HeaderStat({required this.icon, required this.label, required this.value});
 
   @override
   Widget build(BuildContext context) {
@@ -423,10 +423,10 @@ class _HeaderStat extends StatelessWidget {
 }
 
 class _SectionCard extends StatelessWidget {
+  const _SectionCard({required this.title, required this.icon, required this.child});
   final String title;
   final IconData icon;
   final Widget child;
-  const _SectionCard({required this.title, required this.icon, required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -468,9 +468,9 @@ class _SectionCard extends StatelessWidget {
 }
 
 class _AttachmentTile extends StatelessWidget {
+  const _AttachmentTile({required this.fileName, required this.onTap});
   final String fileName;
   final VoidCallback onTap;
-  const _AttachmentTile({required this.fileName, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -511,13 +511,6 @@ class _AttachmentTile extends StatelessWidget {
 }
 
 class _SubmissionSection extends StatelessWidget {
-  final StudentAssignmentModel assignment;
-  final List<PlatformFile> pickedFiles;
-  final bool isSubmitting;
-  final double submitProgress;
-  final VoidCallback onPickFiles;
-  final void Function(int index) onRemoveFile;
-  final VoidCallback onSubmit;
 
   const _SubmissionSection({
     required this.assignment,
@@ -528,6 +521,13 @@ class _SubmissionSection extends StatelessWidget {
     required this.onRemoveFile,
     required this.onSubmit,
   });
+  final StudentAssignmentModel assignment;
+  final List<PlatformFile> pickedFiles;
+  final bool isSubmitting;
+  final double submitProgress;
+  final VoidCallback onPickFiles;
+  final void Function(int index) onRemoveFile;
+  final VoidCallback onSubmit;
 
   @override
   Widget build(BuildContext context) {
@@ -663,9 +663,9 @@ class _SubmissionSection extends StatelessWidget {
 }
 
 class _PickedFileRow extends StatelessWidget {
+  const _PickedFileRow({required this.file, this.onRemove});
   final PlatformFile file;
   final VoidCallback? onRemove;
-  const _PickedFileRow({required this.file, this.onRemove});
 
   String _sizeLabel(int bytes) {
     if (bytes < 1024) return '$bytes B';
@@ -716,8 +716,8 @@ class _PickedFileRow extends StatelessWidget {
 }
 
 class DottedBorderBox extends StatelessWidget {
-  final Widget child;
   const DottedBorderBox({super.key, required this.child});
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
@@ -734,9 +734,9 @@ class DottedBorderBox extends StatelessWidget {
 }
 
 class _ErrorBox extends StatelessWidget {
+  const _ErrorBox({required this.message, required this.onRetry});
   final String message;
   final VoidCallback onRetry;
-  const _ErrorBox({required this.message, required this.onRetry});
 
   @override
   Widget build(BuildContext context) {

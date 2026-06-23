@@ -23,10 +23,10 @@ const _kBorder = Color(0xFFE2E8F0);
 
 // ── Activity type config ──────────────────────────────────────
 class _TypeConfig {
+  const _TypeConfig(this.color, this.icon, this.label);
   final Color color;
   final IconData icon;
   final String label;
-  const _TypeConfig(this.color, this.icon, this.label);
 }
 
 const _typeMap = {
@@ -51,8 +51,8 @@ Color _statusColor(String s) => _statusColors[s] ?? _kSub;
 
 // ── Entry ─────────────────────────────────────────────────────
 class StudentActivitiesScreen extends StatelessWidget {
-  final int? courseId;
   const StudentActivitiesScreen({super.key, this.courseId});
+  final int? courseId;
 
   @override
   Widget build(BuildContext context) {
@@ -65,8 +65,8 @@ class StudentActivitiesScreen extends StatelessWidget {
 }
 
 class _ActivitiesBody extends StatefulWidget {
-  final int? courseId;
   const _ActivitiesBody({this.courseId});
+  final int? courseId;
   @override
   State<_ActivitiesBody> createState() => _ActivitiesBodyState();
 }
@@ -340,8 +340,8 @@ class _ActivitiesBodyState extends State<_ActivitiesBody> {
 
 // ── Summary Bar ───────────────────────────────────────────────
 class _SummaryBar extends StatelessWidget {
-  final StudentActivitiesPage data;
   const _SummaryBar({required this.data});
+  final StudentActivitiesPage data;
 
   @override
   Widget build(BuildContext context) {
@@ -380,11 +380,11 @@ class _SummaryBar extends StatelessWidget {
 }
 
 class _SummaryChip extends StatelessWidget {
+  const _SummaryChip(
+      {required this.label, required this.value, required this.color});
   final String label;
   final int value;
   final Color color;
-  const _SummaryChip(
-      {required this.label, required this.value, required this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -416,9 +416,9 @@ class _VertDivider extends StatelessWidget {
 
 // ── Activity Card ─────────────────────────────────────────────
 class _ActivityCard extends StatefulWidget {
+  const _ActivityCard({required this.activity, required this.index});
   final StudentActivity activity;
   final int index;
-  const _ActivityCard({required this.activity, required this.index});
   @override
   State<_ActivityCard> createState() => _ActivityCardState();
 }
@@ -634,9 +634,9 @@ class _ActivityCardState extends State<_ActivityCard>
 
 // ── Score progress bar ────────────────────────────────────────
 class _ScoreBar extends StatefulWidget {
+  const _ScoreBar({required this.percent, required this.color});
   final double percent;
   final Color color;
-  const _ScoreBar({required this.percent, required this.color});
   @override
   State<_ScoreBar> createState() => _ScoreBarState();
 }
@@ -702,11 +702,6 @@ class _ScoreBarState extends State<_ScoreBar>
 
 // ── Filter Pills ──────────────────────────────────────────────
 class _FilterPill extends StatelessWidget {
-  final String label;
-  final IconData? icon;
-  final bool selected;
-  final Color color;
-  final VoidCallback onTap;
   const _FilterPill({
     required this.label,
     this.icon,
@@ -714,6 +709,11 @@ class _FilterPill extends StatelessWidget {
     required this.color,
     required this.onTap,
   });
+  final String label;
+  final IconData? icon;
+  final bool selected;
+  final Color color;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -751,16 +751,16 @@ class _FilterPill extends StatelessWidget {
 }
 
 class _StatusPill extends StatelessWidget {
-  final String label;
-  final bool selected;
-  final Color color;
-  final VoidCallback onTap;
   const _StatusPill({
     required this.label,
     required this.selected,
     required this.color,
     required this.onTap,
   });
+  final String label;
+  final bool selected;
+  final Color color;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -774,7 +774,7 @@ class _StatusPill extends StatelessWidget {
           color: selected ? color.withOpacity(0.12) : Colors.transparent,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
-              color: selected ? color : Colors.transparent, width: 1),
+              color: selected ? color : Colors.transparent),
         ),
         child: Text(
           label,
@@ -791,8 +791,8 @@ class _StatusPill extends StatelessWidget {
 
 // ── Empty & Error ─────────────────────────────────────────────
 class _EmptyActivities extends StatelessWidget {
-  final VoidCallback onClear;
   const _EmptyActivities({required this.onClear});
+  final VoidCallback onClear;
 
   @override
   Widget build(BuildContext context) {
@@ -840,9 +840,9 @@ class _EmptyActivities extends StatelessWidget {
 }
 
 class _ErrorView extends StatelessWidget {
+  const _ErrorView({required this.message, required this.onRetry});
   final String message;
   final VoidCallback onRetry;
-  const _ErrorView({required this.message, required this.onRetry});
 
   @override
   Widget build(BuildContext context) {

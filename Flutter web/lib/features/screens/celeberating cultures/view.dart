@@ -15,7 +15,7 @@ class CelebratingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(),
+      appBar: const CustomAppBar(),
       body: Container(
         decoration: const BoxDecoration(
           color: Colors.white70,
@@ -23,11 +23,11 @@ class CelebratingScreen extends StatelessWidget {
 
         child: ListView(
           padding: const EdgeInsetsDirectional.only(start: 70, top: 15,end: 70),
-          children: [
-            const SizedBox(height: 20),
+          children: const [
+            SizedBox(height: 20),
 
-            const Text(
-              "Celebrating Cultures",
+            Text(
+              'Celebrating Cultures',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 30,
@@ -35,7 +35,7 @@ class CelebratingScreen extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 25),
+            SizedBox(height: 25),
 
             DefaultTabController(
               length: 4,
@@ -43,21 +43,21 @@ class CelebratingScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
 
-                  const TabBar(
+                  TabBar(
                     indicatorColor: Colors.blue,
                     labelColor: Colors.blue,
                     unselectedLabelColor: Colors.grey,
                     tabs: [
-                      Tab(text: "Course"),
-                      Tab(text: "Participants"),
-                      Tab(text: "Grades"),
-                      Tab(text: "Activities"),
+                      Tab(text: 'Course'),
+                      Tab(text: 'Participants'),
+                      Tab(text: 'Grades'),
+                      Tab(text: 'Activities'),
                     ],
                   ),
 
                   SizedBox(
                     height: 500,
-                    child: const TabBarView(
+                    child: TabBarView(
                       children: [
                         CourseTapbarScreen(),
                         ParticipantsTapbarScreen(),

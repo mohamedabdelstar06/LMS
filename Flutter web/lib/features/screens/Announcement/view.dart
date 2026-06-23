@@ -32,7 +32,7 @@ class _CourseScreenState extends State<AnnouncementScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(milliseconds: 500), () {
+    Future.delayed(const Duration(milliseconds: 500), () {
       if (mounted) {
         setState(() {
           _isLoading = false;
@@ -59,7 +59,7 @@ class _CourseScreenState extends State<AnnouncementScreen> {
             end: Alignment.bottomRight,
           ),
         ),
-        child: Scaffold(
+        child: const Scaffold(
           backgroundColor: Colors.transparent,
           body: Center(
             child: Column(
@@ -71,12 +71,12 @@ class _CourseScreenState extends State<AnnouncementScreen> {
                 ),
                 SizedBox(height: 20),
                 Text(
-                  "Loading Announcements...",
+                  'Loading Announcements...',
                   style: TextStyle(
                     color: Colors.blue,
                     fontSize: 18,
                     fontWeight: FontWeight.w500,
-                    fontFamily: "inter",
+                    fontFamily: 'inter',
                   ),
                 ),
               ],
@@ -119,16 +119,15 @@ class _CourseScreenState extends State<AnnouncementScreen> {
                   horizontal: isLargeScreen ? 40 : (isMediumScreen ? 20 : 16),
                   vertical: 20,
                 ),
-                padding: EdgeInsets.all(20),
+                padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Color(0xffE3F6FF),
+                  color: const Color(0xffE3F6FF),
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withValues(alpha: 0.05),
                       blurRadius: 20,
-                      spreadRadius: 0,
-                      offset: Offset(0, 10),
+                      offset: const Offset(0, 10),
                     ),
                   ],
                 ),
@@ -139,34 +138,33 @@ class _CourseScreenState extends State<AnnouncementScreen> {
                       child: Container(
                         height: 50,
                         decoration: BoxDecoration(
-                          color: Color(0xffF8FAFC),
+                          color: const Color(0xffF8FAFC),
                           borderRadius: BorderRadius.circular(15),
                           border: Border.all(
-                            color: Color(0xffE2E8F0),
-                            width: 1,
+                            color: const Color(0xffE2E8F0),
                           ),
                         ),
                         child: TextFormField(
                           decoration: InputDecoration(
                             border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(
+                            contentPadding: const EdgeInsets.symmetric(
                               horizontal: 20,
                               vertical: 15,
                             ),
-                            hintText: "Search Announcements...",
-                            hintStyle: TextStyle(
+                            hintText: 'Search Announcements...',
+                            hintStyle: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
-                              fontFamily: "inter",
+                              fontFamily: 'inter',
                               color: Color(0xFF64748B),
                             ),
                             prefixIcon: Padding(
-                              padding: EdgeInsets.all(12),
+                              padding: const EdgeInsets.all(12),
                               child: SvgPicture.asset(
                                 Assets.courseSearchIcon,
                                 width: 20,
                                 height: 20,
-                                colorFilter: ColorFilter.mode(
+                                colorFilter: const ColorFilter.mode(
                                   Color(0xFF64748B),
                                   BlendMode.srcIn,
                                 ),
@@ -176,7 +174,7 @@ class _CourseScreenState extends State<AnnouncementScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
 
                     Row(
                       children: [
@@ -184,12 +182,12 @@ class _CourseScreenState extends State<AnnouncementScreen> {
                           icon: Assets.iconsMessageIcon,
                           onPressed: () {},
                         ),
-                        SizedBox(width: 12),
+                        const SizedBox(width: 12),
                         _buildNotificationButton(
                           icon: Assets.iconsBellIcon,
                           onPressed: () {},
                         ),
-                        SizedBox(width: 20),
+                        const SizedBox(width: 20),
                         _buildUserProfile(context),
                       ],
                     ),
@@ -218,7 +216,7 @@ class _CourseScreenState extends State<AnnouncementScreen> {
                         Container(
                           width: double.infinity,
 
-                          padding: EdgeInsets.all(24),
+                          padding: const EdgeInsets.all(24),
                           decoration: BoxDecoration(
                             color: Colors.white.withValues(alpha: 0.9),
                             borderRadius: BorderRadius.circular(20),
@@ -226,8 +224,7 @@ class _CourseScreenState extends State<AnnouncementScreen> {
                               BoxShadow(
                                 color: Colors.black.withValues(alpha: 0.05),
                                 blurRadius: 20,
-                                spreadRadius: 0,
-                                offset: Offset(0, 10),
+                                offset: const Offset(0, 10),
                               ),
                             ],
                           ),
@@ -246,39 +243,39 @@ class _CourseScreenState extends State<AnnouncementScreen> {
                                             SvgPicture.asset(
                                               Assets.listAnnouncementIcon
                                             ),
-                                            SizedBox(width: 5,),
+                                            const SizedBox(width: 5,),
                                             Text(
-                                              "Announcements",
+                                              'Announcements',
                                               style: TextStyle(
-                                                color: Color(0xff175CD3),
+                                                color: const Color(0xff175CD3),
 
                                                 fontSize: isLargeScreen
                                                     ? 36
                                                     : 28,
                                                 fontWeight: FontWeight.w700,
-                                                fontFamily: "inter",
+                                                fontFamily: 'inter',
                                               ),
                                             ),
 
                                           ],
                                         ),
-                                        SizedBox(height: 8),
+                                        const SizedBox(height: 8),
                                         Text(
-                                          "Stay updated with the latest announcements, course updates, and important notifications from your",
+                                          'Stay updated with the latest announcements, course updates, and important notifications from your',
                                           style: TextStyle(
                                             fontSize: isLargeScreen ? 16 : 14,
                                             fontWeight: FontWeight.w400,
-                                            fontFamily: "inter",
-                                            color: Color(0xFF64748B).withValues(alpha: 0.7),
+                                            fontFamily: 'inter',
+                                            color: const Color(0xFF64748B).withValues(alpha: 0.7),
                                           ),
                                         ),
                                         Text(
-                                          "instructors and university",
+                                          'instructors and university',
                                           style: TextStyle(
                                             fontSize: isLargeScreen ? 16 : 14,
                                             fontWeight: FontWeight.w400,
-                                            fontFamily: "inter",
-                                            color: Color(0xFF64748B).withValues(alpha: 0.7),
+                                            fontFamily: 'inter',
+                                            color: const Color(0xFF64748B).withValues(alpha: 0.7),
                                           ),
                                         ),
                                       ],
@@ -289,12 +286,12 @@ class _CourseScreenState extends State<AnnouncementScreen> {
                             ],
                           ),
                         ),
-                        SizedBox(height: 30),
+                        const SizedBox(height: 30),
 
                         Container(
                           width: double.infinity,
                           height:1238 ,
-                          padding: EdgeInsets.all(24),
+                          padding: const EdgeInsets.all(24),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(20),
@@ -302,12 +299,11 @@ class _CourseScreenState extends State<AnnouncementScreen> {
                               BoxShadow(
                                 color: Colors.grey.withValues(alpha: 0.15),
                                 blurRadius: 20,
-                                spreadRadius: 0,
-                                offset: Offset(0, 8),
+                                offset: const Offset(0, 8),
                               ),
                             ],
                           ),
-                          child: Center(
+                          child: const Center(
                             child:  PieChartScreen()
 
                           ),
@@ -342,20 +338,20 @@ class _CourseScreenState extends State<AnnouncementScreen> {
           width: 40,
           height: 40,
           decoration: BoxDecoration(
-            color: Color(0xffF8FAFC),
+            color: const Color(0xffF8FAFC),
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: Color(0xffE2E8F0), width: 1),
+            border: Border.all(color: const Color(0xffE2E8F0)),
           ),
           child: Center(
             child: Badge(
               smallSize: 6,
-              backgroundColor: Color(0xffFF3B30),
-              offset: Offset(-1, 1),
+              backgroundColor: const Color(0xffFF3B30),
+              offset: const Offset(-1, 1),
               child: SvgPicture.asset(
                 icon,
                 width: 18,
                 height: 18,
-                colorFilter: ColorFilter.mode(
+                colorFilter: const ColorFilter.mode(
                   Color(0xFF175CD3),
                   BlendMode.srcIn,
                 ),
@@ -369,11 +365,11 @@ class _CourseScreenState extends State<AnnouncementScreen> {
 
   Widget _buildUserProfile(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: Color(0xffF8FAFC),
+        color: const Color(0xffF8FAFC),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Color(0xffE2E8F0), width: 1),
+        border: Border.all(color: const Color(0xffE2E8F0)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -386,19 +382,19 @@ class _CourseScreenState extends State<AnnouncementScreen> {
 
             backgroundImage: NetworkImage(imageProfile ?? Assets.logo),
           ),
-          SizedBox(width: 8),
-          Text(
-            "Mohamed Ahmed",
+          const SizedBox(width: 8),
+          const Text(
+            'Mohamed Ahmed',
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w600,
-              fontFamily: "inter",
+              fontFamily: 'inter',
               color: Color(0xFF1E293B),
             ),
           ),
-          SizedBox(width: 4),
+          const SizedBox(width: 4),
           IconButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.keyboard_arrow_down_outlined,
               color: Color(0xFF64748B),
               size: 20,
@@ -444,7 +440,7 @@ void _showUserMenu(BuildContext context) async {
             Icon(Icons.person, color: Color(0xFF175CD3)),
             SizedBox(width: 8),
             Text(
-              "Profile",
+              'Profile',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
           ],
@@ -457,7 +453,7 @@ void _showUserMenu(BuildContext context) async {
             Icon(Icons.settings, color: Color(0xFF059669)),
             SizedBox(width: 8),
             Text(
-              "Settings",
+              'Settings',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
           ],
@@ -471,7 +467,7 @@ void _showUserMenu(BuildContext context) async {
             Icon(Icons.logout, color: Color(0xFFDC2626)),
             SizedBox(width: 8),
             Text(
-              "Logout",
+              'Logout',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -561,7 +557,7 @@ class _PieChartScreenState extends State<PieChartScreen> with SingleTickerProvid
             _selectedDate = parsedDate;
             _isEditingDate = false;
             _dateController.text =
-            "${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}";
+            '${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}';
           });
           return;
         }
@@ -587,7 +583,7 @@ class _PieChartScreenState extends State<PieChartScreen> with SingleTickerProvid
     const double centerSpaceRadius = 60.0;
     const double outerRadius = 100.0;
 
-    final center = Offset(100.0, 100.0);
+    const center = Offset(100.0, 100.0);
 
     final dx = localPosition.dx - center.dx;
     final dy = localPosition.dy - center.dy;
@@ -599,7 +595,7 @@ class _PieChartScreenState extends State<PieChartScreen> with SingleTickerProvid
 
     double angle = math.atan2(dy, dx) * 180 / math.pi;
     if (angle < 0) angle += 360;
-    double adjustedAngle = (angle + 90) % 360;
+    final double adjustedAngle = (angle + 90) % 360;
 
     if (adjustedAngle >= 0 && adjustedAngle < 288) {
       return 0;
@@ -655,7 +651,7 @@ class _PieChartScreenState extends State<PieChartScreen> with SingleTickerProvid
         },
         child: AnimatedBuilder(
           animation: _scaleAnimation,
-          builder: (BuildContext context, Widget? child) {
+          builder: (context, child) {
             return Transform.scale(
               scale: _scaleAnimation.value,
               child: Container(
@@ -697,7 +693,7 @@ class _PieChartScreenState extends State<PieChartScreen> with SingleTickerProvid
                       Row(
                         children: [
                           Text(
-                            "Attendance",
+                            'Attendance',
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w600,
@@ -723,7 +719,7 @@ class _PieChartScreenState extends State<PieChartScreen> with SingleTickerProvid
                             children: [
                               CircleAvatar(radius: 5, backgroundColor: Colors.blue.shade600),
                               const SizedBox(width: 6),
-                              Text("Present", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+                              const Text('Present', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
                             ],
                           ),
                           const Spacer(),
@@ -731,7 +727,7 @@ class _PieChartScreenState extends State<PieChartScreen> with SingleTickerProvid
                             children: [
                               CircleAvatar(radius: 5, backgroundColor: Colors.amber.shade400),
                               const SizedBox(width: 6),
-                              Text("Absent", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+                              const Text('Absent', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
                             ],
                           ),
                         ],
@@ -825,7 +821,6 @@ class _PieChartScreenState extends State<PieChartScreen> with SingleTickerProvid
                                     initialDate: _selectedDate ?? now,
                                     firstDate: DateTime(1900),
                                     lastDate: DateTime(2100),
-                                    initialDatePickerMode: DatePickerMode.day,
                                     builder: (context, child) {
                                       return Theme(
                                         data: Theme.of(context).copyWith(
@@ -885,7 +880,7 @@ class _PieChartScreenState extends State<PieChartScreen> with SingleTickerProvid
                                     setState(() {
                                       _selectedDate = picked;
                                       _dateController.text =
-                                      "${picked.day}/${picked.month}/${picked.year}";
+                                      '${picked.day}/${picked.month}/${picked.year}';
                                     });
                                   }
                                 },
@@ -914,8 +909,8 @@ class _PieChartScreenState extends State<PieChartScreen> with SingleTickerProvid
                                       const SizedBox(width: 10),
                                       Text(
                                         _selectedDate == null
-                                            ? "select date"
-                                            : "${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}",
+                                            ? 'select date'
+                                            : '${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}',
                                         style: const TextStyle(
                                           fontSize: 13,
                                           fontWeight: FontWeight.w600,
