@@ -1,10 +1,9 @@
 using SkyLearnApi.DTOs.Import;
+using SkyLearnApi.Services.Interfaces;
 
 namespace SkyLearnApi.Controllers
 {
-     
-    /// Admin-only controller for bulk student import operations.
-    /// 
+    /// Admin-only controller for bulk student import operations
     /// Design Decision: Separated from UsersController to maintain single responsibility.
     /// UsersController handles individual CRUD operations.
     /// This controller handles bulk import which has different concerns:
@@ -17,27 +16,25 @@ namespace SkyLearnApi.Controllers
     public class AdminStudentImportController : ControllerBase
     {
         private readonly IStudentImportService _importService;
-
+        private readonly INotificationService _notificationService;
         // Maximum file size: 5 MB (sufficient for thousands of students)
         private const long MaxFileSizeBytes = 5 * 1024 * 1024;
         
         // Allowed file extensions
         private static readonly string[] AllowedExtensions = { ".csv" };
-
-        public AdminStudentImportController(IStudentImportService importService)
+        public AdminStudentImportController(IStudentImportService importService, INotificationService notificationService)
         {
             _importService = importService;
+            _notificationService = notificationService;
         }
-
         /// Import students from a CSV file.
         /// Expected CSV format (header row required):
         /// Email,FullName,NationalId,DepartmentName,YearName,SquadronName
-        /// 
-        /// Processing rules:
-        /// - Role is always "Student" (not read from file)
-        /// - Users are created WITHOUT passwords (Admin cannot set passwords)
-        /// - Each row is processed independently (one failure doesn't affect others)
-        /// - DepartmentName, YearName, SquadronName must match existing database records
+        //Processing rules:
+        ///Role is always "Student" (not read from file)
+        ///Users are created WITHOUT passwords (Admin cannot set passwords)
+        //Each row is processed independently (one failure doesn't affect others)
+        //DepartmentName, YearName, SquadronName must match existing database records
         [HttpPost("students")]
         [Consumes("multipart/form-data")]
         [ProducesResponseType(typeof(StudentImportResultDto), StatusCodes.Status200OK)]
@@ -47,13 +44,11 @@ namespace SkyLearnApi.Controllers
         public async Task<IActionResult> ImportStudents(IFormFile file)
         {
             // FILE VALIDATION
-
             // 1. File is required
             if (file == null || file.Length == 0)
             {
                 return BadRequest(new { message = "No file uploaded or file is empty" });
             }
-
             // 2. Check file extension
             var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
             if (!AllowedExtensions.Contains(extension))
@@ -63,7 +58,6 @@ namespace SkyLearnApi.Controllers
                     message = $"Invalid file type. Only CSV files are allowed. Received: {extension}"
                 });
             }
-
             // 3. Check file size
             if (file.Length > MaxFileSizeBytes)
             {
@@ -81,19 +75,23 @@ namespace SkyLearnApi.Controllers
                 // Log but don't reject - content type can be unreliable
                 Log.Warning("Unexpected content type for CSV file: {ContentType}", file.ContentType);
             }
-
-            // ========================================
             // PROCESS IMPORT
-            // ========================================
             try
             {
                 using var stream = file.OpenReadStream();
                 var result = await _importService.ImportStudentsFromCsvAsync(stream);
-
                 // Log the operation
                 Log.Information(
                     "Admin bulk import completed: {Success}/{Total} students imported successfully",
                     result.SuccessCount, result.TotalRows);
+
+                if (int.TryParse(User.FindFirst("UserId")?.Value, out var adminId))
+                {
+                    await _notificationService.CreateNotificationAsync(adminId, 
+                        "Student Import Completed", 
+                        $"You have successfully added {result.SuccessCount} out of {result.TotalRows} students to the system.", 
+                        "System");
+                }
 
                 return Ok(result);
             }
@@ -107,11 +105,8 @@ namespace SkyLearnApi.Controllers
                 });
             }
         }
-
-         
         /// Get the expected CSV format/template for student import.
-        /// Returns a sample CSV that admins can use as a template.
-         
+        /// Returns a sample CSV that admins can use as a template
         [HttpGet("students/template")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult GetImportTemplate()

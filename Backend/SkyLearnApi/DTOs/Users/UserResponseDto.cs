@@ -1,5 +1,15 @@
 namespace SkyLearnApi.Dtos.Users
-{    public class UserResponseDto
+{
+    /// DTO for returning user data in API responses.
+    /// 
+    /// Note: Internal flags (IsActive, IsActivated) are NOT exposed directly.
+    /// Instead, a computed AccountStatus field provides a business-friendly representation:
+    /// "Disabled" = Admin disabled the account
+    /// "PendingActivation" = Account enabled but user hasn't set password yet
+    /// "Active" = Fully operational account
+    /// Computed account status for non-technical admins.
+     
+    public class UserResponseDto
     {
         public int Id { get; set; }
         public string Email { get; set; } = string.Empty;
@@ -28,6 +38,9 @@ namespace SkyLearnApi.Dtos.Users
     {
         public List<UserResponseDto> Users { get; set; } = new();
         public int TotalCount { get; set; }
+        public int TotalAdmins { get; set; }
+        public int TotalInstructors { get; set; }
+        public int TotalStudents { get; set; }
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
         public int TotalPages => (int)Math.Ceiling(TotalCount / (double)PageSize);

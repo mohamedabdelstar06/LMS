@@ -1,3 +1,5 @@
+
+
 namespace SkyLearnApi.Configuration
 {
     public class ApplicationUserConfiguration : IEntityTypeConfiguration<ApplicationUser>
@@ -32,6 +34,10 @@ namespace SkyLearnApi.Configuration
             builder.HasIndex(u => u.NationalId)
                    .IsUnique()
                    .HasFilter("[NationalId] IS NOT NULL");
+
+            // Ignore phone number properties from IdentityUser to remove them from DB
+            builder.Ignore(u => u.PhoneNumber);
+            builder.Ignore(u => u.PhoneNumberConfirmed);
 
             // Navigation properties to logs removed
             // Logs are now accessed via IActivityService for cleaner architecture

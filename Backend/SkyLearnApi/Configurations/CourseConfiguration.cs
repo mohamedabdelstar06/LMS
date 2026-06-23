@@ -1,3 +1,5 @@
+
+
 namespace SkyLearnApi.Configurations
 {
     public class CourseConfiguration : IEntityTypeConfiguration<Course>
@@ -34,6 +36,11 @@ namespace SkyLearnApi.Configurations
                 .HasForeignKey(c => c.YearId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            builder.HasOne(c => c.Instructor)
+                .WithMany()
+                .HasForeignKey(c => c.InstructorId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             builder.HasOne(c => c.CreatedBy)
                 .WithMany()
                 .HasForeignKey(c => c.CreatedById)
@@ -42,7 +49,8 @@ namespace SkyLearnApi.Configurations
             builder.Property(c => c.CreatedAt)
                 .HasDefaultValueSql("GETUTCDATE()");
 
-              builder.HasIndex(c => c.YearId);
+            builder.HasIndex(c => c.YearId);
+            builder.HasIndex(c => c.InstructorId);
         }
     }
 }

@@ -8,7 +8,7 @@ namespace SkyLearnApi.Entities
         public string? ImageUrl { get; set; }
         public ICollection<Year> Years { get; set; } = new List<Year>();
         public int HeadId { get; set; }
-        public ApplicationUser Head { get; set; }
+        public required ApplicationUser Head { get; set; }
         public ICollection<Course> Courses { get; set; } = new List<Course>();
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;

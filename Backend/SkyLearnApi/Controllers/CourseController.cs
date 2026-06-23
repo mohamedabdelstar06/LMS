@@ -1,8 +1,8 @@
 namespace SkyLearnApi.Controllers
 {
-   
     /// Course management controller
-   
+    /// Only Admin and Instructor can access course management.
+    /// Students use the Enrollment/my-courses endpoint to see their courses.
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
@@ -18,8 +18,11 @@ namespace SkyLearnApi.Controllers
         private int? UserId =>
             int.TryParse(User.FindFirst("UserId")?.Value, out var id) ? id : null;
 
+        private string? UserRole =>
+            User.FindFirst(ClaimTypes.Role)?.Value ?? User.FindFirst("role")?.Value;
+
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize(Roles = Roles.AdminOrInstructor)]
         public async Task<IActionResult> GetAll(
             [FromQuery] string? search,
             [FromQuery] int? departmentId,
@@ -29,8 +32,12 @@ namespace SkyLearnApi.Controllers
             [FromQuery] int page = 1,
             [FromQuery] int pageSize = 9)
         {
+            if (UserId == null)
+                return Unauthorized(new { message = "Invalid or missing authentication token" });
+
+            // Pass userId and role for instructor-specific filtering
             var result = await _courseService.GetAllAsync(
-                search, departmentId, yearId, startDate, endDate, page, pageSize);
+                search, departmentId, yearId, startDate, endDate, page, pageSize, UserId, UserRole);
 
             return Ok(result);
         }
@@ -38,17 +45,37 @@ namespace SkyLearnApi.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById(int id)
         {
+            // Log all claims for debugging
+            var allClaims = User.Claims.Select(c => $"{c.Type}={c.Value}").ToList();
+            Log.Debug("GetCourseById - Claims: {Claims}", string.Join("; ", allClaims));
+
             if (UserId == null)
-                return Unauthorized(new { message = "Invalid or missing authentication token" });
-
-            var result = await _courseService.GetByIdAsync(id);
-
-            if (result == null)
             {
-                return NotFound(new { message = "Course not found" });
+                Log.Warning("GetCourseById {CourseId}: Cannot extract UserId from token. User.Identity.IsAuthenticated={IsAuth}, Claims count={ClaimsCount}",
+                    id, User.Identity?.IsAuthenticated, User.Claims.Count());
+                return Unauthorized(new { message = "Invalid or missing authentication token" });
             }
 
-            return Ok(result);
+            Log.Information("GetCourseById {CourseId} - UserId: {UserId}, Role: {Role}",
+                id, UserId, UserRole);
+
+            try
+            {
+                var result = await _courseService.GetByIdAsync(id, UserId, UserRole);
+
+                if (result == null)
+                {
+                    return NotFound(new { message = "Course not found" });
+                }
+
+                return Ok(result);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                Log.Warning("GetCourseById {CourseId}: Access denied for UserId {UserId} (Role={Role}) - {Reason}",
+                    id, UserId, UserRole, ex.Message);
+                return StatusCode(403, new { message = ex.Message });
+            }
         }
 
         [HttpPost]
@@ -58,9 +85,19 @@ namespace SkyLearnApi.Controllers
             if (UserId == null)
                 return Unauthorized(new { message = "Invalid or missing authentication token" });
 
-            var created = await _courseService.CreateAsync(dto, UserId.Value);
-
-            return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+            try
+            {
+                var created = await _courseService.CreateAsync(dto, UserId.Value);
+                return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return StatusCode(403, new { message = ex.Message });
+            }
         }
 
         [HttpPut("{id:int}")]
@@ -70,31 +107,49 @@ namespace SkyLearnApi.Controllers
             if (UserId == null)
                 return Unauthorized(new { message = "Invalid or missing authentication token" });
 
-            var updated = await _courseService.UpdateAsync(id, dto, UserId.Value);
-
-            if (updated == null)
+            try
             {
-                return NotFound(new { message = "Course not found" });
-            }
+                var updated = await _courseService.UpdateAsync(id, dto, UserId.Value);
 
-            return Ok(updated);
+                if (updated == null)
+                {
+                    return NotFound(new { message = "Course not found" });
+                }
+
+                return Ok(updated);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return StatusCode(403, new { message = ex.Message });
+            }
         }
 
         [HttpDelete("{id:int}")]
-        [Authorize(Roles = Roles.Admin)]
+        [Authorize(Roles = Roles.AdminOrInstructor)]
         public async Task<IActionResult> Delete(int id)
         {
             if (UserId == null)
                 return Unauthorized(new { message = "Invalid or missing authentication token" });
 
-            var deleted = await _courseService.DeleteAsync(id, UserId.Value);
-
-            if (!deleted)
+            try
             {
-                return NotFound(new { message = "Course not found" });
-            }
+                var deleted = await _courseService.DeleteAsync(id, UserId.Value);
 
-          return Ok(new { message = "Course deleted successfully." });
+                if (!deleted)
+                {
+                    return NotFound(new { message = "Course not found" });
+                }
+
+                return Ok(new { message = "Course deleted successfully." });
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return StatusCode(403, new { message = ex.Message });
+            }
         }
     }
 }

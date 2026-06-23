@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Security.Claims;
@@ -28,7 +28,16 @@ namespace SkyLearnApi.Extentions
             {
                 options.SaveToken = true;
                 options.RequireHttpsMetadata = false;
-                
+
+                // CRITICAL FIX: Disable automatic claim type mapping.
+                // By default, ASP.NET Core JWT middleware maps short claim names
+                // (e.g. "role") to long XML schema URIs (ClaimTypes.Role).
+                // This also interferes with custom claims like "UserId" because
+                // the middleware's inbound claim transformer can rewrite or drop them.
+                // Setting MapInboundClaims = false preserves the exact claim names
+                // as they appear in the JWT token, so User.FindFirst("UserId") works.
+                options.MapInboundClaims = false;
+
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
@@ -43,18 +52,34 @@ namespace SkyLearnApi.Extentions
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.FromMinutes(5),
 
+                    // With MapInboundClaims = false, claim types stay as-is in the token.
+                    // The token uses ClaimTypes.Role (full URI) for roles, so this is correct.
                     RoleClaimType = ClaimTypes.Role,
-                    NameClaimType = ClaimTypes.NameIdentifier
+                    NameClaimType = ClaimTypes.Name
                 };
 
                 options.Events = new JwtBearerEvents
                 {
+                    // SignalR sends JWT as query string ?access_token=... since WebSockets can't use headers
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Query["access_token"];
+                        var path = context.HttpContext.Request.Path;
+
+                        if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs"))
+                        {
+                            context.Token = accessToken;
+                        }
+
+                        return Task.CompletedTask;
+                    },
                     OnAuthenticationFailed = context =>
                     {
                         var error = context.Exception.Message;
                         Log.Warning("JWT Authentication failed: {Error}", error);
                         
-                        context.Response.Headers.Append("X-Auth-Error", error);
+                        var cleanError = error.Replace("\r", " ").Replace("\n", " ");
+                        context.Response.Headers.Append("X-Auth-Error", cleanError);
                         return Task.CompletedTask;
                     },
                     OnTokenValidated = context =>
@@ -118,7 +143,6 @@ namespace SkyLearnApi.Extentions
                     }
                 };
             });
-
             return services;
         }
     }
