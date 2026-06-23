@@ -1,25 +1,19 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:io';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:lms/core/widgets/management/management_layout.dart';
 import 'package:lms/core/widgets/management/management_menu_config.dart';
-import '../../../../../core/cons/Colors/app_colors.dart';
-import '../../../../../core/helpers/logout_server/logout.dart';
-import '../../../Announcement/view.dart';
-import '../../admin_profile/view.dart';
-import '../../courses/create_course/Adding_view.dart';
-import '../../courses/home_courses/view.dart';
-import '../../department/create_department/view.dart';
+
 import '../../department/get_department/model/model.dart';
 import '../../department/get_department/state_mangment/cubit.dart';
 import '../../department/get_department/state_mangment/states.dart';
 import '../../squadron/get_squadron/model/view.dart';
 import '../../squadron/get_squadron/state_mangment/cubit.dart';
 import '../../squadron/get_squadron/state_mangment/states.dart';
-import '../../year/create_year/view.dart';
 import '../../year/get_year/state_managment/cubit.dart';
 import '../../year/get_year/state_managment/states.dart';
 import '../shared/user_form_role_dropdown.dart';
@@ -255,6 +249,7 @@ class _ProfileScreenState extends State<CreateUserScreen> {
                     nationalIdFocus,
                     Icons.badge,
                     '3040105050096',
+                    maxLength: 14,
                   ),
                   const SizedBox(height: 16),
                   _buildTextField(
@@ -1207,76 +1202,7 @@ class _ProfileScreenState extends State<CreateUserScreen> {
 
   Future<void> _pickImage() async {
     _pickImageFromSource(ImageSource.gallery);
-    // showModalBottomSheet(
-    //   context: context,
-    //   backgroundColor: Colors.transparent,
-    //   builder: (context) => Container(
-    //     decoration: const BoxDecoration(
-    //       color: Colors.white,
-    //       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-    //     ),
-    //     padding: const EdgeInsets.all(20),
-    //     child: Column(
-    //       mainAxisSize: MainAxisSize.min,
-    //       children: [
-    //         Container(
-    //           width: 40,
-    //           height: 4,
-    //           decoration: BoxDecoration(
-    //             color: Colors.grey[300],
-    //             borderRadius: BorderRadius.circular(2),
-    //           ),
-    //         ),
-    //         const SizedBox(height: 20),
-    //         const Text(
-    //           'Choose Profile Picture',
-    //           style: TextStyle(
-    //             fontSize: 18,
-    //             fontWeight: FontWeight.w700,
-    //             color: Color(0xFF1E293B),
-    //           ),
-    //         ),
-    //         const SizedBox(height: 20),
-    //         _buildImageSourceOption(
-    //           icon: Icons.photo_library,
-    //           title: 'Choose from Gallery',
-    //           subtitle: 'Select an existing photo',
-    //           onTap: () {
-    //             Navigator.pop(context);
-    //             _pickImageFromSource(ImageSource.gallery);
-    //           },
-    //         ),
-    //         const SizedBox(height: 12),
-    //         _buildImageSourceOption(
-    //           icon: Icons.camera_alt,
-    //           title: 'Take admin_profile Photo',
-    //           subtitle: 'Use your camera',
-    //           onTap: () {
-    //             Navigator.pop(context);
-    //             _pickImageFromSource(ImageSource.camera);
-    //           },
-    //         ),
-    //         if (_selectedImage != null) ...[
-    //           const SizedBox(height: 12),
-    //           _buildImageSourceOption(
-    //             icon: Icons.delete_outline,
-    //             title: 'Remove Photo',
-    //             subtitle: 'Use default avatar',
-    //             color: const Color(0xFFEF4444),
-    //             onTap: () {
-    //               Navigator.pop(context);
-    //               setState(() {
-    //                 _selectedImage = null;
-    //               });
-    //               _showSuccessSnackbar('Profile picture removed');
-    //             },
-    //           ),
-    //         ],
-    //         const SizedBox(height: 20),
-    //       ],
-    //     ),
-    //   ),
-    // );
+
   }
 
   Future<void> _pickImageFromSource(ImageSource source) async {
@@ -1338,13 +1264,14 @@ class _ProfileScreenState extends State<CreateUserScreen> {
     );
   }
 
-  Widget _buildTextField(
+ Widget _buildTextField(
     String label,
     TextEditingController controller,
     FocusNode focusNode,
     IconData icon,
-    String hint,
-  ) {
+    String hint, {
+    int? maxLength,
+  }) {
     return StatefulBuilder(
       builder: (context, setFieldState) {
         bool isHovered = false;
@@ -1421,6 +1348,7 @@ class _ProfileScreenState extends State<CreateUserScreen> {
                           : [],
                     ),
                     child: TextField(
+                      maxLength: maxLength,
                       controller: controller,
                       focusNode: focusNode,
                       style: TextStyle(
@@ -1431,7 +1359,12 @@ class _ProfileScreenState extends State<CreateUserScreen> {
                             : FontWeight.w500,
                       ),
                       decoration: InputDecoration(
+                        counter: const SizedBox.shrink(),
                         hintText: hint,
+                        helperStyle: const TextStyle(
+                          fontSize: 8,
+                          color: Color(0xFF94A3B8),
+                        ),
                         prefixIcon: AnimatedContainer(
                           duration: const Duration(milliseconds: 200),
                           transform: Matrix4.identity()

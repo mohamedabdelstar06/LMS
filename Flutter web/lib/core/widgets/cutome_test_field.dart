@@ -7,7 +7,8 @@ Widget buildTextField(
   IconData icon,
   String hint,
   bool isReadOnly,
-) {
+  {int? maxLength,
+}) {
   return StatefulBuilder(
     builder: (context, setFieldState) {
       return Column(
@@ -23,6 +24,7 @@ Widget buildTextField(
           ),
           const SizedBox(height: 8),
           TextField(
+            maxLength: maxLength,
             enabled: false,
             readOnly: true,
             controller: controller,
@@ -33,6 +35,7 @@ Widget buildTextField(
               fontWeight: FontWeight.w500,
             ),
             decoration: InputDecoration(
+              counter: const SizedBox.shrink(),
               hintText: hint,
               prefixIcon: Icon(
                 icon,

@@ -20,8 +20,7 @@ class _LearnMateChatState extends State<LearnMateChat> {
   bool _isSearching = false;
   String _searchQuery = '';
 
-  // Inline confirmation — no dialog needed, shows inside the chat itself
-  // Values: null = no confirm, 'new' = confirm new session, 'clear' = confirm clear
+
   String? _pendingConfirm;
 
   @override
@@ -64,7 +63,7 @@ class _LearnMateChatState extends State<LearnMateChat> {
     });
   }
 
-  // ── Build ────────────────────────────────────────────────────────────────
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +75,7 @@ class _LearnMateChatState extends State<LearnMateChat> {
     );
   }
 
-  // ── SIDEBAR ──────────────────────────────────────────────────────────────
+ 
 
   Widget _buildSidebar() {
     final w = _sidebarExpanded ? 220.0 : 56.0;
@@ -93,7 +92,6 @@ class _LearnMateChatState extends State<LearnMateChat> {
           _buildSidebarNav(),
           if (_sidebarExpanded) ...[
             const SizedBox(height: 12),
-            // Search bar — shown only when _isSearching
             AnimatedCrossFade(
               duration: const Duration(milliseconds: 200),
               crossFadeState: _isSearching
@@ -118,7 +116,7 @@ class _LearnMateChatState extends State<LearnMateChat> {
           if (_sidebarExpanded)
             const Expanded(
               child: Text(
-                'LearnMate',
+                'Mofeed',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
@@ -149,7 +147,7 @@ class _LearnMateChatState extends State<LearnMateChat> {
       padding: EdgeInsets.symmetric(horizontal: _sidebarExpanded ? 10 : 6),
       child: Column(
         children: [
-          // ── New Chat ────────────────────────────────────────────────────
+        
           _buildActionTile(
             icon: Icons.add_circle_outline_rounded,
             label: 'New Chat',
@@ -157,7 +155,7 @@ class _LearnMateChatState extends State<LearnMateChat> {
             onTap: () => setState(() => _pendingConfirm = 'new'),
           ),
           const SizedBox(height: 3),
-          // ── Search ──────────────────────────────────────────────────────
+   
           _buildActionTile(
             icon: Icons.search_rounded,
             label: 'Search',
@@ -168,7 +166,7 @@ class _LearnMateChatState extends State<LearnMateChat> {
             onTap: _toggleSearch,
           ),
           const SizedBox(height: 3),
-          // ── History refresh ─────────────────────────────────────────────
+      
           _buildActionTile(
             icon: Icons.history_rounded,
             label: 'History',
@@ -176,7 +174,7 @@ class _LearnMateChatState extends State<LearnMateChat> {
             onTap: () => context.read<ChatCubit>().loadChatHistory(),
           ),
           const SizedBox(height: 3),
-          // ── Clear (DELETE /api/Chat/clear) ──────────────────────────────
+       
           _buildActionTile(
             icon: Icons.delete_outline_rounded,
             label: 'Clear All',
@@ -241,6 +239,7 @@ class _LearnMateChatState extends State<LearnMateChat> {
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: TextField(
         controller: _searchController,
+        
         autofocus: false,
         onChanged: (v) => setState(() => _searchQuery = v.toLowerCase()),
         decoration: InputDecoration(
@@ -292,7 +291,6 @@ class _LearnMateChatState extends State<LearnMateChat> {
           if (state is ChatLoaded) {
             messages = state.messages.where((m) => m.isUser).toList();
 
-            // Apply search filter
             if (_searchQuery.isNotEmpty) {
               messages = messages
                   .where((m) => m.content.toLowerCase().contains(_searchQuery))
@@ -307,7 +305,6 @@ class _LearnMateChatState extends State<LearnMateChat> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Show search results count when searching
                 if (_isSearching && _searchQuery.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 6),
@@ -364,7 +361,7 @@ class _LearnMateChatState extends State<LearnMateChat> {
   }
 
   Widget _buildHistoryTile(ChatMessage msg) {
-    // Highlight search term in the text
+    
     final query = _searchQuery;
     final text = msg.content;
 
@@ -388,7 +385,7 @@ class _LearnMateChatState extends State<LearnMateChat> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Highlighted text when searching
+                    
                     query.isNotEmpty
                         ? _buildHighlightedText(text, query)
                         : Text(
@@ -460,7 +457,7 @@ class _LearnMateChatState extends State<LearnMateChat> {
     return '${diff.inDays}d ago';
   }
 
-  // ── CHAT AREA ─────────────────────────────────────────────────────────────
+  
 
   Widget _buildChatArea() {
     return Container(
@@ -479,7 +476,7 @@ class _LearnMateChatState extends State<LearnMateChat> {
         builder: (context, state) {
           return Column(
             children: [
-              // ── Inline confirmation banner (replaces dialog) ─────────────
+              
               if (_pendingConfirm != null)
                 _buildConfirmBanner(_pendingConfirm!),
 
@@ -509,7 +506,7 @@ class _LearnMateChatState extends State<LearnMateChat> {
     );
   }
 
-  // ── Inline confirm banner (shown INSIDE the chat — no dialog needed) ────────
+  
 
   Widget _buildConfirmBanner(String type) {
     final isNew = type == 'new';
@@ -552,7 +549,7 @@ class _LearnMateChatState extends State<LearnMateChat> {
             ),
           ),
           const SizedBox(width: 8),
-          // Cancel
+          
           TextButton(
             style: TextButton.styleFrom(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
@@ -566,7 +563,7 @@ class _LearnMateChatState extends State<LearnMateChat> {
             ),
           ),
           const SizedBox(width: 4),
-          // Confirm
+          
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: color,
@@ -973,7 +970,7 @@ class _LearnMateChatState extends State<LearnMateChat> {
   }
 }
 
-// ── Typing Dots ───────────────────────────────────────────────────────────────
+
 
 class _TypingDots extends StatefulWidget {
   const _TypingDots();

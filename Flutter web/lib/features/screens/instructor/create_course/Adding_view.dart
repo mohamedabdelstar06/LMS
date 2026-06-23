@@ -7,15 +7,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker_web/image_picker_web.dart';
 import 'package:lms/core/widgets/management/management_layout.dart';
 import 'package:lms/core/widgets/management/management_menu_config.dart';
+import 'package:lms/features/screens/Announcement/all_announcement.dart';
 import 'package:lms/features/screens/admin/courses/create_course/state_managment/cubit.dart';
 import 'package:lms/features/screens/admin/courses/create_course/state_managment/states.dart';
 import 'package:lms/features/screens/instructor/teacher_profile/view.dart';
-import '../../../../../core/cons/Colors/app_colors.dart';
 import '../../../../../core/helpers/logout_server/logout.dart';
 
 import '../../Announcement/view.dart';
-import '../../admin/admin_profile/view.dart';
-import '../../admin/courses/home_courses/view.dart';
 import '../../admin/department/get_department/model/model.dart';
 import '../../admin/department/get_department/state_mangment/cubit.dart';
 import '../../admin/department/get_department/state_mangment/states.dart';
@@ -423,6 +421,8 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
               );
             },
           ),
+
+         
 
           _buildMenuItem(
             Icons.grade_outlined,

@@ -1,15 +1,17 @@
-// ignore_for_file: unused_element
+
 
 import 'dart:typed_data';
-import 'package:flutter/material.dart';
+
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker_web/image_picker_web.dart';
 import 'package:lms/core/widgets/management/management_layout.dart';
 import 'package:lms/core/widgets/management/management_menu_config.dart';
+import 'package:lms/features/screens/Announcement/all_announcement.dart';
 import 'package:lms/features/screens/admin/courses/create_course/state_managment/cubit.dart';
 import 'package:lms/features/screens/admin/courses/create_course/state_managment/states.dart';
-import '../../../../../core/cons/Colors/app_colors.dart';
+
 import '../../../../../core/helpers/logout_server/logout.dart';
 import '../../../Announcement/view.dart';
 import '../../admin_profile/view.dart';
@@ -342,7 +344,26 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
     descriptionController.clear();
     creditHoursController.clear();
 
-    // setState(() => selectedImageBytes = null);
+    setState(() {
+      coverImage = null;
+      introVideo = null;
+      attachment = null;
+
+      selectedDepartmentId = null;
+      selectedYearId = null;
+
+      selectedDepartmentName = 'Select Department';
+      selectedYearName = 'Select Year';
+
+      availableYears = [];
+
+      selectedDate = null;
+
+      isDepartmentExpanded = false;
+      isYearExpanded = false;
+
+      selectedAttempts = 'Unlimited Attempts';
+    });
   }
 
   Widget _buildSidebar() {
@@ -358,7 +379,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            // ignore: deprecated_member_use
+            
             color: Colors.black.withOpacity(0.08),
             blurRadius: 20,
             offset: const Offset(0, 4),
@@ -411,6 +432,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
               );
             },
           ),
+          
           _buildMenuItem(
             Icons.person_add_alt_1_outlined,
             Icons.person_add_alt_1,
@@ -1066,7 +1088,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                               );
                             }
 
-                            // ignore: unused_local_variable
+                            
                             final List<GetYearModel> years = yearState.years
                                 .whereType<GetYearModel>()
                                 .toList();

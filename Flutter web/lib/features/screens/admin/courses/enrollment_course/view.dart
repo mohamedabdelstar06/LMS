@@ -2,29 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lms/core/widgets/management/management_layout.dart';
 import 'package:lms/core/widgets/management/management_menu_config.dart';
-import 'package:lms/core/helpers/logout_server/logout.dart';
-import 'package:lms/features/screens/Announcement/view.dart';
-import 'package:lms/features/screens/admin/admin_profile/view.dart';
 import 'package:lms/features/screens/admin/courses/Enrollment_course/state_mangment/cubits.dart';
 import 'package:lms/features/screens/admin/courses/Enrollment_course/state_mangment/states.dart';
-import 'package:lms/features/screens/admin/courses/create_course/Adding_view.dart';
 import 'package:lms/features/screens/admin/courses/home_courses/model/model.dart';
 import 'package:lms/features/screens/admin/courses/home_courses/state_managment/states.dart';
-import 'package:lms/features/screens/admin/courses/home_courses/view.dart';
-import 'package:lms/features/screens/admin/department/create_department/view.dart';
-import 'package:lms/features/screens/admin/department/get_department/get_All_departments/view.dart';
-import 'package:lms/features/screens/admin/squadron/create_squadron/view.dart';
-import 'package:lms/features/screens/admin/user_file/import_file/view.dart';
-import 'package:lms/features/screens/admin/users/create_user/View.dart';
 import 'package:lms/features/screens/admin/users/get_users/get_user_dropdown/model_dropdown/view.dart';
 import 'package:lms/features/screens/admin/users/get_users/get_user_dropdown/state_managment/cubit.dart';
 import 'package:lms/features/screens/admin/users/get_users/get_user_dropdown/state_managment/states.dart';
-import 'package:lms/features/screens/admin/users/get_users/view.dart';
-import 'package:lms/features/screens/admin/year/create_year/view.dart';
-import 'package:lms/features/screens/admin/year/get_year/get_All_years/view.dart';
 
 import '../home_courses/state_managment/cubit.dart';
-
 
 class EnrollmentPage extends StatelessWidget {
   const EnrollmentPage({super.key});
@@ -59,46 +45,6 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
   String selectedMenuItem = 'Add Enrollment';
   String? hoveredMenuItem;
   bool isLogoutHovered = false;
-
-  // void showSuccessSnackBar(String message) {
-  //   ScaffoldMessenger.of(context).showSnackBar(
-  //     SnackBar(
-  //       behavior: SnackBarBehavior.floating,
-  //       backgroundColor: Colors.transparent,
-  //       elevation: 0,
-  //       content: TweenAnimationBuilder<double>(
-  //         tween: Tween(begin: 0, end: 1),
-  //         duration: const Duration(milliseconds: 400),
-  //         builder: (context, value, child) {
-  //           return Transform.scale(scale: value, child: child);
-  //         },
-  //         child: Container(
-  //           padding: const EdgeInsets.all(16),
-  //           decoration: BoxDecoration(
-  //             color: Colors.green.shade600,
-  //             borderRadius: BorderRadius.circular(14),
-  //             boxShadow: const [
-  //               BoxShadow(color: Colors.black26, blurRadius: 10),
-  //             ],
-  //           ),
-  //           child: Row(
-  //             children: const [
-  //               Icon(Icons.check_circle, color: Colors.white),
-  //               SizedBox(width: 12),
-  //               Expanded(
-  //                 child: Text(
-  //                   "Upload completed successfully",
-  //                   style: TextStyle(color: Colors.white, fontSize: 15),
-  //                 ),
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //       ),
-  //       duration: const Duration(seconds: 2),
-  //     ),
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -140,346 +86,6 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
       selectedUserId = null;
       selectedCourseId = null;
     });
-  }
-
-  // setState(() => selectedImageBytes = null);
-
-  Widget _buildSidebar() {
-    return Container(
-      width: 250,
-      margin: const EdgeInsetsDirectional.only(
-        start: 40,
-        top: 50,
-        bottom: 50,
-      ),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 20,
-            offset: const Offset(0, 4),
-            spreadRadius: 2,
-          ),
-        ],
-      ),
-      child: ListView(
-        children: [
-          const SizedBox(height: 40),
-          _buildMenuItem(
-            Icons.person_outline,
-            Icons.person,
-            'Profile',
-            'Profile',
-            () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AdminProfileScreen(),
-                ),
-              );
-            },
-          ),
-          _buildMenuItem(
-            Icons.book_outlined,
-            Icons.book,
-            'My Courses',
-            'My Courses',
-            () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AdminCourseScreen(),
-                ),
-              );
-            },
-          ),
-          _buildMenuItem(
-            Icons.notifications_active_outlined,
-            Icons.notifications_active_rounded,
-            'Announcements',
-            'Announcements',
-            () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AnnouncementScreen(),
-                ),
-              );
-            },
-          ),
-          _buildMenuItem(
-            Icons.person_add_alt_1_outlined,
-            Icons.person_add_alt_1,
-            'Create Users',
-            'Create users',
-            () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const CreateUserScreen(),
-                ),
-              );
-            },
-          ),
-          _buildMenuItem(
-            Icons.folder_copy_outlined,
-            Icons.folder_copy_rounded,
-            'Create Departments',
-            'Create Departments',
-            () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const CreateDepartmentPage()),
-              );
-            },
-          ),
-          _buildMenuItem(
-            Icons.calendar_month,
-            Icons.calendar_month_outlined,
-            'Create Years',
-            'Create Years',
-            () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const CreateYearPage()),
-              );
-            },
-          ),
-          _buildMenuItem(
-            Icons.calendar_month,
-            Icons.calendar_month_outlined,
-            'Add Enrollment',
-            'Add Enrollment',
-            () {},
-          ),
-          _buildMenuItem(
-            Icons.event_available,
-            Icons.event_note_outlined,
-            'Create New Course',
-            'Create New Course',
-            () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const CreateNewCoursePage()),
-              );
-            },
-          ),
-          _buildMenuItem(
-            Icons.airplanemode_active,
-            Icons.airplanemode_active_rounded,
-            'Create Squadrons',
-            'Create Squadrons',
-            () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const CreateSquadronsPage()),
-              );
-            },
-          ),
-          _buildMenuItem(
-            Icons.supervised_user_circle_rounded,
-            Icons.supervised_user_circle_outlined,
-            'All Users',
-            'All Users',
-            () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const GetUsersPage()),
-              );
-            },
-          ),
-          _buildMenuItem(
-            Icons.school_outlined,
-            Icons.school,
-            'All Departments',
-            'All Departments',
-            () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const DepartmentsScreen()),
-              );
-            },
-          ),
-          _buildMenuItem(
-            Icons.auto_awesome_motion_rounded,
-            Icons.auto_awesome_motion_outlined,
-            'All Years',
-            'All Years',
-            () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const YearsScreen()),
-              );
-            },
-          ),
-
-          _buildMenuItem(
-            Icons.file_open_outlined,
-            Icons.file_open,
-            'Import users File',
-            'Import users File',
-            () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const ImportStudentsScreen()),
-              );
-            },
-          ),
-
-          _buildMenuItem(
-            Icons.grade_outlined,
-            Icons.grade,
-            'Grades overview',
-            'Grades overview',
-            () {},
-          ),
-          const Spacer(),
-          _buildLogoutButton(),
-          const SizedBox(height: 20),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildMenuItem(
-    IconData outlinedIcon,
-    IconData filledIcon,
-    String title,
-    String value,
-    onTap,
-  ) {
-    final isSelected = selectedMenuItem == value;
-    final isHovered = hoveredMenuItem == value;
-
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) => setState(() => hoveredMenuItem = value),
-      onExit: (_) => setState(() => hoveredMenuItem = null),
-      child: GestureDetector(
-        onTap: () {
-          setState(() {
-            selectedMenuItem = value;
-          });
-        },
-        child: GestureDetector(
-          onTap: onTap,
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: BoxDecoration(
-              color: isSelected
-                  ? const Color(0xFF2563EB)
-                  : isHovered
-                  ? const Color(0xFF2563EB).withOpacity(0.1)
-                  : Colors.transparent,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(
-                color: isHovered && !isSelected
-                    ? const Color(0xFF2563EB).withOpacity(0.3)
-                    : Colors.transparent,
-              ),
-            ),
-            child: Row(
-              children: [
-                AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 200),
-                  child: Icon(
-                    isSelected ? filledIcon : outlinedIcon,
-                    key: ValueKey(isSelected),
-                    color: isSelected
-                        ? Colors.white
-                        : isHovered
-                        ? const Color(0xFF2563EB)
-                        : const Color(0xFF64748B),
-                    size: 20,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Text(
-                  title,
-                  style: TextStyle(
-                    color: isSelected
-                        ? Colors.white
-                        : isHovered
-                        ? const Color(0xFF2563EB)
-                        : Colors.black87,
-                    fontSize: 14,
-                    fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildLogoutButton() {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) => setState(() => isLogoutHovered = true),
-      onExit: (_) => setState(() => isLogoutHovered = false),
-      child: GestureDetector(
-        onTap: () {
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: const Text('Logout'),
-              content: const Text('Are you sure you want to logout?'),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text('Cancel'),
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-                    await LogoutServer.logout();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFEF4444),
-                  ),
-                  child: const Text('Logout'),
-                ),
-              ],
-            ),
-          );
-        },
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          margin: const EdgeInsets.symmetric(horizontal: 12),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          decoration: BoxDecoration(
-            color: isLogoutHovered
-                ? const Color(0xFFEF4444).withOpacity(0.1)
-                : Colors.transparent,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(
-              color: isLogoutHovered
-                  ? const Color(0xFFEF4444).withOpacity(0.3)
-                  : Colors.transparent,
-            ),
-          ),
-          child: const Row(
-            children: [
-              Icon(Icons.logout, color: Color(0xFFEF4444), size: 20),
-              SizedBox(width: 12),
-              Text(
-                'Logout',
-                style: TextStyle(
-                  color: Color(0xFFEF4444),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
   }
 
   Widget _buildDropdownField(
@@ -798,7 +404,8 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
                               );
                             }
 
-                            final List<UserLiteModel> users = UsersStateDrop.users
+                            final List<UserLiteModel> users = UsersStateDrop
+                                .users
                                 .whereType<UserLiteModel>()
                                 .toList();
 
@@ -857,7 +464,8 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
                               );
                             }
 
-                            final List<GetCoursesModel> courses = courseState.courses
+                            final List<GetCoursesModel> courses = courseState
+                                .courses
                                 .whereType<GetCoursesModel>()
                                 .toList();
 
@@ -897,20 +505,9 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
                     current is EnrollmentActionSuccess ||
                     current is EnrollmentError,
                 listener: (context, state) {
-                  if (state is EnrollmentActionSuccess) {
-                    ScaffoldMessenger.of(
-                      context,
-                    ).showSnackBar(SnackBar(content: Text(state.message)));
-                  }
+                  if (state is EnrollmentActionSuccess) {}
 
-                  if (state is EnrollmentError) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(state.message),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
-                  }
+                  if (state is EnrollmentError) {}
                 },
                 buildWhen: (previous, current) =>
                     current is EnrollmentLoaded || current is EnrollmentLoading,
@@ -924,31 +521,214 @@ class _AddEnrollmentState extends State<EnrollmentScreen> {
                       return const Text('No enrollments yet');
                     }
 
-                    return ListView.separated(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: state.enrollments.length,
-                      separatorBuilder: (_, __) => const Divider(),
-                      itemBuilder: (context, index) {
-                        final enrollment = state.enrollments[index];
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Header row
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 12),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.people_outline,
+                                    size: 16,
+                                    color: Colors.grey[600],
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    'Enrolled students',
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.grey[600],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 3,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFEFF6FF),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Text(
+                                  '${state.enrollments.length} enrollments',
+                                  style: const TextStyle(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w500,
+                                    color: Color(0xFF1849A9),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
 
-                        return ListTile(
-                          key: ValueKey(
-                            '${enrollment.userId}-${enrollment.courseId}',
-                          ),
-                          title: Text(enrollment.userName),
-                          subtitle: Text(enrollment.courseName),
-                          trailing: IconButton(
-                            icon: const Icon(Icons.delete, color: Colors.red),
-                            onPressed: () {
-                              context.read<EnrollmentCubit>().deleteEnrollment(
-                                enrollment.userId,
-                                enrollment.courseId,
-                              );
-                            },
-                          ),
-                        );
-                      },
+                        // Animated list
+                        ListView.separated(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: state.enrollments.length,
+                          separatorBuilder: (_, __) =>
+                              const SizedBox(height: 10),
+                          itemBuilder: (context, index) {
+                            final enrollment = state.enrollments[index];
+                            final initials = enrollment.userName
+                                .trim()
+                                .split(' ')
+                                .take(2)
+                                .map(
+                                  (w) => w.isNotEmpty ? w[0].toUpperCase() : '',
+                                )
+                                .join();
+
+                            return TweenAnimationBuilder<double>(
+                              key: ValueKey(
+                                '${enrollment.userId}-${enrollment.courseId}',
+                              ),
+                              tween: Tween(begin: 0.0, end: 1.0),
+                              duration: Duration(
+                                milliseconds: 300 + index * 60,
+                              ),
+                              curve: Curves.easeOut,
+                              builder: (context, value, child) => Opacity(
+                                opacity: value,
+                                child: Transform.translate(
+                                  offset: Offset(0, 16 * (1 - value)),
+                                  child: child,
+                                ),
+                              ),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 12,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(
+                                    color: const Color(0xFFE2E8F0),
+                                    width: 0.5,
+                                  ),
+                                ),
+                                child: Row(
+                                  children: [
+                                    // Avatar circle
+                                    Container(
+                                      width: 42,
+                                      height: 42,
+                                      decoration: const BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Color(0xFFEFF6FF),
+                                      ),
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        initials,
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                          color: Color(0xFF1849A9),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 14),
+
+                                    // Name + course badge
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            enrollment.userName,
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w500,
+                                              color: Color(0xFF1E293B),
+                                            ),
+                                          ),
+                                          const SizedBox(height: 4),
+                                          Container(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 8,
+                                              vertical: 2,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: const Color(0xFFF8FAFC),
+                                              border: Border.all(
+                                                color: const Color(0xFFE2E8F0),
+                                                width: 0.5,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                            ),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                const Icon(
+                                                  Icons.menu_book_outlined,
+                                                  size: 12,
+                                                  color: Color(0xFF64748B),
+                                                ),
+                                                const SizedBox(width: 4),
+                                                Text(
+                                                  enrollment.courseName,
+                                                  style: const TextStyle(
+                                                    fontSize: 12,
+                                                    color: Color(0xFF64748B),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+
+                                    // Delete button
+                                    InkWell(
+                                      borderRadius: BorderRadius.circular(8),
+                                      onTap: () {
+                                        context
+                                            .read<EnrollmentCubit>()
+                                            .deleteEnrollment(
+                                              enrollment.userId,
+                                              enrollment.courseId,
+                                            );
+                                      },
+                                      child: Container(
+                                        width: 34,
+                                        height: 34,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                            color: const Color(0xFFE2E8F0),
+                                            width: 0.5,
+                                          ),
+                                          borderRadius: BorderRadius.circular(
+                                            8,
+                                          ),
+                                        ),
+                                        alignment: Alignment.center,
+                                        child: const Icon(
+                                          Icons.delete_outline_rounded,
+                                          size: 18,
+                                          color: Color(0xFF94A3B8),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
                     );
                   }
 

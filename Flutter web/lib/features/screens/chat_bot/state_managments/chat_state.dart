@@ -1,54 +1,45 @@
+// ignore: unused_import
 import 'package:equatable/equatable.dart';
 import 'chat_model.dart';
 
-abstract class ChatState extends Equatable {
+abstract class ChatState {
   const ChatState();
-
-  @override
-  List<Object?> get props => [];
 }
 
 class ChatInitial extends ChatState {}
 
 class ChatLoading extends ChatState {}
 
-/// Single source of truth — messages live HERE, not in the cubit field.
-class ChatLoaded extends ChatState {
+class ChatError extends ChatState {
+  const ChatError(this.message);
+  final String message;
+}
+
+class ChatLoaded extends ChatState { 
+
   const ChatLoaded({
     required this.messages,
     required this.isSending,
     this.errorMessage,
+    this.sessions = const [],
   });
-
   final List<ChatMessage> messages;
-
-  /// True while waiting for the assistant response (shows typing indicator).
   final bool isSending;
-
-  /// Non-null when the last send failed (show a banner but keep messages).
   final String? errorMessage;
-
-  @override
-  List<Object?> get props => [messages, isSending, errorMessage];
+  final List<ChatSession> sessions;
 
   ChatLoaded copyWith({
     List<ChatMessage>? messages,
     bool? isSending,
     String? errorMessage,
+    List<ChatSession>? sessions,
+    bool clearError = false,
   }) {
     return ChatLoaded(
       messages: messages ?? this.messages,
       isSending: isSending ?? this.isSending,
-      errorMessage: errorMessage, // null clears the banner
+      errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
+      sessions: sessions ?? this.sessions,
     );
   }
-}
-
-class ChatError extends ChatState {
-  const ChatError(this.message);
-
-  final String message;
-
-  @override
-  List<Object?> get props => [message];
 }
