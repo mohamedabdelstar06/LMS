@@ -9,11 +9,11 @@ class DepartmentInitialState extends DepartmentsStateDrop {}
 class DepartmentLoadingState extends DepartmentsStateDrop {}
 
 class DepartmentLoadedState extends DepartmentsStateDrop {
-  final List<GetDepartmentModel> departments;
   DepartmentLoadedState(this.departments);
+  final List<GetDepartmentModel> departments;
 }
 
 class DepartmentsErrorState extends DepartmentsStateDrop {
-  final String message;
   DepartmentsErrorState(this.message);
+  final String message;
 }

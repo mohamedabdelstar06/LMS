@@ -1,22 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:lms/features/screens/admin/courses/course_details/lectures/functions/smallBadge.dart';
 
 import '../../../home_courses/model/model.dart';
 import '../model/model.dart';
-import 'actionButton.dart';
 import 'add_ViewDialog.dart';
-import 'contentTypeIconAndBadge.dart';
 import 'fileTypeHelper.dart';
-import 'metaChip.dart';
 
 class LectureTile extends StatefulWidget {
   const LectureTile({
     super.key,
     required this.lecture,
     required this.isDeleting,
-    required this.onEdit,
-    required this.onDelete,
+    this.onEdit,
+    this.onDelete,
     required this.onComments,
     required this.course,
   });
@@ -24,8 +20,15 @@ class LectureTile extends StatefulWidget {
   final LectureModel lecture;
   final GetCoursesModel course;
   final bool isDeleting;
-  final VoidCallback onEdit;
-  final VoidCallback onDelete;
+
+  /// Null hides the Edit icon entirely (e.g. for students, who have no
+  /// permission to edit lectures).
+  final VoidCallback? onEdit;
+
+  /// Null hides the Delete icon entirely (e.g. for students, who have no
+  /// permission to delete lectures).
+  final VoidCallback? onDelete;
+
   final VoidCallback onComments;
 
   @override
@@ -42,31 +45,51 @@ class LectureTileState extends State<LectureTile> {
 
   Color get _accent {
     switch (_fileType) {
-      case FileType.video:      return const Color(0xFF7C3AED);
-      case FileType.audio:      return const Color(0xFF059669);
-      case FileType.pdf:        return const Color(0xFFEF4444);
-      case FileType.excel:      return const Color(0xFF16A34A);
-      case FileType.word:       return const Color(0xFF2563EB);
-      case FileType.powerpoint: return const Color(0xFFF97316);
-      case FileType.image:      return const Color(0xFFDB2777);
-      case FileType.text:       return const Color(0xFF6B7280);
-      case FileType.archive:    return const Color(0xFF92400E);
-      case FileType.unknown:    return const Color(0xFF4361EE);
+      case FileType.video:
+        return const Color(0xFF7C3AED);
+      case FileType.audio:
+        return const Color(0xFF059669);
+      case FileType.pdf:
+        return const Color(0xFFEF4444);
+      case FileType.excel:
+        return const Color(0xFF16A34A);
+      case FileType.word:
+        return const Color(0xFF2563EB);
+      case FileType.powerpoint:
+        return const Color(0xFFF97316);
+      case FileType.image:
+        return const Color(0xFFDB2777);
+      case FileType.text:
+        return const Color(0xFF6B7280);
+      case FileType.archive:
+        return const Color(0xFF92400E);
+      case FileType.unknown:
+        return const Color(0xFF4361EE);
     }
   }
 
   IconData get _typeIcon {
     switch (_fileType) {
-      case FileType.video:      return Icons.play_circle_fill_rounded;
-      case FileType.audio:      return Icons.headphones_rounded;
-      case FileType.pdf:        return Icons.picture_as_pdf_rounded;
-      case FileType.excel:      return Icons.table_chart_rounded;
-      case FileType.word:       return Icons.description_rounded;
-      case FileType.powerpoint: return Icons.slideshow_rounded;
-      case FileType.image:      return Icons.image_rounded;
-      case FileType.text:       return Icons.text_snippet_rounded;
-      case FileType.archive:    return Icons.folder_zip_rounded;
-      case FileType.unknown:    return Icons.insert_drive_file_rounded;
+      case FileType.video:
+        return Icons.play_circle_fill_rounded;
+      case FileType.audio:
+        return Icons.headphones_rounded;
+      case FileType.pdf:
+        return Icons.picture_as_pdf_rounded;
+      case FileType.excel:
+        return Icons.table_chart_rounded;
+      case FileType.word:
+        return Icons.description_rounded;
+      case FileType.powerpoint:
+        return Icons.slideshow_rounded;
+      case FileType.image:
+        return Icons.image_rounded;
+      case FileType.text:
+        return Icons.text_snippet_rounded;
+      case FileType.archive:
+        return Icons.folder_zip_rounded;
+      case FileType.unknown:
+        return Icons.insert_drive_file_rounded;
     }
   }
 
@@ -101,19 +124,19 @@ class LectureTileState extends State<LectureTile> {
             ),
             boxShadow: _hovered
                 ? [
-              BoxShadow(
-                color: _accent.withOpacity(0.13),
-                blurRadius: 22,
-                offset: const Offset(0, 8),
-              ),
-            ]
+                    BoxShadow(
+                      color: _accent.withOpacity(0.13),
+                      blurRadius: 22,
+                      offset: const Offset(0, 8),
+                    ),
+                  ]
                 : [
-              const BoxShadow(
-                color: Color(0x09000000),
-                blurRadius: 8,
-                offset: Offset(0, 2),
-              ),
-            ],
+                    const BoxShadow(
+                      color: Color(0x09000000),
+                      blurRadius: 8,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -155,10 +178,7 @@ class LectureTileState extends State<LectureTile> {
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.transparent,
-                    _accent.withOpacity(0.55),
-                  ],
+                  colors: [Colors.transparent, _accent.withOpacity(0.55)],
                 ),
               ),
             ),
@@ -167,8 +187,7 @@ class LectureTileState extends State<LectureTile> {
               top: 10,
               left: 10,
               child: Container(
-                padding:
-                const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
                   color: _accent,
                   borderRadius: BorderRadius.circular(8),
@@ -205,8 +224,7 @@ class LectureTileState extends State<LectureTile> {
                 right: 10,
                 child: Row(
                   children: [
-                    if (l.hasSummary)
-                      const _ThumbBadge('S', Color(0xFF059669)),
+                    if (l.hasSummary) const _ThumbBadge('S', Color(0xFF059669)),
                     if (l.hasSummary && l.hasTranscript)
                       const SizedBox(width: 4),
                     if (l.hasTranscript)
@@ -220,8 +238,11 @@ class LectureTileState extends State<LectureTile> {
               left: 10,
               child: Row(
                 children: [
-                  const Icon(Icons.person_outline_rounded,
-                      color: Colors.white70, size: 11),
+                  const Icon(
+                    Icons.person_outline_rounded,
+                    color: Colors.white70,
+                    size: 11,
+                  ),
                   const SizedBox(width: 4),
                   Text(
                     l.createdByName,
@@ -246,10 +267,7 @@ class LectureTileState extends State<LectureTile> {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            _accent.withOpacity(0.12),
-            _accent.withOpacity(0.22),
-          ],
+          colors: [_accent.withOpacity(0.12), _accent.withOpacity(0.22)],
         ),
       ),
       child: Center(
@@ -287,34 +305,45 @@ class LectureTileState extends State<LectureTile> {
       padding: const EdgeInsets.fromLTRB(12, 6, 8, 10),
       child: Row(
         children: [
-          const Icon(Icons.calendar_today_outlined,
-              size: 11, color: Color(0xFF94A3B8)),
+          const Icon(
+            Icons.calendar_today_outlined,
+            size: 11,
+            color: Color(0xFF94A3B8),
+          ),
           const SizedBox(width: 4),
           Text(
             DateFormat('MMM d, yyyy').format(l.createdAt),
             style: const TextStyle(fontSize: 11, color: Color(0xFF94A3B8)),
           ),
           const Spacer(),
-          _ActionIconBtn(
-            icon: Icons.edit_outlined,
-            color: const Color(0xFF059669),
-            tooltip: 'Edit',
-            onTap: widget.onEdit,
-          ),
-          const SizedBox(width: 4),
+          // Edit icon only renders when onEdit is provided — students
+          // (who get null) never see it, not even disabled.
+          if (widget.onEdit != null) ...[
+            _ActionIconBtn(
+              icon: Icons.edit_outlined,
+              color: const Color(0xFF059669),
+              tooltip: 'Edit',
+              onTap: widget.onEdit!,
+            ),
+            const SizedBox(width: 4),
+          ],
           _ActionIconBtn(
             icon: Icons.chat_bubble_outline_rounded,
             color: const Color(0xFF0EA5E9),
             tooltip: 'Comments',
             onTap: widget.onComments,
           ),
-          const SizedBox(width: 4),
-          _ActionIconBtn(
-            icon: Icons.delete_outline_rounded,
-            color: const Color(0xFFEF4444),
-            tooltip: 'Delete',
-            onTap: widget.onDelete,
-          ),
+          // Delete icon only renders when onDelete is provided — same
+          // rule as Edit above.
+          if (widget.onDelete != null) ...[
+            const SizedBox(width: 4),
+            _ActionIconBtn(
+              icon: Icons.delete_outline_rounded,
+              color: const Color(0xFFEF4444),
+              tooltip: 'Delete',
+              onTap: widget.onDelete!,
+            ),
+          ],
         ],
       ),
     );

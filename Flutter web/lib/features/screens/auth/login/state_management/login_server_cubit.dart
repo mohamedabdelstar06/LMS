@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lms/features/screens/admin/dashboard_screen.dart';
 import 'package:lms/features/screens/student_dashboard_screen.dart';
+import 'package:lms/main.dart';
 
 
 import '../../../../../core/cons/api_helper_resources/api_resources.dart';
@@ -100,6 +101,7 @@ class LoginCubit extends Cubit<LoginState> {
         );
 
         if (model.user.role == "Student") {
+          ChatFabController.show();
           Navigator.pushReplacement(
             navigatorKey.currentContext!,
             MaterialPageRoute(
@@ -107,6 +109,7 @@ class LoginCubit extends Cubit<LoginState> {
             ),
           );
         } else if (model.user.role == "Instructor") {
+          ChatFabController.show();
           Navigator.pushReplacement(
             navigatorKey.currentContext!,
             MaterialPageRoute(
@@ -114,6 +117,7 @@ class LoginCubit extends Cubit<LoginState> {
             ),
           );
         } else {
+          ChatFabController.show();
           Navigator.pushReplacement(
             navigatorKey.currentContext!,
             MaterialPageRoute(

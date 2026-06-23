@@ -8,23 +8,6 @@ import 'dart:convert';
 ///    not a list of file objects — so it must be decoded manually.
 ///  - includes `targetSquadronName`, `createdByName`, `startDate` as plain fields.
 class StudentAssignmentModel {
-  final int id;
-  final int courseId;
-  final String title;
-  final String description;
-  final String instructions;
-  final int maxGrade;
-  final bool allowLateSubmission;
-  final DateTime? startDate;
-  final DateTime? deadlineDate;
-  final int? targetSquadronId;
-  final String? targetSquadronName;
-  final int submissionCount;
-  final bool isVisible;
-  final int createdById;
-  final String createdByName;
-  final DateTime? createdAt;
-  final List<String> fileUrls;
 
   StudentAssignmentModel({
     required this.id,
@@ -73,6 +56,23 @@ class StudentAssignmentModel {
       fileUrls: _parseFileUrls(json['assignmentFileUrls']),
     );
   }
+  final int id;
+  final int courseId;
+  final String title;
+  final String description;
+  final String instructions;
+  final int maxGrade;
+  final bool allowLateSubmission;
+  final DateTime? startDate;
+  final DateTime? deadlineDate;
+  final int? targetSquadronId;
+  final String? targetSquadronName;
+  final int submissionCount;
+  final bool isVisible;
+  final int createdById;
+  final String createdByName;
+  final DateTime? createdAt;
+  final List<String> fileUrls;
 
   static List<String> _parseFileUrls(dynamic raw) {
     if (raw == null) return [];

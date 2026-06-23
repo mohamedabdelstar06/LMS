@@ -6,9 +6,9 @@ import 'package:lms/features/screens/admin/courses/course_details/assignments/st
 
 
 class SubmissionsSheet extends StatefulWidget {
-  final AssignmentModel assignment;
 
   const SubmissionsSheet({super.key, required this.assignment});
+  final AssignmentModel assignment;
 
   @override
   State<SubmissionsSheet> createState() => _SubmissionsSheetState();
@@ -141,8 +141,8 @@ class _EmptySubmissions extends StatelessWidget {
           Container(
             width: 72,
             height: 72,
-            decoration: BoxDecoration(
-              color: const Color(0xFFF3E8FF),
+            decoration: const BoxDecoration(
+              color: Color(0xFFF3E8FF),
               shape: BoxShape.circle,
             ),
             child: const Icon(
@@ -172,15 +172,15 @@ class _EmptySubmissions extends StatelessWidget {
 }
 
 class _SubmissionTile extends StatefulWidget {
-  final SubmissionModel submission;
-  final int maxGrade;
-  final int assignmentId;
 
   const _SubmissionTile({
     required this.submission,
     required this.maxGrade,
     required this.assignmentId,
   });
+  final SubmissionModel submission;
+  final int maxGrade;
+  final int assignmentId;
 
   @override
   State<_SubmissionTile> createState() => _SubmissionTileState();

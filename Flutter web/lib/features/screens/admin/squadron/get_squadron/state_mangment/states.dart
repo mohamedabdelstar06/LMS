@@ -13,18 +13,18 @@ class GetSquadronsInitial extends GetSquadronsState {}
 class GetSquadronsLoading extends GetSquadronsState {}
 
 class GetSquadronsLoaded extends GetSquadronsState {
-  final List<SquadronModel> squadrons;
 
   const GetSquadronsLoaded(this.squadrons);
+  final List<SquadronModel> squadrons;
 
   @override
   List<Object> get props => [squadrons];
 }
 
 class GetSquadronsError extends GetSquadronsState {
-  final String message;
 
   const GetSquadronsError(this.message);
+  final String message;
 
   @override
   List<Object> get props => [message];

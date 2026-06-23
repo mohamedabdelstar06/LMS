@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 class DeleteAssignmentDialog extends StatefulWidget {
-  final String assignmentTitle;
-  final VoidCallback onConfirm;
 
   const DeleteAssignmentDialog({
     super.key,
     required this.assignmentTitle,
     required this.onConfirm,
   });
+  final String assignmentTitle;
+  final VoidCallback onConfirm;
 
   @override
   State<DeleteAssignmentDialog> createState() => _DeleteAssignmentDialogState();
@@ -100,15 +100,15 @@ class _DeleteAssignmentDialogState extends State<DeleteAssignmentDialog> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
+                  const Row(
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.warning_amber_rounded,
                         color: Color(0xFFDC2626),
                         size: 16,
                       ),
-                      const SizedBox(width: 6),
-                      const Text(
+                      SizedBox(width: 6),
+                      Text(
                         'Danger Zone',
                         style: TextStyle(
                           fontSize: 13,

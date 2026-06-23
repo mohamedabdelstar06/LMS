@@ -1,12 +1,4 @@
 class NotificationModel {
-  final int id;
-  final String title;
-  final String body;
-  final String type;
-  final bool isRead;
-  final DateTime? readAt;
-  final int? referenceActivityId;
-  final DateTime createdAt;
 
   const NotificationModel({
     required this.id,
@@ -31,6 +23,14 @@ class NotificationModel {
       createdAt: DateTime.parse(json['createdAt'] as String),
     );
   }
+  final int id;
+  final String title;
+  final String body;
+  final String type;
+  final bool isRead;
+  final DateTime? readAt;
+  final int? referenceActivityId;
+  final DateTime createdAt;
 
   NotificationModel copyWith({bool? isRead, DateTime? readAt}) {
     return NotificationModel(
@@ -47,12 +47,6 @@ class NotificationModel {
 }
 
 class NotificationsResponse {
-  final List<NotificationModel> items;
-  final int totalCount;
-  final int page;
-  final int pageSize;
-  final int totalPages;
-  final int unreadCount;
 
   const NotificationsResponse({
     required this.items,
@@ -75,4 +69,10 @@ class NotificationsResponse {
       unreadCount: json['unreadCount'] as int,
     );
   }
+  final List<NotificationModel> items;
+  final int totalCount;
+  final int page;
+  final int pageSize;
+  final int totalPages;
+  final int unreadCount;
 }

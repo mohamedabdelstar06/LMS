@@ -10,14 +10,14 @@ import 'student_assignment_model.dart';
 import 'assignment_detail_screen.dart';
 
 class AssignmentsListScreen extends StatelessWidget {
-  final int courseId;
-  final String courseTitle;
 
   const AssignmentsListScreen({
     super.key,
     required this.courseId,
     required this.courseTitle,
   });
+  final int courseId;
+  final String courseTitle;
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +29,9 @@ class AssignmentsListScreen extends StatelessWidget {
 }
 
 class _AssignmentsListView extends StatelessWidget {
+  const _AssignmentsListView({required this.courseId, required this.courseTitle});
   final int courseId;
   final String courseTitle;
-  const _AssignmentsListView({required this.courseId, required this.courseTitle});
 
   @override
   Widget build(BuildContext context) {
@@ -187,9 +187,9 @@ class _AssignmentsListView extends StatelessWidget {
 }
 
 class _AssignmentCard extends StatefulWidget {
+  const _AssignmentCard({required this.assignment, required this.onTap});
   final StudentAssignmentModel assignment;
   final VoidCallback onTap;
-  const _AssignmentCard({required this.assignment, required this.onTap});
 
   @override
   State<_AssignmentCard> createState() => _AssignmentCardState();
@@ -325,9 +325,9 @@ class _AssignmentCardState extends State<_AssignmentCard> {
 }
 
 class _MetaTag extends StatelessWidget {
+  const _MetaTag({required this.icon, required this.label});
   final IconData icon;
   final String label;
-  const _MetaTag({required this.icon, required this.label});
 
   @override
   Widget build(BuildContext context) {
@@ -382,9 +382,9 @@ class _EmptyView extends StatelessWidget {
 }
 
 class _ErrorView extends StatelessWidget {
+  const _ErrorView({required this.message, required this.onRetry});
   final String message;
   final VoidCallback onRetry;
-  const _ErrorView({required this.message, required this.onRetry});
 
   @override
   Widget build(BuildContext context) {

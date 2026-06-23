@@ -351,7 +351,6 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
       width: 250,
       margin: const EdgeInsetsDirectional.only(
         start: 30,
-        end: 0,
         top: 50,
         bottom: 50,
       ),
@@ -477,7 +476,6 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                 color: isHovered && !isSelected
                     ? const Color(0xFF2563EB).withOpacity(0.3)
                     : Colors.transparent,
-                width: 1,
               ),
             ),
             child: Row(
@@ -559,7 +557,6 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
               color: isLogoutHovered
                   ? const Color(0xFFEF4444).withOpacity(0.3)
                   : Colors.transparent,
-              width: 1,
             ),
           ),
           child: const Row(
@@ -970,7 +967,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                                   );
                                 }
 
-                                List<GetDepartmentModel> departments =
+                                final List<GetDepartmentModel> departments =
                                     departmentState.departments
                                         .whereType<GetDepartmentModel>()
                                         .toList();
@@ -1036,7 +1033,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                             }
 
                             // ignore: unused_local_variable
-                            List<GetYearModel> years = yearState.years
+                            final List<GetYearModel> years = yearState.years
                                 .whereType<GetYearModel>()
                                 .toList();
 
@@ -1091,7 +1088,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
   }
 
   Widget _buildActionButtons(CreateCourseState state) {
-    bool isLoading = state is CreateCourseLoading;
+    final bool isLoading = state is CreateCourseLoading;
     return Row(
       children: [
         Expanded(

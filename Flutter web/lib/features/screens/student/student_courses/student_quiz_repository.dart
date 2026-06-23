@@ -11,7 +11,7 @@ class StudentQuizRepository {
     final token = await TokenStorageHelper.getTokenSecure();
     if (token == null || token.isEmpty) {
       throw DioException(
-        requestOptions: RequestOptions(path: ''),
+        requestOptions: RequestOptions(),
         error: 'You are not authorized. Token missing.',
       );
     }
@@ -48,12 +48,10 @@ class StudentQuizRepository {
   Future<StudentQuizResult?> getMyResult(int quizId) async {
     dio.interceptors.add(
       LogInterceptor(
-        request: true,
         requestHeader: true,
         requestBody: true,
         responseBody: true,
         responseHeader: false,
-        error: true,
       ),
     );
     final token = await _authOrThrow();
@@ -87,12 +85,10 @@ class StudentQuizRepository {
   }) async {
     dio.interceptors.add(
       LogInterceptor(
-        request: true,
         requestHeader: true,
         requestBody: true,
         responseBody: true,
         responseHeader: false,
-        error: true,
       ),
     );
     final token = await _authOrThrow();

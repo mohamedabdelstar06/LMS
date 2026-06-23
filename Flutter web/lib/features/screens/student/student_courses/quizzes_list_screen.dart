@@ -11,14 +11,14 @@ import 'quiz_take_screen.dart';
 import 'quiz_result_screen.dart';
 
 class QuizzesListScreen extends StatelessWidget {
-  final int courseId;
-  final String courseTitle;
 
   const QuizzesListScreen({
     super.key,
     required this.courseId,
     required this.courseTitle,
   });
+  final int courseId;
+  final String courseTitle;
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +30,9 @@ class QuizzesListScreen extends StatelessWidget {
 }
 
 class _QuizzesListView extends StatelessWidget {
+  const _QuizzesListView({required this.courseId, required this.courseTitle});
   final int courseId;
   final String courseTitle;
-  const _QuizzesListView({required this.courseId, required this.courseTitle});
 
   @override
   Widget build(BuildContext context) {
@@ -198,9 +198,9 @@ class _QuizzesListView extends StatelessWidget {
 /// attempt) or jump straight to the result screen for an already
 /// finished attempt — driven by StudentQuizCubit.beginOrResumeQuiz().
 class QuizEntryScreen extends StatelessWidget {
+  const QuizEntryScreen({super.key, required this.quizId, required this.quizTitle});
   final int quizId;
   final String quizTitle;
-  const QuizEntryScreen({super.key, required this.quizId, required this.quizTitle});
 
   @override
   Widget build(BuildContext context) {
@@ -263,9 +263,9 @@ class QuizEntryScreen extends StatelessWidget {
 }
 
 class _QuizCard extends StatefulWidget {
+  const _QuizCard({required this.quiz, required this.onTap});
   final StudentQuizListItem quiz;
   final VoidCallback onTap;
-  const _QuizCard({required this.quiz, required this.onTap});
 
   @override
   State<_QuizCard> createState() => _QuizCardState();
@@ -397,9 +397,9 @@ class _QuizCardState extends State<_QuizCard> {
 }
 
 class _MetaTag extends StatelessWidget {
+  const _MetaTag({required this.icon, required this.label});
   final IconData icon;
   final String label;
-  const _MetaTag({required this.icon, required this.label});
 
   @override
   Widget build(BuildContext context) {
@@ -454,9 +454,9 @@ class _EmptyView extends StatelessWidget {
 }
 
 class _ErrorView extends StatelessWidget {
+  const _ErrorView({required this.message, required this.onRetry});
   final String message;
   final VoidCallback onRetry;
-  const _ErrorView({required this.message, required this.onRetry});
 
   @override
   Widget build(BuildContext context) {

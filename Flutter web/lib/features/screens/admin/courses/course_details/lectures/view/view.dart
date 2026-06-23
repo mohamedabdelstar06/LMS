@@ -13,18 +13,31 @@ import '../model/model.dart';
 import '../state_managment/lectures_cubit.dart';
 import '../state_managment/lectures_state.dart';
 
+/// Who's viewing this screen. Drives which controls are shown:
+///  - admin / instructor: full management (add, edit, delete, comments).
+///  - student: read-only — only viewing + comments, no Add/Edit/Delete.
 class LecturesScreen extends StatefulWidget {
-  const LecturesScreen({super.key, required this.courseId, required this.course});
+  const LecturesScreen({
+    super.key,
+    required this.courseId,
+    required this.course,
+    this.role = 'admin',
+  });
 
   final int courseId;
   final GetCoursesModel course;
+
+  /// 'admin' | 'instructor' | 'student'
+  final String role;
+
+  bool get isStudent => role.toLowerCase() == 'student';
 
   @override
   State<LecturesScreen> createState() => _LecturesScreenState();
 }
 
 class _LecturesScreenState extends State<LecturesScreen> {
-  bool _sidebarCollapsed = false;
+  final bool _sidebarCollapsed = false;
   String _searchQuery = '';
   String _filterType = 'All';
   final TextEditingController _searchCtrl = TextEditingController();
@@ -52,6 +65,7 @@ class _LecturesScreenState extends State<LecturesScreen> {
       ),
     );
   }
+
   void showSnack(BuildContext ctx, String msg, Color color, IconData icon) {
     ScaffoldMessenger.of(ctx).showSnackBar(
       SnackBar(
@@ -60,8 +74,10 @@ class _LecturesScreenState extends State<LecturesScreen> {
             Icon(icon, color: Colors.white, size: 18),
             const SizedBox(width: 10),
             Expanded(
-              child: Text(msg,
-                  style: const TextStyle(fontWeight: FontWeight.w600)),
+              child: Text(
+                msg,
+                style: const TextStyle(fontWeight: FontWeight.w600),
+              ),
             ),
           ],
         ),
@@ -76,10 +92,12 @@ class _LecturesScreenState extends State<LecturesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isStudent = widget.isStudent;
+
     return BlocProvider(
-      create: (_) => LectureCubit(
-        courseModel: context.read<LectureCubit>().courseModel,
-      )..fetchLectures(widget.courseId),
+      create: (_) =>
+          LectureCubit(courseModel: context.read<LectureCubit>().courseModel)
+            ..fetchLectures(widget.courseId),
       child: Scaffold(
         backgroundColor: const Color(0xFFF0F4FF),
         body: BlocConsumer<LectureCubit, LectureState>(
@@ -100,8 +118,20 @@ class _LecturesScreenState extends State<LecturesScreen> {
                         filterType: _filterType,
                         onFilterChange: (v) => setState(() => _filterType = v),
                         lectureCount: allLectures.length,
-                        onAddNew: () =>
-                            showAddEditDialog(context, widget.courseId, cubit),
+                        subtitle: isStudent
+                            ? 'Course lectures'
+                            : 'Manage course lectures',
+                        // Students have no permission to add lectures —
+                        // the entire "Add Lecture" control is removed,
+                        // not just disabled (see topBar.dart: button is
+                        // only built `if (onAddNew != null)`).
+                        onAddNew: isStudent
+                            ? null
+                            : () => showAddEditDialog(
+                                context,
+                                widget.courseId,
+                                cubit,
+                              ),
                       ),
 
                       Expanded(
@@ -110,13 +140,26 @@ class _LecturesScreenState extends State<LecturesScreen> {
                           filtered: filtered,
                           searchQuery: _searchQuery,
                           cubit: cubit,
-                          onEdit: (l) => showAddEditDialog(
-                              context, widget.courseId, cubit,
-                              lecture: l),
-                          onDelete: (l) => showDeleteDialog(context, cubit, l),
+                          // Genuinely null for students — Body forwards
+                          // null straight into LectureTile, which then
+                          // skips building the Edit/Delete icons
+                          // entirely (see lectureTile.dart _buildFooter:
+                          // `if (widget.onEdit != null) ...`).
+                          onEdit: isStudent
+                              ? null
+                              : (l) => showAddEditDialog(
+                                  context,
+                                  widget.courseId,
+                                  cubit,
+                                  lecture: l,
+                                ),
+                          onDelete: isStudent
+                              ? null
+                              : (l) => showDeleteDialog(context, cubit, l),
                           // onView: (l) => _openLecture(context, l),
                           onComments: (l) => _openComments(context, l.id),
-                          onRetry: () => cubit.fetchLectures(widget.courseId), course: widget.course,
+                          onRetry: () => cubit.fetchLectures(widget.courseId),
+                          course: widget.course,
                         ),
                       ),
                     ],
@@ -129,11 +172,12 @@ class _LecturesScreenState extends State<LecturesScreen> {
       ),
     );
   }
+
   void _listener(BuildContext context, LectureState state) {
     if (state is LectureDeleteSuccess
     // ||
-        // state is LectureCreateSuccess ||
-        // state is LectureUpdateSuccess
+    // state is LectureCreateSuccess ||
+    // state is LectureUpdateSuccess
     ) {
       showSnack(
         context,
@@ -154,23 +198,27 @@ class _LecturesScreenState extends State<LecturesScreen> {
       );
     }
   }
+
   List<LectureModel> _filterLectures(List<LectureModel> lectures) {
     return lectures.where((l) {
       final matchSearch =
           l.title.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-              l.description.toLowerCase().contains(_searchQuery.toLowerCase());
+          l.description.toLowerCase().contains(_searchQuery.toLowerCase());
 
-      final matchType = _filterType == 'All' ||
+      final matchType =
+          _filterType == 'All' ||
           l.contentType.toLowerCase() == _filterType.toLowerCase();
 
       return matchSearch && matchType;
     }).toList();
   }
+
   void _openLecture(BuildContext context, LectureModel lecture) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) => ShowViewDialogScreen(lecture: lecture, course: widget.course,),
+        builder: (_) =>
+            ShowViewDialogScreen(lecture: lecture, course: widget.course),
       ),
     );
   }

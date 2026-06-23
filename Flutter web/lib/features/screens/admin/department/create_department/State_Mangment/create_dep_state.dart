@@ -10,15 +10,15 @@ class DepartmentInitial extends DepartmentState {}
 class DepartmentLoading extends DepartmentState {}
 
 class DepartmentSuccess extends DepartmentState {
-  final String message;
   DepartmentSuccess(this.message);
+  final String message;
   @override
   List<Object?> get props => [message];
 }
 
 class DepartmentError extends DepartmentState {
-  final String message;
   DepartmentError(this.message);
+  final String message;
   @override
   List<Object?> get props => [message];
 }

@@ -9,22 +9,6 @@
 // ============================================================
 
 class StudentQuizListItem {
-  final int id;
-  final int courseId;
-  final String courseName;
-  final String title;
-  final String description;
-  final int? timeLimitMinutes;
-  final int maxAttempts;
-  final double passingScore;
-  final int totalMarks;
-  final DateTime? startDate;
-  final DateTime? deadLineDate;
-  final String? targetSquadronName;
-  final int questionCount;
-  final bool isVisible;
-  final String createdByName;
-  final DateTime? createdAt;
 
   StudentQuizListItem({
     required this.id,
@@ -65,6 +49,22 @@ class StudentQuizListItem {
       createdAt: json['createdAt'] != null ? DateTime.tryParse(json['createdAt']) : null,
     );
   }
+  final int id;
+  final int courseId;
+  final String courseName;
+  final String title;
+  final String description;
+  final int? timeLimitMinutes;
+  final int maxAttempts;
+  final double passingScore;
+  final int totalMarks;
+  final DateTime? startDate;
+  final DateTime? deadLineDate;
+  final String? targetSquadronName;
+  final int questionCount;
+  final bool isVisible;
+  final String createdByName;
+  final DateTime? createdAt;
 
   bool get hasStarted => startDate == null || DateTime.now().isAfter(startDate!);
   bool get hasEnded => deadLineDate != null && DateTime.now().isAfter(deadLineDate!);
@@ -74,13 +74,6 @@ class StudentQuizListItem {
 // ── Take Session ────────────────────────────────────────────
 
 class QuizTakeSession {
-  final int quizId;
-  final String title;
-  final String description;
-  final int? timeLimitMinutes;
-  final int totalMarks;
-  final int attemptNumber;
-  final List<QuizTakeQuestion> questions;
 
   QuizTakeSession({
     required this.quizId,
@@ -105,17 +98,16 @@ class QuizTakeSession {
           .toList(),
     );
   }
+  final int quizId;
+  final String title;
+  final String description;
+  final int? timeLimitMinutes;
+  final int totalMarks;
+  final int attemptNumber;
+  final List<QuizTakeQuestion> questions;
 }
 
 class QuizTakeQuestion {
-  final int id;
-  final String questionText;
-  final String? questionTextAr;
-  final String questionType; // SingleChoice | MultipleChoice | TrueFalse | ShortAnswer
-  final int marks;
-  final int sortOrder;
-  final String? imageUrl;
-  final List<QuizTakeOption> options;
 
   QuizTakeQuestion({
     required this.id,
@@ -142,13 +134,17 @@ class QuizTakeQuestion {
           .toList(),
     );
   }
+  final int id;
+  final String questionText;
+  final String? questionTextAr;
+  final String questionType; // SingleChoice | MultipleChoice | TrueFalse | ShortAnswer
+  final int marks;
+  final int sortOrder;
+  final String? imageUrl;
+  final List<QuizTakeOption> options;
 }
 
 class QuizTakeOption {
-  final int id;
-  final String optionText;
-  final String? optionTextAr;
-  final int sortOrder;
 
   QuizTakeOption({
     required this.id,
@@ -165,15 +161,15 @@ class QuizTakeOption {
       sortOrder: json['sortOrder'] ?? 0,
     );
   }
+  final int id;
+  final String optionText;
+  final String? optionTextAr;
+  final int sortOrder;
 }
 
 // ── Answer (auto-save / submit payload) ─────────────────────
 
 class QuizAnswerDraft {
-  final int questionId;
-  int? selectedOptionId;
-  String? writtenAnswer;
-  bool isFlagged;
 
   QuizAnswerDraft({
     required this.questionId,
@@ -181,6 +177,10 @@ class QuizAnswerDraft {
     this.writtenAnswer,
     this.isFlagged = false,
   });
+  final int questionId;
+  int? selectedOptionId;
+  String? writtenAnswer;
+  bool isFlagged;
 
   Map<String, dynamic> toJson() => {
         'questionId': questionId,
@@ -199,20 +199,6 @@ class QuizAnswerDraft {
 // ── My Result (also used to detect an in-progress attempt) ───
 
 class StudentQuizResult {
-  final int attemptId;
-  final int quizId;
-  final String quizTitle;
-  final int studentId;
-  final String studentName;
-  final int attemptNumber;
-  final double? score;
-  final int maxScore;
-  final double? scorePercent;
-  final String status; // "InProgress" | "Submitted" | "Graded" ...
-  final DateTime? startedAt;
-  final DateTime? submittedAt;
-  final int? timeSpentSeconds;
-  final List<StudentQuizAnswerResult>? answers;
 
   StudentQuizResult({
     required this.attemptId,
@@ -251,17 +237,26 @@ class StudentQuizResult {
           : null,
     );
   }
+  final int attemptId;
+  final int quizId;
+  final String quizTitle;
+  final int studentId;
+  final String studentName;
+  final int attemptNumber;
+  final double? score;
+  final int maxScore;
+  final double? scorePercent;
+  final String status; // "InProgress" | "Submitted" | "Graded" ...
+  final DateTime? startedAt;
+  final DateTime? submittedAt;
+  final int? timeSpentSeconds;
+  final List<StudentQuizAnswerResult>? answers;
 
   bool get isInProgress => status == 'InProgress';
   bool get isPassed => status == 'Graded' && (scorePercent ?? 0) >= 50;
 }
 
 class StudentQuizAnswerResult {
-  final int questionId;
-  final int? selectedOptionId;
-  final String? writtenAnswer;
-  final bool? isCorrect;
-  final int? marksAwarded;
 
   StudentQuizAnswerResult({
     required this.questionId,
@@ -280,4 +275,9 @@ class StudentQuizAnswerResult {
       marksAwarded: json['marksAwarded'],
     );
   }
+  final int questionId;
+  final int? selectedOptionId;
+  final String? writtenAnswer;
+  final bool? isCorrect;
+  final int? marksAwarded;
 }

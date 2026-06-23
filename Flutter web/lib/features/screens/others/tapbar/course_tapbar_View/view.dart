@@ -8,7 +8,7 @@ class CourseTapbarScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-backgroundColor: Color(
+backgroundColor: const Color(
   0xfff6fbff
 ),
       body: ListView(
@@ -41,7 +41,7 @@ class _CultureVideoContainerState extends State<CultureVideoContainer> {
 
     // رابط فيديو صالح للـ Web
     controller = VideoPlayerController.network(
-      "Videos/test.mp4",
+      'Videos/test.mp4',
     )
       ..initialize().then((_) {
         // بمجرد ما الفيديو يجهز، نحدث الواجهة
@@ -83,7 +83,7 @@ class _CultureVideoContainerState extends State<CultureVideoContainer> {
                       : const Icon(Icons.arrow_downward, color: Colors.blue),
                   const SizedBox(width: 20),
                   const Text(
-                    "Welcome! Aloha! Bonvenon!",
+                    'Welcome! Aloha! Bonvenon!',
                     style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -94,11 +94,11 @@ class _CultureVideoContainerState extends State<CultureVideoContainer> {
                   setState(() {});
                 },
                 child: const Text(
-                  "Collapse all",
+                  'Collapse all',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
-                    fontFamily: "inter",
+                    fontFamily: 'inter',
                     color: Colors.blueAccent,
                   ),
                 ),
@@ -108,8 +108,8 @@ class _CultureVideoContainerState extends State<CultureVideoContainer> {
 if (!isCollabsed)...[
           const SizedBox(height: 16),
           const Text(
-            "We are all from different communities but we are all one community at Mount Orange. "
-                "This course is for students, teachers and the wider community members to share and learn about our cultural diversity.",
+            'We are all from different communities but we are all one community at Mount Orange. '
+                'This course is for students, teachers and the wider community members to share and learn about our cultural diversity.',
             style: TextStyle(fontSize: 15, height: 1.4, color: Colors.grey),
           ),
 
@@ -176,25 +176,25 @@ if (!isCollabsed)...[
               borderRadius: BorderRadius.circular(12),
             ),
             color: Colors.grey.shade100,
-            child: Padding(
-              padding: const EdgeInsets.all(4),
+            child: const Padding(
+              padding: EdgeInsets.all(4),
               child: ListTile(
                 isThreeLine: true,
-                leading: const Icon(
+                leading: Icon(
                   Icons.folder_delete_outlined,
                   color: Colors.black87,
                   size: 28,
                 ),
-                title: const Text(
-                  "Interesting cities",
+                title: Text(
+                  'Interesting cities',
                   style: TextStyle(
                     color: Colors.blueAccent,
                     fontWeight: FontWeight.bold,
                     fontSize: 15,
                   ),
                 ),
-                subtitle: const Text(
-                  "No need to download these images - view them directly in the browser!",
+                subtitle: Text(
+                  'No need to download these images - view them directly in the browser!',
                   style: TextStyle(
                     color: Colors.grey,
                     fontSize: 14,
@@ -230,7 +230,7 @@ class CustomCardScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              "Activities",
+              'Activities',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -252,7 +252,7 @@ class CustomCardScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        "Database: Food for Moodlers",
+                        'Database: Food for Moodlers',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -260,10 +260,10 @@ class CustomCardScreen extends StatelessWidget {
                         ),
                       ),
                       const Text(
-                        "Share your favourite meal or recipe with others here.",
+                        'Share your favourite meal or recipe with others here.',
                         style: TextStyle(fontSize: 14, color: Colors.grey),
                       ),
-                      Image.asset("assets/images/food.png",width: 128,height: 100,),
+                      Image.asset('assets/images/food.png',width: 128,height: 100,),
                     ],
                   ),
                 ),
@@ -275,25 +275,25 @@ class CustomCardScreen extends StatelessWidget {
 
             Row(
               children: [
-                SvgPicture.asset("assets/icons/glossary_icon.png", width: 20,
+                SvgPicture.asset('assets/icons/glossary_icon.png', width: 20,
                   height: 24,
                   fit: BoxFit.cover,),
 
                 const SizedBox(width: 16),
-                Expanded(
+                const Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        "Glossary: International Teaching Terms",
+                      Text(
+                        'Glossary: International Teaching Terms',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                           color: Colors.blueAccent,
                         ),
                       ),
-                      const Text(
-                        "Educators around the world use admin_profile variety of phrases and acronyms. Add yours to this glossary.",
+                      Text(
+                        'Educators around the world use admin_profile variety of phrases and acronyms. Add yours to this glossary.',
                         style: TextStyle(fontSize: 14, color: Colors.grey),
                       ),
                     ],
@@ -321,11 +321,11 @@ class CustomCardScreen extends StatelessWidget {
 
             const Divider(height: 32, thickness: 1, color: Colors.grey),
 
-            Column(
+            const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
+              children: [
                 Text(
-                  "Assignment: Languages of Love",
+                  'Assignment: Languages of Love',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -333,7 +333,7 @@ class CustomCardScreen extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  "Speak to us!",
+                  'Speak to us!',
                   style: TextStyle(fontSize: 14, color: Colors.grey),
                 ),
               ],

@@ -16,11 +16,11 @@ class AppInitializationService {
 
   static Future<void> _loadAppConfiguration() async {
 
-    await Future.delayed(Duration(milliseconds: 300));
+    await Future.delayed(const Duration(milliseconds: 300));
   }
 
   static Future<void> _preloadCriticalAssets() async {
 
-    await Future.delayed(Duration(milliseconds: 200));
+    await Future.delayed(const Duration(milliseconds: 200));
   }
 }

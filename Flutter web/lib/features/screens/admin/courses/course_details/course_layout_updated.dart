@@ -11,11 +11,11 @@ import 'package:lms/features/screens/admin/courses/course_details/assignments/st
 import 'package:lms/features/screens/admin/courses/course_details/assignments/view/view.dart';
 import 'package:lms/features/screens/quizes/quizzes_screen.dart';
 
-import '../home_courses/model/model.dart';
 import '../course_details/courseDetailsState_managment/course_details_cubit.dart';
-import '../course_details/view.dart';
 import '../course_details/lectures/state_managment/lectures_cubit.dart';
 import '../course_details/lectures/view/view.dart';
+import '../course_details/view.dart';
+import '../home_courses/model/model.dart';
 import 'lectures/functions/sideBar.dart';
 
 // ── Feature imports ───────────────────────────────────────────

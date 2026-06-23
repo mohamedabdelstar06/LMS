@@ -25,16 +25,16 @@ class YearCubit extends Cubit<YearState> {
 
       final token = await TokenStorageHelper.getTokenSecure();
       if (token == null || token.isEmpty) {
-        emit(YearError("You are not authorized. Token missing."));
+        emit(YearError('You are not authorized. Token missing.'));
         return;
       }
 
       final data = {
-        "name": fullNameController.text.trim(),
-        "description": descriptionController.text.trim(),
-        "departmentName": departmentName,
-        "startDate": startDate.toIso8601String(),
-        "endDate": endDate.toIso8601String(),
+        'name': fullNameController.text.trim(),
+        'description': descriptionController.text.trim(),
+        'departmentName': departmentName,
+        'startDate': startDate.toIso8601String(),
+        'endDate': endDate.toIso8601String(),
       };
 
       final response = await dio.post(
@@ -43,27 +43,27 @@ class YearCubit extends Cubit<YearState> {
         options: Options(
           headers: {
             // "Content-Type": "application/json",
-            "Authorization": "Bearer $token",
+            'Authorization': 'Bearer $token',
           },
         ),
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        emit(YearSuccess("Year created successfully"));
+        emit(YearSuccess('Year created successfully'));
         fullNameController.clear();
         descriptionController.clear();
-        departmentName = "Select Department";
+        departmentName = 'Select Department';
         startDate = DateTime.now();
         endDate = DateTime.now();
       } else {
-        emit(YearError("Failed to create year. Status: ${response.statusCode}"));
+        emit(YearError('Failed to create year. Status: ${response.statusCode}'));
       }
     } on DioException catch (e) {
-      String errorMsg = "An unknown error occurred.";
+      String errorMsg = 'An unknown error occurred.';
       if (e.response != null) {
-        errorMsg = e.response?.data['message'] ?? e.response?.statusMessage ?? "Server Error";
+        errorMsg = e.response?.data['message'] ?? e.response?.statusMessage ?? 'Server Error';
       } else if (e.type == DioExceptionType.connectionError) {
-        errorMsg = "Connection Error. Please check your network.";
+        errorMsg = 'Connection Error. Please check your network.';
       }
       emit(YearError(errorMsg));
     } catch (e) {

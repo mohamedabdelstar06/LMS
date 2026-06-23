@@ -15,12 +15,10 @@ class QuizRepository {
   }) async {
     _dio.interceptors.add(
       LogInterceptor(
-        request: true,
         requestHeader: true,
         requestBody: true,
         responseBody: true,
         responseHeader: false,
-        error: true,
       ),
     );
     final res = await _dio.post(

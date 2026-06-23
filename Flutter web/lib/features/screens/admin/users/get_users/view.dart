@@ -185,7 +185,7 @@ class _GetUsersScreenState extends State<GetUsersPage> {
                                           children: [
                                             Icon(Icons.people_outline, size: 64, color: Colors.grey.shade400),
                                             const SizedBox(height: 16),
-                                            Text("No users found",
+                                            Text('No users found',
                                                 style: TextStyle(fontSize: 18, color: Colors.grey.shade600)),
                                           ],
                                         ),
@@ -715,7 +715,6 @@ class _GetUsersScreenState extends State<GetUsersPage> {
         border: const Border(
           bottom: BorderSide(
             color: Color(0xFFE2E8F0),
-            width: 1,
           ),
         ),
       ),
@@ -752,7 +751,6 @@ class _GetUsersScreenState extends State<GetUsersPage> {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               child: AppNetworkImage(
                 imageUrl: user.profileImageUrl,
-                size: 48,
                 fallbackText: user.fullName,
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -1031,7 +1029,7 @@ class _GetUsersScreenState extends State<GetUsersPage> {
                           Container(
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                              color: Color(0xFFF59E0B).withOpacity(0.15),
+                              color: const Color(0xFFF59E0B).withOpacity(0.15),
                               shape: BoxShape.circle,
                             ),
                             child: const Icon(

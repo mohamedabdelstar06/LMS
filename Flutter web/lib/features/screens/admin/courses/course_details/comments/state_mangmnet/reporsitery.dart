@@ -68,7 +68,7 @@ class CommentsRepository {
       headers: await _headers(),
     );
     if (res.statusCode == 200) {
-      return (jsonDecode(res.body))['liked'] as bool;
+      return jsonDecode(res.body)['liked'] as bool;
     }
     throw Exception('Failed to toggle like (${res.statusCode})');
   }

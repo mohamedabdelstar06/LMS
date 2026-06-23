@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 
 class AdminTableHeader extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final List<AdminStatBadge> stats;
 
   const AdminTableHeader({
     super.key,
@@ -13,6 +9,10 @@ class AdminTableHeader extends StatelessWidget {
     required this.subtitle,
     required this.stats,
   });
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final List<AdminStatBadge> stats;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,6 @@ class AdminTableHeader extends StatelessWidget {
         border: Border(
           bottom: BorderSide(
             color: Colors.grey.shade200,
-            width: 1,
           ),
         ),
       ),
@@ -88,10 +87,6 @@ class AdminTableHeader extends StatelessWidget {
 }
 
 class AdminStatBadge {
-  final String title;
-  final int count;
-  final IconData icon;
-  final Color color;
 
   const AdminStatBadge({
     required this.title,
@@ -99,13 +94,13 @@ class AdminStatBadge {
     required this.icon,
     required this.color,
   });
-}
-
-class _CompactStatBadge extends StatelessWidget {
   final String title;
   final int count;
   final IconData icon;
   final Color color;
+}
+
+class _CompactStatBadge extends StatelessWidget {
 
   const _CompactStatBadge({
     required this.title,
@@ -113,6 +108,10 @@ class _CompactStatBadge extends StatelessWidget {
     required this.icon,
     required this.color,
   });
+  final String title;
+  final int count;
+  final IconData icon;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -150,7 +149,7 @@ class _CompactStatBadge extends StatelessWidget {
               ),
               Text(
                 count.toString(),
-                style:  TextStyle(
+                style:  const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,

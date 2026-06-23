@@ -59,10 +59,11 @@ class PrefHelper {
     return prefs.getString('profileImageUrl');
   }
 
-  // static Future<bool> isLoggedIn() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   return prefs.containsKey("tokenKey");
-  // }
+  static Future<bool> isLoggedIn() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('tokenKey');
+    return token != null && token.isNotEmpty;
+  }
 
   static Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();

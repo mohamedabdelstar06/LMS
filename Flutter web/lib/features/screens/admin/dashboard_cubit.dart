@@ -7,15 +7,8 @@ import 'package:lms/core/helpers/cach_helper/shared_pref_helper.dart';
 
 part 'dashboard_state.dart';
 
-// ── Models ────────────────────────────────────────────────────────────────────
 
 class DashboardStatsModel {
-  final int totalUsers;
-  final int totalStudents;
-  final int totalInstructors;
-  final int totalCourses;
-  final int totalDepartments;
-  final int totalSquadrons;
 
   const DashboardStatsModel({
     required this.totalUsers,
@@ -35,17 +28,21 @@ class DashboardStatsModel {
         totalDepartments: json['totalDepartments'] ?? 0,
         totalSquadrons: json['totalSquadrons'] ?? 0,
       );
+  final int totalUsers;
+  final int totalStudents;
+  final int totalInstructors;
+  final int totalCourses;
+  final int totalDepartments;
+  final int totalSquadrons;
 }
 
 class DepartmentOverview {
-  final int id;
-  final String name;
-  final int courseCount;
 
   const DepartmentOverview({
     required this.id,
     required this.name,
     required this.courseCount,
+    this.imageUrl,
   });
 
   factory DepartmentOverview.fromJson(Map<String, dynamic> json) =>
@@ -53,17 +50,15 @@ class DepartmentOverview {
         id: json['id'] ?? 0,
         name: json['name'] ?? '',
         courseCount: json['courseCount'] ?? 0,
+        imageUrl: json['imageUrl'],
       );
+  final int id;
+  final String name;
+  final int courseCount;
+  final String? imageUrl;
 }
 
 class RecentCourse {
-  final int id;
-  final String title;
-  final String imageUrl;
-  final String departmentName;
-  final String instructorName;
-  final int enrolledStudentsCount;
-  final int creditHours;
 
   const RecentCourse({
     required this.id,
@@ -73,6 +68,7 @@ class RecentCourse {
     required this.instructorName,
     required this.enrolledStudentsCount,
     required this.creditHours,
+    this.createdAt,
   });
 
   factory RecentCourse.fromJson(Map<String, dynamic> json) => RecentCourse(
@@ -83,14 +79,19 @@ class RecentCourse {
         instructorName: json['instructorName'] ?? '',
         enrolledStudentsCount: json['enrolledStudentsCount'] ?? 0,
         creditHours: json['creditHours'] ?? 0,
+        createdAt: json['createdAt'] != null ? DateTime.tryParse(json['createdAt']) : null,
       );
+  final int id;
+  final String title;
+  final String imageUrl;
+  final String departmentName;
+  final String instructorName;
+  final int enrolledStudentsCount;
+  final int creditHours;
+  final DateTime? createdAt;
 }
 
 class TopInstructor {
-  final int instructorId;
-  final String fullName;
-  final String profileImageUrl;
-  final int courseCount;
 
   const TopInstructor({
     required this.instructorId,
@@ -105,12 +106,13 @@ class TopInstructor {
         profileImageUrl: json['profileImageUrl'] ?? '',
         courseCount: json['courseCount'] ?? 0,
       );
+  final int instructorId;
+  final String fullName;
+  final String profileImageUrl;
+  final int courseCount;
 }
 
 class WeeklyHour {
-  final String day;
-  final int study;
-  final int exams;
 
   const WeeklyHour({required this.day, required this.study, required this.exams});
 
@@ -119,15 +121,12 @@ class WeeklyHour {
         study: json['study'] ?? 0,
         exams: json['exams'] ?? 0,
       );
+  final String day;
+  final int study;
+  final int exams;
 }
 
 class DashboardOverviewModel {
-  final List<DepartmentOverview> departments;
-  final List<RecentCourse> recentCourses;
-  final List<TopInstructor> topInstructors;
-  final int monthlyStudyCount;
-  final int monthlyExamCount;
-  final List<WeeklyHour> weeklyHours;
 
   const DashboardOverviewModel({
     required this.departments,
@@ -155,16 +154,22 @@ class DashboardOverviewModel {
             .map((e) => WeeklyHour.fromJson(e))
             .toList(),
       );
+  final List<DepartmentOverview> departments;
+  final List<RecentCourse> recentCourses;
+  final List<TopInstructor> topInstructors;
+  final int monthlyStudyCount;
+  final int monthlyExamCount;
+  final List<WeeklyHour> weeklyHours;
 }
 
-// ── Cubit ─────────────────────────────────────────────────────────────────────
+
 
 class DashboardCubit extends Cubit<DashboardState> {
-  final Dio dio;
 
   DashboardCubit({Dio? dio})
       : dio = dio ?? Dio(),
         super(DashboardInitial());
+  final Dio dio;
 
   Future<void> loadDashboard() async {
     emit(DashboardLoading());
@@ -183,11 +188,11 @@ class DashboardCubit extends Cubit<DashboardState> {
 
       final responses = await Future.wait([
         dio.get(
-          '${ApiResources.apiUrl}Dashboard/admin',
+          '${ApiResources.apiUrl}${ApiResources.adminDashboardEndPoint}',
           options: Options(headers: headers),
         ),
         dio.get(
-          '${ApiResources.apiUrl}Dashboard/admin/overview',
+          '${ApiResources.apiUrl}${ApiResources.adminDashboardOverviewEndPoint}',
           options: Options(headers: headers),
         ),
       ]);
@@ -200,7 +205,7 @@ class DashboardCubit extends Cubit<DashboardState> {
       if (e.response?.statusCode == 401) {
         emit(const DashboardError('غير مصرح. يرجى تسجيل الدخول مجدداً.'));
       } else {
-        emit(DashboardError(e.message ?? 'حدث خطأ في الاتصال'));
+        emit(DashboardError(e.response?.data['message'] ?? e.message ?? 'حدث خطأ في الاتصال'));
       }
     } catch (e) {
       emit(DashboardError(e.toString()));

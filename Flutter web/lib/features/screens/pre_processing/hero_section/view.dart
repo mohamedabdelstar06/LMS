@@ -9,7 +9,7 @@ class HeroSectionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(),
+      appBar: const CustomAppBar(),
       body: Container(width: double.infinity,
         height: double.infinity,
         decoration: BoxDecoration(
@@ -28,59 +28,58 @@ class HeroSectionScreen extends StatelessWidget {
           children: [
             Column(
               mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Spacer(),
-                Text("Learn Smarter,Grow Faster.",style: TextStyle(
+                const Spacer(),
+                const Text('Learn Smarter,Grow Faster.',style: TextStyle(
 
                   fontSize: 48,
                   fontWeight: FontWeight.w700,
-                  fontFamily: "inter",
+                  fontFamily: 'inter',
                   color: Color(0xff175CD3)
 
                 ),),
-                Text("Your All-in-One Learning ",style: TextStyle(
+                const Text('Your All-in-One Learning ',style: TextStyle(
 
                     fontSize: 48,
                     fontWeight: FontWeight.w700,
-                    fontFamily: "inter",
+                    fontFamily: 'inter',
                     color: Color(0xff175CD3)
 
                 ),),
-                Text("Experience.",style: TextStyle(
+                const Text('Experience.',style: TextStyle(
 
                     fontSize: 48,
                     fontWeight: FontWeight.w700,
-                    fontFamily: "inter",
+                    fontFamily: 'inter',
                     color: Color(0xff175CD3)
 
                 ),),
-                Text("Access interactive courses, track your progress, and achieve your ",style: TextStyle(
+                const Text('Access interactive courses, track your progress, and achieve your ',style: TextStyle(
 
                     fontSize: 20,
                     fontWeight: FontWeight.w400,
-                    fontFamily: "inter",
+                    fontFamily: 'inter',
                     color: Color(0xff46556C)
 
                 ),),
-                Text("goals — all in one intuitive learning platform designed to empower ",style: TextStyle(
+                const Text('goals — all in one intuitive learning platform designed to empower ',style: TextStyle(
 
                     fontSize: 20,
                     fontWeight: FontWeight.w400,
-                    fontFamily: "inter",
+                    fontFamily: 'inter',
                     color: Color(0xff46556C)
 
                 ),),
-                Text("students and educators.",style: TextStyle(
+                const Text('students and educators.',style: TextStyle(
 
                     fontSize: 20,
                     fontWeight: FontWeight.w400,
-                    fontFamily: "inter",
+                    fontFamily: 'inter',
                     color: Color(0xff46556C)
 
                 ),),
-                SizedBox(height: 35,),
+                const SizedBox(height: 35,),
 
                 Row(
                   mainAxisSize: MainAxisSize.min,
@@ -94,7 +93,7 @@ class HeroSectionScreen extends StatelessWidget {
             height: 45,
 
               decoration: BoxDecoration(
-                gradient: LinearGradient(
+                gradient: const LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
@@ -103,17 +102,17 @@ class HeroSectionScreen extends StatelessWidget {
                   ],
                 ),
 
-              color: Color(0xFF175CD3),
+              color: const Color(0xFF175CD3),
               borderRadius:
               BorderRadius.circular(12),
             ),
-            child: Center(
+            child: const Center(
               child: Text(
-                "Start Learning",
+                'Start Learning',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  fontFamily: "inter",
+                  fontFamily: 'inter',
                   color: Colors.white,
                 ),
               ),
@@ -121,7 +120,7 @@ class HeroSectionScreen extends StatelessWidget {
                       ),
                     ),
                       ),
-                    SizedBox(width: 20,),
+                    const SizedBox(width: 20,),
                     InkWell(
                       onTap: (){},
 
@@ -133,20 +132,19 @@ class HeroSectionScreen extends StatelessWidget {
                           decoration: BoxDecoration(
 
                   border: Border.all(
-                    color: Color(0xff2E90FA),
-                    width: 1
+                    color: const Color(0xff2E90FA)
                   ),
                             color: Colors.transparent,
                             borderRadius:
                             BorderRadius.circular(12),
                           ),
-                          child: Center(
+                          child: const Center(
                             child: Text(
-                              "Explore Courses",
+                              'Explore Courses',
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
-                                fontFamily: "inter",
+                                fontFamily: 'inter',
                                 color: Color(0xff2E90FA),
                               ),
                             ),
@@ -156,7 +154,7 @@ class HeroSectionScreen extends StatelessWidget {
                     )
                   ],
                 ),
-                Spacer(),
+                const Spacer(),
               ],
             ),
 

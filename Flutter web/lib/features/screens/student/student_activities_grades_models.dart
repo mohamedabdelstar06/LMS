@@ -4,16 +4,6 @@
 
 // ── Activity Model ────────────────────────────────────────────
 class StudentActivity {
-  final int id;
-  final String title;
-  final String activityType; // Quiz, Assignment, Lecture, etc.
-  final String status;       // Completed, Pending, Overdue, etc.
-  final String courseTitle;
-  final int? courseId;
-  final String? dueDate;
-  final String? completedAt;
-  final double? score;
-  final double? maxScore;
 
   const StudentActivity({
     required this.id,
@@ -29,30 +19,35 @@ class StudentActivity {
   });
 
   factory StudentActivity.fromJson(Map<String, dynamic> j) => StudentActivity(
-        id: j['id'] ?? 0,
-        title: j['title'] ?? '',
-        activityType: j['activityType'] ?? '',
-        status: j['status'] ?? '',
-        courseTitle: j['courseTitle'] ?? '',
-        courseId: j['courseId'],
-        dueDate: j['dueDate'],
-        completedAt: j['completedAt'],
-        score: j['score'] != null ? (j['score']).toDouble() : null,
-        maxScore: j['maxScore'] != null ? (j['maxScore']).toDouble() : null,
-      );
+    id: j['id'] ?? 0,
+    title: j['title'] ?? '',
+    activityType: j['activityType'] ?? '',
+    status: j['status'] ?? '',
+    courseTitle: j['courseTitle'] ?? '',
+    courseId: j['courseId'],
+    dueDate: j['dueDate'],
+    completedAt: j['completedAt'],
+    score: j['score'] != null ? (j['score']).toDouble() : null,
+    maxScore: j['maxScore'] != null ? (j['maxScore']).toDouble() : null,
+  );
+  final int id;
+  final String title;
+  final String activityType;
+  final String status;
+  final String courseTitle;
+  final int? courseId;
+  final String? dueDate;
+  final String? completedAt;
+  final double? score;
+  final double? maxScore;
 
   double? get scorePercent =>
       (score != null && maxScore != null && maxScore! > 0)
-          ? (score! / maxScore!) * 100
-          : null;
+      ? (score! / maxScore!) * 100
+      : null;
 }
 
 class StudentActivitiesPage {
-  final List<StudentActivity> items;
-  final int totalCount;
-  final int page;
-  final int pageSize;
-  final int totalPages;
 
   const StudentActivitiesPage({
     required this.items,
@@ -72,52 +67,73 @@ class StudentActivitiesPage {
         pageSize: j['pageSize'] ?? 20,
         totalPages: j['totalPages'] ?? 0,
       );
+  final List<StudentActivity> items;
+  final int totalCount;
+  final int page;
+  final int pageSize;
+  final int totalPages;
 }
 
-// ── Grades Model ──────────────────────────────────────────────
+// ── Grades Models ─────────────────────────────────────────────
+
+/// Matches API:
+/// { quizId, quizTitle, score, maxScore, scorePercent, status, submittedAt }
 class QuizGradeItem {
-  final int quizId;
-  final String quizTitle;
-  final double score;
-  final double maxScore;
-  final bool passed;
-  final String? submittedAt;
 
   const QuizGradeItem({
     required this.quizId,
     required this.quizTitle,
     required this.score,
     required this.maxScore,
-    required this.passed,
+    required this.scorePercent,
+    required this.status,
     this.submittedAt,
   });
 
   factory QuizGradeItem.fromJson(Map<String, dynamic> j) => QuizGradeItem(
-        quizId: j['quizId'] ?? 0,
-        quizTitle: j['quizTitle'] ?? '',
-        score: (j['score'] ?? 0).toDouble(),
-        maxScore: (j['maxScore'] ?? 100).toDouble(),
-        passed: j['passed'] ?? false,
-        submittedAt: j['submittedAt'],
-      );
+    quizId: j['quizId'] ?? 0,
+    quizTitle: j['quizTitle'] ?? '',
+    score: j['score'] != null ? (j['score'] as num).toDouble() : null,
+    maxScore: (j['maxScore'] as num? ?? 100).toDouble(),
+    scorePercent: j['scorePercent'] != null
+        ? (j['scorePercent'] as num).toDouble()
+        : null,
+    status: j['status'] ?? '',
+    submittedAt: j['submittedAt'],
+  );
+  final int quizId;
+  final String quizTitle;
 
-  double get percent => maxScore > 0 ? (score / maxScore) * 100 : 0;
-}
-
-class AssignmentGradeItem {
-  final int assignmentId;
-  final String assignmentTitle;
-  final double score;
+  /// Nullable — null means the quiz hasn't been submitted/graded yet.
+  final double? score;
   final double maxScore;
+
+  /// Nullable — null when status is InProgress (not submitted).
+  final double? scorePercent;
+
+  /// e.g. "Graded", "InProgress"
   final String status;
   final String? submittedAt;
-  final String? feedback;
+
+  /// Returns [scorePercent] if available, otherwise 0.
+  double get percent => scorePercent ?? 0;
+
+  bool get isGraded => status == 'Graded';
+  bool get isInProgress => status == 'InProgress';
+
+  /// Passed = graded AND score >= 60 % of maxScore.
+  bool get passed => isGraded && scorePercent != null && scorePercent! >= 60;
+}
+
+/// Matches API:
+/// { assignmentId, assignmentTitle, grade, maxGrade, status, submittedAt }
+class AssignmentGradeItem {
 
   const AssignmentGradeItem({
     required this.assignmentId,
     required this.assignmentTitle,
-    required this.score,
-    required this.maxScore,
+    required this.grade,
+    required this.maxGrade,
     required this.status,
     this.submittedAt,
     this.feedback,
@@ -127,21 +143,36 @@ class AssignmentGradeItem {
       AssignmentGradeItem(
         assignmentId: j['assignmentId'] ?? 0,
         assignmentTitle: j['assignmentTitle'] ?? '',
-        score: (j['score'] ?? 0).toDouble(),
-        maxScore: (j['maxScore'] ?? 100).toDouble(),
+        grade: j['grade'] != null ? (j['grade'] as num).toDouble() : null,
+        maxGrade: (j['maxGrade'] as num? ?? 100).toDouble(),
         status: j['status'] ?? '',
         submittedAt: j['submittedAt'],
         feedback: j['feedback'],
       );
+  final int assignmentId;
+  final String assignmentTitle;
 
-  double get percent => maxScore > 0 ? (score / maxScore) * 100 : 0;
+  /// Nullable — null means not graded yet.
+  final double? grade;
+  final double maxGrade;
+
+  /// e.g. "Submitted", "Graded", "Pending"
+  final String status;
+  final String? submittedAt;
+  final String? feedback;
+
+  /// Percentage (0–100). Returns 0 if not graded yet.
+  double get percent =>
+      (grade != null && maxGrade > 0) ? (grade! / maxGrade) * 100 : 0;
+
+  bool get isGraded => status == 'Graded';
+
+  /// Passed = graded AND percent >= 60.
+  bool get passed => isGraded && percent >= 60;
 }
 
+// ── CourseGrades ──────────────────────────────────────────────
 class CourseGrades {
-  final int courseId;
-  final String courseName;
-  final List<QuizGradeItem> quizGrades;
-  final List<AssignmentGradeItem> assignmentGrades;
 
   const CourseGrades({
     required this.courseId,
@@ -151,34 +182,45 @@ class CourseGrades {
   });
 
   factory CourseGrades.fromJson(Map<String, dynamic> j) => CourseGrades(
-        courseId: j['courseId'] ?? 0,
-        courseName: j['courseName'] ?? '',
-        quizGrades: (j['quizGrades'] as List? ?? [])
-            .map((e) => QuizGradeItem.fromJson(e))
-            .toList(),
-        assignmentGrades: (j['assignmentGrades'] as List? ?? [])
-            .map((e) => AssignmentGradeItem.fromJson(e))
-            .toList(),
-      );
+    courseId: j['courseId'] ?? 0,
+    courseName: j['courseName'] ?? '',
+    quizGrades: (j['quizGrades'] as List? ?? [])
+        .map((e) => QuizGradeItem.fromJson(e))
+        .toList(),
+    assignmentGrades: (j['assignmentGrades'] as List? ?? [])
+        .map((e) => AssignmentGradeItem.fromJson(e))
+        .toList(),
+  );
+  final int courseId;
+  final String courseName;
+  final List<QuizGradeItem> quizGrades;
+  final List<AssignmentGradeItem> assignmentGrades;
+
+  // ── Averages consider only graded items ──────────────────────
 
   double get overallAverage {
     final all = [
-      ...quizGrades.map((e) => e.percent),
-      ...assignmentGrades.map((e) => e.percent),
+      ...quizGrades.where((e) => e.isGraded).map((e) => e.percent),
+      ...assignmentGrades.where((e) => e.isGraded).map((e) => e.percent),
     ];
     if (all.isEmpty) return 0;
     return all.reduce((a, b) => a + b) / all.length;
   }
 
   double get quizAverage {
-    if (quizGrades.isEmpty) return 0;
-    return quizGrades.map((e) => e.percent).reduce((a, b) => a + b) /
-        quizGrades.length;
+    final graded = quizGrades.where((e) => e.isGraded).toList();
+    if (graded.isEmpty) return 0;
+    return graded.map((e) => e.percent).reduce((a, b) => a + b) / graded.length;
   }
 
   double get assignmentAverage {
-    if (assignmentGrades.isEmpty) return 0;
-    return assignmentGrades.map((e) => e.percent).reduce((a, b) => a + b) /
-        assignmentGrades.length;
+    final graded = assignmentGrades.where((e) => e.isGraded).toList();
+    if (graded.isEmpty) return 0;
+    return graded.map((e) => e.percent).reduce((a, b) => a + b) / graded.length;
   }
+
+  int get pendingQuizzes => quizGrades.where((e) => e.isInProgress).length;
+
+  int get pendingAssignments =>
+      assignmentGrades.where((e) => !e.isGraded).length;
 }

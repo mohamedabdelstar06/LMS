@@ -2,10 +2,6 @@ import 'package:lms/features/screens/admin/courses/home_courses/model/model.dart
 
 
 class CourseModel {
-  final String imageUrl;
-  final String title;
-  final String subTitle;
-  final String rate;
 
   CourseModel({
     required this.imageUrl,
@@ -13,6 +9,10 @@ class CourseModel {
     required this.subTitle,
     required this.rate,
   });
+  final String imageUrl;
+  final String title;
+  final String subTitle;
+  final String rate;
 }
 
 List<GetCoursesModel> courses = [

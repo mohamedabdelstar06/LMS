@@ -194,7 +194,7 @@ class _ImportStudentsScreenState extends State<ImportStudentsScreen> {
                     child: OutlinedButton.icon(
                       onPressed: state is ImportStudentsLoading
                           ? null
-                          : () => _pickFile(),
+                          : _pickFile,
                       icon: const Icon(Icons.folder_open),
                       label: Text(hasProcessedOnce ? 'Choose Another File' : 'Choose File'),
                       style: OutlinedButton.styleFrom(
@@ -250,13 +250,13 @@ class _ImportStudentsScreenState extends State<ImportStudentsScreen> {
           ),
         ],
       ),
-      child: Column(
+      child: const Column(
         children: [
-          const CircularProgressIndicator(
+          CircularProgressIndicator(
             color: Color(0xFF2563EB),
           ),
-          const SizedBox(height: 24),
-          const Text(
+          SizedBox(height: 24),
+          Text(
             'Processing CSV file...',
             style: TextStyle(
               fontSize: 16,
@@ -264,8 +264,8 @@ class _ImportStudentsScreenState extends State<ImportStudentsScreen> {
               color: Color(0xFF1E293B),
             ),
           ),
-          const SizedBox(height: 8),
-          const Text(
+          SizedBox(height: 8),
+          Text(
             'Please wait while we import the students',
             style: TextStyle(
               fontSize: 14,
@@ -295,16 +295,15 @@ class _ImportStudentsScreenState extends State<ImportStudentsScreen> {
         children: [
           Container(
             padding: const EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              color: const Color(0xFFF8FAFC),
-              borderRadius: const BorderRadius.only(
+            decoration: const BoxDecoration(
+              color: Color(0xFFF8FAFC),
+              borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(16),
                 topRight: Radius.circular(16),
               ),
               border: Border(
                 bottom: BorderSide(
-                  color: const Color(0xFFE2E8F0),
-                  width: 1,
+                  color: Color(0xFFE2E8F0),
                 ),
               ),
             ),
@@ -425,12 +424,11 @@ class _ImportStudentsScreenState extends State<ImportStudentsScreen> {
           if (response.errors.isNotEmpty) ...[
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              decoration: BoxDecoration(
-                color: const Color(0xFFFEF2F2),
+              decoration: const BoxDecoration(
+                color: Color(0xFFFEF2F2),
                 border: Border(
                   top: BorderSide(
-                    color: const Color(0xFFE2E8F0),
-                    width: 1,
+                    color: Color(0xFFE2E8F0),
                   ),
                 ),
               ),
@@ -501,7 +499,6 @@ class _ImportStudentsScreenState extends State<ImportStudentsScreen> {
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: color.withValues(alpha: .2),
-          width: 1,
         ),
       ),
       child: Row(
@@ -556,7 +553,6 @@ class _ImportStudentsScreenState extends State<ImportStudentsScreen> {
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
           color: const Color(0xFFEF4444).withValues(alpha: .2),
-          width: 1,
         ),
       ),
       child: Row(
@@ -633,7 +629,7 @@ class _ImportStudentsScreenState extends State<ImportStudentsScreen> {
 
   Future<void> _pickFile() async {
     try {
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
+      final FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['csv'],
         withData: true,

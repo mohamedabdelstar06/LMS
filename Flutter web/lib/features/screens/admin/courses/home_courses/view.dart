@@ -37,10 +37,10 @@ class _CourseScreenState extends State<AdminCourseScreen> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return ManagementScaffold(
+      return const ManagementScaffold(
         selectedMenuItem: 'My Courses',
         role: ManagementRole.admin,
-        child: const Center(
+        child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -282,7 +282,6 @@ class _CourseScreenState extends State<AdminCourseScreen> {
                                             physics:
                                             const NeverScrollableScrollPhysics(),
                                             addAutomaticKeepAlives: false,
-                                            addRepaintBoundaries: true,
                                             addSemanticIndexes: false,
                                             cacheExtent: 0,
                                             gridDelegate:
@@ -392,7 +391,7 @@ class _CourseScreenState extends State<AdminCourseScreen> {
     return _CourseCardWidget(
       courseModel: course,
       index: index,
-      onDelete: (int courseIndex) {},
+      onDelete: (courseIndex) {},
     );
   }
 }
@@ -446,7 +445,6 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
                 color: Colors.grey.withValues(alpha: 0.1),
-                width: 1,
               ),
               boxShadow: isHovered
                   ? [

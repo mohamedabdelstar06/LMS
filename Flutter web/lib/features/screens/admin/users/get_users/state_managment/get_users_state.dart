@@ -14,12 +14,6 @@ class GetUsersInitial extends GetUsersState {}
 class GetUsersLoading extends GetUsersState {}
 
 class GetUsersLoaded extends GetUsersState {
-  final AllUsersResponseModel usersResponse;
-  final String searchQuery;
-  final int currentPage;
-  final int filterStatus;
-  final String sortBy;
-  final String order;
 
   const GetUsersLoaded({
     required this.usersResponse,
@@ -29,6 +23,12 @@ class GetUsersLoaded extends GetUsersState {
     this.sortBy = 'createdAt',
     this.order = 'desc',
   });
+  final AllUsersResponseModel usersResponse;
+  final String searchQuery;
+  final int currentPage;
+  final int filterStatus;
+  final String sortBy;
+  final String order;
 
   GetUsersLoaded copyWith({
     AllUsersResponseModel? usersResponse,
@@ -62,8 +62,8 @@ class GetUsersLoaded extends GetUsersState {
 class GetUsersUnauthorized extends GetUsersState {}
 
 class GetUsersError extends GetUsersState {
-  final String message;
   const GetUsersError(this.message);
+  final String message;
 
   @override
   List<Object?> get props => [message];
@@ -72,15 +72,15 @@ class GetUsersError extends GetUsersState {
 class DeleteUserLoading extends GetUsersState {}
 
 class DeleteUserSuccess extends GetUsersState {
-  final String message;
 
   const DeleteUserSuccess(this.message);
+  final String message;
 }
 
 class DeleteUserError extends GetUsersState {
-  final String message;
 
   const DeleteUserError(this.message);
+  final String message;
 }
 
 class GetUsersLoadingMore extends GetUsersState {}
@@ -88,25 +88,25 @@ class GetUsersLoadingMore extends GetUsersState {}
 class DeactivateUserLoading extends GetUsersState {}
 
 class DeactivateUserSuccess extends GetUsersState {
-  final String message;
   const DeactivateUserSuccess(this.message);
+  final String message;
 }
 
 class DeactivateUserError extends GetUsersState {
-  final String message;
   const DeactivateUserError(this.message);
+  final String message;
 }
 
 class ActivateUserLoading extends GetUsersState {}
 
 class ActivateUserSuccess extends GetUsersState {
-  final String message;
   const ActivateUserSuccess(this.message);
+  final String message;
 }
 
 class ActivateUserError extends GetUsersState {
-  final String message;
   const ActivateUserError(this.message);
+  final String message;
 }
 
 // class UpdateUsersLoading extends GetUsersState {}
@@ -129,22 +129,22 @@ class ActivateUserError extends GetUsersState {
 class UpdateUsersLoading extends GetUsersState {}
 
 class UpdateUsersSuccess extends GetUsersState {
-  final String message;
-  final int? statusCode;
-  final DateTime timestamp;
 
   UpdateUsersSuccess(this.message, {this.statusCode})
       : timestamp = DateTime.now();
+  final String message;
+  final int? statusCode;
+  final DateTime timestamp;
 
   @override
   List<Object?> get props => [message, statusCode, timestamp];
 }
 
 class UpdateUsersError extends GetUsersState {
-  final String errorMessage;
-  final int? statusCode;
 
   const UpdateUsersError(this.errorMessage, {this.statusCode});
+  final String errorMessage;
+  final int? statusCode;
 
   @override
   List<Object?> get props => [errorMessage, statusCode];
@@ -158,18 +158,18 @@ class GetUserByIdLoading extends GetUsersState {
 }
 
 class GetUserByIdSuccess extends GetUsersState {
-  final GetUserModel user;
 
   const GetUserByIdSuccess(this.user);
+  final GetUserModel user;
 
   @override
   List<Object?> get props => [user];
 }
 
 class GetUserByIdError extends GetUsersState {
-  final String message;
 
   const GetUserByIdError(this.message);
+  final String message;
 
   @override
   List<Object?> get props => [message];

@@ -24,18 +24,18 @@ class EnrollmentCubit extends Cubit<EnrollmentState> {
 
       final token = await TokenStorageHelper.getTokenSecure();
       if (token == null || token.isEmpty) {
-        emit(const EnrollmentError("Unauthorized"));
+        emit(const EnrollmentError('Unauthorized'));
         return;
       }
 
       final response = await dio.post(
         ApiResources.addEnrollmentEndPoint,
         data: {
-          "studentId": studentId,
-          "courseId": courseId,
+          'studentId': studentId,
+          'courseId': courseId,
         },
         options: Options(
-          headers: {"Authorization": "Bearer $token"},
+          headers: {'Authorization': 'Bearer $token'},
           validateStatus: (status) => status != null && status < 500,
         ),
       );
@@ -51,9 +51,9 @@ class EnrollmentCubit extends Cubit<EnrollmentState> {
         _enrollments = [..._enrollments, newEnrollment];
 
         emit(EnrollmentLoaded(_enrollments));
-        emit(const EnrollmentActionSuccess("Enrollment added successfully"));
+        emit(const EnrollmentActionSuccess('Enrollment added successfully'));
       } else {
-        emit(EnrollmentError("Server Error: ${response.statusCode}"));
+        emit(EnrollmentError('Server Error: ${response.statusCode}'));
       }
     } catch (e) {
       emit(EnrollmentError(e.toString()));
@@ -66,14 +66,14 @@ class EnrollmentCubit extends Cubit<EnrollmentState> {
 
       final token = await TokenStorageHelper.getTokenSecure();
       if (token == null) {
-        emit(const EnrollmentError("Unauthorized"));
+        emit(const EnrollmentError('Unauthorized'));
         return;
       }
 
       final response = await dio.delete(
-        "/Enrollment/student/$userId/course/$courseId",
+        '/Enrollment/student/$userId/course/$courseId',
         options: Options(
-          headers: {"Authorization": "Bearer $token"},
+          headers: {'Authorization': 'Bearer $token'},
           validateStatus: (status) => status != null && status < 500,
         ),
       );
@@ -85,9 +85,9 @@ class EnrollmentCubit extends Cubit<EnrollmentState> {
             .toList();
 
         emit(EnrollmentLoaded(_enrollments));
-        emit(const EnrollmentActionSuccess("Enrollment deleted successfully"));
+        emit(const EnrollmentActionSuccess('Enrollment deleted successfully'));
       } else {
-        emit(const EnrollmentError("Delete failed"));
+        emit(const EnrollmentError('Delete failed'));
       }
     } catch (e) {
       emit(EnrollmentError(e.toString()));

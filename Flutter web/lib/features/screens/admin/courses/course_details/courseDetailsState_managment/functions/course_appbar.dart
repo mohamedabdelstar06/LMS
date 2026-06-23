@@ -140,7 +140,6 @@ class CourseHeroAppBar extends StatelessWidget {
                     width: 350,
                     height: 200,
                     fit: BoxFit.cover,
-                    alignment: Alignment.center,
                     loadingBuilder: (_, child, progress) {
                       if (progress == null) return child;
                       return Container(

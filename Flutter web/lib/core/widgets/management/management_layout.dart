@@ -4,10 +4,6 @@ import 'package:lms/core/widgets/management/management_menu_config.dart';
 import 'package:lms/core/widgets/management/management_sidebar.dart';
 
 class ManagementScaffold extends StatefulWidget {
-  final String selectedMenuItem;
-  final ManagementRole role;
-  final Widget child;
-  final String? pageTitle;
 
   const ManagementScaffold({
     super.key,
@@ -16,6 +12,10 @@ class ManagementScaffold extends StatefulWidget {
     required this.child,
     this.pageTitle,
   });
+  final String selectedMenuItem;
+  final ManagementRole role;
+  final Widget child;
+  final String? pageTitle;
 
   static const double _mobileBreakpoint = 900;
   static const double _tabletBreakpoint = 1200;
@@ -146,11 +146,11 @@ class _ManagementScaffoldState extends State<ManagementScaffold> {
             color: const Color(0xFF2563EB),
           ),
           const SizedBox(width: 10),
-          Text(
+          const Text(
             'Management',
             style: TextStyle(
               fontSize: 13,
-              color: const Color(0xFF94A3B8),
+              color: Color(0xFF94A3B8),
               fontFamily: 'inter',
             ),
           ),

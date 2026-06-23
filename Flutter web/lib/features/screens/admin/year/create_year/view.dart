@@ -49,7 +49,7 @@ class _CreateYearScreenState extends State<CreateYearScreen> {
   String selectedMenuItem = 'Create Years';
   String? hoveredMenuItem;
   bool isLogoutHovered = false;
-  String selectedDepartmentName = "Select Department";
+  String selectedDepartmentName = 'Select Department';
   DateTime? selectedStartDate;
   DateTime? selectedEndDate;
   final dobStartController = TextEditingController();
@@ -132,11 +132,11 @@ class _CreateYearScreenState extends State<CreateYearScreen> {
     descriptionController.clear();
     departmentNameController.clear();
 
-    setState(() => selectedDepartmentName = "Select Department");
+    setState(() => selectedDepartmentName = 'Select Department');
     selectedStartDate = null;
     selectedEndDate = null;
-    dobStartController.text = "";
-    dobEndController.text = "";
+    dobStartController.text = '';
+    dobEndController.text = '';
   }
 
   Widget _buildField(
@@ -149,7 +149,7 @@ class _CreateYearScreenState extends State<CreateYearScreen> {
       children: [
         Text(
           label,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w600,
             color: Color(0xFF2563EB),
@@ -157,7 +157,7 @@ class _CreateYearScreenState extends State<CreateYearScreen> {
         ),
         const SizedBox(height: 8),
         TextFormField(
-          validator: (v) => v!.isEmpty ? "Field Required" : null,
+          validator: (v) => v!.isEmpty ? 'Field Required' : null,
 
           controller: nameController,
           maxLines: maxLines,
@@ -168,7 +168,7 @@ class _CreateYearScreenState extends State<CreateYearScreen> {
   }
 
   Widget _buildActionButtons(YearState state) {
-    bool isLoading = state is YearLoading;
+    final bool isLoading = state is YearLoading;
     return Row(
       children: [
         Expanded(
@@ -183,7 +183,7 @@ class _CreateYearScreenState extends State<CreateYearScreen> {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text(
-                              "Please select both start and end dates",
+                              'Please select both start and end dates',
                             ),
                             backgroundColor: Colors.red,
                           ),
@@ -191,11 +191,11 @@ class _CreateYearScreenState extends State<CreateYearScreen> {
                         return;
                       }
 
-                      if (selectedDepartmentName == "Select Department" ||
+                      if (selectedDepartmentName == 'Select Department' ||
                           selectedDepartmentName.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text("Please select a department name"),
+                            content: Text('Please select a department name'),
                             backgroundColor: Colors.red,
                           ),
                         );
@@ -238,7 +238,7 @@ class _CreateYearScreenState extends State<CreateYearScreen> {
                           ),
                           SizedBox(width: 12),
                           Text(
-                            "Creating Year...",
+                            'Creating Year...',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
@@ -248,7 +248,7 @@ class _CreateYearScreenState extends State<CreateYearScreen> {
                         ],
                       )
                     : const Text(
-                        "Create Year",
+                        'Create Year',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
@@ -269,7 +269,7 @@ class _CreateYearScreenState extends State<CreateYearScreen> {
       child: TweenAnimationBuilder(
         duration: const Duration(milliseconds: 600),
         tween: Tween<double>(begin: 0, end: 1),
-        builder: (context, double value, child) {
+        builder: (context, value, child) {
           return Opacity(
             opacity: value,
             child: Transform.translate(
@@ -298,7 +298,7 @@ class _CreateYearScreenState extends State<CreateYearScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  "Create Year",
+                  'Create Year',
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
@@ -310,7 +310,7 @@ class _CreateYearScreenState extends State<CreateYearScreen> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(child: _buildField("Year Name", nameController)),
+                    Expanded(child: _buildField('Year Name', nameController)),
                     const SizedBox(width: 20),
                     Expanded(
                       child: BlocProvider(
@@ -335,7 +335,7 @@ class _CreateYearScreenState extends State<CreateYearScreen> {
                                   return Padding(
                                     padding: const EdgeInsets.only(top: 30),
                                     child: Text(
-                                      "Error: ${departmentState.message}",
+                                      'Error: ${departmentState.message}',
                                       style: const TextStyle(color: Colors.red),
                                     ),
                                   );
@@ -345,11 +345,11 @@ class _CreateYearScreenState extends State<CreateYearScreen> {
                                   if (departmentState.departments.isEmpty) {
                                     return const Padding(
                                       padding: EdgeInsets.only(top: 30),
-                                      child: Text("No departments found"),
+                                      child: Text('No departments found'),
                                     );
                                   }
 
-                                  List<GetDepartmentModel> departments =
+                                  final List<GetDepartmentModel> departments =
                                       departmentState.departments
                                           .whereType<GetDepartmentModel>()
                                           .toList();
@@ -389,7 +389,7 @@ class _CreateYearScreenState extends State<CreateYearScreen> {
                         'Start Date',
                         dobStartController,
                         dobStartFocus,
-                        "Select Date",
+                        'Select Date',
                         onDateChanged: (date) {
                           setState(() {
                             selectedStartDate = date;
@@ -397,13 +397,13 @@ class _CreateYearScreenState extends State<CreateYearScreen> {
                         },
                       ),
                     ),
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
                     Expanded(
                       child: _buildDateField(
                         'End date',
                         dobEndController,
                         dobEndFocus,
-                        "Select Date",
+                        'Select Date',
                         onDateChanged: (date) {
                           setState(() {
                             selectedEndDate = date;
@@ -416,7 +416,7 @@ class _CreateYearScreenState extends State<CreateYearScreen> {
 
                 const SizedBox(height: 24),
 
-                _buildField("Description", descriptionController, maxLines: 4),
+                _buildField('Description', descriptionController, maxLines: 4),
                 const SizedBox(height: 40),
 
                 _buildActionButtons(state),
@@ -439,7 +439,7 @@ class _CreateYearScreenState extends State<CreateYearScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          "Department Name",
+          'Department Name',
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w600,
@@ -529,7 +529,7 @@ class _CreateYearScreenState extends State<CreateYearScreen> {
                       children: [
                         Expanded(
                           child: Text(
-                            "${department.name} (${department.headName})",
+                            '${department.name} (${department.headName})',
                             style: const TextStyle(
                               fontSize: 14,
                               color: Color(0xFF1E293B),
@@ -629,7 +629,7 @@ class _CreateYearScreenState extends State<CreateYearScreen> {
                 onTap: () async {
                   final DateTime? picked = await showDatePicker(
                     context: context,
-                    initialDate: DateTime(1975, 9, 1),
+                    initialDate: DateTime(1975, 9),
                     firstDate: DateTime(1900),
                     lastDate: DateTime.now(),
                     builder: (context, child) {

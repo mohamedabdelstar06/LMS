@@ -75,7 +75,7 @@ class _QuizResultScreenState extends State<QuizResultScreen> with SingleTickerPr
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                     decoration: BoxDecoration(color: const Color(0xFFFFFBEB), borderRadius: BorderRadius.circular(20), border: Border.all(color: const Color(0xFFFCD34D))),
-                    child: Row(mainAxisSize: MainAxisSize.min, children: const [
+                    child: const Row(mainAxisSize: MainAxisSize.min, children: [
                       Icon(Icons.hourglass_top_rounded, size: 14, color: Color(0xFFD97706)),
                       SizedBox(width: 6),
                       Text('Pending manual grading', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Color(0xFFD97706))),
@@ -183,9 +183,9 @@ class _StatCard extends StatelessWidget {
 }
 
 class _ScoreRingPainter extends CustomPainter {
+  _ScoreRingPainter({required this.progress, required this.color});
   final double progress;
   final Color color;
-  _ScoreRingPainter({required this.progress, required this.color});
 
   @override
   void paint(Canvas canvas, Size size) {

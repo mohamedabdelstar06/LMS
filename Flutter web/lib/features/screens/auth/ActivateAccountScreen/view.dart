@@ -79,32 +79,31 @@ class _SignUpScreenState extends State<ActivateAccountScreen> {
                     children: [
                       Row(
                         mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            "Set up your account 🔐",
+                            'Set up your account 🔐',
                             style: TextStyle(
-                              color: Color(0xFF175cd3).withValues(alpha: 0.86),
+                              color: const Color(0xFF175cd3).withValues(alpha: 0.86),
                               fontSize: 32,
                               fontWeight: FontWeight.w700,
-                              fontFamily: "inter",
+                              fontFamily: 'inter',
                             ),
                           ),
-                          SizedBox(width: 5),
+                          const SizedBox(width: 5),
                         ],
                       ),
-                      Text(
-                        "Just one more step to activate your account and start learning.",
+                      const Text(
+                        'Just one more step to activate your account and start learning.',
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
-                          fontFamily: "inter",
+                          fontFamily: 'inter',
                           color: Color(0xFF545F70),
                         ),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       Container(
-                        padding: EdgeInsets.all(20),
+                        padding: const EdgeInsets.all(20),
 
                         width: 514,
                         height: 410,
@@ -115,22 +114,22 @@ class _SignUpScreenState extends State<ActivateAccountScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(height: 20),
-                            Text(
-                              "Email",
+                            const SizedBox(height: 20),
+                            const Text(
+                              'Email',
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
-                                fontFamily: "inter",
+                                fontFamily: 'inter',
                                 color: Color(0xFF175CD3),
                               ),
                             ),
-                            SizedBox(height: 8),
+                            const SizedBox(height: 8),
                             TextFormField(
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
-                                fontFamily: "inter",
+                                fontFamily: 'inter',
                                 color: Colors.black87.withValues(alpha: 0.6),
                               ),
                               readOnly: true,
@@ -140,23 +139,23 @@ class _SignUpScreenState extends State<ActivateAccountScreen> {
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
-                                contentPadding: EdgeInsets.symmetric(
+                                contentPadding: const EdgeInsets.symmetric(
                                   horizontal: 16,
                                 ),
                               ),
                             ),
 
-                            SizedBox(height: 16),
-                            Text(
-                              "Password",
+                            const SizedBox(height: 16),
+                            const Text(
+                              'Password',
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
-                                fontFamily: "inter",
+                                fontFamily: 'inter',
                                 color: Color(0xFF175CD3),
                               ),
                             ),
-                            SizedBox(height: 8),
+                            const SizedBox(height: 8),
                             TextFormField(
                               controller: passwordController,
                               obscureText: isObscure,
@@ -173,36 +172,36 @@ class _SignUpScreenState extends State<ActivateAccountScreen> {
                                         ? Icons.visibility_outlined
                                         : Icons.visibility_off_outlined,
                                     size: 17,
-                                    color: Color(0xFF99A1AF),
+                                    color: const Color(0xFF99A1AF),
                                   ),
                                 ),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
-                                contentPadding: EdgeInsets.symmetric(
+                                contentPadding: const EdgeInsets.symmetric(
                                   horizontal: 16,
                                 ),
-                                hintText: "Enter your password",
+                                hintText: 'Enter your password',
 
-                                hintStyle: TextStyle(
+                                hintStyle: const TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w400,
-                                  fontFamily: "inter",
+                                  fontFamily: 'inter',
                                   color: Color(0xFF08303D),
                                 ),
                               ),
                             ),
-                            SizedBox(height: 16),
-                            Text(
-                              "Confirmed Password",
+                            const SizedBox(height: 16),
+                            const Text(
+                              'Confirmed Password',
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
-                                fontFamily: "inter",
+                                fontFamily: 'inter',
                                 color: Color(0xFF175CD3),
                               ),
                             ),
-                            SizedBox(height: 8),
+                            const SizedBox(height: 8),
                             TextFormField(
                               controller: confirmedPasswordController,
                               obscureText: isConfirmedObscure,
@@ -219,26 +218,26 @@ class _SignUpScreenState extends State<ActivateAccountScreen> {
                                         ? Icons.visibility_outlined
                                         : Icons.visibility_off_outlined,
                                     size: 17,
-                                    color: Color(0xFF99A1AF),
+                                    color: const Color(0xFF99A1AF),
                                   ),
                                 ),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
-                                contentPadding: EdgeInsets.symmetric(
+                                contentPadding: const EdgeInsets.symmetric(
                                   horizontal: 16,
                                 ),
-                                hintText: "Enter your password Again",
+                                hintText: 'Enter your password Again',
 
-                                hintStyle: TextStyle(
+                                hintStyle: const TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w400,
-                                  fontFamily: "inter",
+                                  fontFamily: 'inter',
                                   color: Color(0xFF08303D),
                                 ),
                               ),
                             ),
-                            SizedBox(height: 22),
+                            const SizedBox(height: 22),
 
                             BlocBuilder<ActivateCubit, ActivateState>(
                               bloc: activateCubit,
@@ -267,7 +266,7 @@ class _SignUpScreenState extends State<ActivateAccountScreen> {
                                       width: 470,
                                       height: 45,
                                       decoration: BoxDecoration(
-                                        gradient: LinearGradient(
+                                        gradient: const LinearGradient(
                                           begin: Alignment.topLeft,
                                           end: Alignment.bottomRight,
                                           colors: [
@@ -279,7 +278,7 @@ class _SignUpScreenState extends State<ActivateAccountScreen> {
                                       ),
                                       child: Center(
                                         child: isLoading
-                                            ? Row(
+                                            ? const Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.center,
                                                 children: [
@@ -296,23 +295,23 @@ class _SignUpScreenState extends State<ActivateAccountScreen> {
                                                   ),
                                                   SizedBox(width: 10),
                                                   Text(
-                                                    "Activation Data...",
+                                                    'Activation Data...',
                                                     style: TextStyle(
                                                       fontSize: 16,
                                                       fontWeight:
                                                           FontWeight.w600,
-                                                      fontFamily: "inter",
+                                                      fontFamily: 'inter',
                                                       color: Colors.white,
                                                     ),
                                                   ),
                                                 ],
                                               )
-                                            : Text(
-                                                "Activate Account",
+                                            : const Text(
+                                                'Activate Account',
                                                 style: TextStyle(
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.w600,
-                                                  fontFamily: "inter",
+                                                  fontFamily: 'inter',
                                                   color: Colors.white,
                                                 ),
                                               ),

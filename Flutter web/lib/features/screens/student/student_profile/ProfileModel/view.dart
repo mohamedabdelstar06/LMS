@@ -1,7 +1,4 @@
 class StudentProfileModel {
-  final String message;
-  final bool success;
-  final User user;
 
   StudentProfileModel({
     required this.message,
@@ -15,6 +12,9 @@ class StudentProfileModel {
         success: json['success'] ?? false,
         user: User.fromJson(json['user'] ?? {}),
       );
+  final String message;
+  final bool success;
+  final User user;
 
   Map<String, dynamic> toJson() => {
     'message': message,
@@ -24,19 +24,6 @@ class StudentProfileModel {
 }
 
 class User {
-  final int id;
-  final String email;
-  final String fullName;
-  final String role;
-  final String nationalId;
-  final String? dateOfBirth;
-  final String? gender;
-  final String? city;
-  final String? profileImageUrl;
-  final String accountStatus;
-  final String createdAt;
-  final String lastLoginAt;
-  final AcademicInfo academicInfo;
 
   User({
     required this.id,
@@ -70,6 +57,19 @@ class User {
     academicInfo:
     AcademicInfo.fromJson(json['academicInfo'] ?? <String, dynamic>{}),
   );
+  final int id;
+  final String email;
+  final String fullName;
+  final String role;
+  final String nationalId;
+  final String? dateOfBirth;
+  final String? gender;
+  final String? city;
+  final String? profileImageUrl;
+  final String accountStatus;
+  final String createdAt;
+  final String lastLoginAt;
+  final AcademicInfo academicInfo;
 
   Map<String, dynamic> toJson() => {
     'id': id,
@@ -89,10 +89,6 @@ class User {
 }
 
 class AcademicInfo {
-  final Department department;
-  final Year year;
-  final Squadron squadron;
-  final int admissionYear;
 
   AcademicInfo({
     required this.department,
@@ -107,6 +103,10 @@ class AcademicInfo {
     squadron: Squadron.fromJson(json['squadron'] ?? {}),
     admissionYear: json['admissionYear'] ?? 0,
   );
+  final Department department;
+  final Year year;
+  final Squadron squadron;
+  final int admissionYear;
 
   Map<String, dynamic> toJson() => {
     'department': department.toJson(),
@@ -117,8 +117,6 @@ class AcademicInfo {
 }
 
 class Department {
-  final int id;
-  final String name;
 
   Department({required this.id, required this.name});
 
@@ -126,6 +124,8 @@ class Department {
     id: json['id'] ?? 0,
     name: json['name'] ?? '',
   );
+  final int id;
+  final String name;
 
   Map<String, dynamic> toJson() => {
     'id': id,
@@ -134,8 +134,6 @@ class Department {
 }
 
 class Year {
-  final int id;
-  final String name;
 
   Year({required this.id, required this.name});
 
@@ -143,6 +141,8 @@ class Year {
     id: json['id'] ?? 0,
     name: json['name'] ?? '',
   );
+  final int id;
+  final String name;
 
   Map<String, dynamic> toJson() => {
     'id': id,
@@ -151,8 +151,6 @@ class Year {
 }
 
 class Squadron {
-  final int id;
-  final String name;
 
   Squadron({required this.id, required this.name});
 
@@ -160,6 +158,8 @@ class Squadron {
     id: json['id'] ?? 0,
     name: json['name'] ?? '',
   );
+  final int id;
+  final String name;
 
   Map<String, dynamic> toJson() => {
     'id': id,

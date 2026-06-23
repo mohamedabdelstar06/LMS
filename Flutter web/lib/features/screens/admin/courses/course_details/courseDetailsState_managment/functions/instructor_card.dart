@@ -772,9 +772,9 @@ class _Avatar extends StatelessWidget {
     return Container(
       width: size,
       height: size,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         shape: BoxShape.circle,
-        gradient: const LinearGradient(
+        gradient: LinearGradient(
           colors: [Color(0xFF0EA5E9), Color(0xFF38BDF8)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,

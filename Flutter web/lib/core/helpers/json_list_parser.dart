@@ -13,7 +13,7 @@ List<Map<String, dynamic>> parseJsonObjectList(
   if (data is List) {
     return data
         .whereType<Map>()
-        .map((e) => Map<String, dynamic>.from(e))
+        .map(Map<String, dynamic>.from)
         .toList();
   }
 
@@ -25,7 +25,7 @@ List<Map<String, dynamic>> parseJsonObjectList(
       if (value is List) {
         return value
             .whereType<Map>()
-            .map((e) => Map<String, dynamic>.from(e))
+            .map(Map<String, dynamic>.from)
             .toList();
       }
     }

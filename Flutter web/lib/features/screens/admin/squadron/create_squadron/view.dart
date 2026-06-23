@@ -119,7 +119,7 @@ class _CreateDepartmentScreenState extends State<CreateSquadronScreen> {
       children: [
         Text(
           label,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w600,
             color: Color(0xFF2563EB),
@@ -127,7 +127,7 @@ class _CreateDepartmentScreenState extends State<CreateSquadronScreen> {
         ),
         const SizedBox(height: 8),
         TextFormField(
-          validator: (v) => v!.isEmpty ? "Field Required" : null,
+          validator: (v) => v!.isEmpty ? 'Field Required' : null,
 
           controller: nameController,
           maxLines: maxLines,
@@ -138,7 +138,7 @@ class _CreateDepartmentScreenState extends State<CreateSquadronScreen> {
   }
 
   Widget _buildActionButtons(SquadronState state) {
-    bool isLoading = state is SquadronLoading;
+    final bool isLoading = state is SquadronLoading;
     return Row(
       children: [
         Expanded(
@@ -181,7 +181,7 @@ class _CreateDepartmentScreenState extends State<CreateSquadronScreen> {
                           ),
                           SizedBox(width: 12),
                           Text(
-                            "Creating Squadron...",
+                            'Creating Squadron...',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
@@ -191,7 +191,7 @@ class _CreateDepartmentScreenState extends State<CreateSquadronScreen> {
                         ],
                       )
                     : const Text(
-                        "Create Squadron",
+                        'Create Squadron',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
@@ -212,7 +212,7 @@ class _CreateDepartmentScreenState extends State<CreateSquadronScreen> {
       child: TweenAnimationBuilder(
         duration: const Duration(milliseconds: 600),
         tween: Tween<double>(begin: 0, end: 1),
-        builder: (context, double value, child) {
+        builder: (context, value, child) {
           return Opacity(
             opacity: value,
             child: Transform.translate(
@@ -241,7 +241,7 @@ class _CreateDepartmentScreenState extends State<CreateSquadronScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  "Create Squadron",
+                  'Create Squadron',
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
@@ -254,7 +254,7 @@ class _CreateDepartmentScreenState extends State<CreateSquadronScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
-                      child: _buildField("Squadron Name", nameController),
+                      child: _buildField('Squadron Name', nameController),
                     ),
                     const SizedBox(width: 20),
                   ],
@@ -262,7 +262,7 @@ class _CreateDepartmentScreenState extends State<CreateSquadronScreen> {
 
                 const SizedBox(height: 24),
 
-                _buildField("Description", descriptionController, maxLines: 4),
+                _buildField('Description', descriptionController, maxLines: 4),
                 const SizedBox(height: 40),
 
                 _buildActionButtons(state),

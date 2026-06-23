@@ -255,7 +255,7 @@ class _GenerateQuizSheetState extends State<GenerateQuizSheet> {
                               ? state.squadrons
                               : <SquadronModel>[];
                           return DropdownButtonFormField<int>(
-                            value: _selectedSquadronId,
+                            initialValue: _selectedSquadronId,
                             decoration: InputDecoration(
                               hintText: 'Select squadron',
                               filled: true,

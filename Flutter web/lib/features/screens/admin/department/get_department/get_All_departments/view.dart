@@ -133,7 +133,6 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
                                   border: Border(
                                     bottom: BorderSide(
                                       color: Color(0xFFE2E8F0),
-                                      width: 1,
                                     ),
                                   ),
                                 ),
@@ -359,7 +358,7 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
             ? Colors.white
             : const Color(0xFFF8FAFC),
         border: const Border(
-          bottom: BorderSide(color: Color(0xFFE2E8F0), width: 1),
+          bottom: BorderSide(color: Color(0xFFE2E8F0)),
         ),
       ),
       children: [
@@ -498,6 +497,13 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   _buildActionButton(
+                    icon: Icons.info_outline,
+                    color: const Color(0xFF10B981),
+                    tooltip: 'Details',
+                    onPressed: () => _showDepartmentDetailsDialog(context, dep),
+                  ),
+                  const SizedBox(width: 8),
+                  _buildActionButton(
                     icon: Icons.edit,
                     color: const Color(0xFF2563EB),
                     tooltip: 'Edit',
@@ -534,6 +540,122 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
     );
   }
 
+  void _showDepartmentDetailsDialog(BuildContext context, GetAllDepartmentModel dep) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          title: const Row(
+            children: [
+              Icon(Icons.info_outline, color: Color(0xFF2563EB), size: 28),
+              SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  'Department Details',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
+          ),
+          content: Container(
+            width: 600,
+            constraints: const BoxConstraints(maxHeight: 500),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildDetailRow('ID', dep.id.toString()),
+                  _buildDetailRow('Name', dep.name),
+                  _buildDetailRow('Description', dep.description),
+                  _buildDetailRow('Head ID', dep.headId.toString()),
+                  _buildDetailRow('Head Name', dep.headName),
+                  _buildDetailRow('Created At', dep.createdAt.toLocal().toString().split('.')[0]),
+                  _buildDetailRow('Updated At', dep.updatedAt.toLocal().toString().split('.')[0]),
+                  const SizedBox(height: 16),
+                  const Divider(),
+                  const SizedBox(height: 12),
+                  const Text(
+                    'Associated Academic Years',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF1E293B)),
+                  ),
+                  const SizedBox(height: 8),
+                  if (dep.years.isEmpty)
+                    const Text('No years associated with this department.', style: TextStyle(color: Colors.grey, fontStyle: FontStyle.italic))
+                  else
+                    ...dep.years.map((year) => Card(
+                          margin: const EdgeInsets.symmetric(vertical: 6),
+                          color: const Color(0xFFF8FAFC),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            side: const BorderSide(color: Color(0xFFE2E8F0)),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(12),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  year.name,
+                                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Color(0xFF2563EB)),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(year.description, style: const TextStyle(fontSize: 12, color: Color(0xFF64748B))),
+                                const SizedBox(height: 8),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('Courses: ${year.totalCourses}', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+                                    Text('Hours: ${year.totalHours}', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+                                  ],
+                                ),
+                                const SizedBox(height: 4),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('Start: ${year.startDate.toString().split(' ')[0]}', style: const TextStyle(fontSize: 11, color: Colors.grey)),
+                                    Text('End: ${year.endDate.toString().split(' ')[0]}', style: const TextStyle(fontSize: 11, color: Colors.grey)),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        )),
+                ],
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext),
+              child: const Text('Close', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildDetailRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF64748B)),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            value,
+            style: const TextStyle(fontSize: 14, color: Color(0xFF1E293B)),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildTableCell(Widget child) {
     return child;
   }
@@ -554,7 +676,7 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
           decoration: BoxDecoration(
             color: color.withOpacity(0.1),
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: color.withOpacity(0.2), width: 1),
+            border: Border.all(color: color.withOpacity(0.2)),
           ),
           child: Icon(icon, size: 16, color: color),
         ),
@@ -1055,9 +1177,6 @@ class _DepartmentsScreenState extends State<DepartmentsScreen> {
 }
 
 class WebImage extends StatelessWidget {
-  final String url;
-  final double width;
-  final double height;
 
   const WebImage({
     super.key,
@@ -1065,6 +1184,9 @@ class WebImage extends StatelessWidget {
     required this.width,
     required this.height,
   });
+  final String url;
+  final double width;
+  final double height;
 
   @override
   Widget build(BuildContext context) {

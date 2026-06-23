@@ -12,9 +12,6 @@ import 'package:lms/features/screens/student_dashboard_states.dart';
 // ── Models ────────────────────────────────────────────────────────────────────
 
 class CompletionStatus {
-  final int completed;
-  final int inProgress;
-  final int notStarted;
   const CompletionStatus({
     required this.completed,
     required this.inProgress,
@@ -25,12 +22,12 @@ class CompletionStatus {
     inProgress: j['inProgress'] ?? 0,
     notStarted: j['notStarted'] ?? 0,
   );
+  final int completed;
+  final int inProgress;
+  final int notStarted;
 }
 
 class ProgressPoint {
-  final String week;
-  final double yourProgress;
-  final double classAverage;
   const ProgressPoint({
     required this.week,
     required this.yourProgress,
@@ -41,22 +38,22 @@ class ProgressPoint {
     yourProgress: (j['yourProgress'] ?? 0).toDouble(),
     classAverage: (j['classAverage'] ?? 0).toDouble(),
   );
+  final String week;
+  final double yourProgress;
+  final double classAverage;
 }
 
 class GradePerCourse {
-  final String courseName;
-  final double grade;
   const GradePerCourse({required this.courseName, required this.grade});
   factory GradePerCourse.fromJson(Map<String, dynamic> j) => GradePerCourse(
     courseName: j['courseName'] ?? '',
     grade: (j['grade'] ?? 0).toDouble(),
   );
+  final String courseName;
+  final double grade;
 }
 
 class UpcomingDeadline {
-  final String title;
-  final String dueDate;
-  final String courseTitle;
   const UpcomingDeadline({
     required this.title,
     required this.dueDate,
@@ -67,12 +64,12 @@ class UpcomingDeadline {
     dueDate: j['dueDate'] ?? '',
     courseTitle: j['courseTitle'] ?? '',
   );
+  final String title;
+  final String dueDate;
+  final String courseTitle;
 }
 
 class Achievement {
-  final String title;
-  final String description;
-  final String icon;
   const Achievement({
     required this.title,
     required this.description,
@@ -83,13 +80,12 @@ class Achievement {
     description: j['description'] ?? '',
     icon: j['icon'] ?? '',
   );
+  final String title;
+  final String description;
+  final String icon;
 }
 
 class EnrolledCourse {
-  final int id;
-  final String title;
-  final double progressPercent;
-  final String imageUrl;
   const EnrolledCourse({
     required this.id,
     required this.title,
@@ -102,23 +98,13 @@ class EnrolledCourse {
     progressPercent: (j['progressPercent'] ?? 0).toDouble(),
     imageUrl: j['imageUrl'] ?? '',
   );
+  final int id;
+  final String title;
+  final double progressPercent;
+  final String imageUrl;
 }
 
 class StudentDashboardModel {
-  final double overallGpa;
-  final int coursesCompleted;
-  final int creditHours;
-  final double courseProgressPercent;
-  final int assignmentsCompleted;
-  final int assignmentsTotal;
-  final double averageGrade;
-  final double attendanceRate;
-  final CompletionStatus completionStatus;
-  final List<ProgressPoint> progressOverTime;
-  final List<GradePerCourse> gradesPerCourse;
-  final List<UpcomingDeadline> upcomingDeadlines;
-  final List<Achievement> achievements;
-  final List<EnrolledCourse> enrolledCourses;
 
   const StudentDashboardModel({
     required this.overallGpa,
@@ -166,16 +152,30 @@ class StudentDashboardModel {
             .map((e) => EnrolledCourse.fromJson(e))
             .toList(),
       );
+  final double overallGpa;
+  final int coursesCompleted;
+  final int creditHours;
+  final double courseProgressPercent;
+  final int assignmentsCompleted;
+  final int assignmentsTotal;
+  final double averageGrade;
+  final double attendanceRate;
+  final CompletionStatus completionStatus;
+  final List<ProgressPoint> progressOverTime;
+  final List<GradePerCourse> gradesPerCourse;
+  final List<UpcomingDeadline> upcomingDeadlines;
+  final List<Achievement> achievements;
+  final List<EnrolledCourse> enrolledCourses;
 }
 
 // ── Cubit ─────────────────────────────────────────────────────────────────────
 
 class StudentDashboardCubit extends Cubit<StudentDashboardState> {
-  final Dio dio;
 
   StudentDashboardCubit({Dio? dio})
     : dio = dio ?? Dio(),
       super(StudentDashboardInitial());
+  final Dio dio;
 
   Future<void> loadDashboard() async {
     emit(StudentDashboardLoading());

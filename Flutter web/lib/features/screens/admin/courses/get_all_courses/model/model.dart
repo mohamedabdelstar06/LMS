@@ -1,18 +1,4 @@
 class GetCourseModel {
-  final int id;
-  final String title;
-  final String description;
-  final int departmentId;
-  final String departmentName;
-  final int yearId;
-  final String yearName;
-  final int creditHours;
-  final int enrolledStudentsCount;
-  final String imageUrl;
-  final int instructorId;
-  final String instructorName;
-  final DateTime createdAt;
-  final DateTime? updatedAt;
 
   GetCourseModel({
     required this.id,
@@ -51,6 +37,20 @@ class GetCourseModel {
           : null,
     );
   }
+  final int id;
+  final String title;
+  final String description;
+  final int departmentId;
+  final String departmentName;
+  final int yearId;
+  final String yearName;
+  final int creditHours;
+  final int enrolledStudentsCount;
+  final String imageUrl;
+  final int instructorId;
+  final String instructorName;
+  final DateTime createdAt;
+  final DateTime? updatedAt;
 
   Map<String, dynamic> toJson() {
     return {

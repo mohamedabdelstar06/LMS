@@ -95,7 +95,7 @@ class DepartmentsCubit extends Cubit<DepartmentsState> {
     try {
       final token = await TokenStorageHelper.getTokenSecure();
       if (token == null || token.isEmpty) {
-        emit(DepartmentByIdError('Unauthorized: Please login again.'));
+        emit(const DepartmentByIdError('Unauthorized: Please login again.'));
         return;
       }
 
@@ -143,7 +143,7 @@ class DepartmentsCubit extends Cubit<DepartmentsState> {
     try {
       final token = await TokenStorageHelper.getTokenSecure();
       if (token == null || token.isEmpty) {
-        emit(DepartmentByIdError('Unauthorized: Please login again.'));
+        emit(const DepartmentByIdError('Unauthorized: Please login again.'));
         return;
       }
 
@@ -179,7 +179,7 @@ class DepartmentsCubit extends Cubit<DepartmentsState> {
       print('Response Data: ${response.data}');
 
       if (response.statusCode == 200 || response.statusCode == 204) {
-        emit(UpdateDepartmentSuccess('Department updated successfully'));
+        emit(const UpdateDepartmentSuccess('Department updated successfully'));
         fetchDepartments();
       } else {
         emit(

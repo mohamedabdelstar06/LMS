@@ -14,17 +14,17 @@ class DepartmentsInitial extends DepartmentsState {}
 class DepartmentsLoading extends DepartmentsState {}
 
 class DepartmentsLoaded extends DepartmentsState {
-  final List<GetAllDepartmentModel> departments;
 
   const DepartmentsLoaded(this.departments);
+  final List<GetAllDepartmentModel> departments;
 
   @override
   List<Object?> get props => [departments];
 }
 
 class DepartmentsError extends DepartmentsState {
-  final String message;
   const DepartmentsError(this.message);
+  final String message;
 
   @override
   List<Object?> get props => [message];
@@ -33,39 +33,39 @@ class DepartmentsError extends DepartmentsState {
 class DeleteDepartmentLoading extends DepartmentsState {}
 
 class DeleteDepartmentSuccess extends DepartmentsState {
-  final String message;
   const DeleteDepartmentSuccess(this.message);
+  final String message;
 }
 
 class DeleteDepartmentError extends DepartmentsState {
-  final String message;
   const DeleteDepartmentError(this.message);
+  final String message;
 }
 
 class UpdateDepartmentLoading extends DepartmentsState {}
 
 class UpdateDepartmentSuccess extends DepartmentsState {
-  final String message;
   const UpdateDepartmentSuccess(this.message);
+  final String message;
 }
 
 class UpdateDepartmentError extends DepartmentsState {
-  final String message;
   const UpdateDepartmentError(this.message);
+  final String message;
 }
 
 class DepartmentByIdLoading extends DepartmentsState {}
 class DepartmentByIdLoaded extends DepartmentsState {
-  final GetAllDepartmentModel department;
 
   const DepartmentByIdLoaded(this.department);
+  final GetAllDepartmentModel department;
 
   @override
   List<Object?> get props => [department];
 }
 class DepartmentByIdError extends DepartmentsState {
-  final String message;
   const DepartmentByIdError(this.message);
+  final String message;
 
   @override
   List<Object?> get props => [message];

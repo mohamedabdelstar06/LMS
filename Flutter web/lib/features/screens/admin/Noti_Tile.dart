@@ -5,10 +5,6 @@ import 'package:lms/features/screens/admin/Notifications_model.dart';
 
 
 class NotificationTile extends StatefulWidget {
-  final NotificationModel notification;
-  final bool isMarking;
-  final VoidCallback onTap;
-  final VoidCallback onMarkRead;
 
   const NotificationTile({
     super.key,
@@ -17,6 +13,10 @@ class NotificationTile extends StatefulWidget {
     required this.onTap,
     required this.onMarkRead,
   });
+  final NotificationModel notification;
+  final bool isMarking;
+  final VoidCallback onTap;
+  final VoidCallback onMarkRead;
 
   @override
   State<NotificationTile> createState() => _NotificationTileState();

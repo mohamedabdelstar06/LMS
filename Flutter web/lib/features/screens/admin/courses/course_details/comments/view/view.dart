@@ -707,18 +707,18 @@ class _CommentTileState extends State<_CommentTile> {
                                 color: const Color(0xFF334155),
                               ),
                             ),
-                            child: Row(
+                            child: const Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                const Icon(
+                                Icon(
                                   Icons.keyboard_rounded,
                                   size: 14,
                                   color: Color(0xFF64748B),
                                 ),
-                                const SizedBox(width: 8),
+                                SizedBox(width: 8),
                                 Text(
                                   confirmText,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w700,
                                     color: Color(0xFFEF4444),
@@ -1548,9 +1548,6 @@ class _ReplyLinePainter extends CustomPainter {
   bool shouldRepaint(_) => false;
 }
 class WebImage extends StatelessWidget {
-  final String url;
-  final double width;
-  final double height;
 
   const WebImage({
     super.key,
@@ -1558,6 +1555,9 @@ class WebImage extends StatelessWidget {
     required this.width,
     required this.height,
   });
+  final String url;
+  final double width;
+  final double height;
 
   @override
   Widget build(BuildContext context) {

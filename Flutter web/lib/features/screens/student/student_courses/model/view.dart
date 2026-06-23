@@ -1,12 +1,4 @@
 class CourseEnrollmentModel {
-  final int courseId;
-  final String courseTitle;
-  final String courseDescription;
-  final String imageUrl;
-  final int creditHours;
-  final int enrolledStudentsCount;
-  final String instructorName;
-  final DateTime enrolledAt;
 
   CourseEnrollmentModel({
     required this.courseId,
@@ -31,6 +23,14 @@ class CourseEnrollmentModel {
       enrolledAt: DateTime.parse(json['enrolledAt']),
     );
   }
+  final int courseId;
+  final String courseTitle;
+  final String courseDescription;
+  final String imageUrl;
+  final int creditHours;
+  final int enrolledStudentsCount;
+  final String instructorName;
+  final DateTime enrolledAt;
 
   Map<String, dynamic> toJson() {
     return {

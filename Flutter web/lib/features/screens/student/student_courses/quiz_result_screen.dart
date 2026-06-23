@@ -5,8 +5,8 @@ import '../../../../core/cons/Colors/app_colors.dart';
 import 'student_quiz_model.dart';
 
 class QuizResultScreen extends StatelessWidget {
-  final StudentQuizResult result;
   const QuizResultScreen({super.key, required this.result});
+  final StudentQuizResult result;
 
   @override
   Widget build(BuildContext context) {
@@ -106,10 +106,6 @@ class QuizResultScreen extends StatelessWidget {
 }
 
 class _ResultHeroCard extends StatelessWidget {
-  final StudentQuizResult result;
-  final bool hasScore;
-  final double percent;
-  final bool passed;
 
   const _ResultHeroCard({
     required this.result,
@@ -117,6 +113,10 @@ class _ResultHeroCard extends StatelessWidget {
     required this.percent,
     required this.passed,
   });
+  final StudentQuizResult result;
+  final bool hasScore;
+  final double percent;
+  final bool passed;
 
   @override
   Widget build(BuildContext context) {
@@ -233,8 +233,8 @@ class _ResultHeroCard extends StatelessWidget {
 }
 
 class _ResultDetailsCard extends StatelessWidget {
-  final StudentQuizResult result;
   const _ResultDetailsCard({required this.result});
+  final StudentQuizResult result;
 
   @override
   Widget build(BuildContext context) {
@@ -300,9 +300,9 @@ class _ResultDetailsCard extends StatelessWidget {
 }
 
 class _DetailRow extends StatelessWidget {
+  const _DetailRow({required this.label, required this.value});
   final String label;
   final String value;
-  const _DetailRow({required this.label, required this.value});
 
   @override
   Widget build(BuildContext context) {

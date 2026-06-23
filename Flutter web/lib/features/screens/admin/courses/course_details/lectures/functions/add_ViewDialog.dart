@@ -4,7 +4,6 @@ import 'package:lms/features/screens/admin/courses/course_details/courseDetailsS
 import 'package:lms/features/screens/admin/courses/home_courses/model/model.dart';
 import '../model/model.dart';
 import 'Functions_of_Lecture_details/additional_file_card.dart';
-import 'Functions_of_Lecture_details/author_card.dart';
 import 'Functions_of_Lecture_details/description_card.dart';
 import 'Functions_of_Lecture_details/hero_bar.dart';
 import 'Functions_of_Lecture_details/info_grid.dart';

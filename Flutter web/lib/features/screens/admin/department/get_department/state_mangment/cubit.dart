@@ -13,17 +13,17 @@ class DepartmentsCubitDrop extends Cubit<DepartmentsStateDrop> {
     try {
       final token = await TokenStorageHelper.getTokenSecure();
       if (token == null || token.isEmpty) {
-        emit(DepartmentsErrorState("Unauthorized: Please login again."));
+        emit(DepartmentsErrorState('Unauthorized: Please login again.'));
         return;
       }
 
       final dio = Dio();
       final response = await dio.get(
-        "https://skylearn.runasp.net/api/Department",
+        'https://skylearn.runasp.net/api/Department',
         options: Options(
           headers: {
-            "Authorization": "Bearer $token",
-            "Content-Type": "application/json",
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'application/json',
           },
         ),
       );
@@ -36,22 +36,22 @@ class DepartmentsCubitDrop extends Cubit<DepartmentsStateDrop> {
 
         emit(DepartmentLoadedState(departments));
       } else {
-        emit(DepartmentsErrorState("Failed to load departments. Status: ${response.statusCode}"));
+        emit(DepartmentsErrorState('Failed to load departments. Status: ${response.statusCode}'));
       }
     } on DioException catch (e) {
-      print("Dio Error: ${e.message}");
-      String errorMessage = "Failed to load departments";
+      print('Dio Error: ${e.message}');
+      String errorMessage = 'Failed to load departments';
       if (e.response != null) {
-        errorMessage = "Server Error: ${e.response?.statusCode} - ${e.response?.statusMessage}";
+        errorMessage = 'Server Error: ${e.response?.statusCode} - ${e.response?.statusMessage}';
       } else if (e.type == DioExceptionType.connectionTimeout) {
-        errorMessage = "Connection timeout. Please check your internet.";
+        errorMessage = 'Connection timeout. Please check your internet.';
       } else if (e.type == DioExceptionType.connectionError) {
-        errorMessage = "Connection Error. Please check the API URL or your network.";
+        errorMessage = 'Connection Error. Please check the API URL or your network.';
       }
       emit(DepartmentsErrorState(errorMessage));
     } catch (e) {
-      print("Unexpected Error: $e");
-      emit(DepartmentsErrorState("An unexpected error occurred."));
+      print('Unexpected Error: $e');
+      emit(DepartmentsErrorState('An unexpected error occurred.'));
     }
   }
 }

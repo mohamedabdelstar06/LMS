@@ -49,7 +49,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
   Uint8List? coverImage;
   Uint8List? introVideo;
   PlatformFile? attachment;
-  String selectedAttempts = "Unlimited Attempts";
+  String selectedAttempts = 'Unlimited Attempts';
   DateTime? selectedDate;
 
   String? selectedDepartmentId;
@@ -66,8 +66,8 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
   String selectedMenuItem = 'Create New Course';
   String? hoveredMenuItem;
   bool isLogoutHovered = false;
-  String selectedDepartmentName = "Select Department";
-  String selectedYearName = "Select Year";
+  String selectedDepartmentName = 'Select Department';
+  String selectedYearName = 'Select Year';
   bool isYearExpanded = false;
 
   void showSuccessSnackBar(String message) {
@@ -91,13 +91,13 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                 BoxShadow(color: Colors.black26, blurRadius: 10),
               ],
             ),
-            child: Row(
-              children: const [
+            child: const Row(
+              children: [
                 Icon(Icons.check_circle, color: Colors.white),
                 SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    "Upload completed successfully",
+                    'Upload completed successfully',
                     style: TextStyle(color: Colors.white, fontSize: 15),
                   ),
                 ),
@@ -114,7 +114,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
     final img = await ImagePickerWeb.getImageAsBytes();
     if (img != null) {
       setState(() => coverImage = img);
-      showSuccessSnackBar("Image uploaded successfully");
+      showSuccessSnackBar('Image uploaded successfully');
     }
   }
 
@@ -122,7 +122,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
     final video = await ImagePickerWeb.getVideoAsBytes();
     if (video != null) {
       setState(() => introVideo = video);
-      showSuccessSnackBar("Video uploaded successfully");
+      showSuccessSnackBar('Video uploaded successfully');
     }
   }
 
@@ -130,7 +130,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
     final result = await FilePicker.platform.pickFiles();
     if (result != null) {
       setState(() => attachment = result.files.first);
-      showSuccessSnackBar("File uploaded successfully");
+      showSuccessSnackBar('File uploaded successfully');
     }
   }
 
@@ -165,19 +165,19 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                 ),
               )
             : video != null
-            ? Column(
+            ? const Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(Icons.videocam, size: 40, color: Colors.blue),
-                  const SizedBox(height: 8),
-                  const Text("Video uploaded", style: TextStyle(fontSize: 14)),
+                  SizedBox(height: 8),
+                  Text('Video uploaded', style: TextStyle(fontSize: 14)),
                 ],
               )
             : file != null
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.insert_drive_file, size: 40, color: Colors.blue),
+                  const Icon(Icons.insert_drive_file, size: 40, color: Colors.blue),
                   const SizedBox(height: 8),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -195,7 +195,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                 children: [
                   Icon(icon, size: 38, color: Colors.blue),
                   const SizedBox(height: 8),
-                  Text("Upload $title", style: const TextStyle(fontSize: 14)),
+                  Text('Upload $title', style: const TextStyle(fontSize: 14)),
                 ],
               ),
       ),
@@ -204,31 +204,31 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
 
   String _getFormattedDate(DateTime date) {
     final months = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
     ];
-    return "${date.day} ${months[date.month - 1]}, ${date.year}";
+    return '${date.day} ${months[date.month - 1]}, ${date.year}';
   }
 
   IconData _getAttemptsIcon(String? attempts) {
     switch (attempts) {
-      case "Unlimited Attempts":
+      case 'Unlimited Attempts':
         return Icons.all_inclusive;
-      case "1 Attempt":
+      case '1 Attempt':
         return Icons.looks_one;
-      case "3 Attempts":
+      case '3 Attempts':
         return Icons.looks_3;
-      case "5 Attempts":
+      case '5 Attempts':
         return Icons.looks_5;
       default:
         return Icons.help_outline;
@@ -237,13 +237,13 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
 
   Color _getAttemptsColor(String? attempts) {
     switch (attempts) {
-      case "Unlimited Attempts":
+      case 'Unlimited Attempts':
         return Colors.green;
-      case "1 Attempt":
+      case '1 Attempt':
         return Colors.red;
-      case "3 Attempts":
+      case '3 Attempts':
         return Colors.orange;
-      case "5 Attempts":
+      case '5 Attempts':
         return Colors.blue;
       default:
         return Colors.grey;
@@ -252,31 +252,31 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
 
   String _getAttemptsInfo(String? attempts) {
     switch (attempts) {
-      case "Unlimited Attempts":
-        return "No limit";
-      case "1 Attempt":
-        return "Strict";
-      case "3 Attempts":
-        return "Moderate";
-      case "5 Attempts":
-        return "Flexible";
+      case 'Unlimited Attempts':
+        return 'No limit';
+      case '1 Attempt':
+        return 'Strict';
+      case '3 Attempts':
+        return 'Moderate';
+      case '5 Attempts':
+        return 'Flexible';
       default:
-        return "";
+        return '';
     }
   }
 
   String _getAttemptsDescription(String? attempts) {
     switch (attempts) {
-      case "Unlimited Attempts":
-        return "Students can attempt the activity as many times as they want. Only the highest score will be recorded.";
-      case "1 Attempt":
-        return "Students can only attempt the activity once. Make sure they are prepared before starting.";
-      case "3 Attempts":
-        return "Students can attempt the activity up to 3 times. The highest score will be recorded.";
-      case "5 Attempts":
-        return "Students can attempt the activity up to 5 times. This provides more flexibility while maintaining some structure.";
+      case 'Unlimited Attempts':
+        return 'Students can attempt the activity as many times as they want. Only the highest score will be recorded.';
+      case '1 Attempt':
+        return 'Students can only attempt the activity once. Make sure they are prepared before starting.';
+      case '3 Attempts':
+        return 'Students can attempt the activity up to 3 times. The highest score will be recorded.';
+      case '5 Attempts':
+        return 'Students can attempt the activity up to 5 times. This provides more flexibility while maintaining some structure.';
       default:
-        return "Select the number of attempts allowed for this activity.";
+        return 'Select the number of attempts allowed for this activity.';
     }
   }
 
@@ -291,7 +291,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
               size: 20,
             ),
             const SizedBox(width: 8),
-            Text("Attempts set to: $selectedAttempts"),
+            Text('Attempts set to: $selectedAttempts'),
           ],
         ),
         backgroundColor: _getAttemptsColor(selectedAttempts),
@@ -350,7 +350,6 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
       width: 250,
       margin: const EdgeInsetsDirectional.only(
         start: 30,
-        end: 0,
         top: 50,
         bottom: 50,
       ),
@@ -511,7 +510,6 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                 color: isHovered && !isSelected
                     ? const Color(0xFF2563EB).withOpacity(0.3)
                     : Colors.transparent,
-                width: 1,
               ),
             ),
             child: Row(
@@ -593,14 +591,13 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
               color: isLogoutHovered
                   ? const Color(0xFFEF4444).withOpacity(0.3)
                   : Colors.transparent,
-              width: 1,
             ),
           ),
-          child: Row(
+          child: const Row(
             children: [
-              Icon(Icons.logout, color: const Color(0xFFEF4444), size: 20),
-              const SizedBox(width: 12),
-              const Text(
+              Icon(Icons.logout, color: Color(0xFFEF4444), size: 20),
+              SizedBox(width: 12),
+              Text(
                 'Logout',
                 style: TextStyle(
                   color: Color(0xFFEF4444),
@@ -626,11 +623,11 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Department Name",
+          'Department Name',
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
-            fontFamily: "inter",
+            fontFamily: 'inter',
             color: Colors.blue[900],
           ),
         ),
@@ -717,7 +714,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                       children: [
                         Expanded(
                           child: Text(
-                            "${department.name} (${department.headName})",
+                            '${department.name} (${department.headName})',
                             style: const TextStyle(
                               fontSize: 14,
                               color: Color(0xFF1E293B),
@@ -752,11 +749,11 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Year Name",
+          'Year Name',
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
-            fontFamily: "inter",
+            fontFamily: 'inter',
             color: Colors.blue[900],
           ),
         ),
@@ -832,7 +829,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: Center(
                 child: Text(
-                  "No years already created for this department",
+                  'No years already created for this department',
                   style: TextStyle(
                     color: Colors.red[600],
                     fontSize: 14,
@@ -900,11 +897,11 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Course Title",
+                'Course Title',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  fontFamily: "inter",
+                  fontFamily: 'inter',
                   color: Colors.blue[900],
                 ),
               ),
@@ -914,7 +911,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
 
                 decoration: const InputDecoration(
                   hintStyle: TextStyle(color: Colors.grey, fontSize: 14),
-                  hintText: "Introduction to Marketing",
+                  hintText: 'Introduction to Marketing',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(8)),
                   ),
@@ -922,11 +919,11 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
               ),
               const SizedBox(height: 16),
               Text(
-                "Course Description",
+                'Course Description',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  fontFamily: "inter",
+                  fontFamily: 'inter',
                   color: Colors.blue[900],
                 ),
               ),
@@ -934,7 +931,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
               TextField(
                 controller: descriptionController,
                 decoration: const InputDecoration(
-                  hintText: "Brief overview of what the course covers",
+                  hintText: 'Brief overview of what the course covers',
                   hintStyle: TextStyle(color: Colors.grey, fontSize: 14),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -943,11 +940,11 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
               ),
               const SizedBox(height: 16),
               Text(
-                "Course CreditHours",
+                'Course CreditHours',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  fontFamily: "inter",
+                  fontFamily: 'inter',
                   color: Colors.blue[900],
                 ),
               ),
@@ -955,7 +952,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
               TextField(
                 controller: creditHoursController,
                 decoration: const InputDecoration(
-                  hintText: "Number of credit hours",
+                  hintText: 'Number of credit hours',
                   hintStyle: TextStyle(color: Colors.grey, fontSize: 14),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -990,7 +987,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                                 return Padding(
                                   padding: const EdgeInsets.only(top: 30),
                                   child: Text(
-                                    "Error: ${departmentState.message}",
+                                    'Error: ${departmentState.message}',
                                     style: const TextStyle(color: Colors.red),
                                   ),
                                 );
@@ -1000,11 +997,11 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                                 if (departmentState.departments.isEmpty) {
                                   return const Padding(
                                     padding: EdgeInsets.only(top: 30),
-                                    child: Text("No departments found"),
+                                    child: Text('No departments found'),
                                   );
                                 }
 
-                                List<GetDepartmentModel> departments =
+                                final List<GetDepartmentModel> departments =
                                     departmentState.departments
                                         .whereType<GetDepartmentModel>()
                                         .toList();
@@ -1018,7 +1015,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                                       selectedDepartmentId = chosenDep.id
                                           .toString();
                                       availableYears = chosenDep.years;
-                                      selectedYearName = "Select Year";
+                                      selectedYearName = 'Select Year';
                                       selectedYearId = null;
                                       selectedDepartmentName = chosenDep.name;
                                       isDepartmentExpanded = false;
@@ -1055,7 +1052,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                             return Padding(
                               padding: const EdgeInsets.only(top: 30),
                               child: Text(
-                                "Error: ${yearState.message}",
+                                'Error: ${yearState.message}',
                                 style: const TextStyle(color: Colors.red),
                               ),
                             );
@@ -1065,12 +1062,12 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                             if (yearState.years.isEmpty) {
                               return const Padding(
                                 padding: EdgeInsets.only(top: 30),
-                                child: Text("No years found"),
+                                child: Text('No years found'),
                               );
                             }
 
                             // ignore: unused_local_variable
-                            List<GetYearModel> years = yearState.years
+                            final List<GetYearModel> years = yearState.years
                                 .whereType<GetYearModel>()
                                 .toList();
 
@@ -1106,7 +1103,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                 children: [
                   Expanded(
                     child: uploadBox(
-                      title: "Cover Image",
+                      title: 'Cover Image',
                       onTap: pickImage,
                       image: coverImage,
                       icon: Icons.image,
@@ -1125,7 +1122,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
   }
 
   Widget _buildActionButtons(CreateCourseState state) {
-    bool isLoading = state is CreateCourseLoading;
+    final bool isLoading = state is CreateCourseLoading;
     return Row(
       children: [
         Expanded(
@@ -1135,21 +1132,21 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                 ? null
                 : () {
                     if (_formKey.currentState!.validate()) {
-                      if (selectedDepartmentName == "Select Department" ||
+                      if (selectedDepartmentName == 'Select Department' ||
                           selectedDepartmentName.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text("Please select a department Name"),
+                            content: Text('Please select a department Name'),
                             backgroundColor: Colors.red,
                           ),
                         );
                         return;
                       }
-                      if (selectedYearName == "Select Year" ||
+                      if (selectedYearName == 'Select Year' ||
                           selectedYearName.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text("Please select a year Name"),
+                            content: Text('Please select a year Name'),
                             backgroundColor: Colors.red,
                           ),
                         );
@@ -1194,7 +1191,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                           ),
                           SizedBox(width: 12),
                           Text(
-                            "Creating Course...",
+                            'Creating Course...',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
@@ -1204,7 +1201,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                         ],
                       )
                     : const Text(
-                        "Create Course",
+                        'Create Course',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,

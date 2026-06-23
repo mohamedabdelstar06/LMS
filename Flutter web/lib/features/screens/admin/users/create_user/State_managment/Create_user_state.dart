@@ -15,16 +15,16 @@ class CreateUserInitialState extends CreateState {}
 class LoadingCreateUserState extends CreateState {}
 
 class CreateUserSuccessState extends CreateState {
-  final int? statusCode;
-  final String? message;
 
   CreateUserSuccessState({this.statusCode, this.message});
+  final int? statusCode;
+  final String? message;
 }
 
 class CreateUserErrorState extends CreateState {
-  final String errorMessage;
-  final int? statusCode;
 
   CreateUserErrorState(this.errorMessage, {this.statusCode});
+  final String errorMessage;
+  final int? statusCode;
 }
 

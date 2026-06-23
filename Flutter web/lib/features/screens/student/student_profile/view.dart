@@ -20,9 +20,6 @@ import '../student_courses/view.dart';
 import 'ProfileModel/view.dart';
 
 class WebImage extends StatelessWidget {
-  final String url;
-  final double width;
-  final double height;
 
   const WebImage({
     super.key,
@@ -30,6 +27,9 @@ class WebImage extends StatelessWidget {
     required this.width,
     required this.height,
   });
+  final String url;
+  final double width;
+  final double height;
 
   @override
   Widget build(BuildContext context) {
@@ -262,7 +262,6 @@ class _ProfileScreenState extends State<StudentProfileScreen> {
       width: 250,
       margin: const EdgeInsetsDirectional.only(
         start: 40,
-        end: 0,
         top: 50,
         bottom: 50,
       ),
@@ -368,7 +367,6 @@ class _ProfileScreenState extends State<StudentProfileScreen> {
                 color: isHovered && !isSelected
                     ? const Color(0xFF2563EB).withOpacity(0.3)
                     : Colors.transparent,
-                width: 1,
               ),
             ),
             child: Row(
@@ -450,14 +448,13 @@ class _ProfileScreenState extends State<StudentProfileScreen> {
               color: isLogoutHovered
                   ? const Color(0xFFEF4444).withOpacity(0.3)
                   : Colors.transparent,
-              width: 1,
             ),
           ),
-          child: Row(
+          child: const Row(
             children: [
-              Icon(Icons.logout, color: const Color(0xFFEF4444), size: 20),
-              const SizedBox(width: 12),
-              const Text(
+              Icon(Icons.logout, color: Color(0xFFEF4444), size: 20),
+              SizedBox(width: 12),
+              Text(
                 'Logout',
                 style: TextStyle(
                   color: Color(0xFFEF4444),
@@ -477,7 +474,7 @@ class _ProfileScreenState extends State<StudentProfileScreen> {
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           constraints: const BoxConstraints(maxWidth: 1132),
           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 30),
           decoration: BoxDecoration(
@@ -495,7 +492,6 @@ class _ProfileScreenState extends State<StudentProfileScreen> {
           child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 40),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Text(
                   'Your Profile',
@@ -843,7 +839,7 @@ class _ProfileScreenState extends State<StudentProfileScreen> {
           children: [
             AnimatedDefaultTextStyle(
               duration: const Duration(milliseconds: 200),
-              style: TextStyle(
+              style: const TextStyle(
                 fontWeight: FontWeight.w600,
                 color: Color(0xFF2563EB),
               ),
@@ -1071,7 +1067,7 @@ class _ProfileScreenState extends State<StudentProfileScreen> {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: const Color(0xFFE2E8F0), width: 1),
+              border: Border.all(color: const Color(0xFFE2E8F0)),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.1),
@@ -1147,7 +1143,7 @@ class _ProfileScreenState extends State<StudentProfileScreen> {
         }
       },
       builder: (context, state) {
-        bool isLoading = state is StudentProfileLoading;
+        final bool isLoading = state is StudentProfileLoading;
 
         return InkWell(
           onTap: isLoading
@@ -1179,7 +1175,7 @@ class _ProfileScreenState extends State<StudentProfileScreen> {
               width: 470,
               height: 45,
               decoration: BoxDecoration(
-                gradient: LinearGradient(
+                gradient: const LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
@@ -1191,7 +1187,7 @@ class _ProfileScreenState extends State<StudentProfileScreen> {
               ),
               child: Center(
                 child: isLoading
-                    ? Row(
+                    ? const Row(
                   mainAxisAlignment:
                   MainAxisAlignment.center,
                   children: [
@@ -1219,7 +1215,7 @@ class _ProfileScreenState extends State<StudentProfileScreen> {
                     ),
                   ],
                 )
-                    : Row(
+                    : const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
 
@@ -1251,9 +1247,9 @@ class _ProfileScreenState extends State<StudentProfileScreen> {
 }
 
 class DateRangeSelector extends StatelessWidget {
-  final List<String> years = [for (int y = 1980; y <= 2030; y++) y.toString()];
 
    DateRangeSelector({super.key});
+  final List<String> years = [for (int y = 1980; y <= 2030; y++) y.toString()];
 
   @override
   Widget build(BuildContext context) {

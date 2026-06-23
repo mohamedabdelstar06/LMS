@@ -89,7 +89,7 @@ class _SidebarState extends State<Sidebar>
           ],
         ),
         border: Border(
-          right: BorderSide(color: Color(0xFFBAE6FD), width: 1),
+          right: BorderSide(color: Color(0xFFBAE6FD)),
         ),
         boxShadow: [
           BoxShadow(
@@ -453,7 +453,6 @@ class _STileState extends State<_STile>
                   : _hov
                   ? const Color(0xFFBAE6FD).withOpacity(0.5)
                   : Colors.transparent,
-              width: 1,
             ),
             boxShadow: a
                 ? [

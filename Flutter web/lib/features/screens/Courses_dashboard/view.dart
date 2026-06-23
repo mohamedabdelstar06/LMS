@@ -767,7 +767,7 @@ class _DashboardPageState extends State<DashboardPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(),
+      appBar: const CustomAppBar(),
       backgroundColor: const Color(0xFFF9FAFB),
       body: Container(
         decoration: BoxDecoration(
@@ -812,9 +812,9 @@ class _DashboardPageState extends State<DashboardPage>
                 children: [
                   Expanded(
                     child: InteractiveMetricCard(
-                      image: Image(
+                      image: const Image(
                         image: AssetImage(
-                          "assets/icons/hugeicons_students.png",
+                          'assets/icons/hugeicons_students.png',
                         ),
                         height: 24,
                         width: 24,
@@ -830,9 +830,9 @@ class _DashboardPageState extends State<DashboardPage>
                   const SizedBox(width: 24),
                   Expanded(
                     child: InteractiveMetricCard(
-                      image: Image(
+                      image: const Image(
                         image: AssetImage(
-                          "assets/icons/total courses icons.png",
+                          'assets/icons/total courses icons.png',
                         ),
                         height: 24,
                         width: 24,
@@ -841,18 +841,18 @@ class _DashboardPageState extends State<DashboardPage>
                       value: '97',
                       change: '+2.1%',
                       gradient: LinearGradient(
-                        colors: [Colors.purple.shade200, Color(0xFF7C3AED)],
+                        colors: [Colors.purple.shade200, const Color(0xFF7C3AED)],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
-                        stops: [0.0, 1.0],
+                        stops: const [0.0, 1.0],
                       ),
                     ),
                   ),
                   const SizedBox(width: 24),
                   Expanded(
                     child: InteractiveMetricCard(
-                      image: Image(
-                        image: AssetImage("assets/icons/complete_icon.png"),
+                      image: const Image(
+                        image: AssetImage('assets/icons/complete_icon.png'),
                         height: 24,
                         width: 24,
                       ),
@@ -860,15 +860,15 @@ class _DashboardPageState extends State<DashboardPage>
                       value: '80',
                       change: '+4.2%',
                       gradient: LinearGradient(
-                        colors: [Colors.green.shade200, Color(0xFF059669)],
+                        colors: [Colors.green.shade200, const Color(0xFF059669)],
                       ),
                     ),
                   ),
                   const SizedBox(width: 24),
                   Expanded(
                     child: InteractiveMetricCard(
-                      image: Image(
-                        image: AssetImage("assets/icons/mage_video.png"),
+                      image: const Image(
+                        image: AssetImage('assets/icons/mage_video.png'),
                         height: 24,
                         width: 24,
                       ),
@@ -876,7 +876,7 @@ class _DashboardPageState extends State<DashboardPage>
                       value: '75%',
                       change: '+5.2%',
                       gradient: LinearGradient(
-                        colors: [Colors.orange.shade200, Color(0xFFD97706)],
+                        colors: [Colors.orange.shade200, const Color(0xFFD97706)],
                       ),
                     ),
                   ),
@@ -888,13 +888,12 @@ class _DashboardPageState extends State<DashboardPage>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
-                    flex: 1,
                     child: AnimatedOnlineCard(
                       pulseController: _pulseController,
                     ),
                   ),
                   const SizedBox(width: 24),
-                  Expanded(flex: 2, child: InteractiveCoursesCard()),
+                  const Expanded(flex: 2, child: InteractiveCoursesCard()),
                 ],
               ),
               const SizedBox(height: 24),
@@ -935,13 +934,13 @@ class _DashboardPageState extends State<DashboardPage>
         onTap: () {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Row(
+              content: const Row(
                 children: [
                   Icon(Icons.check_circle, color: Colors.white),
                   SizedBox(width: 10),
                   Expanded(
                     child: Text(
-                      "Refresh Success",
+                      'Refresh Success',
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
@@ -949,11 +948,11 @@ class _DashboardPageState extends State<DashboardPage>
               ),
               backgroundColor: Colors.green,
               behavior: SnackBarBehavior.floating,
-              margin: EdgeInsets.all(16),
+              margin: const EdgeInsets.all(16),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
-              duration: Duration(seconds: 3),
+              duration: const Duration(seconds: 3),
             ),
           );
         },
@@ -979,11 +978,6 @@ class _DashboardPageState extends State<DashboardPage>
 }
 
 class InteractiveMetricCard extends StatefulWidget {
-  final String title;
-  final String value;
-  final String change;
-  final Gradient gradient;
-  final Image image;
 
   const InteractiveMetricCard({
     super.key,
@@ -993,6 +987,11 @@ class InteractiveMetricCard extends StatefulWidget {
     required this.gradient,
     required this.image,
   });
+  final String title;
+  final String value;
+  final String change;
+  final Gradient gradient;
+  final Image image;
 
   @override
   State<InteractiveMetricCard> createState() => _InteractiveMetricCardState();
@@ -1087,9 +1086,9 @@ class _InteractiveMetricCardState extends State<InteractiveMetricCard> {
 }
 
 class AnimatedOnlineCard extends StatelessWidget {
-  final AnimationController pulseController;
 
   const AnimatedOnlineCard({super.key, required this.pulseController});
+  final AnimationController pulseController;
 
   @override
   Widget build(BuildContext context) {
@@ -1235,8 +1234,8 @@ class _InteractiveCoursesCardState extends State<InteractiveCoursesCard> {
           ),
           const SizedBox(height: 24),
           ...courses.asMap().entries.map((entry) {
-            int index = entry.key;
-            var course = entry.value;
+            final int index = entry.key;
+            final course = entry.value;
             return MouseRegion(
               onEnter: (_) => setState(() => hoveredIndex = index),
               onExit: (_) => setState(() => hoveredIndex = null),
@@ -1258,10 +1257,6 @@ class _InteractiveCoursesCardState extends State<InteractiveCoursesCard> {
 }
 
 class AnimatedCourseProgressBar extends StatelessWidget {
-  final String name;
-  final int progress;
-  final Color color;
-  final bool isHovered;
 
   const AnimatedCourseProgressBar({
     super.key,
@@ -1270,6 +1265,10 @@ class AnimatedCourseProgressBar extends StatelessWidget {
     required this.color,
     required this.isHovered,
   });
+  final String name;
+  final int progress;
+  final Color color;
+  final bool isHovered;
 
   @override
   Widget build(BuildContext context) {
@@ -1330,14 +1329,14 @@ class AnimatedCourseProgressBar extends StatelessWidget {
 }
 
 class InteractiveLoginChart extends StatelessWidget {
-  final String selectedPeriod;
-  final Function(String) onPeriodChanged;
 
   const InteractiveLoginChart({
     super.key,
     required this.selectedPeriod,
     required this.onPeriodChanged,
   });
+  final String selectedPeriod;
+  final Function(String) onPeriodChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -1385,12 +1384,11 @@ class InteractiveLoginChart extends StatelessWidget {
             child: LineChart(
               LineChartData(
                 gridData: FlGridData(
-                  show: true,
                   drawVerticalLine: false,
                   horizontalInterval: 1,
                   getDrawingHorizontalLine: (value) {
-                    return FlLine(
-                      color: const Color(0xFFF3F4F6),
+                    return const FlLine(
+                      color: Color(0xFFF3F4F6),
                       strokeWidth: 1,
                     );
                   },
@@ -1411,11 +1409,11 @@ class InteractiveLoginChart extends StatelessWidget {
                       },
                     ),
                   ),
-                  rightTitles: AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
+                  rightTitles: const AxisTitles(
+                    sideTitles: SideTitles(),
                   ),
-                  topTitles: AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
+                  topTitles: const AxisTitles(
+                    sideTitles: SideTitles(),
                   ),
                   bottomTitles: AxisTitles(
                     sideTitles: SideTitles(
@@ -1449,9 +1447,8 @@ class InteractiveLoginChart extends StatelessWidget {
                 minY: 0,
                 maxY: 4,
                 lineTouchData: LineTouchData(
-                  enabled: true,
                   touchTooltipData: LineTouchTooltipData(
-                    getTooltipColor: (touchedSpots) => Color(0xFF2563EB),
+                    getTooltipColor: (touchedSpots) => const Color(0xFF2563EB),
 
                     getTooltipItems: (touchedSpots) {
                       return touchedSpots.map((spot) {
@@ -1480,7 +1477,6 @@ class InteractiveLoginChart extends StatelessWidget {
                     color: const Color(0xFF2563EB),
                     barWidth: 3,
                     dotData: FlDotData(
-                      show: true,
                       getDotPainter: (spot, percent, barData, index) {
                         return FlDotCirclePainter(
                           radius: 5,
@@ -1536,14 +1532,14 @@ class InteractiveLoginChart extends StatelessWidget {
 }
 
 class InteractivePerformanceCard extends StatelessWidget {
-  final String selectedFilter;
-  final Function(String) onFilterChanged;
 
   const InteractivePerformanceCard({
     super.key,
     required this.selectedFilter,
     required this.onFilterChanged,
   });
+  final String selectedFilter;
+  final Function(String) onFilterChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -1625,9 +1621,9 @@ class InteractivePerformanceCard extends StatelessWidget {
             style: TextStyle(fontSize: 14, color: Color(0xFF6B7280)),
           ),
           const SizedBox(height: 8),
-          Row(
+          const Row(
             crossAxisAlignment: CrossAxisAlignment.end,
-            children: const [
+            children: [
               Text(
                 '85%',
                 style: TextStyle(
@@ -1660,7 +1656,7 @@ class InteractivePerformanceCard extends StatelessWidget {
                 barTouchData: BarTouchData(
                   enabled: true,
                   touchTooltipData: BarTouchTooltipData(
-                    getTooltipColor: (touchedSpots) => Color(0xFF2563EB),
+                    getTooltipColor: (touchedSpots) => const Color(0xFF2563EB),
                     getTooltipItem: (group, groupIndex, rod, rodIndex) {
                       const years = ['2022', '2023', '2024', '2025'];
                       return BarTooltipItem(
@@ -1674,7 +1670,6 @@ class InteractivePerformanceCard extends StatelessWidget {
                   ),
                 ),
                 titlesData: FlTitlesData(
-                  show: true,
                   bottomTitles: AxisTitles(
                     sideTitles: SideTitles(
                       showTitles: true,
@@ -1693,17 +1688,17 @@ class InteractivePerformanceCard extends StatelessWidget {
                       },
                     ),
                   ),
-                  leftTitles: AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
+                  leftTitles: const AxisTitles(
+                    sideTitles: SideTitles(),
                   ),
-                  topTitles: AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
+                  topTitles: const AxisTitles(
+                    sideTitles: SideTitles(),
                   ),
-                  rightTitles: AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
+                  rightTitles: const AxisTitles(
+                    sideTitles: SideTitles(),
                   ),
                 ),
-                gridData: FlGridData(show: false),
+                gridData: const FlGridData(show: false),
                 borderData: FlBorderData(show: false),
                 barGroups: [
                   _buildBarGroup(0, 78),

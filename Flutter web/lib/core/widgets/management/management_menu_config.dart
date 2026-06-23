@@ -4,6 +4,7 @@ import 'package:lms/features/screens/admin/admin_profile/view.dart';
 import 'package:lms/features/screens/admin/courses/Enrollment_course/view.dart';
 import 'package:lms/features/screens/admin/courses/create_course/Adding_view.dart';
 import 'package:lms/features/screens/admin/courses/home_courses/view.dart';
+import 'package:lms/features/screens/admin/dashboard_screen.dart';
 import 'package:lms/features/screens/admin/department/create_department/view.dart';
 import 'package:lms/features/screens/admin/department/get_department/get_All_departments/view.dart';
 import 'package:lms/features/screens/admin/squadron/create_squadron/view.dart';
@@ -53,6 +54,18 @@ class ManagementMenuConfig {
   }
 
   static const _adminSections = [
+    ManagementMenuSection(
+      title: 'Management',
+      items: [
+        ManagementMenuItem(
+          id: 'Dashboard',
+          label: 'Dashboard',
+          outlinedIcon: Icons.space_dashboard_outlined,
+          filledIcon: Icons.space_dashboard,
+          screenBuilder: AdminDashboardScreen.new,
+        ),
+      ],
+    ),
     ManagementMenuSection(
       title: 'Account',
       items: [
@@ -191,6 +204,18 @@ class ManagementMenuConfig {
   ];
 
   static const _instructorSections = [
+    ManagementMenuSection(
+      title: 'Management',
+      items: [
+        ManagementMenuItem(
+          id: 'Dashboard',
+          label: 'Dashboard',
+          outlinedIcon: Icons.space_dashboard_outlined,
+          filledIcon: Icons.space_dashboard,
+          screenBuilder: TeacherCourseScreen.new,
+        ),
+      ],
+    ),
     ManagementMenuSection(
       title: 'Account',
       items: [

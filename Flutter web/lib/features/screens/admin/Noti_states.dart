@@ -11,23 +11,17 @@ class NotificationInitial extends NotificationState {}
 class NotificationLoading extends NotificationState {}
 
 class NotificationLoadingMore extends NotificationState {
-  final List<NotificationModel> currentItems;
-  final int unreadCount;
 
   NotificationLoadingMore({
     required this.currentItems,
     required this.unreadCount,
   });
+  final List<NotificationModel> currentItems;
+  final int unreadCount;
 }
 
 // ── Loaded ─────────────────────────────────────────────────────────────────
 class NotificationLoaded extends NotificationState {
-  final List<NotificationModel> items;
-  final int totalCount;
-  final int currentPage;
-  final int totalPages;
-  final int unreadCount;
-  final bool hasMore;
 
   NotificationLoaded({
     required this.items,
@@ -36,31 +30,37 @@ class NotificationLoaded extends NotificationState {
     required this.totalPages,
     required this.unreadCount,
   }) : hasMore = currentPage < totalPages;
+  final List<NotificationModel> items;
+  final int totalCount;
+  final int currentPage;
+  final int totalPages;
+  final int unreadCount;
+  final bool hasMore;
 }
 
 // ── Error ──────────────────────────────────────────────────────────────────
 class NotificationError extends NotificationState {
-  final String message;
 
   NotificationError(this.message);
+  final String message;
 }
 
 // ── Action Results ─────────────────────────────────────────────────────────
-class NotificationMarkingRead extends NotificationState {
-  final List<NotificationModel> items;
-  final int unreadCount;
-  final int? markingId; // null = mark-all
+class NotificationMarkingRead extends NotificationState { // null = mark-all
 
   NotificationMarkingRead({
     required this.items,
     required this.unreadCount,
     this.markingId,
   });
+  final List<NotificationModel> items;
+  final int unreadCount;
+  final int? markingId;
 }
 
 // ── Unread count only (for badge) ─────────────────────────────────────────
 class NotificationUnreadCountLoaded extends NotificationState {
-  final int unreadCount;
 
   NotificationUnreadCountLoaded(this.unreadCount);
+  final int unreadCount;
 }

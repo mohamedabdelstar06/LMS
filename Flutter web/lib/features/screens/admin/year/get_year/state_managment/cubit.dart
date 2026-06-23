@@ -15,17 +15,17 @@ class YearsCubitDrop extends Cubit<YearsStateDrop> {
     try {
       final token = await TokenStorageHelper.getTokenSecure();
       if (token == null || token.isEmpty) {
-        emit(YearsErrorState("Unauthorized: Please login again."));
+        emit(YearsErrorState('Unauthorized: Please login again.'));
         return;
       }
 
       final dio = Dio();
       final response = await dio.get(
-        "https://skylearn.runasp.net/api/years",
+        'https://skylearn.runasp.net/api/years',
         options: Options(
           headers: {
-            "Authorization": "Bearer $token",
-            "Content-Type": "application/json",
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'application/json',
           },
         ),
       );
@@ -38,22 +38,22 @@ class YearsCubitDrop extends Cubit<YearsStateDrop> {
 
         emit(YearLoadedState(years));
       } else {
-        emit(YearsErrorState("Failed to load years. Status: ${response.statusCode}"));
+        emit(YearsErrorState('Failed to load years. Status: ${response.statusCode}'));
       }
     } on DioException catch (e) {
-      print("Dio Error: ${e.message}");
-      String errorMessage = "Failed to load departments";
+      print('Dio Error: ${e.message}');
+      String errorMessage = 'Failed to load departments';
       if (e.response != null) {
-        errorMessage = "Server Error: ${e.response?.statusCode} - ${e.response?.statusMessage}";
+        errorMessage = 'Server Error: ${e.response?.statusCode} - ${e.response?.statusMessage}';
       } else if (e.type == DioExceptionType.connectionTimeout) {
-        errorMessage = "Connection timeout. Please check your internet.";
+        errorMessage = 'Connection timeout. Please check your internet.';
       } else if (e.type == DioExceptionType.connectionError) {
-        errorMessage = "Connection Error. Please check the API URL or your network.";
+        errorMessage = 'Connection Error. Please check the API URL or your network.';
       }
       emit(YearsErrorState(errorMessage));
     } catch (e) {
-      print("Unexpected Error: $e");
-      emit(YearsErrorState("An unexpected error occurred."));
+      print('Unexpected Error: $e');
+      emit(YearsErrorState('An unexpected error occurred.'));
     }
   }
 }

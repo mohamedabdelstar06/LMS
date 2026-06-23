@@ -21,13 +21,13 @@ SquadronCubit( ) : super(SquadronInitial());
 
       final token = await TokenStorageHelper.getTokenSecure();
       if (token == null || token.isEmpty) {
-        emit(SquadronError("You are not authorized. Token missing."));
+        emit(SquadronError('You are not authorized. Token missing.'));
         return;
       }
 
       final data = {
-        "name": fullNameController.text.trim(),
-        "description": descriptionController.text.trim(),
+        'name': fullNameController.text.trim(),
+        'description': descriptionController.text.trim(),
 
       };
 
@@ -37,25 +37,25 @@ SquadronCubit( ) : super(SquadronInitial());
         options: Options(
           headers: {
             // "Content-Type": "application/json",
-            "Authorization": "Bearer $token",
+            'Authorization': 'Bearer $token',
           },
         ),
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        emit(SquadronSuccess("Squadron created successfully"));
+        emit(SquadronSuccess('Squadron created successfully'));
         fullNameController.clear();
         descriptionController.clear();
 
       } else {
-        emit(SquadronError("Failed to create Squadron. Status: ${response.statusCode}"));
+        emit(SquadronError('Failed to create Squadron. Status: ${response.statusCode}'));
       }
     } on DioException catch (e) {
-      String errorMsg = "An unknown error occurred.";
+      String errorMsg = 'An unknown error occurred.';
       if (e.response != null) {
-        errorMsg = e.response?.data['message'] ?? e.response?.statusMessage ?? "Server Error";
+        errorMsg = e.response?.data['message'] ?? e.response?.statusMessage ?? 'Server Error';
       } else if (e.type == DioExceptionType.connectionError) {
-        errorMsg = "Connection Error. Please check your network.";
+        errorMsg = 'Connection Error. Please check your network.';
       }
       emit(SquadronError(errorMsg));
     } catch (e) {

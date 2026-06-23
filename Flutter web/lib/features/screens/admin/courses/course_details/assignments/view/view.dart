@@ -10,9 +10,9 @@ import 'package:lms/features/screens/admin/courses/course_details/assignments/vi
 import 'package:lms/features/screens/admin/courses/home_courses/model/model.dart';
 
 class AssignmentsScreen extends StatefulWidget {
-  final GetCoursesModel courseModel;
 
   const AssignmentsScreen({super.key, required this.courseModel});
+  final GetCoursesModel courseModel;
 
   @override
   State<AssignmentsScreen> createState() => _AssignmentsScreenState();
@@ -260,8 +260,8 @@ class _AssignmentsScreenState extends State<AssignmentsScreen> {
 }
 
 class _EmptyView extends StatelessWidget {
-  final VoidCallback onCreateTap;
   const _EmptyView({required this.onCreateTap});
+  final VoidCallback onCreateTap;
 
   @override
   Widget build(BuildContext context) {
@@ -330,10 +330,10 @@ class _EmptyView extends StatelessWidget {
 }
 
 class _ErrorView extends StatelessWidget {
-  final String message;
-  final VoidCallback onRetry;
 
   const _ErrorView({required this.message, required this.onRetry});
+  final String message;
+  final VoidCallback onRetry;
 
   @override
   Widget build(BuildContext context) {
@@ -346,8 +346,8 @@ class _ErrorView extends StatelessWidget {
             Container(
               width: 72,
               height: 72,
-              decoration: BoxDecoration(
-                color: const Color(0xFFFEE2E2),
+              decoration: const BoxDecoration(
+                color: Color(0xFFFEE2E2),
                 shape: BoxShape.circle,
               ),
               child: const Icon(

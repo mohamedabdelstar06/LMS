@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
 
 class ProfileDateField extends StatelessWidget {
-  final String label;
-  final TextEditingController controller;
-  final FocusNode focusNode;
-  final String hint;
-  final DateTime? selectedDate;
-  final Function(DateTime?) onDateSelected;
 
   const ProfileDateField({
     super.key,
@@ -17,13 +11,19 @@ class ProfileDateField extends StatelessWidget {
     this.selectedDate,
     required this.onDateSelected,
   });
+  final String label;
+  final TextEditingController controller;
+  final FocusNode focusNode;
+  final String hint;
+  final DateTime? selectedDate;
+  final Function(DateTime?) onDateSelected;
 
 
 
   String _formatDate(DateTime date) {
-    return "${date.day.toString()}/"
-        "${date.month.toString()}/"
-        "${date.year}";
+    return '${date.day.toString()}/'
+        '${date.month.toString()}/'
+        '${date.year}';
   }
 
   @override

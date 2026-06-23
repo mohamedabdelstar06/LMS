@@ -79,7 +79,7 @@ class LectureCubit extends Cubit<LectureState> {
     required PlatformFile file,
     List<PlatformFile> additionalFiles = const [],
   }) async {
-    emit(const LectureCreateLoading(progress: 0.0));
+    emit(const LectureCreateLoading());
     try {
       final formData = FormData.fromMap({
         'courseId': courseId,

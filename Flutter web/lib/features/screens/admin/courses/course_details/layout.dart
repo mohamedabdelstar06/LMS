@@ -77,7 +77,6 @@ class CourseLayoutState extends State<CourseLayout> {
     _quizCubit = QuizCubit(
       repository: QuizRepository(_buildDio()),
       courseId: widget.courseModel.id,
-      role: UserRole.admin,
     )..loadQuizzes();
   }
 
@@ -113,7 +112,7 @@ class CourseLayoutState extends State<CourseLayout> {
             BlocBuilder<QuizCubit, QuizState>(
               builder: (context, quizState) {
                 // Resolve live quiz count from state
-                int quizCount = _quizCubit.quizCount;
+                final int quizCount = _quizCubit.quizCount;
 
                 return Sidebar(
                   collapsed: _collapsed,

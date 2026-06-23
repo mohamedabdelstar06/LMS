@@ -42,9 +42,9 @@ class ActivateCubit extends Cubit<ActivateState> {
       ).post(
         ApiResources.activateUserEmailEndPoint,
         data: {
-          "email": emailController.text.trim(),
-          "password": passwordController.text,
-          "confirmPassword": confirmPasswordController.text,
+          'email': emailController.text.trim(),
+          'password': passwordController.text,
+          'confirmPassword': confirmPasswordController.text,
         },
       );
 
@@ -65,50 +65,50 @@ class ActivateCubit extends Cubit<ActivateState> {
         confirmPasswordController.clear();
 
         _showSnackBar(
-          message: response.data["message"] ?? "Account activated successfully",
+          message: response.data['message'] ?? 'Account activated successfully',
         );
 
-        if (model.user.role == "Student") {
+        if (model.user.role == 'Student') {
           Navigator.pushReplacement(
             navigatorKey.currentContext!,
-            MaterialPageRoute(builder: (_) => StudentCourseScreen()),
+            MaterialPageRoute(builder: (_) => const StudentCourseScreen()),
           );
-        } else if (model.user.role == "Instructor") {
+        } else if (model.user.role == 'Instructor') {
           Navigator.pushReplacement(
             navigatorKey.currentContext!,
-            MaterialPageRoute(builder: (_) => TeacherCourseScreen()),
+            MaterialPageRoute(builder: (_) => const TeacherCourseScreen()),
           );
         } else {
           Navigator.pushReplacement(
             navigatorKey.currentContext!,
-            MaterialPageRoute(builder: (_) => AdminCourseScreen()),
+            MaterialPageRoute(builder: (_) => const AdminCourseScreen()),
           );
         }
       } else {
         emit(ActivateErrorState());
         _showSnackBar(
-          message: response.data["message"] ?? "Activation failed",
+          message: response.data['message'] ?? 'Activation failed',
           isError: true,
         );
       }
     } on DioException catch (e) {
       emit(ActivateErrorState());
 
-      String errorMessage = "Network error occurred";
+      String errorMessage = 'Network error occurred';
 
       if (e.response?.data is Map) {
-        errorMessage = e.response?.data["message"] ?? errorMessage;
+        errorMessage = e.response?.data['message'] ?? errorMessage;
       } else if (e.type == DioExceptionType.connectionTimeout) {
-        errorMessage = "Connection timeout, please try again";
+        errorMessage = 'Connection timeout, please try again';
       } else if (e.type == DioExceptionType.receiveTimeout) {
-        errorMessage = "Server is not responding";
+        errorMessage = 'Server is not responding';
       }
 
       _showSnackBar(message: errorMessage, isError: true);
     } catch (e) {
       emit(ActivateErrorState());
       _showSnackBar(
-        message: "Unexpected error, please try again",
+        message: 'Unexpected error, please try again',
         isError: true,
       );
     }
@@ -120,7 +120,7 @@ class ActivateCubit extends Cubit<ActivateState> {
     required String confirmPassword,
   }) {
     if (email.isEmpty) {
-      return "Email is required";
+      return 'Email is required';
     }
 
     // if (!email.endsWith("@gmail.com")) {
@@ -128,19 +128,19 @@ class ActivateCubit extends Cubit<ActivateState> {
     // }
 
     if (password.isEmpty) {
-      return "Password is required";
+      return 'Password is required';
     }
 
     if (password.length < 7) {
-      return "Password must be at least 8 characters";
+      return 'Password must be at least 8 characters';
     }
 
     if (!RegExp(r'[A-Z]').hasMatch(password)) {
-      return "Password must contain at least one capital letter";
+      return 'Password must contain at least one capital letter';
     }
 
     if (password != confirmPassword) {
-      return "Passwords do not match";
+      return 'Passwords do not match';
     }
 
     return null;

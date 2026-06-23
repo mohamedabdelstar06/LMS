@@ -135,7 +135,6 @@ class _DepartmentsScreenState extends State<YearsScreen> {
                                   border: Border(
                                     bottom: BorderSide(
                                       color: Color(0xFFE2E8F0),
-                                      width: 1,
                                     ),
                                   ),
                                 ),
@@ -265,7 +264,6 @@ class _DepartmentsScreenState extends State<YearsScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       child: Row(
         mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Icon(icon, size: 18, color: Colors.blue),
           const SizedBox(width: 8),
@@ -361,7 +359,7 @@ class _DepartmentsScreenState extends State<YearsScreen> {
             ? Colors.white
             : const Color(0xFFF8FAFC),
         border: const Border(
-          bottom: BorderSide(color: Color(0xFFE2E8F0), width: 1),
+          bottom: BorderSide(color: Color(0xFFE2E8F0)),
         ),
       ),
       children: [
@@ -622,7 +620,7 @@ class _DepartmentsScreenState extends State<YearsScreen> {
             decoration: BoxDecoration(
               color: color.withOpacity(0.1),
               borderRadius: BorderRadius.circular(6),
-              border: Border.all(color: color.withOpacity(0.3), width: 1),
+              border: Border.all(color: color.withOpacity(0.3)),
             ),
             child: Icon(icon, size: 16, color: color),
           ),

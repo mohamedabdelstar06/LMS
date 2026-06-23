@@ -7,10 +7,6 @@ class CommentsInitial extends CommentsState {}
 class CommentsLoading extends CommentsState {}
 
 class CommentsLoaded extends CommentsState {
-  final List<CommentModel> comments;
-  final int? replyingToId;
-  final int? editingCommentId;
-  final Set<int> submitting;
 
   CommentsLoaded({
     required this.comments,
@@ -18,6 +14,10 @@ class CommentsLoaded extends CommentsState {
     this.editingCommentId,
     this.submitting = const {},
   });
+  final List<CommentModel> comments;
+  final int? replyingToId;
+  final int? editingCommentId;
+  final Set<int> submitting;
 
   CommentsLoaded copyWith({
     List<CommentModel>? comments,
@@ -36,6 +36,6 @@ class CommentsLoaded extends CommentsState {
 }
 
 class CommentsError extends CommentsState {
-  final String message;
   CommentsError(this.message);
+  final String message;
 }

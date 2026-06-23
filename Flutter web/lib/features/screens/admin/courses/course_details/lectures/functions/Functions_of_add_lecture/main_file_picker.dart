@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'file_config.dart';
 
 class MainFilePicker extends StatelessWidget {
-  const MainFilePicker({
+  const MainFilePicker({super.key, 
     required this.file,
     required this.onPick,
     required this.onClear,

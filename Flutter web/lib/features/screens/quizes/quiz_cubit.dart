@@ -12,13 +12,6 @@ import 'quiz_state.dart';
 enum UserRole { admin, student }
 
 class QuizCubit extends Cubit<QuizState> {
-  final QuizRepository _repo;
-  final int courseId;
-  final UserRole role;
-
-  List<QuizModel> _quizzes = [];
-  Timer? _autoSaveTimer;
-  int? _activeQuizId;
 
   QuizCubit({
     required QuizRepository repository,
@@ -26,6 +19,13 @@ class QuizCubit extends Cubit<QuizState> {
     this.role = UserRole.admin,
   })  : _repo = repository,
         super(const QuizInitial());
+  final QuizRepository _repo;
+  final int courseId;
+  final UserRole role;
+
+  List<QuizModel> _quizzes = [];
+  Timer? _autoSaveTimer;
+  int? _activeQuizId;
 
   List<QuizModel> get quizzes => _quizzes;
   int get quizCount => _quizzes.length;
@@ -96,7 +96,7 @@ class QuizCubit extends Cubit<QuizState> {
     try {
       final updated = await _repo.updateQuiz(quizId: quizId, data: data);
       _quizzes = _quizzes.map((q) => q.id == quizId ? updated : q).toList();
-      emit(QuizActionSuccess('Quiz updated successfully'));
+      emit(const QuizActionSuccess('Quiz updated successfully'));
       emit(QuizLoaded(_quizzes));
       return true;
     } catch (e) {
@@ -161,7 +161,7 @@ class QuizCubit extends Cubit<QuizState> {
 
   // ── Generate quiz with AI (multipart) ──────────────────────
   Future<bool> generateQuiz(GenerateQuizRequest req) async {
-    emit(const QuizGenerating(progress: 0));
+    emit(const QuizGenerating());
     try {
       final quiz = await _repo.generateQuiz(
         req,

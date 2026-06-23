@@ -68,9 +68,9 @@ import 'package:lms/core/widgets/app_network_image.dart';
 
 
 class BuildProfilePicture extends StatefulWidget {
-  final String? userImageUrl;
 
   const BuildProfilePicture({super.key, this.userImageUrl});
+  final String? userImageUrl;
 
   @override
   State<BuildProfilePicture> createState() => BuildProfilePictureState();

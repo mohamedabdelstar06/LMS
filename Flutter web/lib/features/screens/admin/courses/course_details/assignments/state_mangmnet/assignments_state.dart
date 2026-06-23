@@ -6,15 +6,6 @@ enum AssignmentStatus { initial, loading, success, failure }
 enum AssignmentActionStatus { idle, loading, success, failure }
 
 class AssignmentState extends Equatable {
-  final AssignmentStatus status;
-  final AssignmentActionStatus actionStatus;
-  final List<AssignmentModel> assignments;
-  final AssignmentModel? selectedAssignment;
-  final List<SubmissionModel> submissions;
-  final String? errorMessage;
-  final String? actionError;
-  final List<UploadFileProgress> uploadProgresses;
-  final bool isUploadingFiles;
 
   const AssignmentState({
     this.status = AssignmentStatus.initial,
@@ -27,6 +18,15 @@ class AssignmentState extends Equatable {
     this.uploadProgresses = const [],
     this.isUploadingFiles = false,
   });
+  final AssignmentStatus status;
+  final AssignmentActionStatus actionStatus;
+  final List<AssignmentModel> assignments;
+  final AssignmentModel? selectedAssignment;
+  final List<SubmissionModel> submissions;
+  final String? errorMessage;
+  final String? actionError;
+  final List<UploadFileProgress> uploadProgresses;
+  final bool isUploadingFiles;
 
   AssignmentState copyWith({
     AssignmentStatus? status,

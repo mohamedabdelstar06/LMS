@@ -178,7 +178,7 @@ class _CreateDepartmentScreenState extends State<CreateDepartmentScreen> {
   }
 
   Widget _buildActionButtons(DepartmentState state) {
-    bool isLoading = state is DepartmentLoading;
+    final bool isLoading = state is DepartmentLoading;
     return Row(
       children: [
         Expanded(
@@ -265,7 +265,7 @@ class _CreateDepartmentScreenState extends State<CreateDepartmentScreen> {
       child: TweenAnimationBuilder(
         duration: const Duration(milliseconds: 600),
         tween: Tween<double>(begin: 0, end: 1),
-        builder: (context, double value, child) {
+        builder: (context, value, child) {
           return Opacity(
             opacity: value,
             child: Transform.translate(
@@ -343,7 +343,7 @@ class _CreateDepartmentScreenState extends State<CreateDepartmentScreen> {
                                 );
                               }
 
-                              List<UserLiteModel> users = userState.users
+                              final List<UserLiteModel> users = userState.users
                                   .whereType<UserLiteModel>()
                                   .toList();
 

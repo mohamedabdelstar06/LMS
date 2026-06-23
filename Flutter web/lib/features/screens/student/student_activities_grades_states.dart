@@ -16,28 +16,28 @@ class StudentActivitiesInitial extends StudentActivitiesState {}
 class StudentActivitiesLoading extends StudentActivitiesState {}
 
 class StudentActivitiesLoadingMore extends StudentActivitiesState {
-  final StudentActivitiesPage current;
   const StudentActivitiesLoadingMore(this.current);
+  final StudentActivitiesPage current;
   @override
   List<Object?> get props => [current];
 }
 
 class StudentActivitiesLoaded extends StudentActivitiesState {
-  final StudentActivitiesPage data;
-  final String? activeType;
-  final String? activeStatus;
   const StudentActivitiesLoaded({
     required this.data,
     this.activeType,
     this.activeStatus,
   });
+  final StudentActivitiesPage data;
+  final String? activeType;
+  final String? activeStatus;
   @override
   List<Object?> get props => [data, activeType, activeStatus];
 }
 
 class StudentActivitiesError extends StudentActivitiesState {
-  final String message;
   const StudentActivitiesError(this.message);
+  final String message;
   @override
   List<Object?> get props => [message];
 }
@@ -53,10 +53,10 @@ class CourseGradesInitial extends CourseGradesState {}
 
 class CourseGradesLoading extends CourseGradesState {}
 
-class CourseGradesLoaded extends CourseGradesState {
-  final CourseGrades grades;
-  final int activeTab; // 0 = Overview, 1 = Quizzes, 2 = Assignments
+class CourseGradesLoaded extends CourseGradesState { // 0 = Overview, 1 = Quizzes, 2 = Assignments
   const CourseGradesLoaded({required this.grades, this.activeTab = 0});
+  final CourseGrades grades;
+  final int activeTab;
   @override
   List<Object?> get props => [grades, activeTab];
 
@@ -68,8 +68,8 @@ class CourseGradesLoaded extends CourseGradesState {
 }
 
 class CourseGradesError extends CourseGradesState {
-  final String message;
   const CourseGradesError(this.message);
+  final String message;
   @override
   List<Object?> get props => [message];
 }

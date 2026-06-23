@@ -282,7 +282,6 @@ class _SplashScreenState extends State<LoadingScreen>
                                   shape: BoxShape.circle,
                                   border: Border.all(
                                     color: _kYellow.withOpacity(0.12),
-                                    width: 1,
                                   ),
                                 ),
                               ),
@@ -295,7 +294,6 @@ class _SplashScreenState extends State<LoadingScreen>
                                 shape: BoxShape.circle,
                                 border: Border.all(
                                   color: Colors.white.withOpacity(0.06),
-                                  width: 1,
                                 ),
                               ),
                             ),
@@ -388,7 +386,6 @@ class _SplashScreenState extends State<LoadingScreen>
                         // ── Animated divider ──
                         LayoutBuilder(
                           builder: (_, constraints) => Align(
-                            alignment: Alignment.center,
                             child: Container(
                               width:
                               constraints.maxWidth *

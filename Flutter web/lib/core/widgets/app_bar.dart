@@ -1,6 +1,10 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:lms/core/widgets/app_network_image.dart';
+import 'package:lms/features/screens/admin/admin_profile/state_management/cubit_d_profile.dart';
+import 'package:lms/features/screens/admin/admin_profile/state_management/state_d_profile.dart';
 import 'package:lms/features/screens/admin/dashboard_cubit.dart';
 import 'package:lms/features/screens/admin/dashboard_screen.dart';
 
@@ -18,96 +22,99 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 68,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border(
-          bottom: BorderSide(color: const Color(0xFFE2E8F0), width: 1),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 12,
-            offset: const Offset(0, 2),
+    return BlocProvider(
+      create: (_) => AdminProfileCubit()..getProfile(),
+      child: Container(
+        height: 68,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: const Border(
+            bottom: BorderSide(color: Color(0xFFE2E8F0)),
           ),
-        ],
-      ),
-      child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Row(
-            children: [
-              // ── Logo + Brand ─────────────────────────────────
-              _LogoBrand(),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 12,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Row(
+              children: [
+                // ── Logo + Brand ─────────────────────────────────
+                _LogoBrand(),
 
-              const Spacer(),
+                const Spacer(),
 
-              // ── Nav links ────────────────────────────────────
-              _NavLink(
-                label: 'Dashboard',
-                icon: Icons.dashboard_rounded,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => BlocProvider(
-                        create: (_) => DashboardCubit(),
-                        child: const AdminDashboardScreen(),
+                // ── Nav links ────────────────────────────────────
+                _NavLink(
+                  label: 'Dashboard',
+                  icon: Icons.dashboard_rounded,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => BlocProvider(
+                          create: (_) => DashboardCubit(),
+                          child: const AdminDashboardScreen(),
+                        ),
                       ),
-                    ),
-                  );
-                },
-              ),
-              const SizedBox(width: 4),
-              _NavLink(
-                label: 'System Logs',
-                icon: Icons.receipt_long_rounded,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => BlocProvider(
-                        create: (_) =>
-                            ActivityLogsCubit(ActivityLogsRepository()),
-                        child: const ActivityLogsScreen(),
+                    );
+                  },
+                ),
+                const SizedBox(width: 4),
+                _NavLink(
+                  label: 'System Logs',
+                  icon: Icons.receipt_long_rounded,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => BlocProvider(
+                          create: (_) =>
+                              ActivityLogsCubit(ActivityLogsRepository()),
+                          child: const ActivityLogsScreen(),
+                        ),
                       ),
-                    ),
-                  );
-                },
-              ),
-              const SizedBox(width: 4),
-              _NavLink(
-                label: 'Management',
-                icon: Icons.manage_accounts_rounded,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => AdminProfileScreen()),
-                  );
-                },
-              ),
+                    );
+                  },
+                ),
+                const SizedBox(width: 4),
+                _NavLink(
+                  label: 'Management',
+                  icon: Icons.manage_accounts_rounded,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const AdminProfileScreen()),
+                    );
+                  },
+                ),
 
-              const SizedBox(width: 20),
+                const SizedBox(width: 20),
 
-              // ── Divider ──────────────────────────────────────
-              Container(width: 1, height: 28, color: const Color(0xFFE2E8F0)),
+                // ── Divider ──────────────────────────────────────
+                Container(width: 1, height: 28, color: const Color(0xFFE2E8F0)),
 
-              const SizedBox(width: 20),
+                const SizedBox(width: 20),
 
-              // ── Notification bell ────────────────────────────
-              _IconBtn(
-                icon: Icons.notifications_none_rounded,
-                tooltip: 'Notifications',
-                badge: 3,
-                onTap: () {},
-              ),
+                // ── Notification bell ────────────────────────────
+                _IconBtn(
+                  icon: Icons.notifications_none_rounded,
+                  tooltip: 'Notifications',
+                  badge: 3,
+                  onTap: () {},
+                ),
 
-              const SizedBox(width: 4),
+                const SizedBox(width: 4),
 
-              // ── Avatar ───────────────────────────────────────
-              _AdminAvatar(),
-            ],
+                // ── Avatar ───────────────────────────────────────
+                _AdminAvatar(),
+              ],
+            ),
           ),
         ),
       ),
@@ -125,7 +132,7 @@ class _LogoBrand extends StatelessWidget {
       children: [
         _PulsingLogo(),
         const SizedBox(width: 10),
-        Column(
+        const Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -134,7 +141,7 @@ class _LogoBrand extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w800,
-                color: const Color(0xFF0D2772),
+                color: Color(0xFF0D2772),
                 letterSpacing: -0.3,
                 fontFamily: 'inter',
               ),
@@ -144,7 +151,7 @@ class _LogoBrand extends StatelessWidget {
               style: TextStyle(
                 fontSize: 10,
                 fontWeight: FontWeight.w500,
-                color: const Color(0xFF64748B),
+                color: Color(0xFF64748B),
                 letterSpacing: 0.3,
               ),
             ),
@@ -214,15 +221,14 @@ class _PulsingLogoState extends State<_PulsingLogo>
 // ── Nav link button ──────────────────────────────────────────
 
 class _NavLink extends StatefulWidget {
-  final String label;
-  final IconData icon;
-  final VoidCallback onTap;
-
   const _NavLink({
     required this.label,
     required this.icon,
     required this.onTap,
   });
+  final String label;
+  final IconData icon;
+  final VoidCallback onTap;
 
   @override
   State<_NavLink> createState() => _NavLinkState();
@@ -279,17 +285,16 @@ class _NavLinkState extends State<_NavLink> {
 // ── Icon button with optional badge ─────────────────────────
 
 class _IconBtn extends StatefulWidget {
-  final IconData icon;
-  final String tooltip;
-  final int badge;
-  final VoidCallback onTap;
-
   const _IconBtn({
     required this.icon,
     required this.tooltip,
     this.badge = 0,
     required this.onTap,
   });
+  final IconData icon;
+  final String tooltip;
+  final int badge;
+  final VoidCallback onTap;
 
   @override
   State<_IconBtn> createState() => _IconBtnState();
@@ -374,7 +379,7 @@ class _AdminAvatarState extends State<_AdminAvatar> {
       child: GestureDetector(
         onTap: () => Navigator.push(
           context,
-          MaterialPageRoute(builder: (_) => AdminProfileScreen()),
+          MaterialPageRoute(builder: (_) => const AdminProfileScreen()),
         ),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
@@ -391,51 +396,63 @@ class _AdminAvatarState extends State<_AdminAvatar> {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Container(
-                width: 26,
-                height: 26,
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF2563EB), Color(0xFF0D2772)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  shape: BoxShape.circle,
-                ),
-                child: const Center(
-                  child: Text(
-                    'A',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
+              BlocBuilder<AdminProfileCubit, AdminProfileState>(
+                builder: (context, state) {
+                  String? profileImageUrl;
+                  String? fullName;
+
+                  if (state is AdminProfileLoaded) {
+                    profileImageUrl = state.profile.user.profileImageUrl;
+                    fullName = state.profile.user.fullName;
+                  }
+
+                  return SizedBox(
+                    width: 26,
+                    height: 26,
+                    child: AppNetworkImage(
+                      imageUrl: profileImageUrl,
+                      fallbackText: fullName ?? 'Admin',
+                      shape: BoxShape.circle,
+                      backgroundColor: Colors.blue.shade100,
                     ),
-                  ),
-                ),
+                  );
+                },
               ),
               const SizedBox(width: 8),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Admin',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                      color: Color(0xFF0F172A),
-                      fontFamily: 'inter',
-                    ),
-                  ),
-                  Text(
-                    'System Administrator',
-                    style: TextStyle(
-                      fontSize: 9,
-                      color: const Color(0xFF94A3B8),
-                      fontFamily: 'inter',
-                    ),
-                  ),
-                ],
+              BlocBuilder<AdminProfileCubit, AdminProfileState>(
+                builder: (context, state) {
+                  String displayName = 'Admin';
+
+                  if (state is AdminProfileLoaded) {
+                    displayName = state.profile.user.fullName;
+                  }
+
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        displayName,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          color: Color(0xFF0F172A),
+                          fontFamily: 'inter',
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const Text(
+                        'System Administrator',
+                        style: TextStyle(
+                          fontSize: 9,
+                          color: Color(0xFF94A3B8),
+                          fontFamily: 'inter',
+                        ),
+                      ),
+                    ],
+                  );
+                },
               ),
               const SizedBox(width: 6),
               Icon(

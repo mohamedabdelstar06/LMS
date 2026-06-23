@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class MetaTag extends StatelessWidget {
-  const MetaTag({required this.icon, required this.label});
+  const MetaTag({super.key, required this.icon, required this.label});
   final IconData icon;
   final String label;
 

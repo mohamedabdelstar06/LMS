@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class StatCard extends StatelessWidget {
-  const StatCard({
+  const StatCard({super.key, 
     required this.icon,
     required this.value,
     required this.label,

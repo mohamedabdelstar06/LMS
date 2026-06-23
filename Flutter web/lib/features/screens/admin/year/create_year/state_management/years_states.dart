@@ -10,15 +10,15 @@ class YearInitial extends YearState {}
 class YearLoading extends YearState {}
 
 class YearSuccess extends YearState {
-  final String message;
   YearSuccess(this.message);
+  final String message;
   @override
   List<Object?> get props => [message];
 }
 
 class YearError extends YearState {
-  final String message;
   YearError(this.message);
+  final String message;
   @override
   List<Object?> get props => [message];
 }

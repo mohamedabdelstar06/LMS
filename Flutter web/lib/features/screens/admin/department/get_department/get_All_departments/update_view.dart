@@ -15,9 +15,9 @@ import 'package:lms/features/screens/admin/users/get_users/get_user_dropdown/sta
 import 'package:lms/features/screens/admin/users/get_users/get_user_dropdown/state_managment/states.dart';
 
 class UpdateDepartmentPage extends StatefulWidget {
-  final int departmentId;
 
   const UpdateDepartmentPage({super.key, required this.departmentId});
+  final int departmentId;
 
   @override
   State<UpdateDepartmentPage> createState() => _UpdateDepartmentPageState();
@@ -31,7 +31,7 @@ class _UpdateDepartmentPageState extends State<UpdateDepartmentPage> {
 
   Uint8List? selectedImageBytes;
   String selectedMenuItem = 'Create Departments';
-  String selectedHeadName = "Select Head";
+  String selectedHeadName = 'Select Head';
   int? selectedHeadId;
   bool _isInitialized = false;
 
@@ -226,7 +226,7 @@ class _UpdateDepartmentPageState extends State<UpdateDepartmentPage> {
         ),
         const SizedBox(height: 8),
         TextFormField(
-          validator: (v) => v!.isEmpty ? "Field Required" : null,
+          validator: (v) => v!.isEmpty ? 'Field Required' : null,
           controller: controller,
           maxLines: maxLines,
           decoration: _inputStyle(label),
@@ -337,9 +337,9 @@ class _UpdateDepartmentPageState extends State<UpdateDepartmentPage> {
             ),
           ],
         )
-            : Column(
+            : const Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
+          children: [
             Icon(
               Icons.cloud_upload_outlined,
               size: 48,
@@ -347,7 +347,7 @@ class _UpdateDepartmentPageState extends State<UpdateDepartmentPage> {
             ),
             SizedBox(height: 12),
             Text(
-              "Upload Department Image",
+              'Upload Department Image',
               style: TextStyle(
                 color: Color(0xFF64748B),
                 fontWeight: FontWeight.w600,
@@ -355,7 +355,7 @@ class _UpdateDepartmentPageState extends State<UpdateDepartmentPage> {
             ),
             SizedBox(height: 4),
             Text(
-              "Click to upload",
+              'Click to upload',
               style: TextStyle(color: Color(0xFF94A3B8), fontSize: 12),
             ),
           ],
@@ -431,7 +431,7 @@ class _UpdateDepartmentPageState extends State<UpdateDepartmentPage> {
                           ),
                           SizedBox(width: 12),
                           Text(
-                            "Updating Department...",
+                            'Updating Department...',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
@@ -444,7 +444,7 @@ class _UpdateDepartmentPageState extends State<UpdateDepartmentPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "Update Department",
+                            'Update Department',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
@@ -468,11 +468,11 @@ class _UpdateDepartmentPageState extends State<UpdateDepartmentPage> {
 
   void _handleUpdate(GetAllDepartmentModel department) {
     if (_formKey.currentState!.validate()) {
-       if (selectedHeadName == "Select Head" || selectedHeadName.isEmpty || selectedHeadId == null) {
+       if (selectedHeadName == 'Select Head' || selectedHeadName.isEmpty || selectedHeadId == null) {
          ScaffoldMessenger.of(context).showSnackBar(
            const SnackBar(
              content: Row(
-               children: [Icon(Icons.warning, color: Colors.white), SizedBox(width: 12), Text("Please select a department head")],
+               children: [Icon(Icons.warning, color: Colors.white), SizedBox(width: 12), Text('Please select a department head')],
              ),
              backgroundColor: Colors.orange,
              behavior: SnackBarBehavior.floating,
@@ -495,7 +495,7 @@ class _UpdateDepartmentPageState extends State<UpdateDepartmentPage> {
     return TweenAnimationBuilder(
       duration: const Duration(milliseconds: 600),
       tween: Tween<double>(begin: 0, end: 1),
-      builder: (context, double value, child) {
+      builder: (context, value, child) {
         return Opacity(
           opacity: value,
           child: Transform.translate(
@@ -539,7 +539,7 @@ class _UpdateDepartmentPageState extends State<UpdateDepartmentPage> {
                   ),
                   const SizedBox(width: 16),
                   const Text(
-                    "Update Department",
+                    'Update Department',
                     style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
@@ -553,7 +553,7 @@ class _UpdateDepartmentPageState extends State<UpdateDepartmentPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
-                    child: _buildField("Department Name", nameController),
+                    child: _buildField('Department Name', nameController),
                   ),
                   const SizedBox(width: 20),
                   Expanded(
@@ -564,7 +564,7 @@ class _UpdateDepartmentPageState extends State<UpdateDepartmentPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Text(
-                                "Department Head",
+                                'Department Head',
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
@@ -593,8 +593,8 @@ class _UpdateDepartmentPageState extends State<UpdateDepartmentPage> {
                           final usersToShow = userState.users.isEmpty
                               ? [
                             UserLiteModel(
-                              fullName: "No users available",
-                              role: "System",
+                              fullName: 'No users available',
+                              role: 'System',
                               id: -1,
                             ),
                           ]
@@ -618,11 +618,11 @@ class _UpdateDepartmentPageState extends State<UpdateDepartmentPage> {
                           );
                         } else if (userState is UsersErrorState) {
                           return _buildDropdownField(
-                            "Error loading users",
+                            'Error loading users',
                             [
                               UserLiteModel(
                                 fullName: state.department.headName,
-                                role: "Current Head (API Error)",
+                                role: 'Current Head (API Error)',
                                 id: state.department.id,
                               ),
                             ],
@@ -642,7 +642,7 @@ class _UpdateDepartmentPageState extends State<UpdateDepartmentPage> {
                             [
                               UserLiteModel(
                                 fullName: state.department.headName,
-                                role: "Current Head",
+                                role: 'Current Head',
                                 id: state.department.id,
                               ),
                             ],
@@ -663,10 +663,10 @@ class _UpdateDepartmentPageState extends State<UpdateDepartmentPage> {
                 ],
               ),
               const SizedBox(height: 24),
-              _buildField("Description", descriptionController, maxLines: 4),
+              _buildField('Description', descriptionController, maxLines: 4),
               const SizedBox(height: 24),
               const Text(
-                "Photo",
+                'Photo',
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
@@ -695,7 +695,7 @@ class _UpdateDepartmentPageState extends State<UpdateDepartmentPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          "Department Head",
+          'Department Head',
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w600,
@@ -803,17 +803,17 @@ class _UpdateDepartmentPageState extends State<UpdateDepartmentPage> {
                         Container(
                           padding: const EdgeInsets.all(6),
                           decoration: BoxDecoration(
-                            color: user.role == "Admin"
+                            color: user.role == 'Admin'
                                 ? Colors.purple.withOpacity(0.1)
                                 : Colors.orange.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(6),
                           ),
                           child: Icon(
-                            user.role == "Admin"
+                            user.role == 'Admin'
                                 ? Icons.admin_panel_settings
                                 : Icons.school,
                             size: 16,
-                            color: user.role == "Admin"
+                            color: user.role == 'Admin'
                                 ? Colors.purple
                                 : Colors.orange,
                           ),

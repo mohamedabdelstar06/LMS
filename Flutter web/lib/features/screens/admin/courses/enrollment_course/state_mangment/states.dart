@@ -12,36 +12,32 @@ class EnrollmentInitial extends EnrollmentState {}
 class EnrollmentLoading extends EnrollmentState {}
 
 class EnrollmentLoaded extends EnrollmentState {
-  final List<EnrollmentModel> enrollments;
 
   const EnrollmentLoaded(this.enrollments);
+  final List<EnrollmentModel> enrollments;
 
   @override
   List<Object?> get props => [enrollments];
 }
 
 class EnrollmentActionSuccess extends EnrollmentState {
-  final String message;
 
   const EnrollmentActionSuccess(this.message);
+  final String message;
 
   @override
   List<Object?> get props => [message];
 }
 
 class EnrollmentError extends EnrollmentState {
-  final String message;
 
   const EnrollmentError(this.message);
+  final String message;
 
   @override
   List<Object?> get props => [message];
 }
 class EnrollmentModel {
-  final int userId;
-  final String userName;
-  final int courseId;
-  final String courseName;
 
   const EnrollmentModel({
     required this.userId,
@@ -49,4 +45,8 @@ class EnrollmentModel {
     required this.courseId,
     required this.courseName,
   });
+  final int userId;
+  final String userName;
+  final int courseId;
+  final String courseName;
 }

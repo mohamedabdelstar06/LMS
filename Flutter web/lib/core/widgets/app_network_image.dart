@@ -5,17 +5,6 @@ import 'app_network_image_stub.dart'
 if (dart.library.html) 'app_network_image_web.dart' as impl;
 
 class AppNetworkImage extends StatelessWidget {
-  final String? imageUrl;
-  final double size;
-  final double? width;
-  final double? height;
-
-  /// 🔥 خلي الافتراضي rectangle بدل circle
-  final BoxShape shape;
-
-  final BorderRadius? borderRadius;
-  final String? fallbackText;
-  final Color? backgroundColor;
 
   const AppNetworkImage({
     super.key,
@@ -28,6 +17,17 @@ class AppNetworkImage extends StatelessWidget {
     this.fallbackText,
     this.backgroundColor,
   });
+  final String? imageUrl;
+  final double size;
+  final double? width;
+  final double? height;
+
+  /// 🔥 خلي الافتراضي rectangle بدل circle
+  final BoxShape shape;
+
+  final BorderRadius? borderRadius;
+  final String? fallbackText;
+  final Color? backgroundColor;
 
   static String? resolveImageUrl(String? url, {String? baseUrl}) {
     return ApiUrlHelper.resolveMediaUrl(url);

@@ -1,15 +1,4 @@
 class AcademicYearModel {
-  final int id;
-  final String name;
-  final String description;
-  final DateTime startDate;
-  final DateTime endDate;
-  final int totalCourses;
-  final int totalHours;
-  final String departmentName;
-  final String createdBy;
-  final DateTime createdAt;
-  final DateTime updatedAt;
 
   AcademicYearModel({
     required this.id,
@@ -40,6 +29,17 @@ class AcademicYearModel {
       updatedAt: DateTime.parse(json['updatedAt']),
     );
   }
+  final int id;
+  final String name;
+  final String description;
+  final DateTime startDate;
+  final DateTime endDate;
+  final int totalCourses;
+  final int totalHours;
+  final String departmentName;
+  final String createdBy;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   Map<String, dynamic> toJson() {
     return {

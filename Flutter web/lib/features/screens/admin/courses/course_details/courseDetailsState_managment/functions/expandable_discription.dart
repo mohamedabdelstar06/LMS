@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ExpandableDescription extends StatefulWidget {
-  const ExpandableDescription({required this.text});
+  const ExpandableDescription({super.key, required this.text});
   final String text;
 
   @override

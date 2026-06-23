@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lms/features/screens/admin/courses/course_details/lectures/state_managment/lectures_cubit.dart';
+import 'package:lms/features/screens/admin/courses/course_details/lectures/view/view.dart';
+import 'package:lms/features/screens/student/course_grades_screen.dart';
 import 'package:lms/features/screens/student/student_courses/assignments_list_screen.dart';
-import 'package:lms/features/screens/student/student_courses/course_detail_cubit.dart';
-import 'package:lms/features/screens/student/student_courses/course_detail_states.dart';
 import 'package:lms/features/screens/student/student_courses/quizzes_list_screen.dart';
+
 
 import '../../../../core/cons/Colors/app_colors.dart';
 import '../student_courses/model/view.dart';
-import '../student_courses/view.dart'; // for WebImage, buildProfileImageUrl
+import '../student_courses/view.dart';
 import 'course_detail_model.dart';
-
+import 'course_detail_cubit.dart';
+import 'course_detail_states.dart';
 
 String buildImageUrl(String? image) {
   if (image == null || image.isEmpty) return '';
@@ -17,18 +20,11 @@ String buildImageUrl(String? image) {
   return 'https://skylearn.runasp.net$image';
 }
 
-/// Entry point: pass either the lightweight [CourseEnrollmentModel] (from the
-/// courses grid — gives instant header paint) and/or the [courseId] to fetch
-/// full detail (counts, instructor, progress) from GET /api/Course/{id}.
 class CourseDetailsScreen extends StatelessWidget {
+
+  const CourseDetailsScreen({super.key, required this.courseId, this.preview});
   final int courseId;
   final CourseEnrollmentModel? preview;
-
-  const CourseDetailsScreen({
-    super.key,
-    required this.courseId,
-    this.preview,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -40,15 +36,17 @@ class CourseDetailsScreen extends StatelessWidget {
 }
 
 class _CourseDetailsView extends StatelessWidget {
-  final CourseEnrollmentModel? preview;
   const _CourseDetailsView({this.preview});
+  final CourseEnrollmentModel? preview;
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final isLargeScreen = screenWidth > 1200;
     final isMediumScreen = screenWidth > 800;
-    final maxWidth = isLargeScreen ? 1100.0 : (isMediumScreen ? 800.0 : double.infinity);
+    final maxWidth = isLargeScreen
+        ? 1100.0
+        : (isMediumScreen ? 800.0 : double.infinity);
 
     return Container(
       decoration: BoxDecoration(
@@ -95,7 +93,11 @@ class _CourseDetailsView extends StatelessWidget {
     );
   }
 
-  Widget _buildBody(BuildContext context, CourseDetailState state, bool isLargeScreen) {
+  Widget _buildBody(
+    BuildContext context,
+    CourseDetailState state,
+    bool isLargeScreen,
+  ) {
     if (state is CourseDetailLoading && preview == null) {
       return const Padding(
         padding: EdgeInsets.symmetric(vertical: 100),
@@ -104,22 +106,24 @@ class _CourseDetailsView extends StatelessWidget {
     }
 
     if (state is CourseDetailError && preview == null) {
-      return _ErrorState(
-        message: state.message,
-        onRetry: () {},
-      );
+      return _ErrorState(message: state.message, onRetry: () {});
     }
 
-    CourseDetailModel? course = state is CourseDetailSuccess ? state.course : null;
+    final CourseDetailModel? course = state is CourseDetailSuccess
+        ? state.course
+        : null;
 
     final title = course?.title ?? preview?.courseTitle ?? '';
     final description = course?.description ?? preview?.courseDescription ?? '';
     final image = course?.imageUrl ?? preview?.imageUrl ?? '';
     final creditHours = course?.creditHours ?? preview?.creditHours ?? 0;
-    final instructorName = course?.instructorName ?? preview?.instructorName ?? '';
-    final enrolledCount = course?.enrolledStudentsCount ?? preview?.enrolledStudentsCount ?? 0;
+    final instructorName =
+        course?.instructorName ?? preview?.instructorName ?? '';
+    final enrolledCount =
+        course?.enrolledStudentsCount ?? preview?.enrolledStudentsCount ?? 0;
 
-    final isStillLoadingFullDetail = state is CourseDetailLoading && preview != null;
+    final isStillLoadingFullDetail =
+        state is CourseDetailLoading && preview != null;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -149,7 +153,7 @@ class _CourseDetailsView extends StatelessWidget {
         Text(
           isStillLoadingFullDetail
               ? 'Loading the latest course content...'
-              : 'Jump into assignments, quizzes, and lectures for this course.',
+              : 'Jump into assignments, quizzes, lectures and grades for this course.',
           style: const TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.w400,
@@ -161,6 +165,7 @@ class _CourseDetailsView extends StatelessWidget {
         _ExploreGrid(
           courseId: course?.id ?? preview?.courseId ?? 0,
           courseTitle: title,
+          course: course,
           assignmentsCount: course?.assignmentsCount,
           quizzesCount: course?.quizzesCount,
           lecturesCount: course?.lecturesCount,
@@ -172,9 +177,10 @@ class _CourseDetailsView extends StatelessWidget {
   }
 }
 
+// ── Back Row ──────────────────────────────────────────────────
 class _BackRow extends StatelessWidget {
-  final String? title;
   const _BackRow({this.title});
+  final String? title;
 
   @override
   Widget build(BuildContext context) {
@@ -196,8 +202,11 @@ class _BackRow extends StatelessWidget {
                 ),
               ],
             ),
-            child: const Icon(Icons.arrow_back_ios_new_rounded,
-                size: 16, color: Color(0xFF175CD3)),
+            child: const Icon(
+              Icons.arrow_back_ios_new_rounded,
+              size: 16,
+              color: Color(0xFF175CD3),
+            ),
           ),
         ),
         const SizedBox(width: 12),
@@ -219,16 +228,8 @@ class _BackRow extends StatelessWidget {
   }
 }
 
+// ── Course Header Card ────────────────────────────────────────
 class _CourseHeaderCard extends StatelessWidget {
-  final String title;
-  final String description;
-  final String imageUrl;
-  final int creditHours;
-  final String instructorName;
-  final int enrolledCount;
-  final String? profileImageUrl;
-  final double? progressPercentage;
-  final bool isLargeScreen;
 
   const _CourseHeaderCard({
     required this.title,
@@ -241,6 +242,15 @@ class _CourseHeaderCard extends StatelessWidget {
     this.progressPercentage,
     required this.isLargeScreen,
   });
+  final String title;
+  final String description;
+  final String imageUrl;
+  final int creditHours;
+  final String instructorName;
+  final int enrolledCount;
+  final String? profileImageUrl;
+  final double? progressPercentage;
+  final bool isLargeScreen;
 
   @override
   Widget build(BuildContext context) {
@@ -345,23 +355,32 @@ class _CourseHeaderCard extends StatelessWidget {
                   spacing: 10,
                   runSpacing: 10,
                   children: [
-                    _InfoChip(icon: Icons.school_rounded, label: '$creditHours Credit Hours'),
-                    _InfoChip(icon: Icons.groups_rounded, label: '$enrolledCount Students'),
+                    _InfoChip(
+                      icon: Icons.school_rounded,
+                      label: '$creditHours Credit Hours',
+                    ),
+                    _InfoChip(
+                      icon: Icons.groups_rounded,
+                      label: '$enrolledCount Students',
+                    ),
                     if (instructorName.isNotEmpty)
-                      _InfoChip(icon: Icons.person_rounded, label: instructorName),
+                      _InfoChip(
+                        icon: Icons.person_rounded,
+                        label: instructorName,
+                      ),
                   ],
                 ),
                 if (progressPercentage != null) ...[
                   const SizedBox(height: 18),
                   Row(
                     children: [
-                      Text(
+                      const Text(
                         'Your Progress',
                         style: TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w600,
                           fontFamily: 'inter',
-                          color: const Color(0xFF1E293B),
+                          color: Color(0xFF1E293B),
                         ),
                       ),
                       const Spacer(),
@@ -383,7 +402,9 @@ class _CourseHeaderCard extends StatelessWidget {
                       value: (progressPercentage! / 100).clamp(0, 1),
                       minHeight: 8,
                       backgroundColor: const Color(0xffE2E8F0),
-                      valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF175CD3)),
+                      valueColor: const AlwaysStoppedAnimation<Color>(
+                        Color(0xFF175CD3),
+                      ),
                     ),
                   ),
                 ],
@@ -397,9 +418,9 @@ class _CourseHeaderCard extends StatelessWidget {
 }
 
 class _InfoChip extends StatelessWidget {
+  const _InfoChip({required this.icon, required this.label});
   final IconData icon;
   final String label;
-  const _InfoChip({required this.icon, required this.label});
 
   @override
   Widget build(BuildContext context) {
@@ -430,28 +451,34 @@ class _InfoChip extends StatelessWidget {
   }
 }
 
+// ── Explore Grid ──────────────────────────────────────────────
 class _ExploreGrid extends StatelessWidget {
-  final int courseId;
-  final String courseTitle;
-  final int? assignmentsCount;
-  final int? quizzesCount;
-  final int? lecturesCount;
-  final bool isLargeScreen;
-  final bool isLoadingCounts;
 
   const _ExploreGrid({
     required this.courseId,
     required this.courseTitle,
+    required this.course,
     this.assignmentsCount,
     this.quizzesCount,
     this.lecturesCount,
     required this.isLargeScreen,
     required this.isLoadingCounts,
   });
+  final int courseId;
+  final String courseTitle;
+  final CourseDetailModel? course;
+  final int? assignmentsCount;
+  final int? quizzesCount;
+  final int? lecturesCount;
+  final bool isLargeScreen;
+  final bool isLoadingCounts;
 
   @override
   Widget build(BuildContext context) {
-    final crossAxisCount = isLargeScreen ? 3 : (MediaQuery.of(context).size.width > 600 ? 2 : 1);
+    // 4 cards: 2×2 on medium, 4 in a row on large, 1 col on mobile
+    final crossAxisCount = isLargeScreen
+        ? 4
+        : (MediaQuery.of(context).size.width > 600 ? 2 : 1);
 
     return GridView.count(
       crossAxisCount: crossAxisCount,
@@ -459,8 +486,9 @@ class _ExploreGrid extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       crossAxisSpacing: 18,
       mainAxisSpacing: 18,
-      childAspectRatio: isLargeScreen ? 1.5 : 1.7,
+      childAspectRatio: isLargeScreen ? 1.3 : 1.7,
       children: [
+        // ── Assignments ──────────────────────────────────────
         _ExploreCard(
           title: 'Assignments',
           subtitle: 'View and submit your work',
@@ -468,18 +496,18 @@ class _ExploreGrid extends StatelessWidget {
           gradientColors: const [Color(0xFF175CD3), Color(0xFF4F8DFD)],
           count: assignmentsCount,
           isLoadingCount: isLoadingCounts,
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => AssignmentsListScreen(
-                  courseId: courseId,
-                  courseTitle: courseTitle,
-                ),
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => AssignmentsListScreen(
+                courseId: courseId,
+                courseTitle: courseTitle,
               ),
-            );
-          },
+            ),
+          ),
         ),
+
+        // ── Quizzes ──────────────────────────────────────────
         _ExploreCard(
           title: 'Quizzes',
           subtitle: 'Test your knowledge',
@@ -487,18 +515,18 @@ class _ExploreGrid extends StatelessWidget {
           gradientColors: const [Color(0xFF7C3AED), Color(0xFFA78BFA)],
           count: quizzesCount,
           isLoadingCount: isLoadingCounts,
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => QuizzesListScreen(
-                  courseId: courseId,
-                  courseTitle: courseTitle,
-                ),
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => QuizzesListScreen(
+                courseId: courseId,
+                courseTitle: courseTitle,
               ),
-            );
-          },
+            ),
+          ),
         ),
+
+        // ── Lectures ─────────────────────────────────────────
         _ExploreCard(
           title: 'Lectures',
           subtitle: 'Course materials & videos',
@@ -507,27 +535,59 @@ class _ExploreGrid extends StatelessWidget {
           count: lecturesCount,
           isLoadingCount: isLoadingCounts,
           onTap: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('📚 Lectures screen coming soon'),
-                behavior: SnackBarBehavior.floating,
+            final loadedCourse = course;
+            if (loadedCourse == null) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text(
+                    'Still loading course details — try again in a second.',
+                  ),
+                  behavior: SnackBarBehavior.floating,
+                ),
+              );
+              return;
+            }
+            final adminCourseModel = loadedCourse.toGetCoursesModel();
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => BlocProvider(
+                  create: (_) => LectureCubit(courseModel: adminCourseModel),
+                  child: LecturesScreen(
+                    courseId: adminCourseModel.id,
+                    course: adminCourseModel,
+                  ),
+                ),
               ),
             );
           },
+        ),
+
+        // ── Grades ───────────────────────────────────────────
+        _ExploreCard(
+          title: 'Grades',
+          subtitle: 'Your quiz & assignment scores',
+          icon: Icons.grade_rounded,
+          gradientColors: const [Color(0xFFD97706), Color(0xFFFBBF24)],
+          count: null, // no count badge needed for grades
+          isLoadingCount: false,
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => CourseGradesScreen(
+                courseId: courseId,
+                courseName: courseTitle,
+              ),
+            ),
+          ),
         ),
       ],
     );
   }
 }
 
+// ── Explore Card ──────────────────────────────────────────────
 class _ExploreCard extends StatefulWidget {
-  final String title;
-  final String subtitle;
-  final IconData icon;
-  final List<Color> gradientColors;
-  final int? count;
-  final bool isLoadingCount;
-  final VoidCallback onTap;
 
   const _ExploreCard({
     required this.title,
@@ -538,6 +598,13 @@ class _ExploreCard extends StatefulWidget {
     required this.isLoadingCount,
     required this.onTap,
   });
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final List<Color> gradientColors;
+  final int? count;
+  final bool isLoadingCount;
+  final VoidCallback onTap;
 
   @override
   State<_ExploreCard> createState() => _ExploreCardState();
@@ -569,7 +636,9 @@ class _ExploreCardState extends State<_ExploreCard> {
               borderRadius: BorderRadius.circular(18),
               boxShadow: [
                 BoxShadow(
-                  color: widget.gradientColors.first.withValues(alpha: hovered ? 0.35 : 0.2),
+                  color: widget.gradientColors.first.withValues(
+                    alpha: hovered ? 0.35 : 0.2,
+                  ),
                   blurRadius: hovered ? 24 : 14,
                   offset: const Offset(0, 10),
                 ),
@@ -595,12 +664,17 @@ class _ExploreCardState extends State<_ExploreCard> {
                         height: 14,
                         child: CircularProgressIndicator(
                           strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white70),
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            Colors.white70,
+                          ),
                         ),
                       )
                     else if (widget.count != null)
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 4,
+                        ),
                         decoration: BoxDecoration(
                           color: Colors.white.withValues(alpha: 0.22),
                           borderRadius: BorderRadius.circular(20),
@@ -655,8 +729,11 @@ class _ExploreCardState extends State<_ExploreCard> {
                     AnimatedSlide(
                       offset: hovered ? const Offset(0.3, 0) : Offset.zero,
                       duration: const Duration(milliseconds: 200),
-                      child: const Icon(Icons.arrow_forward_rounded,
-                          color: Colors.white, size: 14),
+                      child: const Icon(
+                        Icons.arrow_forward_rounded,
+                        color: Colors.white,
+                        size: 14,
+                      ),
                     ),
                   ],
                 ),
@@ -669,10 +746,11 @@ class _ExploreCardState extends State<_ExploreCard> {
   }
 }
 
+// ── Error State ───────────────────────────────────────────────
 class _ErrorState extends StatelessWidget {
+  const _ErrorState({required this.message, required this.onRetry});
   final String message;
   final VoidCallback onRetry;
-  const _ErrorState({required this.message, required this.onRetry});
 
   @override
   Widget build(BuildContext context) {
@@ -681,7 +759,11 @@ class _ErrorState extends StatelessWidget {
       child: Center(
         child: Column(
           children: [
-            const Icon(Icons.error_outline_rounded, size: 48, color: Color(0xFFDC2626)),
+            const Icon(
+              Icons.error_outline_rounded,
+              size: 48,
+              color: Color(0xFFDC2626),
+            ),
             const SizedBox(height: 12),
             Text(
               message,

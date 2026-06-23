@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lms/features/screens/student/dashboard_Appbar.dart';
 import 'package:lms/features/screens/student_dashboard_states.dart';
 import 'package:lms/features/screens/student/student_courses/view.dart';
+import 'package:lms/features/widgets/chat_fab.dart';
 import 'student_dashboard_cubit.dart';
 
 // ── Palette ───────────────────────────────────────────────────────────────────
@@ -67,39 +68,45 @@ class _StudentDashboardViewState extends State<_StudentDashboardView>
       backgroundColor: _kBg,
       appBar: StudentDashboardAppBar(
         onNavigateToGrades: () {
-          // Grades are scoped per-course, so send the student to pick a
-          // course first; that screen is responsible for opening
-          // CourseGradesScreen(courseId, courseName) once one is selected.
           Navigator.push(
             context,
             MaterialPageRoute(builder: (_) => const StudentCourseScreen()),
           );
         },
       ),
-      body: BlocConsumer<StudentDashboardCubit, StudentDashboardState>(
-        listener: (_, state) {
-          if (state is StudentDashboardLoaded) _fadeCtrl.forward(from: 0);
-        },
-        builder: (context, state) {
-          if (state is StudentDashboardLoading ||
-              state is StudentDashboardInitial) {
-            return const _LoadingView();
-          }
-          if (state is StudentDashboardError) {
-            return _ErrorView(
-              message: state.message,
-              onRetry: () =>
-                  context.read<StudentDashboardCubit>().loadDashboard(),
-            );
-          }
-          if (state is StudentDashboardLoaded) {
-            return FadeTransition(
-              opacity: _fadeAnim,
-              child: _DashboardBody(model: state.model),
-            );
-          }
-          return const SizedBox();
-        },
+      // ✅ Stack هنا عشان ChatFab يكون فوق المحتوى بس في الـ dashboard
+      body: Stack(
+        children: [
+          // ── Main content ────────────────────────────────────────────────
+          BlocConsumer<StudentDashboardCubit, StudentDashboardState>(
+            listener: (_, state) {
+              if (state is StudentDashboardLoaded) _fadeCtrl.forward(from: 0);
+            },
+            builder: (context, state) {
+              if (state is StudentDashboardLoading ||
+                  state is StudentDashboardInitial) {
+                return const _LoadingView();
+              }
+              if (state is StudentDashboardError) {
+                return _ErrorView(
+                  message: state.message,
+                  onRetry: () =>
+                      context.read<StudentDashboardCubit>().loadDashboard(),
+                );
+              }
+              if (state is StudentDashboardLoaded) {
+                return FadeTransition(
+                  opacity: _fadeAnim,
+                  child: _DashboardBody(model: state.model),
+                );
+              }
+              return const SizedBox();
+            },
+          ),
+
+          // ✅ ChatFab هنا بس — مش في login ولا verify
+        
+        ],
       ),
     );
   }
@@ -123,7 +130,6 @@ class _DashboardBody extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ── Hero row: GPA card + Ongoing Courses ──
           isWide
               ? Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -144,15 +150,9 @@ class _DashboardBody extends StatelessWidget {
                     _OngoingCoursesCard(courses: model.enrolledCourses),
                   ],
                 ),
-
           const SizedBox(height: 20),
-
-          // ── Stats row ──
           _StatsRow(model: model, isWide: isWide),
-
           const SizedBox(height: 20),
-
-          // ── Charts row ──
           isWide
               ? Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -175,10 +175,7 @@ class _DashboardBody extends StatelessWidget {
                     _BarChartCard(grades: model.gradesPerCourse),
                   ],
                 ),
-
           const SizedBox(height: 20),
-
-          // ── Bottom row ──
           isWide
               ? Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -203,12 +200,10 @@ class _DashboardBody extends StatelessWidget {
                     _DeadlinesCard(deadlines: model.upcomingDeadlines),
                   ],
                 ),
-
           if (model.achievements.isNotEmpty) ...[
             const SizedBox(height: 20),
             _AchievementsCard(achievements: model.achievements),
           ],
-
           const SizedBox(height: 32),
         ],
       ),
@@ -352,8 +347,7 @@ class _GpaHeroCardState extends State<_GpaHeroCard>
 }
 
 class _MiniStat extends StatelessWidget {
-  final String label;
-  final String value;
+  final String label, value;
   final Color color;
   const _MiniStat({
     required this.label,
@@ -407,12 +401,11 @@ class _OngoingCoursesCard extends StatelessWidget {
           ? const _EmptyState(message: 'No courses enrolled yet')
           : Column(
               children: courses.asMap().entries.map((e) {
-                final color = _colors[e.key % _colors.length];
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 14),
                   child: _CourseProgressRow(
                     course: e.value,
-                    color: color,
+                    color: _colors[e.key % _colors.length],
                     delay: e.key * 100,
                   ),
                 );
@@ -563,7 +556,6 @@ class _StatsRow extends StatelessWidget {
         _kPurple,
       ),
     ];
-
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -707,7 +699,7 @@ class _LineChartCardState extends State<_LineChartCard>
     with SingleTickerProviderStateMixin {
   late final AnimationController _ctrl;
   late final Animation<double> _anim;
-  int _selected = 2; // Last Month default
+  int _selected = 2;
 
   @override
   void initState() {
@@ -790,7 +782,6 @@ class _LineChartPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     if (points.isEmpty) return;
-
     final maxY = points.fold<double>(
       1,
       (p, e) => math.max(p, math.max(e.yourProgress, e.classAverage)),
@@ -856,7 +847,6 @@ class _LineChartPainter extends CustomPainter {
       }
     }
 
-    // Grid lines
     for (int i = 0; i <= 4; i++) {
       final y = h * i / 4;
       canvas.drawLine(
@@ -866,10 +856,9 @@ class _LineChartPainter extends CustomPainter {
           ..color = const Color(0xFFE2E8F0)
           ..strokeWidth = 1,
       );
-      final label = ((1 - i / 4) * maxY).toStringAsFixed(0);
       final tp = TextPainter(
         text: TextSpan(
-          text: label,
+          text: ((1 - i / 4) * maxY).toStringAsFixed(0),
           style: const TextStyle(fontSize: 9, color: _kSub),
         ),
         textDirection: TextDirection.ltr,
@@ -880,7 +869,6 @@ class _LineChartPainter extends CustomPainter {
     drawLine(points, _kBlue, (p) => p.yourProgress);
     drawLine(points, const Color(0xFFEC4899), (p) => p.classAverage);
 
-    // X labels
     for (int i = 0; i < points.length; i++) {
       final tp = TextPainter(
         text: TextSpan(
@@ -898,7 +886,7 @@ class _LineChartPainter extends CustomPainter {
       old.progress != progress;
 }
 
-// ── Bar Chart (Grades) ────────────────────────────────────────────────────────
+// ── Bar Chart ─────────────────────────────────────────────────────────────────
 
 class _BarChartCard extends StatefulWidget {
   final List<GradePerCourse> grades;
@@ -934,7 +922,6 @@ class _BarChartCardState extends State<_BarChartCard>
     final avg = widget.grades.isEmpty
         ? 0.0
         : widget.grades.fold(0.0, (s, e) => s + e.grade) / widget.grades.length;
-
     return _Card(
       title: 'Student Performance',
       icon: Icons.bar_chart_rounded,
@@ -1003,7 +990,6 @@ class _BarChartPainter extends CustomPainter {
   final List<GradePerCourse> grades;
   final double progress;
   const _BarChartPainter({required this.grades, required this.progress});
-
   static const _colors = [
     _kBlue,
     Color(0xFF60A5FA),
@@ -1018,18 +1004,15 @@ class _BarChartPainter extends CustomPainter {
     final barW = (size.width / grades.length) * 0.5;
     final gap = (size.width / grades.length) * 0.5;
     final h = size.height - 20;
-
     for (int i = 0; i < grades.length; i++) {
       final x = i * (barW + gap) + gap / 2;
       final barH = (grades[i].grade / maxVal) * h * progress;
       final color = _colors[i % _colors.length];
-
-      final rrect = RRect.fromRectAndRadius(
-        Rect.fromLTWH(x, h - barH, barW, barH),
-        const Radius.circular(6),
-      );
       canvas.drawRRect(
-        rrect,
+        RRect.fromRectAndRadius(
+          Rect.fromLTWH(x, h - barH, barW, barH),
+          const Radius.circular(6),
+        ),
         Paint()
           ..shader = LinearGradient(
             begin: Alignment.topCenter,
@@ -1037,7 +1020,6 @@ class _BarChartPainter extends CustomPainter {
             colors: [color, color.withOpacity(0.6)],
           ).createShader(Rect.fromLTWH(x, h - barH, barW, barH)),
       );
-
       final tp = TextPainter(
         text: TextSpan(
           text: grades[i].courseName.length > 6
@@ -1094,7 +1076,6 @@ class _CompletionDonutCardState extends State<_CompletionDonutCard>
                 widget.status.inProgress +
                 widget.status.notStarted)
             .clamp(1, 9999);
-
     return _Card(
       title: 'Course Completion',
       icon: Icons.donut_large_rounded,
@@ -1163,21 +1144,6 @@ class _DonutPainter extends CustomPainter {
     const sw = 22.0;
     const start = -math.pi / 2;
 
-    void arc(double sweep, Color color) {
-      canvas.drawArc(
-        Rect.fromCircle(center: Offset(cx, cy), radius: r),
-        start + (2 * math.pi * (1 - sweep) * progress), // offset for animation
-        sweep * 2 * math.pi * progress,
-        false,
-        Paint()
-          ..color = color
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = sw
-          ..strokeCap = StrokeCap.round,
-      );
-    }
-
-    // Track
     canvas.drawCircle(
       Offset(cx, cy),
       r,
@@ -1207,7 +1173,6 @@ class _DonutPainter extends CustomPainter {
     arcOffset(inProgress, _kOrange);
     arcOffset(notStarted, _kBorder);
 
-    // Center text
     final tp = TextPainter(
       text: TextSpan(
         children: [
@@ -1476,7 +1441,7 @@ class _AchievementChip extends StatelessWidget {
   }
 }
 
-// ── Reusable Card ─────────────────────────────────────────────────────────────
+// ── Reusable Widgets ──────────────────────────────────────────────────────────
 
 class _Card extends StatelessWidget {
   final String title;
@@ -1484,7 +1449,6 @@ class _Card extends StatelessWidget {
   final Color iconColor;
   final Widget child;
   final Widget? trailing;
-
   const _Card({
     required this.title,
     required this.icon,
@@ -1595,8 +1559,6 @@ class _EmptyState extends StatelessWidget {
   }
 }
 
-// ── Loading / Error ───────────────────────────────────────────────────────────
-
 class _LoadingView extends StatelessWidget {
   const _LoadingView();
   @override
@@ -1619,6 +1581,7 @@ class _ErrorView extends StatelessWidget {
   final String message;
   final VoidCallback onRetry;
   const _ErrorView({required this.message, required this.onRetry});
+
   @override
   Widget build(BuildContext context) => Center(
     child: Padding(

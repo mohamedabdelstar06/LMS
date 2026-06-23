@@ -11,7 +11,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lms/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test_images', (WidgetTester tester) async {
+  testWidgets('Counter increments smoke test_images', (tester) async {
     // Build our app and trigger admin_profile frame.
     await tester.pumpWidget(const MyApp());
 

@@ -1,16 +1,4 @@
 class CreateCourseModel {
-  final int id;
-  final String title;
-  final String description;
-  final int departmentId;
-  final String departmentName;
-  final int yearId;
-  final String yearName;
-  final int creditHours;
-  final int enrolledStudentsCount;
-  final String imageUrl;
-  final DateTime createdAt;
-  final DateTime updatedAt;
 
   CreateCourseModel({
     required this.id,
@@ -43,6 +31,18 @@ class CreateCourseModel {
       updatedAt: DateTime.parse(json['updatedAt']),
     );
   }
+  final int id;
+  final String title;
+  final String description;
+  final int departmentId;
+  final String departmentName;
+  final int yearId;
+  final String yearName;
+  final int creditHours;
+  final int enrolledStudentsCount;
+  final String imageUrl;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   Map<String, dynamic> toJson() {
     return {

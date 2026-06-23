@@ -18,5 +18,6 @@ class ApiResources {
   static const importStudentsEndPoint = 'admin/import/students';
   static const getCourseStudentEndPoint = 'Enrollment/my-courses';
   static const addEnrollmentEndPoint = 'Enrollment';
-
+  static const adminDashboardOverviewEndPoint = 'Dashboard/admin/overview';
+  static const adminDashboardEndPoint = 'Dashboard/admin';
 }
