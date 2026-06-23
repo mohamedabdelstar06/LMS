@@ -1,10 +1,11 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:lms/features/screens/admin/user_file/import_file/state_managment/cubit.dart';
-import 'package:lms/features/screens/admin/user_file/import_file/state_managment/states.dart';
 import 'package:lms/core/widgets/management/management_layout.dart';
 import 'package:lms/core/widgets/management/management_menu_config.dart';
+import 'package:lms/features/screens/admin/user_file/import_file/state_managment/cubit.dart';
+import 'package:lms/features/screens/admin/user_file/import_file/state_managment/states.dart';
+
 import 'model/model.dart';
 
 class ImportStudentsScreen extends StatefulWidget {
@@ -476,7 +477,33 @@ class _ImportStudentsScreenState extends State<ImportStudentsScreen> {
       child: SizedBox(
         height: 50,
         child: ElevatedButton.icon(
-          onPressed: () => Navigator.pop(context),
+        onPressed: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                behavior: SnackBarBehavior.floating,
+                backgroundColor: const Color(0xFF10B981),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                content: const Row(
+                  children: [
+                    Icon(Icons.check_circle, color: Colors.white),
+                    SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        'User added to the system successfully',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                duration: const Duration(seconds: 3),
+              ),
+            );
+          },
           icon: const Icon(Icons.check),
           label: const Text('Done'),
           style: ElevatedButton.styleFrom(

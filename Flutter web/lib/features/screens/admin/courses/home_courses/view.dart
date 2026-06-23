@@ -481,7 +481,7 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
-                  width: 304,
+                  width: 340,
                   height: 164,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(16),
@@ -503,7 +503,7 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                 ),
                 Expanded(
                   child: SizedBox(
-                    width: 304,
+                    width: 340,
                     height: 86,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -520,8 +520,9 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                         ),
                         const SizedBox(height: 3),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Expanded(
+                            Flexible(
                               child: Text(
                                 widget.courseModel.description,
                                 style: const TextStyle(
@@ -534,6 +535,7 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
+                           
                             InkWell(
                               onTap: () {
                                 Navigator.push(

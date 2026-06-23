@@ -75,7 +75,6 @@ class CreateUserCubit extends Cubit<CreateState> {
         final model = CreateUserModel.fromJson(response.data);
         await UserStorageHelper.saveCreatedUserData(model);
         emit(CreateUserSuccessState(
-          statusCode: response.statusCode,
           message: response.data?['message'] ?? 'User Created Successfully',
         ));
       } else {

@@ -1,7 +1,12 @@
+// ignore_for_file: avoid_redundant_argument_values
+
+import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lms/core/helpers/api_url_helper.dart';
 import 'package:lms/core/helpers/cach_helper/shared_pref_helper.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'chat_model.dart';
 import 'chat_state.dart';
 
@@ -10,7 +15,9 @@ class ChatCubit extends Cubit<ChatState> {
 
   final Dio _dio;
 
-  // ── helpers ──────────────────────────────────────────────────────────────
+  static const _sessionsKey = 'chat_sessions_v1';
+
+ 
 
   Future<Map<String, String>> get _authHeaders async {
     final token = await TokenStorageHelper.getTokenSecure();
@@ -23,25 +30,86 @@ class ChatCubit extends Cubit<ChatState> {
   List<ChatMessage> get _currentMessages =>
       state is ChatLoaded ? (state as ChatLoaded).messages : [];
 
-  // ── load history ──────────────────────────────────────────────────────────
+  List<ChatSession> get _currentSessions =>
+      state is ChatLoaded ? (state as ChatLoaded).sessions : [];
+
+
+
+  Future<List<ChatSession>> _loadSessionsLocal() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final raw = prefs.getString(_sessionsKey);
+      if (raw == null) return [];
+      final list = jsonDecode(raw) as List<dynamic>;
+      return list
+          .map((e) => ChatSession.fromJson(e as Map<String, dynamic>))
+          .toList();
+    } catch (_) {
+      return [];
+    }
+  }
+
+  Future<void> _saveSessionsLocal(List<ChatSession> sessions) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final encoded = jsonEncode(sessions.map((s) => s.toJson()).toList());
+      await prefs.setString(_sessionsKey, encoded);
+    } catch (_) {}
+  }
+
+ 
+  Future<void> _archiveCurrentSession() async {
+    final msgs = _currentMessages;
+    if (msgs.isEmpty) return;
+
+    final firstUser = msgs.firstWhere(
+      (m) => m.isUser,
+      orElse: () => msgs.first,
+    );
+    final title = firstUser.content.length > 40
+        ? '${firstUser.content.substring(0, 40)}…'
+        : firstUser.content;
+
+    final session = ChatSession(
+      id: 'session_${DateTime.now().millisecondsSinceEpoch}',
+      title: title,
+      messages: List.from(msgs),
+      createdAt: DateTime.now(),
+    );
+
+    final updated = [session, ..._currentSessions];
+    await _saveSessionsLocal(updated);
+
+    if (state is ChatLoaded) {
+      emit((state as ChatLoaded).copyWith(sessions: updated));
+    }
+  }
+
+
 
   Future<void> loadChatHistory() async {
     emit(ChatLoading());
     try {
+      final headers = await _authHeaders;
+
       final response = await _dio.get(
         '${ApiUrlHelper.apiBase}Chat',
         queryParameters: {'page': 1, 'pageSize': 50},
-        options: Options(headers: await _authHeaders),
+        options: Options(headers: headers),
       );
 
       final raw = response.data;
       final List<dynamic> list = raw is List ? raw : [];
-
       final messages = list
           .map((e) => ChatMessage.fromJson(e as Map<String, dynamic>))
           .toList();
 
-      emit(ChatLoaded(messages: messages, isSending: false));
+      // Load locally saved sessions
+      final sessions = await _loadSessionsLocal();
+
+      emit(
+        ChatLoaded(messages: messages, isSending: false, sessions: sessions),
+      );
     } on DioException catch (e) {
       emit(ChatError(e.message ?? 'Failed to load chat history'));
     } catch (e) {
@@ -49,12 +117,11 @@ class ChatCubit extends Cubit<ChatState> {
     }
   }
 
-  // ── send message ──────────────────────────────────────────────────────────
+  
 
   Future<void> sendMessage(String content) async {
     if (content.trim().isEmpty) return;
 
-    // Snapshot BEFORE optimistic update
     final previousMessages = List<ChatMessage>.from(_currentMessages);
 
     final userMessage = ChatMessage(
@@ -65,7 +132,11 @@ class ChatCubit extends Cubit<ChatState> {
     );
 
     emit(
-      ChatLoaded(messages: [...previousMessages, userMessage], isSending: true),
+      ChatLoaded(
+        messages: [...previousMessages, userMessage],
+        isSending: true,
+        sessions: _currentSessions,
+      ),
     );
 
     try {
@@ -76,29 +147,18 @@ class ChatCubit extends Cubit<ChatState> {
       );
 
       final raw = response.data;
-
-      // DEBUG — remove after confirming fix
-      // ignore: avoid_print
-      print('=== CHAT SEND RESPONSE ===');
-      // ignore: avoid_print
-      print('type: ${raw.runtimeType}  data: $raw');
-
       ChatMessage? botMessage;
 
       if (raw is Map<String, dynamic>) {
-        // Check if it's a wrapper like { "message": "...", "role": "..." }
-        // or { "reply": "..." } or { "response": "..." }
         final hasRole = raw.containsKey('role');
         final hasId = raw.containsKey('id');
 
         if (hasRole || hasId) {
-          // Looks like a full ChatMessage object
           botMessage = ChatMessage.fromJson(raw);
         } else {
-          // It's a wrapper — extract the text from any common key
           final text =
-              (raw['reply'] as String?) ??
               (raw['response'] as String?) ??
+              (raw['reply'] as String?) ??
               (raw['content'] as String?) ??
               (raw['message'] as String?);
 
@@ -126,18 +186,23 @@ class ChatCubit extends Cubit<ChatState> {
         );
       }
 
-      final newMessages = [
-        ...previousMessages,
-        userMessage,
-        if (botMessage != null && !botMessage.isUser) botMessage,
-      ];
-
-      emit(ChatLoaded(messages: newMessages, isSending: false));
+      emit(
+        ChatLoaded(
+          messages: [
+            ...previousMessages,
+            userMessage,
+            if (botMessage != null && !botMessage.isUser) botMessage,
+          ],
+          isSending: false,
+          sessions: _currentSessions,
+        ),
+      );
     } on DioException catch (e) {
       emit(
         ChatLoaded(
           messages: previousMessages,
           isSending: false,
+          sessions: _currentSessions,
           errorMessage: e.message ?? 'Failed to send message',
         ),
       );
@@ -146,52 +211,88 @@ class ChatCubit extends Cubit<ChatState> {
         ChatLoaded(
           messages: previousMessages,
           isSending: false,
+          sessions: _currentSessions,
           errorMessage: e.toString(),
         ),
       );
     }
   }
 
-  // ── new session ───────────────────────────────────────────────────────────
+  
 
   Future<void> newSession() async {
-    emit(ChatLoading());
+    await _archiveCurrentSession();
+
     try {
       await _dio.post(
         '${ApiUrlHelper.apiBase}Chat/new-session',
         options: Options(headers: await _authHeaders),
       );
-      // After creating a new session, start with empty messages
-      emit(const ChatLoaded(messages: [], isSending: false));
-    } on DioException catch (e) {
-      emit(ChatError(e.message ?? 'Failed to create new session'));
-    } catch (e) {
-      emit(ChatError(e.toString()));
+    } catch (_) {
     }
+
+    emit(
+      ChatLoaded(
+        messages: const [],
+        isSending: false,
+        sessions: _currentSessions,
+      ),
+    );
   }
 
-  // ── dismiss error banner ──────────────────────────────────────────────────
 
-  void dismissError() {
-    if (state is ChatLoaded) {
-      final s = state as ChatLoaded;
-      emit(ChatLoaded(messages: s.messages, isSending: s.isSending));
-    }
+
+  void loadSession(ChatSession session) {
+    emit(
+      ChatLoaded(
+        messages: List.from(session.messages),
+        isSending: false,
+        sessions: _currentSessions,
+      ),
+    );
   }
 
-  // ── clear (DELETE /api/Chat/clear) ────────────────────────────────────────
+
+
+  Future<void> deleteSession(String sessionId) async {
+    final updated = _currentSessions.where((s) => s.id != sessionId).toList();
+    await _saveSessionsLocal(updated);
+    emit((state as ChatLoaded).copyWith(sessions: updated));
+  }
+
+
 
   Future<void> clearChat() async {
     final previous = List<ChatMessage>.from(_currentMessages);
-    emit(const ChatLoaded(messages: [], isSending: false));
+    final previousSessions = List<ChatSession>.from(_currentSessions);
+
+    // Optimistic clear
+    emit(const ChatLoaded(messages: [], isSending: false, sessions: []));
+
     try {
       await _dio.delete(
         '${ApiUrlHelper.apiBase}Chat/clear',
         options: Options(headers: await _authHeaders),
       );
+      // Also wipe local sessions
+      await _saveSessionsLocal([]);
     } on DioException catch (_) {
-      // Restore messages if API call fails
-      emit(ChatLoaded(messages: previous, isSending: false));
+      // Restore on failure
+      emit(
+        ChatLoaded(
+          messages: previous,
+          isSending: false,
+          sessions: previousSessions,
+        ),
+      );
+    }
+  }
+
+
+
+  void dismissError() {
+    if (state is ChatLoaded) {
+      emit((state as ChatLoaded).copyWith(clearError: true));
     }
   }
 }

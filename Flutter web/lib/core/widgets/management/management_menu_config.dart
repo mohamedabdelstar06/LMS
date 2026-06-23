@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lms/features/screens/Announcement/all_announcement.dart';
 import 'package:lms/features/screens/Announcement/view.dart';
 import 'package:lms/features/screens/admin/admin_profile/view.dart';
 import 'package:lms/features/screens/admin/courses/Enrollment_course/view.dart';
@@ -181,12 +182,20 @@ class ManagementMenuConfig {
       title: 'Communication',
       items: [
         ManagementMenuItem(
-          id: 'Announcements',
-          label: 'Announcements',
-          outlinedIcon: Icons.campaign_outlined,
-          filledIcon: Icons.campaign_rounded,
+          id: 'Add Announcement',
+          label: 'Add Announcement',
+          outlinedIcon: Icons.add_alert_outlined,
+          filledIcon: Icons.add_alert_rounded,
           screenBuilder: AnnouncementScreen.new,
         ),
+        ManagementMenuItem(
+          id: 'All Announcements',
+          label: 'All Announcements',
+          outlinedIcon: Icons.campaign_outlined,
+          filledIcon: Icons.campaign_rounded,
+          screenBuilder: AllAnnouncementScreen.new,
+        ),
+        
       ],
     ),
     ManagementMenuSection(

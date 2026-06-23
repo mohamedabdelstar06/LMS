@@ -112,7 +112,7 @@ class _ChatFabState extends State<ChatFab> with SingleTickerProviderStateMixin {
                                 ),
                                 const SizedBox(width: 10),
                                 const Text(
-                                  'LearnMate',
+                                  'Mofeed',
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,

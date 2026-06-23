@@ -512,6 +512,7 @@ class _ProfileScreenState extends State<TeacherProfileScreen> {
                   Icons.badge,
                   user.nationalId,
                   true,
+                  maxLength: 14,
                 ),
                 const SizedBox(height: 16),
                 _buildDateField(
@@ -780,6 +781,7 @@ class _ProfileScreenState extends State<TeacherProfileScreen> {
       IconData icon,
       String hint,
       bool isReadOnly,
+      {int? maxLength}
       ) {
     return StatefulBuilder(
       builder: (context, setFieldState) {
@@ -796,6 +798,7 @@ class _ProfileScreenState extends State<TeacherProfileScreen> {
             ),
             const SizedBox(height: 8),
             TextField(
+              maxLength: maxLength,
               enabled: false,
               readOnly: true,
               controller: controller,
@@ -806,6 +809,7 @@ class _ProfileScreenState extends State<TeacherProfileScreen> {
                 fontWeight: FontWeight.w500,
               ),
               decoration: InputDecoration(
+                counter: const SizedBox.shrink(),
                 hintText: hint,
                 prefixIcon: Icon(
                   icon,

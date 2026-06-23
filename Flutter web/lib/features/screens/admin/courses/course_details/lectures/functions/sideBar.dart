@@ -32,8 +32,6 @@ class _SidebarState extends State<Sidebar>
     _SItem(Icons.play_circle_rounded,    'Lectures'),
     _SItem(Icons.quiz_rounded,           'Quizzes'),
     _SItem(Icons.assignment_rounded,     'Assignments'),
-    _SItem(Icons.help_outline_rounded,   'Questions'),
-    _SItem(Icons.settings_rounded,       'Settings'),
   ];
 
   @override

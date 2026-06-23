@@ -364,6 +364,7 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                     nationalIdFocus,
                     Icons.badge,
                     '3040105050096',
+                    maxLength: 14,
                   ),
                   const SizedBox(height: 16),
                   _buildTextField(
@@ -1364,6 +1365,7 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
     FocusNode focusNode,
     IconData icon,
     String hint,
+    {int? maxLength}
   ) {
     return StatefulBuilder(
       builder: (context, setFieldState) {
@@ -1443,6 +1445,7 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                     child: TextField(
                       controller: controller,
                       focusNode: focusNode,
+                      maxLength: maxLength,
                       style: TextStyle(
                         fontSize: 14,
                         color: const Color(0xFF1E293B),
@@ -1451,6 +1454,7 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                             : FontWeight.w500,
                       ),
                       decoration: InputDecoration(
+                        counter: const SizedBox.shrink(),
                         hintText: hint,
                         prefixIcon: AnimatedContainer(
                           duration: const Duration(milliseconds: 200),

@@ -7,15 +7,14 @@ class ChatMessage {
   });
 
   factory ChatMessage.fromJson(Map<String, dynamic> json) {
-    // Normalize role — handles "User", "user", "USER", "Assistant", etc.
     final role = (json['role'] as String? ?? '').toLowerCase().trim();
 
-    // Support both 'message' and 'content' field names
+    // API returns {response: "..."} as wrapper — check that first
     final content =
+        (json['response'] as String?)?.trim() ??
         (json['message'] as String?)?.trim() ??
         (json['content'] as String?)?.trim() ??
         (json['reply'] as String?)?.trim() ??
-        (json['response'] as String?)?.trim() ??
         '';
 
     return ChatMessage(
@@ -29,6 +28,13 @@ class ChatMessage {
           : null,
     );
   }
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'content': content,
+    'isUser': isUser,
+    'timestamp': timestamp?.toIso8601String(),
+  };
 
   final String id;
   final String content;
@@ -60,6 +66,13 @@ class ChatSession {
           [],
     );
   }
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'title': title,
+    'createdAt': createdAt?.toIso8601String(),
+    'messages': messages.map((m) => m.toJson()).toList(),
+  };
 
   final String id;
   final String title;

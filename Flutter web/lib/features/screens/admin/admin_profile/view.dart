@@ -247,6 +247,7 @@ class _AdminProfileContentState extends State<_AdminProfileContent> {
                   Icons.badge,
                   user.nationalId,
                   true,
+                  maxLength: 14,
                 ),
                 const SizedBox(height: 16),
                 ProfileDateField(
