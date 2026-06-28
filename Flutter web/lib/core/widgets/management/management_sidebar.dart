@@ -128,7 +128,7 @@ class _ManagementSidebarState extends State<ManagementSidebar> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    'SkyLearn',
+                    'اّفــــــاق',
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w800,

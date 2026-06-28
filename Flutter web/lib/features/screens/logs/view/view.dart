@@ -211,7 +211,7 @@ class _ActivityLogsScreenState extends State<ActivityLogsScreen> {
               ),
             ),
             Text(
-              'SkyLearn Platform · Monitor all system events',
+              'اّفــــــاق· Monitor all system events',
               style: TextStyle(color: _Sky.textMuted, fontSize: 12),
             ),
           ],

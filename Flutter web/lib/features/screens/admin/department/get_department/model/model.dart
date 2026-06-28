@@ -111,7 +111,8 @@ class YearModel {
     required this.id,
     required this.name,
     required this.startDate,
-    required this.endDate,
+    required this.endDate, this.departmentId,
+
   });
 
   factory YearModel.fromJson(Map<String, dynamic> json) {
@@ -129,6 +130,7 @@ class YearModel {
             ? DateTime.parse(json['endDate'])
             : json['endDate'].toDate())
             : DateTime.now(),
+        departmentId: json['departmentId'] ?? 0,
       );
     } catch (e) {
       print('Error parsing year: $e');
@@ -144,6 +146,7 @@ class YearModel {
   final String name;
   final DateTime startDate;
   final DateTime endDate;
+  final int? departmentId;
 
   Map<String, dynamic> toJson() {
     return {
@@ -151,6 +154,7 @@ class YearModel {
       'name': name,
       'startDate': startDate.toIso8601String(),
       'endDate': endDate.toIso8601String(),
+      'departmentId': departmentId,
     };
   }
 }

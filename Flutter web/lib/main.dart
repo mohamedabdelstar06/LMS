@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lms/core/cons/context/navigation_key.dart';
 import 'package:lms/core/services/app_initialization_service.dart';
-import 'package:lms/features/widgets/chat_fab.dart'; // your existing ChatFab
+import 'package:lms/features/widgets/chat_fab.dart'; 
 import 'features/screens/auth/Verify_email/view.dart';
 
 void main() async {
@@ -15,7 +15,7 @@ void main() async {
           msg.contains('_handledContextLostEvent') ||
           msg.contains('LateInitializationError') ||
           msg.contains('onContextLost')) {
-        return; // Flutter web engine bug — not our code
+        return; 
       }
       FlutterError.presentError(details);
     };
@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         scrollBehavior: const ScrollBehavior().copyWith(scrollbars: false),
         navigatorKey: navigatorKey,
-        title: 'SKY Learn',
+        title: 'اّفــــــاق',
         theme: ThemeData(
           useMaterial3: true,
           fontFamily: 'inter',
@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
         ),
         debugShowCheckedModeBanner: false,
         home: const VerifyScreen(),
-        // ✅ This builder injects a global overlay above ALL navigated screens
+        
         builder: (context, child) {
           return Stack(
             children: [

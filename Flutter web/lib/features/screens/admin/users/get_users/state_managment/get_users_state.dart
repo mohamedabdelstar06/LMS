@@ -11,93 +11,87 @@ class GetUsersInitial extends GetUsersState {}
 
 class GetUsersLoading extends GetUsersState {}
 
-// Main loaded state — carries isLoadingMore for infinite-scroll indicator
 class GetUsersLoaded extends GetUsersState {
-  final AllUsersResponseModel usersResponse;
-  final String searchQuery;
+  final List<GetUserModel> users;
+  final int totalCount;
   final int currentPage;
+  final int totalPages;
+  final bool hasNextPage;
+  final bool hasPreviousPage;
+  final String searchQuery;
   final int filterStatus;
+  final String roleFilter; // ← أُضيف
   final String sortBy;
   final String order;
-  final bool isLoadingMore; // true while fetching the next page
 
   const GetUsersLoaded({
-    required this.usersResponse,
+    required this.users,
+    required this.totalCount,
+    required this.currentPage,
+    required this.totalPages,
+    required this.hasNextPage,
+    required this.hasPreviousPage,
     this.searchQuery = '',
-    this.currentPage = 1,
     this.filterStatus = 0,
+    this.roleFilter = '', // ← أُضيف
     this.sortBy = 'createdAt',
     this.order = 'desc',
-    this.isLoadingMore = false,
   });
-
-  GetUsersLoaded copyWith({
-    AllUsersResponseModel? usersResponse,
-    String? searchQuery,
-    int? currentPage,
-    int? filterStatus,
-    String? sortBy,
-    String? order,
-    bool? isLoadingMore,
-  }) => GetUsersLoaded(
-    usersResponse: usersResponse ?? this.usersResponse,
-    searchQuery: searchQuery ?? this.searchQuery,
-    currentPage: currentPage ?? this.currentPage,
-    filterStatus: filterStatus ?? this.filterStatus,
-    sortBy: sortBy ?? this.sortBy,
-    order: order ?? this.order,
-    isLoadingMore: isLoadingMore ?? this.isLoadingMore,
-  );
 
   @override
   List<Object?> get props => [
-    usersResponse,
-    searchQuery,
+    users,
+    totalCount,
     currentPage,
+    totalPages,
+    hasNextPage,
+    hasPreviousPage,
+    searchQuery,
+    filterStatus,
+    roleFilter,
+    sortBy,
+    order,
+  ];
+}
+
+/// Shown while next page is fetching — keeps current list visible
+class GetUsersLoadingMore extends GetUsersState {
+  final List<GetUserModel> currentUsers;
+  final int totalCount;
+  final int currentPage;
+  final int totalPages;
+  final String searchQuery;
+  final int filterStatus;
+  final String sortBy;
+  final String order;
+
+  const GetUsersLoadingMore({
+    required this.currentUsers,
+    required this.totalCount,
+    required this.currentPage,
+    required this.totalPages,
+    this.searchQuery = '',
+    this.filterStatus = 0,
+    this.sortBy = 'createdAt',
+    this.order = 'desc',
+  });
+
+  @override
+  List<Object?> get props => [
+    currentUsers,
+    totalCount,
+    currentPage,
+    totalPages,
+    searchQuery,
     filterStatus,
     sortBy,
     order,
-    isLoadingMore,
   ];
 }
 
 class GetUsersError extends GetUsersState {
   final String message;
   const GetUsersError(this.message);
-  @override
-  List<Object?> get props => [message];
-}
-
-// ── Delete ───────────────────────────────────────────────────────────────────
-class DeleteUserLoading extends GetUsersState {}
-
-class DeleteUserSuccess extends GetUsersState {
-  final String message;
-  const DeleteUserSuccess(this.message);
-  @override
-  List<Object?> get props => [message];
-}
-
-class DeleteUserError extends GetUsersState {
-  final String message;
-  const DeleteUserError(this.message);
-  @override
-  List<Object?> get props => [message];
-}
-
-// ── Deactivate ────────────────────────────────────────────────────────────────
-class DeactivateUserLoading extends GetUsersState {}
-
-class DeactivateUserSuccess extends GetUsersState {
-  final String message;
-  const DeactivateUserSuccess(this.message);
-  @override
-  List<Object?> get props => [message];
-}
-
-class DeactivateUserError extends GetUsersState {
-  final String message;
-  const DeactivateUserError(this.message);
   @override
   List<Object?> get props => [message];
 }
@@ -138,4 +132,38 @@ class UpdateUsersError extends GetUsersState {
   const UpdateUsersError(this.errorMessage, {this.statusCode});
   @override
   List<Object?> get props => [errorMessage, statusCode];
+}
+
+// ── Deactivate ────────────────────────────────────────────────────────────────
+class DeactivateUserLoading extends GetUsersState {}
+
+class DeactivateUserSuccess extends GetUsersState {
+  final String message;
+  const DeactivateUserSuccess(this.message);
+  @override
+  List<Object?> get props => [message];
+}
+
+class DeactivateUserError extends GetUsersState {
+  final String message;
+  const DeactivateUserError(this.message);
+  @override
+  List<Object?> get props => [message];
+}
+
+// ── Delete ────────────────────────────────────────────────────────────────────
+class DeleteUserLoading extends GetUsersState {}
+
+class DeleteUserSuccess extends GetUsersState {
+  final String message;
+  const DeleteUserSuccess(this.message);
+  @override
+  List<Object?> get props => [message];
+}
+
+class DeleteUserError extends GetUsersState {
+  final String message;
+  const DeleteUserError(this.message);
+  @override
+  List<Object?> get props => [message];
 }

@@ -310,7 +310,7 @@ class _ProfileScreenState extends State<StudentProfileScreen> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const AnnouncementScreen(),
+                  builder: (context) => const AllAnnouncementScreen(),
                 ),
               );
             },

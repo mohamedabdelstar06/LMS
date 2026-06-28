@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:lms/features/screens/Announcement/all_announcement.dart';
+
 import 'package:lms/features/screens/Announcement/view.dart';
 import 'package:lms/features/screens/admin/admin_profile/view.dart';
+import 'package:lms/features/screens/grades_overview/grades_overview_screen.dart';
 import 'package:lms/features/screens/admin/courses/Enrollment_course/view.dart';
 import 'package:lms/features/screens/admin/courses/create_course/Adding_view.dart';
 import 'package:lms/features/screens/admin/courses/home_courses/view.dart';
@@ -120,7 +121,7 @@ class ManagementMenuConfig {
           label: 'All Users',
           outlinedIcon: Icons.groups_outlined,
           filledIcon: Icons.groups_rounded,
-          screenBuilder: GetUsersPage.new,
+          screenBuilder: GetUserPage.new,
         ),
         ManagementMenuItem(
           id: 'Import users File',
@@ -186,7 +187,7 @@ class ManagementMenuConfig {
           label: 'Add Announcement',
           outlinedIcon: Icons.add_alert_outlined,
           filledIcon: Icons.add_alert_rounded,
-          screenBuilder: AnnouncementScreen.new,
+          screenBuilder: AddAnnouncementScreen.new,
         ),
         ManagementMenuItem(
           id: 'All Announcements',
@@ -206,7 +207,7 @@ class ManagementMenuConfig {
           label: 'Grades Overview',
           outlinedIcon: Icons.assessment_outlined,
           filledIcon: Icons.assessment_rounded,
-          screenBuilder: _PlaceholderScreen.new,
+          screenBuilder: AdminGradesOverviewScreen.new,
         ),
       ],
     ),
@@ -256,6 +257,7 @@ class ManagementMenuConfig {
         ),
       ],
     ),
+    /// TODO: Add Announcements section for instructors if needed
     ManagementMenuSection(
       title: 'Communication',
       items: [
@@ -264,7 +266,7 @@ class ManagementMenuConfig {
           label: 'Announcements',
           outlinedIcon: Icons.campaign_outlined,
           filledIcon: Icons.campaign_rounded,
-          screenBuilder: AnnouncementScreen.new,
+          screenBuilder: AllAnnouncementScreen.new,
         ),
       ],
     ),
@@ -276,23 +278,9 @@ class ManagementMenuConfig {
           label: 'Grades Overview',
           outlinedIcon: Icons.assessment_outlined,
           filledIcon: Icons.assessment_rounded,
-          screenBuilder: _PlaceholderScreen.new,
+          screenBuilder: InstructorGradesOverviewScreen.new,
         ),
       ],
     ),
   ];
-}
-
-class _PlaceholderScreen extends StatelessWidget {
-  const _PlaceholderScreen();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        'Coming soon',
-        style: TextStyle(fontSize: 16, color: Color(0xFF64748B)),
-      ),
-    );
-  }
 }

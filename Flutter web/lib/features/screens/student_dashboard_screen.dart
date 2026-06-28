@@ -1,17 +1,16 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lms/features/screens/grades_overview/grades_overview_screen.dart';
 import 'package:lms/features/screens/student/dashboard_Appbar.dart';
 import 'package:lms/features/screens/student_dashboard_states.dart';
-import 'package:lms/features/screens/student/student_courses/view.dart';
-import 'package:lms/features/widgets/chat_fab.dart';
+import 'student_dashboard_analytics_section.dart';
 import 'student_dashboard_cubit.dart';
 
 // ── Palette ───────────────────────────────────────────────────────────────────
 const _kBg = Color(0xFFF0F6FF);
 const _kCard = Colors.white;
 const _kBlue = Color(0xFF2563EB);
-const _kBlueDeep = Color(0xFF0D2772);
 const _kBlueSoft = Color(0xFFEFF6FF);
 const _kGreen = Color(0xFF10B981);
 const _kOrange = Color(0xFFF59E0B);
@@ -70,7 +69,9 @@ class _StudentDashboardViewState extends State<_StudentDashboardView>
         onNavigateToGrades: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (_) => const StudentCourseScreen()),
+            MaterialPageRoute(
+              builder: (_) => const GradesOverviewScreen(isStudent: true),
+            ),
           );
         },
       ),
@@ -97,7 +98,10 @@ class _StudentDashboardViewState extends State<_StudentDashboardView>
               if (state is StudentDashboardLoaded) {
                 return FadeTransition(
                   opacity: _fadeAnim,
-                  child: _DashboardBody(model: state.model),
+                  child: _DashboardBody(
+                    model: state.model,
+                    analytics: state.analytics,
+                  ),
                 );
               }
               return const SizedBox();
@@ -116,7 +120,8 @@ class _StudentDashboardViewState extends State<_StudentDashboardView>
 
 class _DashboardBody extends StatelessWidget {
   final StudentDashboardModel model;
-  const _DashboardBody({required this.model});
+  final StudentAnalyticsModel analytics;
+  const _DashboardBody({required this.model, required this.analytics});
 
   @override
   Widget build(BuildContext context) {
@@ -204,6 +209,8 @@ class _DashboardBody extends StatelessWidget {
             const SizedBox(height: 20),
             _AchievementsCard(achievements: model.achievements),
           ],
+          const SizedBox(height: 24),
+          StudentDashboardAnalyticsSection(analytics: analytics),
           const SizedBox(height: 32),
         ],
       ),

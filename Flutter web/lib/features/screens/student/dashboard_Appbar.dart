@@ -6,6 +6,7 @@ import 'package:lms/core/helpers/cach_helper/shared_pref_helper.dart';
 import 'package:lms/core/helpers/logout_server/logout.dart';
 import 'package:lms/features/screens/admin/Noti_button.dart';
 
+import 'package:lms/features/screens/grades_overview/grades_overview_screen.dart';
 import 'package:lms/features/screens/student/student_activities_screen.dart';
 import 'package:lms/features/screens/student/student_courses/view.dart';
 import 'package:lms/features/screens/student/student_profile/view.dart';
@@ -95,7 +96,13 @@ class StudentDashboardAppBar extends StatelessWidget
                 },
               ),
               const SizedBox(width: 10),
-              
+              _QuickAccessButton(
+                icon: Icons.grade_rounded,
+                label: 'Grades',
+                color: const Color(0xFF7C3AED),
+                onTap: () => _openGradesOverview(context),
+              ),
+              const SizedBox(width: 10),
             ],
             const Spacer(),
 
@@ -121,6 +128,15 @@ class StudentDashboardAppBar extends StatelessWidget
   /// Shows a dialog explaining that the student needs to pick a course
   /// before viewing grades, then navigates to [StudentCourseScreen].
   
+  void _openGradesOverview(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const GradesOverviewScreen(isStudent: true),
+      ),
+    );
+  }
+
 Widget buildUserProfile(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),

@@ -11,7 +11,7 @@ class GetAllYearModel {
     required this.departmentName,
     required this.createdBy,
     required this.createdAt,
-    required this.updatedAt,
+    required this.updatedAt, 
   });
 
   factory GetAllYearModel.fromJson(Map<String, dynamic> json) {
@@ -40,6 +40,7 @@ class GetAllYearModel {
   final String createdBy;
   final DateTime createdAt;
   final DateTime updatedAt;
+
 
   Map<String, dynamic> toJson() {
     return {

@@ -287,7 +287,7 @@ class _ProfileScreenState extends State<TeacherProfileScreen> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const AnnouncementScreen(),
+                  builder: (context) => const AllAnnouncementScreen(),
                 ),
               );
             },

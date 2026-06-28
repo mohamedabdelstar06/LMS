@@ -12,12 +12,17 @@ class DashboardLoading extends DashboardState {}
 
 class DashboardLoaded extends DashboardState {
 
-  const DashboardLoaded({required this.stats, required this.overview});
+  const DashboardLoaded({
+    required this.stats,
+    required this.overview,
+    required this.analytics,
+  });
   final DashboardStatsModel stats;
   final DashboardOverviewModel overview;
+  final AdminAnalyticsModel analytics;
 
   @override
-  List<Object?> get props => [stats, overview];
+  List<Object?> get props => [stats, overview, analytics];
 }
 
 class DashboardError extends DashboardState {

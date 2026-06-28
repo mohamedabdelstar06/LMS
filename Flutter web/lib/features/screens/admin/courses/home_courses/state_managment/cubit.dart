@@ -9,9 +9,7 @@ import '../../../../../../core/cons/api_helper_resources/api_resources.dart';
 import '../../../../../../core/helpers/cach_helper/shared_pref_helper.dart';
 import '../model/model.dart';
 
-
 class GetCoursesCubit extends Cubit<GetCourseStates> {
-
   GetCoursesCubit() : super(GetCourseInitial());
   List<GetCoursesModel> currentCourses = [];
 
@@ -61,13 +59,14 @@ class GetCoursesCubit extends Cubit<GetCourseStates> {
       emit(GetCourseError(e.toString()));
     }
   }
+
   Future<void> deleteCourse(int id) async {
     emit(DeleteCourseLoading());
 
     try {
       final token = await TokenStorageHelper.getTokenSecure();
       if (token == null || token.isEmpty) {
-        emit( const DeleteCourseError('Unauthorized: Please login again.'));
+        emit(const DeleteCourseError('Unauthorized: Please login again.'));
         return;
       }
 
@@ -83,27 +82,31 @@ class GetCoursesCubit extends Cubit<GetCourseStates> {
       );
 
       if (response.statusCode == 200 || response.statusCode == 204) {
-        emit( const DeleteCourseSuccess(
-          'Course deleted successfully',
-        ));
-        await getCourses();      } else {
-        emit(DeleteCourseError('Failed to delete course. Status: ${response.statusCode}'));
+        emit(const DeleteCourseSuccess('Course deleted successfully'));
+        await getCourses();
+      } else {
+        emit(
+          DeleteCourseError(
+            'Failed to delete course. Status: ${response.statusCode}',
+          ),
+        );
       }
     } on DioException catch (e) {
       String errorMessage = 'Failed to delete squadron';
       if (e.response != null) {
-        errorMessage = 'Server Error: ${e.response?.statusCode} - ${e.response?.statusMessage}';
+        errorMessage =
+            'Server Error: ${e.response?.statusCode} - ${e.response?.statusMessage}';
       } else if (e.type == DioExceptionType.connectionTimeout) {
         errorMessage = 'Connection timeout. Please check your internet.';
       } else if (e.type == DioExceptionType.connectionError) {
-        errorMessage = 'Connection Error. Please check the API URL or your network.';
+        errorMessage =
+            'Connection Error. Please check the API URL or your network.';
       }
       emit(DeleteCourseError(errorMessage));
     } catch (e) {
-      emit( const DeleteCourseError('An unexpected error occurred.'));
+      emit(const DeleteCourseError('An unexpected error occurred.'));
     }
   }
-
 
   Future<void> fetchCourseById(int id) async {
     emit(GetCourseByIdLoading());
@@ -111,7 +114,7 @@ class GetCoursesCubit extends Cubit<GetCourseStates> {
     try {
       final token = await TokenStorageHelper.getTokenSecure();
       if (token == null || token.isEmpty) {
-        emit( const GetCourseByIdError('Unauthorized: Please login again.'));
+        emit(const GetCourseByIdError('Unauthorized: Please login again.'));
         return;
       }
 
@@ -130,16 +133,20 @@ class GetCoursesCubit extends Cubit<GetCourseStates> {
         final course = GetCoursesModel.fromJson(response.data);
         emit(GetCourseByIdSuccess(course));
       } else {
-        emit(GetCourseByIdError(
-          'Failed to load squadron. Status: ${response.statusCode}',
-        ));
+        emit(
+          GetCourseByIdError(
+            'Failed to load squadron. Status: ${response.statusCode}',
+          ),
+        );
       }
     } on DioException catch (e) {
-      emit(GetCourseByIdError(
-        e.response != null
-            ? 'Server Error: ${e.response?.statusCode}'
-            : 'Connection Error',
-      ));
+      emit(
+        GetCourseByIdError(
+          e.response != null
+              ? 'Server Error: ${e.response?.statusCode}'
+              : 'Connection Error',
+        ),
+      );
     }
   }
 
@@ -162,28 +169,29 @@ class GetCoursesCubit extends Cubit<GetCourseStates> {
         'Description': courseData['description'],
         'DepartmentName': courseData['departmentName'],
         'YearName': courseData['yearName'],
-        'CreditHours': int.tryParse(courseData['credithours']?.toString() ?? '') ?? 0,
+        'CreditHours':
+            int.tryParse(courseData['credithours']?.toString() ?? '') ?? 0,
       });
 
       final Uint8List? imageBytes = courseData['imageFile'];
       if (imageBytes != null) {
-        formData.files.add(MapEntry(
-          'ImageFile',
-          MultipartFile.fromBytes(
-            imageBytes,
-            filename: 'cover.jpg',
-            contentType: MediaType('image', 'jpeg'),
+        formData.files.add(
+          MapEntry(
+            'ImageFile',
+            MultipartFile.fromBytes(
+              imageBytes,
+              filename: 'cover.jpg',
+              contentType: MediaType('image', 'jpeg'),
+            ),
           ),
-        ));
+        );
       }
 
       final response = await dio.put(
         '${ApiResources.apiUrl}${ApiResources.getCourseEndPoint}/$courseId',
         data: formData,
         options: Options(
-          headers: {
-            'Authorization': 'Bearer $token',
-          },
+          headers: {'Authorization': 'Bearer $token'},
           validateStatus: (status) => status != null && status < 500,
         ),
       );
@@ -192,11 +200,14 @@ class GetCoursesCubit extends Cubit<GetCourseStates> {
         emit(UpdateCourseSuccess('Course updated successfully'));
       } else if (response.statusCode == 409) {
         final msg = response.data is Map
-            ? (response.data['message'] ?? 'A course with this title already exists')
+            ? (response.data['message'] ??
+                  'A course with this title already exists')
             : 'A course with this title already exists';
         emit(UpdateCourseError(msg));
       } else {
-        emit(UpdateCourseError('Failed to update course (${response.statusCode})'));
+        emit(
+          UpdateCourseError('Failed to update course (${response.statusCode})'),
+        );
       }
     } on DioException catch (e) {
       if (e.response?.statusCode == 409) {
@@ -206,9 +217,11 @@ class GetCoursesCubit extends Cubit<GetCourseStates> {
             : 'A course with this title already exists';
         emit(UpdateCourseError(msg));
       } else {
-        emit(UpdateCourseError(
-          e.response?.data?['message'] ?? e.message ?? 'Error while updating',
-        ));
+        emit(
+          UpdateCourseError(
+            e.response?.data?['message'] ?? e.message ?? 'Error while updating',
+          ),
+        );
       }
     } catch (e) {
       emit(UpdateCourseError('Unexpected error: $e'));
