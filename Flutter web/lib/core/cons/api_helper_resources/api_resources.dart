@@ -14,10 +14,15 @@ class ApiResources {
   static const createCourseEndPoint = 'Course';
   static const updateCourseEndPoint = 'Course';
   static const getCourseEndPoint = 'Course';
+  static const courseGradesEndPoint = 'courses/{courseId}/grades';
   static const squadronEndPoint = 'Squadron';
   static const importStudentsEndPoint = 'admin/import/students';
   static const getCourseStudentEndPoint = 'Enrollment/my-courses';
   static const addEnrollmentEndPoint = 'Enrollment';
   static const adminDashboardOverviewEndPoint = 'Dashboard/admin/overview';
   static const adminDashboardEndPoint = 'Dashboard/admin';
+  static const adminDashboardAnalyticsEndPoint = 'Dashboard/admin/analytics';
+  static const studentDashboardEndPoint = 'Dashboard/student';
+  static const studentDashboardAnalyticsEndPoint = 'Dashboard/student/analytics';
+  static const studentAnalyticsEndPoint = 'Dashboard/student/{studentId}/analytics';
 }

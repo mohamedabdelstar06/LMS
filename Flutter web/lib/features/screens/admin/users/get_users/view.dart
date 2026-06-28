@@ -3,22 +3,37 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lms/features/screens/admin/users/get_users/state_managment/get_users_cubit.dart';
 import 'package:lms/features/screens/admin/users/get_users/state_managment/get_users_state.dart';
 import 'package:lms/features/screens/admin/users/get_users/view_updating_user.dart';
-import '../../../../../core/cons/Colors/app_colors.dart';
+
 import '../../../../../core/widgets/admin_action_button.dart';
-import '../../../../../core/widgets/management/management_layout.dart';
-import '../../../../../core/widgets/management/management_menu_config.dart';
 import '../../../../../core/widgets/admin_table_header.dart';
 import '../../../../../core/widgets/app_network_image.dart';
+import '../../../../../core/widgets/management/management_layout.dart';
+import '../../../../../core/widgets/management/management_menu_config.dart';
 import 'get_user_model/view.dart';
 
+// ─── Wrapper: owns the BlocProvider ──────────────────────────────────────────
+// Use THIS widget in your router/navigation, never GetUsersPage directly.
+class GetUserPage extends StatelessWidget {
+  const GetUserPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => GetUsersCubit()..loadUsers(),
+      child: const GetUsersPage(),
+    );
+  }
+}
+
+// ─── Actual page — assumes BlocProvider<GetUsersCubit> exists above it ────────
 class GetUsersPage extends StatefulWidget {
   const GetUsersPage({super.key});
 
   @override
-  State<GetUsersPage> createState() => _GetUsersScreenState();
+  State<GetUsersPage> createState() => _GetUsersPageState();
 }
 
-class _GetUsersScreenState extends State<GetUsersPage> {
+class _GetUsersPageState extends State<GetUsersPage> {
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _searchController = TextEditingController();
   String selectedMenuItem = 'All Users';
@@ -27,258 +42,287 @@ class _GetUsersScreenState extends State<GetUsersPage> {
   @override
   void initState() {
     super.initState();
+    // BlocProvider is ABOVE this widget now, so context.read works safely here
     _scrollController.addListener(_onScroll);
-  }
-
-  void _onScroll() {
-    if (!_scrollController.hasClients) return;
-    final pos = _scrollController.position;
-    // Trigger load when 200 px from the bottom
-    if (pos.pixels >= pos.maxScrollExtent - 200) {
-      context.read<GetUsersCubit>().loadMoreUsers();
-    }
   }
 
   @override
   void dispose() {
-    _scrollController
-      ..removeListener(_onScroll)
-      ..dispose();
+    _scrollController.dispose();
     _searchController.dispose();
     super.dispose();
   }
 
+  // ─── Infinite scroll ──────────────────────────────────────────────────────
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 400) {
+      context.read<GetUsersCubit>().loadMore();
+    }
+  }
+
+  void _onSearchChanged(String value) {
+    setState(() {});
+    context.read<GetUsersCubit>().searchUsers(value);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => GetUsersCubit()..fetchUsers(),
-      child: ManagementScaffold(
-        selectedMenuItem: selectedMenuItem,
-        role: ManagementRole.admin,
-        child: BlocConsumer<GetUsersCubit, GetUsersState>(
-          listener: (context, state) {
-            if (state is DeleteUserSuccess) {
-              _showSnack(context, state.message, Colors.green);
-              context.read<GetUsersCubit>().fetchUsers();
-            }
-            if (state is DeleteUserError) {
-              _showSnack(context, state.message, Colors.red);
-            }
-            if (state is DeactivateUserSuccess) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Row(
-                    children: [
-                      const Icon(Icons.check_circle, color: Colors.white),
-                      const SizedBox(width: 8),
-                      Text(state.message),
-                    ],
-                  ),
-                  backgroundColor: Colors.orange,
-                  duration: const Duration(seconds: 2),
-                ),
-              );
-              context.read<GetUsersCubit>().fetchUsers();
-            }
-            if (state is DeactivateUserError) {
-              _showSnack(context, state.message, Colors.red);
-            }
-            // UpdateUsersSuccess is handled in UpdateUserScreen itself.
-            // When the user navigates back, the list is already refreshed
-            // because updateUser() calls fetchUsers(silent:true) before emitting
-            // success. No extra fetchUsers() call needed here.
-          },
-          builder: (context, state) {
-            if (state is GetUsersLoading) {
-              return const Center(child: CircularProgressIndicator());
-            }
-
-            return Padding(
-              padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.08),
-                      blurRadius: 20,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    // ── Header ────────────────────────────────────────────────
-                    if (state is GetUsersLoaded)
-                      AdminTableHeader(
-                        icon: Icons.people,
-                        title: 'All Users',
-                        subtitle: 'Manage all users',
-                        stats: [
-                          AdminStatBadge(
-                            title: 'Total',
-                            count: state.usersResponse.totalCount,
-                            icon: Icons.people,
-                            color: Colors.blueAccent.shade200,
-                          ),
-                          AdminStatBadge(
-                            title: 'Admins',
-                            count: state.usersResponse.totalAdmins,
-                            icon: Icons.admin_panel_settings,
-                            color: Colors.purple.shade200,
-                          ),
-                          AdminStatBadge(
-                            title: 'Instructors',
-                            count: state.usersResponse.totalInstructors,
-                            icon: Icons.school,
-                            color: Colors.orange.shade200,
-                          ),
-                          AdminStatBadge(
-                            title: 'Students',
-                            count: state.usersResponse.totalStudents,
-                            icon: Icons.person,
-                            color: Colors.green.shade200,
-                          ),
-                        ],
-                      ),
-
-                    // ── Table body ────────────────────────────────────────────
-                    Expanded(
-                      child: Builder(
-                        builder: (_) {
-                          if (state is GetUsersLoading ||
-                              state is DeleteUserLoading) {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }
-
-                          if (state is GetUsersError) {
-                            return Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.error_outline,
-                                    size: 64,
-                                    color: Colors.red.shade300,
-                                  ),
-                                  const SizedBox(height: 16),
-                                  Text(
-                                    state.message,
-                                    style: const TextStyle(color: Colors.red),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  const SizedBox(height: 16),
-                                  ElevatedButton.icon(
-                                    onPressed: () => context
-                                        .read<GetUsersCubit>()
-                                        .fetchUsers(),
-                                    icon: const Icon(Icons.refresh),
-                                    label: const Text('Retry'),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }
-
-                          if (state is GetUsersLoaded) {
-                            final users = state.usersResponse.users;
-                            if (users.isEmpty) {
-                              return Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.people_outline,
-                                      size: 64,
-                                      color: Colors.grey.shade400,
-                                    ),
-                                    const SizedBox(height: 16),
-                                    Text(
-                                      'No users found',
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        color: Colors.grey.shade600,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }
-
-                            return SingleChildScrollView(
-                              controller: _scrollController,
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(24),
-                                    child: _buildModernUsersTable(
-                                      context,
-                                      users,
-                                    ),
-                                  ),
-
-                                  // ── Infinite scroll footer ────────────────
-                                  if (state.isLoadingMore)
-                                    const Padding(
-                                      padding: EdgeInsets.symmetric(
-                                        vertical: 20,
-                                      ),
-                                      child: _LoadingMoreIndicator(),
-                                    )
-                                  else if (!state.usersResponse.hasNextPage &&
-                                      users.isNotEmpty)
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: 20,
-                                      ),
-                                      child: Text(
-                                        'All ${state.usersResponse.totalCount} users loaded',
-                                        style: TextStyle(
-                                          color: Colors.grey.shade500,
-                                          fontSize: 13,
-                                        ),
-                                      ),
-                                    )
-                                  else
-                                    // invisible trigger zone so scroll fires
-                                    const SizedBox(height: 40),
-                                ],
-                              ),
-                            );
-                          }
-
-                          return const SizedBox.shrink();
-                        },
-                      ),
-                    ),
-                  ],
-                ),
+    return ManagementScaffold(
+      selectedMenuItem: selectedMenuItem,
+      role: ManagementRole.admin,
+      child: BlocConsumer<GetUsersCubit, GetUsersState>(
+        listener: (context, state) {
+          if (state is DeleteUserSuccess) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.green,
+                duration: const Duration(seconds: 2),
               ),
             );
-          },
+          }
+          if (state is DeleteUserError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.red,
+                duration: const Duration(seconds: 3),
+              ),
+            );
+          }
+          if (state is DeactivateUserSuccess) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Row(
+                  children: [
+                    const Icon(Icons.check_circle, color: Colors.white),
+                    const SizedBox(width: 8),
+                    Text(state.message),
+                  ],
+                ),
+                backgroundColor: Colors.orange,
+                duration: const Duration(seconds: 2),
+              ),
+            );
+          }
+          if (state is DeactivateUserError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+          if (state is UpdateUsersSuccess) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.green,
+                duration: const Duration(seconds: 2),
+              ),
+            );
+            context.read<GetUsersCubit>().loadUsers();
+          }
+        },
+        builder: (context, state) {
+          return Padding(
+            padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.08),
+                    blurRadius: 20,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  ///_buildHeader(state),
+                  Expanded(child: _buildBody(context, state)),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  // ─── Header ───────────────────────────────────────────────────────────────
+  /*Widget _buildHeader(GetUsersState state) {
+    if (state is! GetUsersLoaded) return const SizedBox.shrink();
+
+    return AdminTableHeader(
+      icon: Icons.people,
+      title: 'All Users',
+      subtitle: 'Manage all users',
+      stats: [
+        AdminStatBadge(
+          title: 'Total',
+          count: state.totalCount,
+          icon: Icons.people,
+          color: Colors.blueAccent.shade200,
         ),
+        AdminStatBadge(
+          title: 'Admins',
+          count: state.totalAdmins,
+          icon: Icons.admin_panel_settings,
+          color: Colors.purple.shade200,
+        ),
+        AdminStatBadge(
+          title: 'Instructors',
+          count: state.totalInstructors,
+          icon: Icons.school,
+          color: Colors.orange.shade200,
+        ),
+        AdminStatBadge(
+          title: 'Students',
+          count: state.totalStudents,
+          icon: Icons.person,
+          color: Colors.green.shade200,
+        ),
+      ],
+    );
+  }*/
+
+  // ─── Body ─────────────────────────────────────────────────────────────────
+  Widget _buildBody(BuildContext context, GetUsersState state) {
+    if (state is GetUsersLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (state is GetUsersError) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.error_outline, size: 64, color: Colors.red.shade300),
+            const SizedBox(height: 16),
+            Text(
+              state.message,
+              style: const TextStyle(color: Colors.red),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton.icon(
+              onPressed: () => context.read<GetUsersCubit>().loadUsers(),
+              icon: const Icon(Icons.refresh),
+              label: const Text('Retry'),
+            ),
+          ],
+        ),
+      );
+    }
+
+    // Resolve users + flags from either Loaded or LoadingMore
+    List<GetUserModel> users = [];
+    bool loadingMore = false;
+    bool hasNextPage = false;
+    int totalCount = 0;
+
+    if (state is GetUsersLoaded) {
+      users = state.users;
+      hasNextPage = state.hasNextPage;
+      totalCount = state.totalCount;
+    } else if (state is GetUsersLoadingMore) {
+      users = state.currentUsers;
+      loadingMore = true;
+      totalCount = state.totalCount;
+    }
+
+    if (users.isEmpty && !loadingMore) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.people_outline, size: 64, color: Colors.grey.shade400),
+            const SizedBox(height: 16),
+            Text(
+              'No users found',
+              style: TextStyle(fontSize: 18, color: Colors.grey.shade600),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return SingleChildScrollView(
+      controller: _scrollController,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(24),
+            child: _buildUsersTable(context, users),
+          ),
+
+          // Loading more spinner
+          if (loadingMore)
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 24),
+              child: Center(
+                child: SizedBox(
+                  width: 28,
+                  height: 28,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2.5,
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      Color(0xFF1849A9),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
+          // End-of-list indicator
+          if (!hasNextPage && !loadingMore && users.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: Center(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF8FAFC),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: const Color(0xFFE2E8F0)),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.check_circle_outline,
+                        size: 16,
+                        color: Colors.grey.shade500,
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        'All $totalCount users loaded',
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Colors.grey.shade500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+
+          const SizedBox(height: 8),
+        ],
       ),
     );
   }
 
-  void _showSnack(BuildContext ctx, String msg, Color color) {
-    ScaffoldMessenger.of(ctx).showSnackBar(
-      SnackBar(
-        content: Text(msg),
-        backgroundColor: color,
-        duration: const Duration(seconds: 2),
-      ),
-    );
-  }
-
-  // ── Table ─────────────────────────────────────────────────────────────────
-  Widget _buildModernUsersTable(
-    BuildContext context,
-    List<GetUserModel> users,
-  ) {
+  // ─── Table ────────────────────────────────────────────────────────────────
+  Widget _buildUsersTable(BuildContext context, List<GetUserModel> users) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: ConstrainedBox(
@@ -305,21 +349,20 @@ class _GetUsersScreenState extends State<GetUsersPage> {
                 borderRadius: BorderRadius.circular(8),
               ),
               children: [
-                _buildUsersTableHeader('N_ID', Icons.badge),
-                _buildUsersTableHeader('Profile', Icons.person),
-                _buildUsersTableHeader('Full Name', Icons.person_outline),
-                _buildUsersTableHeader('Email', Icons.email),
-                _buildUsersTableHeader('Role', Icons.admin_panel_settings),
-                _buildUsersTableHeader('Department', Icons.business),
-                _buildUsersTableHeader('Year', Icons.calendar_today),
-                _buildUsersTableHeader('Squadron', Icons.group),
-                _buildUsersTableHeader('Status', Icons.info),
-                _buildUsersTableHeader('Actions', Icons.settings),
+                _tableHeader('N_ID', Icons.badge),
+                _tableHeader('Profile', Icons.person),
+                _tableHeader('Full Name', Icons.person_outline),
+                _tableHeader('Email', Icons.email),
+                _tableHeader('Role', Icons.admin_panel_settings),
+                _tableHeader('Department', Icons.business),
+                _tableHeader('Year', Icons.calendar_today),
+                _tableHeader('Squadron', Icons.group),
+                _tableHeader('Status', Icons.info),
+                _tableHeader('Actions', Icons.settings),
               ],
             ),
             ...users.asMap().entries.map(
-              (entry) =>
-                  _buildModernUserTableRow(context, entry.value, entry.key),
+              (entry) => _buildTableRow(context, entry.value, entry.key),
             ),
           ],
         ),
@@ -327,7 +370,7 @@ class _GetUsersScreenState extends State<GetUsersPage> {
     );
   }
 
-  Widget _buildUsersTableHeader(String title, IconData icon) {
+  Widget _tableHeader(String title, IconData icon) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       child: Row(
@@ -351,11 +394,7 @@ class _GetUsersScreenState extends State<GetUsersPage> {
     );
   }
 
-  TableRow _buildModernUserTableRow(
-    BuildContext context,
-    GetUserModel user,
-    int index,
-  ) {
+  TableRow _buildTableRow(BuildContext context, GetUserModel   user, int index) {
     final isHovered = hoveredRowIndex == index;
 
     Color statusColor;
@@ -562,16 +601,9 @@ class _GetUsersScreenState extends State<GetUsersPage> {
                   icon: Icons.edit,
                   color: const Color(0xFF10B981),
                   tooltip: 'Edit',
-                  onPressed: () async {
+                  onPressed: () {
                     final cubit = context.read<GetUsersCubit>();
-                    final currentState = cubit.state;
-                    int page = 1;
-                    String searchQuery = '';
-                    if (currentState is GetUsersLoaded) {
-                      page = currentState.currentPage;
-                      searchQuery = currentState.searchQuery;
-                    }
-                    await Navigator.push(
+                    Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (_) => BlocProvider.value(
@@ -580,12 +612,6 @@ class _GetUsersScreenState extends State<GetUsersPage> {
                         ),
                       ),
                     );
-                    // List was already refreshed silently inside updateUser().
-                    // If the user just dismissed the screen without saving,
-                    // we still want to make sure the list state is correct.
-                    if (context.mounted && cubit.state is! GetUsersLoaded) {
-                      cubit.fetchUsers(page: page, searchQuery: searchQuery);
-                    }
                   },
                 ),
                 if (user.accountStatus.toLowerCase() == 'active') ...[
@@ -612,7 +638,6 @@ class _GetUsersScreenState extends State<GetUsersPage> {
     );
   }
 
-  // Wraps a cell in a MouseRegion that tracks hover per row
   Widget _cell(GetUserModel user, int index, Widget child) {
     return MouseRegion(
       onEnter: (_) => setState(() => hoveredRowIndex = index),
@@ -621,7 +646,8 @@ class _GetUsersScreenState extends State<GetUsersPage> {
     );
   }
 
-  // ── Delete dialog ─────────────────────────────────────────────────────────
+  // ─── Dialogs ──────────────────────────────────────────────────────────────
+
   void _showDangerDeleteDialog(BuildContext context, GetUserModel user) {
     final confirmController = TextEditingController();
     final confirmText = user.fullName.trim();
@@ -643,7 +669,6 @@ class _GetUsersScreenState extends State<GetUsersPage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Header
                 _dialogHeader(
                   icon: Icons.delete_forever,
                   iconColor: const Color(0xFFEF4444),
@@ -697,7 +722,6 @@ class _GetUsersScreenState extends State<GetUsersPage> {
     );
   }
 
-  // ── Deactivate dialog ─────────────────────────────────────────────────────
   void _showDeactivateDialog(BuildContext context, GetUserModel user) {
     final confirmController = TextEditingController();
     final confirmText = user.fullName.trim();
@@ -734,7 +758,7 @@ class _GetUsersScreenState extends State<GetUsersPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _warningBox(
-                        'You are about to deactivate user "${user.fullName}". This user will not be able to log in and access the system.',
+                        'You are about to deactivate user "${user.fullName}". This user will not be able to log in.',
                       ),
                       const SizedBox(height: 20),
                       _confirmField(
@@ -1005,33 +1029,6 @@ Widget _dialogActions({
     ],
   ),
 );
-
-// ── Loading more indicator ────────────────────────────────────────────────────
-class _LoadingMoreIndicator extends StatelessWidget {
-  const _LoadingMoreIndicator();
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        SizedBox(
-          width: 18,
-          height: 18,
-          child: CircularProgressIndicator(
-            strokeWidth: 2,
-            color: Colors.blue.shade400,
-          ),
-        ),
-        const SizedBox(width: 12),
-        Text(
-          'Loading more users...',
-          style: TextStyle(color: Colors.grey.shade500, fontSize: 13),
-        ),
-      ],
-    );
-  }
-}
 
 // ── Role / Info badges ────────────────────────────────────────────────────────
 

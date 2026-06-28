@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lms/core/cons/api_helper_resources/api_resources.dart';
 
@@ -168,6 +167,258 @@ class StudentDashboardModel {
   final List<EnrolledCourse> enrolledCourses;
 }
 
+// ── Analytics Models ──────────────────────────────────────────────────────────
+
+class StudentAnalyticsModel {
+  const StudentAnalyticsModel({
+    required this.studentId,
+    required this.departmentName,
+    required this.squadronName,
+    required this.segment,
+    required this.overallRank,
+    required this.deptRank,
+    required this.squadronRank,
+    required this.compositeScore,
+    required this.avgQuizScore,
+    required this.avgGrade,
+    required this.quizPassRate,
+    required this.completionRate,
+    required this.riskScore,
+    required this.dropoutProbability,
+    required this.atRiskProbability,
+    required this.isAnomaly,
+    required this.anomalyType,
+    required this.classAverages,
+    required this.departmentAverages,
+    required this.improvementTrend,
+    required this.strengthsWeaknesses,
+    required this.courseProgress,
+    required this.learningEfficiency,
+    required this.workload,
+  });
+
+  const StudentAnalyticsModel.empty()
+      : studentId = 0,
+        departmentName = '',
+        squadronName = '',
+        segment = '',
+        overallRank = 0,
+        deptRank = 0,
+        squadronRank = 0,
+        compositeScore = 0,
+        avgQuizScore = 0,
+        avgGrade = 0,
+        quizPassRate = 0,
+        completionRate = 0,
+        riskScore = 0,
+        dropoutProbability = 0,
+        atRiskProbability = 0,
+        isAnomaly = false,
+        anomalyType = '',
+        classAverages = const [],
+        departmentAverages = const [],
+        improvementTrend = const [],
+        strengthsWeaknesses = const [],
+        courseProgress = const [],
+        learningEfficiency = const [],
+        workload = const [];
+
+  factory StudentAnalyticsModel.fromJson(Map<String, dynamic> j) =>
+      StudentAnalyticsModel(
+        studentId: j['studentId'] ?? 0,
+        departmentName: j['departmentName'] ?? '',
+        squadronName: j['squadronName'] ?? '',
+        segment: j['segment'] ?? '',
+        overallRank: j['overallRank'] ?? 0,
+        deptRank: j['deptRank'] ?? 0,
+        squadronRank: j['squadronRank'] ?? 0,
+        compositeScore: (j['compositeScore'] ?? 0).toDouble(),
+        avgQuizScore: (j['avgQuizScore'] ?? 0).toDouble(),
+        avgGrade: (j['avgGrade'] ?? 0).toDouble(),
+        quizPassRate: (j['quizPassRate'] ?? 0).toDouble(),
+        completionRate: (j['completionRate'] ?? 0).toDouble(),
+        riskScore: (j['riskScore'] ?? 0).toDouble(),
+        dropoutProbability: (j['dropoutProbability'] ?? 0).toDouble(),
+        atRiskProbability: (j['atRiskProbability'] ?? 0).toDouble(),
+        isAnomaly: j['isAnomaly'] == true || j['isAnomaly'] == 1,
+        anomalyType: j['anomalyType'] ?? '',
+        classAverages: (j['classAverages'] as List? ?? [])
+            .map((e) => ClassAverageModel.fromJson(e))
+            .toList(),
+        departmentAverages: (j['departmentAverages'] as List? ?? [])
+            .map((e) => ClassAverageModel.fromJson(e))
+            .toList(),
+        improvementTrend: (j['improvementTrend'] as List? ?? [])
+            .map((e) => ImprovementTrendModel.fromJson(e))
+            .toList(),
+        strengthsWeaknesses: (j['strengthsWeaknesses'] as List? ?? [])
+            .map((e) => StrengthWeaknessModel.fromJson(e))
+            .toList(),
+        courseProgress: (j['courseProgress'] as List? ?? [])
+            .map((e) => StudentCourseProgressModel.fromJson(e))
+            .toList(),
+        learningEfficiency: (j['learningEfficiency'] as List? ?? [])
+            .map((e) => LearningEfficiencyModel.fromJson(e))
+            .toList(),
+        workload: (j['workload'] as List? ?? [])
+            .map((e) => StudentWorkloadModel.fromJson(e))
+            .toList(),
+      );
+
+  final int studentId;
+  final String departmentName;
+  final String squadronName;
+  final String segment;
+  final int overallRank;
+  final int deptRank;
+  final int squadronRank;
+  final double compositeScore;
+  final double avgQuizScore;
+  final double avgGrade;
+  final double quizPassRate;
+  final double completionRate;
+  final double riskScore;
+  final double dropoutProbability;
+  final double atRiskProbability;
+  final bool isAnomaly;
+  final String anomalyType;
+  final List<ClassAverageModel> classAverages;
+  final List<ClassAverageModel> departmentAverages;
+  final List<ImprovementTrendModel> improvementTrend;
+  final List<StrengthWeaknessModel> strengthsWeaknesses;
+  final List<StudentCourseProgressModel> courseProgress;
+  final List<LearningEfficiencyModel> learningEfficiency;
+  final List<StudentWorkloadModel> workload;
+}
+
+class ClassAverageModel {
+  const ClassAverageModel({
+    required this.metric,
+    this.departmentName,
+    required this.average,
+  });
+  factory ClassAverageModel.fromJson(Map<String, dynamic> j) => ClassAverageModel(
+        metric: j['metric'] ?? '',
+        departmentName: j['departmentName'],
+        average: (j['average'] ?? 0).toDouble(),
+      );
+  final String metric;
+  final String? departmentName;
+  final double average;
+}
+
+class ImprovementTrendModel {
+  const ImprovementTrendModel({
+    required this.month,
+    required this.avgScore,
+    required this.attempts,
+    required this.passRate,
+  });
+  factory ImprovementTrendModel.fromJson(Map<String, dynamic> j) =>
+      ImprovementTrendModel(
+        month: j['month'] ?? '',
+        avgScore: (j['avgScore'] ?? 0).toDouble(),
+        attempts: j['attempts'] ?? 0,
+        passRate: (j['passRate'] ?? 0).toDouble(),
+      );
+  final String month;
+  final double avgScore;
+  final int attempts;
+  final double passRate;
+}
+
+class StrengthWeaknessModel {
+  const StrengthWeaknessModel({
+    required this.questionType,
+    required this.answered,
+    required this.correctCount,
+    required this.correctRate,
+  });
+  factory StrengthWeaknessModel.fromJson(Map<String, dynamic> j) =>
+      StrengthWeaknessModel(
+        questionType: j['questionType'] ?? '',
+        answered: j['answered'] ?? 0,
+        correctCount: j['correctCount'] ?? 0,
+        correctRate: (j['correctRate'] ?? 0).toDouble(),
+      );
+  final String questionType;
+  final int answered;
+  final int correctCount;
+  final double correctRate;
+}
+
+class StudentCourseProgressModel {
+  const StudentCourseProgressModel({
+    required this.courseId,
+    required this.title,
+    required this.activitiesTotal,
+    required this.activitiesDone,
+    required this.avgProgress,
+    required this.avgTimeMinutes,
+    required this.completionRate,
+  });
+  factory StudentCourseProgressModel.fromJson(Map<String, dynamic> j) =>
+      StudentCourseProgressModel(
+        courseId: j['courseId'] ?? 0,
+        title: j['title'] ?? '',
+        activitiesTotal: j['activitiesTotal'] ?? 0,
+        activitiesDone: j['activitiesDone'] ?? 0,
+        avgProgress: (j['avgProgress'] ?? 0).toDouble(),
+        avgTimeMinutes: (j['avgTimeMinutes'] ?? 0).toDouble(),
+        completionRate: (j['completionRate'] ?? 0).toDouble(),
+      );
+  final int courseId;
+  final String title;
+  final int activitiesTotal;
+  final int activitiesDone;
+  final double avgProgress;
+  final double avgTimeMinutes;
+  final double completionRate;
+}
+
+class LearningEfficiencyModel {
+  const LearningEfficiencyModel({
+    required this.avgEfficiency,
+    required this.avgScore,
+    required this.avgTimeMinutes,
+    required this.totalAttempts,
+    required this.efficiencyTier,
+  });
+  factory LearningEfficiencyModel.fromJson(Map<String, dynamic> j) =>
+      LearningEfficiencyModel(
+        avgEfficiency: (j['avgEfficiency'] ?? 0).toDouble(),
+        avgScore: (j['avgScore'] ?? 0).toDouble(),
+        avgTimeMinutes: (j['avgTimeMinutes'] ?? 0).toDouble(),
+        totalAttempts: j['totalAttempts'] ?? 0,
+        efficiencyTier: j['efficiencyTier'] ?? '',
+      );
+  final double avgEfficiency;
+  final double avgScore;
+  final double avgTimeMinutes;
+  final int totalAttempts;
+  final String efficiencyTier;
+}
+
+class StudentWorkloadModel {
+  const StudentWorkloadModel({
+    required this.avgSubmissionsPerWeek,
+    required this.maxSubmissionsInWeek,
+    required this.activeWeeks,
+    required this.workloadTier,
+  });
+  factory StudentWorkloadModel.fromJson(Map<String, dynamic> j) =>
+      StudentWorkloadModel(
+        avgSubmissionsPerWeek: (j['avgSubmissionsPerWeek'] ?? 0).toDouble(),
+        maxSubmissionsInWeek: j['maxSubmissionsInWeek'] ?? 0,
+        activeWeeks: j['activeWeeks'] ?? 0,
+        workloadTier: j['workloadTier'] ?? '',
+      );
+  final double avgSubmissionsPerWeek;
+  final int maxSubmissionsInWeek;
+  final int activeWeeks;
+  final String workloadTier;
+}
+
 // ── Cubit ─────────────────────────────────────────────────────────────────────
 
 class StudentDashboardCubit extends Cubit<StudentDashboardState> {
@@ -185,18 +436,37 @@ class StudentDashboardCubit extends Cubit<StudentDashboardState> {
         emit(const StudentDashboardError('غير مصرح. Token مفقود.'));
         return;
       }
-      final response = await dio.get(
-        '${ApiResources.apiUrl}Dashboard/student',
-        options: Options(
-          headers: {
-            'Authorization': 'Bearer $token',
-            'Content-Type': 'application/json',
-          },
-        ),
+
+      final headers = {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      };
+
+      final dashboardResponse = await dio.get(
+        '${ApiResources.apiUrl}${ApiResources.studentDashboardEndPoint}',
+        options: Options(headers: headers),
       );
+
+      Response? analyticsResponse;
+      try {
+        analyticsResponse = await dio.get(
+          '${ApiResources.apiUrl}${ApiResources.studentDashboardAnalyticsEndPoint}',
+          options: Options(headers: headers),
+        );
+      } catch (_) {
+        analyticsResponse = null;
+      }
+
+      final model = StudentDashboardModel.fromJson(dashboardResponse.data);
+      final analytics = analyticsResponse?.data is Map<String, dynamic>
+          ? StudentAnalyticsModel.fromJson(
+              analyticsResponse!.data as Map<String, dynamic>)
+          : const StudentAnalyticsModel.empty();
+
       emit(
         StudentDashboardLoaded(
-          model: StudentDashboardModel.fromJson(response.data),
+          model: model,
+          analytics: analytics,
         ),
       );
     } on DioException catch (e) {

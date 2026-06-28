@@ -137,7 +137,7 @@ class _LogoBrand extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'SkyLearn',
+              'اّفــــــاق',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w800,

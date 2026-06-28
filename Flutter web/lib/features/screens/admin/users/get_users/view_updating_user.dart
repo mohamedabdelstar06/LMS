@@ -214,6 +214,7 @@ class _ProfileScreenState extends State<UpdateUserScreen> {
                     backgroundColor: Colors.red,
                     duration: const Duration(seconds: 3),
                   ));
+                  Navigator.pop(context);
                 }
               },
               // buildWhen: (previous, current) =>

@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker_web/image_picker_web.dart';
 import 'package:lms/core/widgets/management/management_layout.dart';
 import 'package:lms/core/widgets/management/management_menu_config.dart';
-import 'package:lms/features/screens/Announcement/all_announcement.dart';
+
 import 'package:lms/features/screens/admin/courses/create_course/state_managment/cubit.dart';
 import 'package:lms/features/screens/admin/courses/create_course/state_managment/states.dart';
 import 'package:lms/features/screens/instructor/teacher_profile/view.dart';
@@ -416,7 +416,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const AnnouncementScreen(),
+                  builder: (context) => const AllAnnouncementScreen(),
                 ),
               );
             },

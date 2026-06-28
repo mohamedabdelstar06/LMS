@@ -1,20 +1,17 @@
 
+// ignore_for_file: prefer_const_declarations
+
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../../features/screens/auth/login/view.dart';
 import '../../cons/Colors/app_colors.dart';
 import '../../cons/api_helper_resources/api_resources.dart';
 import '../../cons/context/navigation_key.dart';
+import '../cach_helper/shared_pref_helper.dart';
 
 class LogoutServer {
-  static AndroidOptions _getAndroidOptions() => const AndroidOptions(
-    encryptedSharedPreferences: true,
-  );
-
   static Future<void> logout() async {
-    final storage = FlutterSecureStorage(aOptions: _getAndroidOptions());
-    final token = await storage.read(key: 'tokenKey');
+    final token = await TokenStorageHelper.getTokenSecure();
     final context = navigatorKey.currentContext!;
 
     if (token == null || token.isEmpty) {
@@ -139,8 +136,7 @@ class LogoutServer {
 
     final response = result['response'] as Response;
     if (response.statusCode == 200) {
-      final storage = FlutterSecureStorage(aOptions: _getAndroidOptions());
-      await storage.delete(key: 'tokenKey');
+      await TokenStorageHelper.clearToken();
 
       final message = (response.data is Map && response.data['message'] != null)
           ? response.data['message'].toString()
@@ -237,8 +233,7 @@ class LogoutServer {
 
 
   static Future<void> clearAll() async {
-    final storage = FlutterSecureStorage(aOptions: _getAndroidOptions());
-    await storage.deleteAll();
+    await TokenStorageHelper.clearToken();
   }
 }
 

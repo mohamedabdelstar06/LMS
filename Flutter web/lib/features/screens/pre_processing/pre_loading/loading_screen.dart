@@ -1,14 +1,14 @@
-// ignore_for_file: deprecated_member_use
+
 
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:lms/features/screens/auth/Verify_email/view.dart';
 
-// ── Exact Air Force palette ──────────────────────────────────────────────────
+
 const _kYellow = Color(
   0xFFFFB300,
-); // amber / yellow — same as Air Force secondary
+); 
 const _kBg = Color(0xFF020810);
 const _kMid = Color(0xFF081A36);
 const _kBlue = Color(0xFF0D3260);
@@ -22,7 +22,7 @@ class LoadingScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<LoadingScreen>
     with TickerProviderStateMixin {
-  // ── Controllers ─────────────────────────────────────────────────────────
+  
   late final AnimationController _master;
   late final AnimationController _aurora;
   late final AnimationController _pulse;
@@ -30,7 +30,7 @@ class _SplashScreenState extends State<LoadingScreen>
   late final AnimationController _exit;
   late final AnimationController _letterCtrl;
 
-  // ── Master animations ────────────────────────────────────────────────────
+  
   late final Animation<double> _logoScale;
   late final Animation<double> _logoOpacity;
   late final Animation<double> _badgeScale;
@@ -40,17 +40,17 @@ class _SplashScreenState extends State<LoadingScreen>
   late final Animation<double> _enOpacity;
   late final Animation<double> _loaderOpacity;
 
-  // ── Ambient animations ───────────────────────────────────────────────────
+  
   late final Animation<double> _auroraShift;
   late final Animation<double> _pulseScale;
   late final Animation<double> _orbitAngle;
 
-  // ── Exit animations ──────────────────────────────────────────────────────
+  
   late final Animation<double> _exitScale;
   late final Animation<double> _exitOpacity;
 
-  // ── COUGAR letter animations (staggered) ─────────────────────────────────
-  static const _letters = ['S', 'K', 'Y', '_', 'L', 'E', 'A', 'R', 'N'];
+  
+  static const _letters = ['آ', 'فـــــا', 'ق'];
   final List<Animation<double>> _letterOpacity = [];
   final List<Animation<double>> _letterSlide = [];
 
@@ -85,7 +85,7 @@ class _SplashScreenState extends State<LoadingScreen>
       duration: const Duration(milliseconds: 900),
     );
 
-    // Logo
+    
     _logoScale = Tween<double>(begin: 0.5, end: 1.0).animate(
       CurvedAnimation(
         parent: _master,
@@ -99,7 +99,7 @@ class _SplashScreenState extends State<LoadingScreen>
       ),
     );
 
-    // Badge
+    
     _badgeScale = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _master,
@@ -107,7 +107,7 @@ class _SplashScreenState extends State<LoadingScreen>
       ),
     );
 
-    // FALCON letters — each letter staggers 130 ms apart
+    
     for (int i = 0; i < _letters.length; i++) {
       final start = (i * 0.13).clamp(0.0, 1.0);
       final end = (start + 0.35).clamp(0.0, 1.0);
@@ -129,7 +129,7 @@ class _SplashScreenState extends State<LoadingScreen>
       );
     }
 
-    // Divider
+    
     _dividerWidth = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(
         parent: _master,
@@ -137,7 +137,7 @@ class _SplashScreenState extends State<LoadingScreen>
       ),
     );
 
-    // Subtitle
+    
     _subtitleOpacity = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(
         parent: _master,
@@ -152,7 +152,7 @@ class _SplashScreenState extends State<LoadingScreen>
           ),
         );
 
-    // English tagline
+    
     _enOpacity = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(
         parent: _master,
@@ -160,7 +160,7 @@ class _SplashScreenState extends State<LoadingScreen>
       ),
     );
 
-    // Loader
+    
     _loaderOpacity = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(
         parent: _master,
@@ -168,7 +168,7 @@ class _SplashScreenState extends State<LoadingScreen>
       ),
     );
 
-    // Ambient
+    
     _auroraShift = Tween<double>(begin: 0, end: 1).animate(_aurora);
     _pulseScale = Tween<double>(
       begin: 0.92,
@@ -176,7 +176,7 @@ class _SplashScreenState extends State<LoadingScreen>
     ).animate(CurvedAnimation(parent: _pulse, curve: Curves.easeInOut));
     _orbitAngle = Tween<double>(begin: 0, end: 2 * math.pi).animate(_orbit);
 
-    // Exit
+    
     _exitScale = Tween<double>(
       begin: 1.0,
       end: 1.15,
@@ -188,7 +188,7 @@ class _SplashScreenState extends State<LoadingScreen>
 
     _master.forward();
 
-    // Start letter animation after logo settles
+    
     Future<void>.delayed(const Duration(milliseconds: 900), () {
       if (mounted) _letterCtrl.forward();
     });
@@ -196,7 +196,7 @@ class _SplashScreenState extends State<LoadingScreen>
     _scheduleExit();
   }
 
-  // ── Falcon Navigation Logic ──────────────────────────────────────────────
+  
   Future<void> _scheduleExit() async {
     await Future<void>.delayed(const Duration(seconds: 3));
     if (!mounted) return;
@@ -262,17 +262,17 @@ class _SplashScreenState extends State<LoadingScreen>
                   ),
                   const _StarField(),
 
-                  // ── Content ──
+                  
                   SafeArea(
                     child: Column(
                       children: [
                         const Spacer(flex: 2),
 
-                        // ── Logo cluster ──
+                        
                         Stack(
                           alignment: Alignment.center,
                           children: [
-                            // Outer pulse ring
+                            
                             ScaleTransition(
                               scale: _pulseScale,
                               child: Container(
@@ -286,7 +286,7 @@ class _SplashScreenState extends State<LoadingScreen>
                                 ),
                               ),
                             ),
-                            // Mid ring
+                            
                             Container(
                               width: 155,
                               height: 155,
@@ -297,7 +297,7 @@ class _SplashScreenState extends State<LoadingScreen>
                                 ),
                               ),
                             ),
-                            // Badge (shield)
+                            
                             ScaleTransition(
                               scale: _badgeScale,
                               child: Container(
@@ -332,7 +332,7 @@ class _SplashScreenState extends State<LoadingScreen>
                                 ),
                               ),
                             ),
-                            // Logo icons
+                            
                             FadeTransition(
                               opacity: _logoOpacity,
                               child: ScaleTransition(
@@ -345,11 +345,12 @@ class _SplashScreenState extends State<LoadingScreen>
 
                         const SizedBox(height: 36),
 
-                        // ── COUGAR — letter-by-letter animation ──
+                        
                         Padding(
                           padding: const EdgeInsets.only(top: 32),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
+                            textDirection: TextDirection.rtl,
                             children: List.generate(_letters.length, (i) {
                               return Transform.translate(
                                 offset: Offset(0, _letterSlide[i].value),
@@ -383,7 +384,7 @@ class _SplashScreenState extends State<LoadingScreen>
 
                         const SizedBox(height: 10),
 
-                        // ── Animated divider ──
+                        
                         LayoutBuilder(
                           builder: (_, constraints) => Align(
                             child: Container(
@@ -407,7 +408,7 @@ class _SplashScreenState extends State<LoadingScreen>
 
                         const SizedBox(height: 10),
 
-                        // ── Arabic subtitle ──
+                        
                         FadeTransition(
                           opacity: _subtitleOpacity,
                           child: SlideTransition(
@@ -427,7 +428,7 @@ class _SplashScreenState extends State<LoadingScreen>
 
                         const SizedBox(height: 10),
 
-                        // ── English tagline ──
+                        
                         FadeTransition(
                           opacity: _enOpacity,
                           child: Row(
@@ -467,7 +468,7 @@ class _SplashScreenState extends State<LoadingScreen>
 
                         const Spacer(flex: 3),
 
-                        // ── Loader + version ──
+                        
                         FadeTransition(
                           opacity: _loaderOpacity,
                           child: const Column(
@@ -493,7 +494,7 @@ class _SplashScreenState extends State<LoadingScreen>
   }
 }
 
-// ─── Logo Icons ───────────────────────────────────────────────────────────────
+
 
 class _LogoIcons extends StatelessWidget {
   const _LogoIcons();
@@ -502,9 +503,9 @@ class _LogoIcons extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipOval(
       child: Image.asset(
-        'assets/images/cougar_img.png',
-        width: 200,
-        height: 200,
+        'assets/images/cougar_app.png',
+        width: 300,
+        height: 300,
         fit: BoxFit.cover,
         errorBuilder: (_, __, ___) =>
         const Icon(Icons.airplanemode_active, size: 60, color: _kYellow),
@@ -513,7 +514,7 @@ class _LogoIcons extends StatelessWidget {
   }
 }
 
-// ─── Version Label ────────────────────────────────────────────────────────────
+
 
 class _VersionLabel extends StatelessWidget {
   const _VersionLabel();
@@ -529,7 +530,7 @@ class _VersionLabel extends StatelessWidget {
   );
 }
 
-// ─── Animated Loader (dot wave) ───────────────────────────────────────────────
+
 
 class _AnimatedLoader extends StatefulWidget {
   const _AnimatedLoader();
@@ -604,7 +605,7 @@ class _AnimatedLoaderState extends State<_AnimatedLoader>
   );
 }
 
-// ─── Background ───────────────────────────────────────────────────────────────
+
 
 class _MeshBackground extends StatelessWidget {
   const _MeshBackground();
@@ -622,7 +623,7 @@ class _MeshBackground extends StatelessWidget {
   );
 }
 
-// ─── Star Field ───────────────────────────────────────────────────────────────
+
 
 class _StarField extends StatelessWidget {
   const _StarField();
@@ -656,7 +657,7 @@ class _StarPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter _) => false;
 }
 
-// ─── Aurora Painter ───────────────────────────────────────────────────────────
+
 
 class _AuroraPainter extends CustomPainter {
   const _AuroraPainter({required this.t});
@@ -707,7 +708,7 @@ class _AuroraPainter extends CustomPainter {
   bool shouldRepaint(covariant _AuroraPainter old) => old.t != t;
 }
 
-// ─── Orbit Painter ───────────────────────────────────────────────────────────
+
 
 class _OrbitPainter extends CustomPainter {
   const _OrbitPainter({required this.angle});

@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lms/core/cons/api_helper_resources/api_resources.dart';
 import 'package:lms/core/helpers/cach_helper/shared_pref_helper.dart';
 import 'package:lms/core/widgets/app_network_image.dart';
+import 'package:lms/features/screens/Announcement/dashboard_announcment_card.dart';
 import 'package:lms/features/screens/admin/Noti_button.dart';
 import 'package:lms/features/screens/admin/admin_profile/state_management/cubit_d_profile.dart';
 import 'package:lms/features/screens/admin/admin_profile/state_management/state_d_profile.dart';
@@ -15,12 +16,14 @@ import 'package:lms/features/screens/admin/courses/course_details/layout.dart';
 import 'package:lms/features/screens/admin/department/get_department/get_All_departments/view.dart';
 import 'package:lms/features/screens/admin/squadron/create_squadron/view.dart';
 import 'package:lms/features/screens/admin/squadron/get_squadron/get_all%20squadrons/view.dart';
+import 'package:lms/features/screens/admin/users/filtered_uses_screen.dart';
 import 'package:lms/features/screens/admin/users/get_users/view.dart';
 import 'package:lms/features/screens/logs/state_mangement/logs_cubit.dart';
 import 'package:lms/features/screens/logs/state_mangement/repositery_fetch.dart';
 import 'package:lms/features/screens/logs/view/view.dart';
 import 'package:lms/generated/assets.dart';
 
+import 'dashboard_analytics_section.dart';
 import 'dashboard_cubit.dart';
 
 const _kBg = Color(0xFFF0F4FF);
@@ -99,6 +102,7 @@ class _DashboardViewState extends State<_DashboardView>
               child: _DashboardBody(
                 stats: state.stats,
                 overview: state.overview,
+                analytics: state.analytics,
               ),
             );
           }
@@ -113,9 +117,14 @@ class _DashboardViewState extends State<_DashboardView>
 
 class _DashboardBody extends StatelessWidget {
 
-  const _DashboardBody({required this.stats, required this.overview});
+  const _DashboardBody({
+    required this.stats,
+    required this.overview,
+    required this.analytics,
+  });
   final DashboardStatsModel stats;
   final DashboardOverviewModel overview;
+  final AdminAnalyticsModel analytics;
 
   @override
   Widget build(BuildContext context) {
@@ -172,6 +181,9 @@ class _DashboardBody extends StatelessWidget {
                   ),
             const SizedBox(height: 24),
             _RecentCoursesCard(courses: overview.recentCourses),
+             const SizedBox(height: 24), 
+            DashboardAnnouncementCard(),
+            DashboardAnalyticsSection(analytics: analytics),
             const SizedBox(height: 32),
           ],
         ),
@@ -184,7 +196,7 @@ class _DashboardBody extends StatelessWidget {
 // ignore: unused_element
 class _QuickNavRow extends StatelessWidget {
   final _items = const [
-    _NavItem(label: 'Users', icon: Icons.people_alt_rounded, color: _kBlue, page: GetUsersPage()),
+    _NavItem(label: 'Users', icon: Icons.people_alt_rounded, color: _kBlue, page: GetUserPage()),
     _NavItem(label: 'Courses', icon: Icons.menu_book_rounded, color: _kGreen, page: AdminCourseScreen()),
     _NavItem(label: 'Departments', icon: Icons.domain_rounded, color: _kOrange, page: DepartmentsScreen()),
     _NavItem(label: 'Squadrons', icon: Icons.flight_rounded, color: _kPurple, page: GetSquadronPage()),
@@ -352,13 +364,13 @@ class _StatsGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-   final items = [
+  final items = [
       _StatData(
         'Total Users',
         stats.totalUsers,
         Icons.people_rounded,
         _kBlue,
-        const GetUsersPage(),
+        const GetUserPage(),
         'All registered accounts',
       ),
       _StatData(
@@ -366,7 +378,7 @@ class _StatsGrid extends StatelessWidget {
         stats.totalStudents,
         Icons.school_rounded,
         _kGreen,
-        const GetUsersPage(),
+        const FilteredUsersScreen(role: FilteredRole.students), // ← changed
         'Active learners enrolled',
       ),
       _StatData(
@@ -374,8 +386,16 @@ class _StatsGrid extends StatelessWidget {
         stats.totalInstructors,
         Icons.person_pin_rounded,
         _kOrange,
-        const GetUsersPage(),
+        const FilteredUsersScreen(role: FilteredRole.instructors), // ← changed
         'Teaching staff members',
+      ),
+      _StatData(
+        'Admins',
+        stats.totalAdmins,
+        Icons.admin_panel_settings_rounded,
+        _kBlue,
+        const FilteredUsersScreen(role: FilteredRole.admins), // ← NEW card
+        'System administrators',
       ),
       _StatData(
         'Courses',
@@ -406,10 +426,10 @@ class _StatsGrid extends StatelessWidget {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: isWide ? 3 : 2,
+        crossAxisCount: isWide ? 4 : 2,
         crossAxisSpacing: 12,
         mainAxisSpacing: 12,
-        childAspectRatio: isWide ? 3.1 : 1.8,
+        childAspectRatio: isWide ? 2.6 : 1.8,
       ),
       itemCount: items.length,
       itemBuilder: (_, i) => _AnimatedStatCard(data: items[i], delay: i * 80),
@@ -1855,7 +1875,7 @@ class _LogoBrand extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'SkyLearn',
+              'اّفـــــاق',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w800,

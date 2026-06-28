@@ -204,7 +204,7 @@ class _SidebarHeader extends StatelessWidget {
             child: FadeTransition(
               opacity: expandAnim,
               child: const Text(
-                'SkyLearn',
+                'اّفــــــاق',
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   color: Color(0xFF0369A1),

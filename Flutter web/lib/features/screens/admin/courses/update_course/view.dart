@@ -19,7 +19,6 @@ import '../../year/get_year/state_managment/cubit.dart';
 import '../../year/get_year/state_managment/states.dart';
 
 class UpdateNewCoursePage extends StatefulWidget {
-
   const UpdateNewCoursePage({super.key, required this.courseId});
   // final GetCoursesModel courseModel;
   final int courseId;
@@ -130,10 +129,6 @@ class _UpdateNewCoursePageState extends State<UpdateNewCoursePage> {
       ),
     );
   }
-
-
-
-
 
   Future<void> pickImage() async {
     final img = await ImagePickerWeb.getImageAsBytes();
@@ -272,7 +267,6 @@ class _UpdateNewCoursePageState extends State<UpdateNewCoursePage> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -304,7 +298,6 @@ class _UpdateNewCoursePageState extends State<UpdateNewCoursePage> {
                 context.read<GetCoursesCubit>()..getCourses();
               }
 
-
               if (state is UpdateCourseError) {
                 _showErrorSnackbar(state.message);
               }
@@ -326,7 +319,10 @@ class _UpdateNewCoursePageState extends State<UpdateNewCoursePage> {
                   imageUrl: '',
                   instructorId: 0,
                   instructorName: '',
-                  createdAt: DateTime.now(), lecturesCount: 0, quizzesCount: 0, assignmentsCount: 0,
+                  createdAt: DateTime.now(),
+                  lecturesCount: 0,
+                  quizzesCount: 0,
+                  assignmentsCount: 0,
                 ),
               );
 
