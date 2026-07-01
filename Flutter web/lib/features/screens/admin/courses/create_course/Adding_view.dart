@@ -576,30 +576,11 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
       onEnter: (_) => setState(() => isLogoutHovered = true),
       onExit: (_) => setState(() => isLogoutHovered = false),
       child: GestureDetector(
-        onTap: () {
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: const Text('Logout'),
-              content: const Text('Are you sure you want to logout?'),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text('Cancel'),
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-                    await LogoutServer.logout();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFEF4444),
-                  ),
-                  child: const Text('Logout'),
-                ),
-              ],
-            ),
-          );
+                   
+        onTap: () async {
+          await LogoutServer.logout();
         },
+    
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           margin: const EdgeInsets.symmetric(horizontal: 12),

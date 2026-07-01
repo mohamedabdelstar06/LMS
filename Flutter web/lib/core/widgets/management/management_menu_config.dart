@@ -18,9 +18,14 @@ import 'package:lms/features/screens/admin/year/create_year/view.dart';
 import 'package:lms/features/screens/admin/year/get_year/get_All_years/view.dart';
 import 'package:lms/features/screens/instructor/create_course/Adding_view.dart';
 import 'package:lms/features/screens/instructor/home_courses/view.dart';
+import 'package:lms/features/screens/instructor/instructor_dashboard_screen.dart';
 import 'package:lms/features/screens/instructor/teacher_profile/view.dart';
+import 'package:lms/features/screens/student/student_courses/view.dart';
+import 'package:lms/features/screens/student/student_activities_screen.dart';
+import 'package:lms/features/screens/student/student_profile/view.dart';
+import 'package:lms/features/screens/student_dashboard_screen.dart';
 
-enum ManagementRole { admin, instructor }
+enum ManagementRole { admin, instructor, student }
 
 class ManagementMenuItem {
   final String id;
@@ -52,6 +57,8 @@ class ManagementMenuConfig {
         return _adminSections;
       case ManagementRole.instructor:
         return _instructorSections;
+      case ManagementRole.student:
+        return _studentSections;
     }
   }
 
@@ -213,8 +220,8 @@ class ManagementMenuConfig {
     ),
   ];
 
-  static const _instructorSections = [
-    ManagementMenuSection(
+  static final _instructorSections = [
+    const ManagementMenuSection(
       title: 'Management',
       items: [
         ManagementMenuItem(
@@ -222,11 +229,11 @@ class ManagementMenuConfig {
           label: 'Dashboard',
           outlinedIcon: Icons.space_dashboard_outlined,
           filledIcon: Icons.space_dashboard,
-          screenBuilder: TeacherCourseScreen.new,
+          screenBuilder: InstructorDashboardScreen.new,
         ),
       ],
     ),
-    ManagementMenuSection(
+    const ManagementMenuSection(
       title: 'Account',
       items: [
         ManagementMenuItem(
@@ -238,7 +245,7 @@ class ManagementMenuConfig {
         ),
       ],
     ),
-    ManagementMenuSection(
+    const ManagementMenuSection(
       title: 'Courses',
       items: [
         ManagementMenuItem(
@@ -258,7 +265,7 @@ class ManagementMenuConfig {
       ],
     ),
     /// TODO: Add Announcements section for instructors if needed
-    ManagementMenuSection(
+    const ManagementMenuSection(
       title: 'Communication',
       items: [
         ManagementMenuItem(
@@ -270,7 +277,7 @@ class ManagementMenuConfig {
         ),
       ],
     ),
-    ManagementMenuSection(
+    const ManagementMenuSection(
       title: 'Analytics',
       items: [
         ManagementMenuItem(
@@ -279,6 +286,69 @@ class ManagementMenuConfig {
           outlinedIcon: Icons.assessment_outlined,
           filledIcon: Icons.assessment_rounded,
           screenBuilder: InstructorGradesOverviewScreen.new,
+        ),
+      ],
+    ),
+  ];
+
+  static const _studentSections = [
+    ManagementMenuSection(
+      title: 'Management',
+      items: [
+        ManagementMenuItem(
+          id: 'Dashboard',
+          label: 'Dashboard',
+          outlinedIcon: Icons.space_dashboard_outlined,
+          filledIcon: Icons.space_dashboard,
+          screenBuilder: StudentDashboardScreen.new,
+        ),
+      ],
+    ),
+    ManagementMenuSection(
+      title: 'Account',
+      items: [
+        ManagementMenuItem(
+          id: 'Profile',
+          label: 'Profile',
+          outlinedIcon: Icons.person_outline_rounded,
+          filledIcon: Icons.person_rounded,
+          screenBuilder: StudentProfileScreen.new,
+        ),
+      ],
+    ),
+    ManagementMenuSection(
+      title: 'Courses',
+      items: [
+        ManagementMenuItem(
+          id: 'My Courses',
+          label: 'My Courses',
+          outlinedIcon: Icons.menu_book_outlined,
+          filledIcon: Icons.menu_book_rounded,
+          screenBuilder: StudentCourseScreen.new,
+        ),
+      ],
+    ),
+    ManagementMenuSection(
+      title: 'Activities',
+      items: [
+        ManagementMenuItem(
+          id: 'Student Activities',
+          label: 'Activities',
+          outlinedIcon: Icons.timeline_outlined,
+          filledIcon: Icons.timeline_rounded,
+          screenBuilder: StudentActivitiesScreen.new,
+        ),
+      ],
+    ),
+    ManagementMenuSection(
+      title: 'Communication',
+      items: [
+        ManagementMenuItem(
+          id: 'Announcements',
+          label: 'Announcements',
+          outlinedIcon: Icons.campaign_outlined,
+          filledIcon: Icons.campaign_rounded,
+          screenBuilder: AllAnnouncementScreen.new,
         ),
       ],
     ),

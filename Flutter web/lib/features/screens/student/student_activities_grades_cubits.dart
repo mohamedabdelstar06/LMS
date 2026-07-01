@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lms/core/cons/api_helper_resources/api_resources.dart';
 import 'package:lms/core/helpers/cach_helper/shared_pref_helper.dart';
+import 'package:lms/core/helpers/cach_helper/submission_tracker.dart';
 
 import 'student_activities_grades_models.dart';
 import 'student_activities_grades_states.dart';
@@ -62,15 +63,41 @@ class StudentActivitiesCubit extends Cubit<StudentActivitiesState> {
 
       final page = StudentActivitiesPage.fromJson(resp.data);
 
+      // Filter out submitted assignments and closed quizzes (hide them from the list)
+      final submittedIds = await SubmissionTracker.getSubmittedIds();
+      final filteredItems = page.items.where((item) {
+        // Hide assignments that are completed (submitted)
+        if (item.activityType == 'Assignment' && item.status == 'Completed') {
+          return false;
+        }
+        // Also hide if we locally tracked it as submitted
+        if (item.activityType == 'Assignment' && submittedIds.contains(item.id)) {
+          return false;
+        }
+        // Hide closed quizzes (deadline passed and not completed)
+        if (item.activityType == 'Quiz' && item.status == 'Overdue') {
+          return false;
+        }
+        return true;
+      }).toList();
+
+      final filteredPage = StudentActivitiesPage(
+        items: filteredItems,
+        totalCount: page.totalCount - (page.items.length - filteredItems.length),
+        page: page.page,
+        pageSize: page.pageSize,
+        totalPages: page.totalPages,
+      );
+
       // Merge on load-more
       if (!reset && state is StudentActivitiesLoadingMore) {
         final prev = (state as StudentActivitiesLoadingMore).current;
         final merged = StudentActivitiesPage(
-          items: [...prev.items, ...page.items],
-          totalCount: page.totalCount,
-          page: page.page,
-          pageSize: page.pageSize,
-          totalPages: page.totalPages,
+          items: [...prev.items, ...filteredItems],
+          totalCount: filteredPage.totalCount,
+          page: filteredPage.page,
+          pageSize: filteredPage.pageSize,
+          totalPages: filteredPage.totalPages,
         );
         emit(StudentActivitiesLoaded(
           data: merged,
@@ -79,7 +106,7 @@ class StudentActivitiesCubit extends Cubit<StudentActivitiesState> {
         ));
       } else {
         emit(StudentActivitiesLoaded(
-          data: page,
+          data: filteredPage,
           activeType: _activeType,
           activeStatus: _activeStatus,
         ));

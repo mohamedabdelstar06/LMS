@@ -6,7 +6,6 @@ import 'package:lms/features/screens/admin/Notifications_model.dart';
 class NotificationRepository {
   static const String _baseUrl = 'https://skylearn.runasp.net';
 
-  // ── GET /api/notifications ──────────────────────────────────────────────────
   Future<NotificationsResponse> getNotifications({
     required String token,
     int pageNumber = 1,
@@ -32,7 +31,6 @@ class NotificationRepository {
     return NotificationsResponse.fromJson(json);
   }
 
-  // ── GET /api/notifications/unread-count ────────────────────────────────────
   Future<int> getUnreadCount({required String token}) async {
     final response = await http.get(
       Uri.parse('$_baseUrl/api/notifications/unread-count'),

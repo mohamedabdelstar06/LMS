@@ -8,7 +8,7 @@ import 'package:lms/features/screens/student_dashboard_states.dart';
 
 
 
-// ── Models ────────────────────────────────────────────────────────────────────
+
 
 class CompletionStatus {
   const CompletionStatus({
@@ -90,17 +90,29 @@ class EnrolledCourse {
     required this.title,
     required this.progressPercent,
     required this.imageUrl,
+    this.assignmentsSubmitted = 0,
+    this.assignmentsPending = 0,
+    this.quizzesTaken = 0,
+    this.quizzesNotTaken = 0,
   });
   factory EnrolledCourse.fromJson(Map<String, dynamic> j) => EnrolledCourse(
     id: j['id'] ?? 0,
     title: j['title'] ?? '',
     progressPercent: (j['progressPercent'] ?? 0).toDouble(),
     imageUrl: j['imageUrl'] ?? '',
+    assignmentsSubmitted: j['assignmentsSubmitted'] ?? 0,
+    assignmentsPending: j['assignmentsPending'] ?? 0,
+    quizzesTaken: j['quizzesTaken'] ?? 0,
+    quizzesNotTaken: j['quizzesNotTaken'] ?? 0,
   );
   final int id;
   final String title;
   final double progressPercent;
   final String imageUrl;
+  final int assignmentsSubmitted;
+  final int assignmentsPending;
+  final int quizzesTaken;
+  final int quizzesNotTaken;
 }
 
 class StudentDashboardModel {
@@ -167,7 +179,7 @@ class StudentDashboardModel {
   final List<EnrolledCourse> enrolledCourses;
 }
 
-// ── Analytics Models ──────────────────────────────────────────────────────────
+
 
 class StudentAnalyticsModel {
   const StudentAnalyticsModel({
@@ -419,7 +431,7 @@ class StudentWorkloadModel {
   final String workloadTier;
 }
 
-// ── Cubit ─────────────────────────────────────────────────────────────────────
+
 
 class StudentDashboardCubit extends Cubit<StudentDashboardState> {
 

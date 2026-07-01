@@ -3,6 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:lms/core/helpers/api_url_helper.dart';
+import 'package:lms/core/helpers/cach_helper/shared_pref_helper.dart';
+import 'package:lms/core/widgets/management/management_layout.dart';
+import 'package:lms/core/widgets/management/management_menu_config.dart';
 import 'package:lms/features/screens/Announcement/cubit.dart';
 import 'package:lms/features/screens/Announcement/model.dart';
 import 'package:lms/features/screens/Announcement/states.dart';
@@ -66,20 +70,73 @@ String _audienceLabel(int audienceType) {
 
 
 
-class AllAnnouncementScreen extends StatelessWidget {
+class AllAnnouncementScreen extends StatefulWidget {
   const AllAnnouncementScreen({super.key});
 
   @override
+  State<AllAnnouncementScreen> createState() => _AllAnnouncementScreenState();
+}
+
+class _AllAnnouncementScreenState extends State<AllAnnouncementScreen> {
+  ManagementRole? _role;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadRole();
+  }
+
+  Future<void> _loadRole() async {
+    final roleStr = await PrefHelper.getRole();
+    if (mounted) {
+      setState(() {
+        if (roleStr == 'Student') {
+          _role = ManagementRole.student;
+        } else if (roleStr == 'Instructor') {
+          _role = ManagementRole.instructor;
+        } else {
+          _role = ManagementRole.admin;
+        }
+      });
+    }
+  }
+
+  bool get _isAdmin => _role == ManagementRole.admin;
+  String get _selectedMenuItem {
+    switch (_role) {
+      case ManagementRole.admin:
+        return 'All Announcements';
+      case ManagementRole.instructor:
+      case ManagementRole.student:
+        return 'Announcements';
+      default:
+        return 'Announcements';
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => AnnouncementCubit()..getAllAnnouncements(),
-      child: const _AllAnnouncementView(),
+    if (_role == null) {
+      return const Scaffold(
+        backgroundColor: _kSurface,
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    return ManagementScaffold(
+      selectedMenuItem: _selectedMenuItem,
+      role: _role!,
+      child: BlocProvider(
+        create: (_) => AnnouncementCubit()..getAllAnnouncements(),
+        child: _AllAnnouncementView(isAdmin: _isAdmin),
+      ),
     );
   }
 }
 
 class _AllAnnouncementView extends StatefulWidget {
-  const _AllAnnouncementView();
+  const _AllAnnouncementView({this.isAdmin = true});
+  final bool isAdmin;
   @override
   State<_AllAnnouncementView> createState() => _AllAnnouncementViewState();
 }
@@ -151,7 +208,7 @@ class _AllAnnouncementViewState extends State<_AllAnnouncementView>
         listener: (ctx, state) {
           if (state is DeleteAnnouncementSuccess) {
             _showSnack(ctx, 'Announcement deleted', isError: false);
-            ctx.read<AnnouncementCubit>().getAllAnnouncements();
+            // Cubit already refreshes list internally
           } else if (state is DeleteAnnouncementError) {
             _showSnack(ctx, state.message, isError: true);
           }
@@ -168,6 +225,7 @@ class _AllAnnouncementViewState extends State<_AllAnnouncementView>
                   onAdd: _goToAdd,
                   onRefresh: () =>
                       ctx.read<AnnouncementCubit>().getAllAnnouncements(),
+                  isAdmin: widget.isAdmin,
                   stats: state is GetAllAnnouncementsSuccess
                       ? (
                           total: state.totalCount,
@@ -199,6 +257,7 @@ class _AllAnnouncementViewState extends State<_AllAnnouncementView>
                         (_, i) => _AnnouncementCard(
                           announcement: state.announcements[i],
                           index: i,
+                          isAdmin: widget.isAdmin,
                           onDelete: () => _confirmDelete(
                             state.announcements[i].id,
                             state.announcements[i].title,
@@ -216,20 +275,22 @@ class _AllAnnouncementViewState extends State<_AllAnnouncementView>
 
       
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
-      floatingActionButton: ScaleTransition(
-        scale: CurvedAnimation(parent: _fabAnim, curve: Curves.elasticOut),
-        child: FloatingActionButton.extended(
-          onPressed: _goToAdd,
-          backgroundColor: _kSky,
-          foregroundColor: Colors.white,
-          elevation: 6,
-          icon: const Icon(Icons.add_rounded, size: 22),
-          label: const Text(
-            'New Announcement',
-            style: TextStyle(fontWeight: FontWeight.w700, letterSpacing: 0.3),
-          ),
-        ),
-      ),
+      floatingActionButton: widget.isAdmin
+          ? ScaleTransition(
+              scale: CurvedAnimation(parent: _fabAnim, curve: Curves.elasticOut),
+              child: FloatingActionButton.extended(
+                onPressed: _goToAdd,
+                backgroundColor: _kSky,
+                foregroundColor: Colors.white,
+                elevation: 6,
+                icon: const Icon(Icons.add_rounded, size: 22),
+                label: const Text(
+                  'New Announcement',
+                  style: TextStyle(fontWeight: FontWeight.w700, letterSpacing: 0.3),
+                ),
+              ),
+            )
+          : null,
     );
   }
 }
@@ -242,12 +303,14 @@ class _HeroHeaderDelegate extends SliverPersistentHeaderDelegate {
   final bool isScrolled;
   final VoidCallback onAdd;
   final VoidCallback onRefresh;
+  final bool isAdmin;
   final ({int total, int pages, int page})? stats;
 
   const _HeroHeaderDelegate({
     required this.isScrolled,
     required this.onAdd,
     required this.onRefresh,
+    this.isAdmin = true,
     this.stats,
   });
 
@@ -261,7 +324,7 @@ class _HeroHeaderDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   bool shouldRebuild(_HeroHeaderDelegate o) =>
-      o.isScrolled != isScrolled || o.stats != stats;
+      o.isScrolled != isScrolled || o.stats != stats || o.isAdmin != isAdmin;
 
   @override
   Widget build(BuildContext ctx, double shrinkOffset, bool overlapsContent) {
@@ -324,11 +387,12 @@ class _HeroHeaderDelegate extends SliverPersistentHeaderDelegate {
                     height: _collapsedH - MediaQuery.of(ctx).padding.top,
                     child: Row(
                       children: [
-                        _IconBtn(
-                          icon: Icons.arrow_back_ios_new_rounded,
-                          onTap: () => Navigator.pop(ctx),
-                        ),
-                        const SizedBox(width: 10),
+                        if (isAdmin) ...[                          _IconBtn(
+                            icon: Icons.arrow_back_ios_new_rounded,
+                            onTap: () => Navigator.pop(ctx),
+                          ),
+                          const SizedBox(width: 10),
+                        ],
                         Expanded(
                           child: AnimatedSwitcher(
                             duration: const Duration(milliseconds: 200),
@@ -390,12 +454,13 @@ class _HeroHeaderDelegate extends SliverPersistentHeaderDelegate {
                           ),
                         ),
                         _IconBtn(icon: Icons.refresh_rounded, onTap: onRefresh),
-                        const SizedBox(width: 8),
-                        _IconBtn(
-                          icon: Icons.add_rounded,
-                          onTap: onAdd,
-                          accent: true,
-                        ),
+                        if (isAdmin) ...[                          const SizedBox(width: 8),
+                          _IconBtn(
+                            icon: Icons.add_rounded,
+                            onTap: onAdd,
+                            accent: true,
+                          ),
+                        ],
                       ],
                     ),
                   ),
@@ -572,10 +637,12 @@ class _AnnouncementCard extends StatefulWidget {
     required this.announcement,
     required this.index,
     required this.onDelete,
+    this.isAdmin = true,
   });
   final AnnouncementModel announcement;
   final int index;
   final VoidCallback onDelete;
+  final bool isAdmin;
 
   @override
   State<_AnnouncementCard> createState() => _AnnouncementCardState();
@@ -620,7 +687,8 @@ class _AnnouncementCardState extends State<_AnnouncementCard>
   Widget build(BuildContext context) {
     final a = widget.announcement;
     final fmt = DateFormat('d MMM y  ·  h:mm a');
-    final hasImage = a.imageUrl != null && a.imageUrl!.isNotEmpty;
+    final resolvedImageUrl = ApiUrlHelper.resolveMediaUrl(a.imageUrl);
+    final hasImage = resolvedImageUrl != null && resolvedImageUrl.isNotEmpty;
 
     return FadeTransition(
       opacity: _fade,
@@ -723,10 +791,11 @@ class _AnnouncementCardState extends State<_AnnouncementCard>
                             ],
                           ),
                         ),
-                        _CardMenu(
-                          accent: _accent,
-                          onDelete: widget.onDelete,
-                        ),
+                        if (widget.isAdmin)
+                          _CardMenu(
+                            accent: _accent,
+                            onDelete: widget.onDelete,
+                          ),
                       ],
                     ),
                   ),
@@ -746,7 +815,7 @@ class _AnnouncementCardState extends State<_AnnouncementCard>
                         child: AspectRatio(
                           aspectRatio: 3.5,
                           child: Image.network(
-                            a.imageUrl!,
+                            resolvedImageUrl!,
                             fit: BoxFit.cover,
                             errorBuilder: (_, __, ___) => Container(
                               decoration: BoxDecoration(
@@ -857,12 +926,14 @@ class _UserAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final hasImg = imageUrl != null && imageUrl!.isNotEmpty;
+    final resolvedUrl = ApiUrlHelper.resolveMediaUrl(imageUrl);
+    final shouldShowImage = hasImg && resolvedUrl != null && resolvedUrl.isNotEmpty;
     return Container(
       width: size,
       height: size,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        gradient: hasImg
+        gradient: shouldShowImage
             ? null
             : LinearGradient(
                 colors: [accent, accent.withOpacity(0.6)],
@@ -878,9 +949,9 @@ class _UserAvatar extends StatelessWidget {
         ],
       ),
       child: ClipOval(
-        child: hasImg
+        child: shouldShowImage
             ? Image.network(
-                imageUrl!,
+                resolvedUrl!,
                 fit: BoxFit.cover,
                 errorBuilder: (_, __, ___) =>
                     _InitialFallback(name: name, accent: accent, size: size),
@@ -1130,107 +1201,214 @@ class _CardMenu extends StatelessWidget {
 
 
 
-class _DeleteDialog extends StatelessWidget {
+class _DeleteDialog extends StatefulWidget {
   const _DeleteDialog({required this.title});
   final String title;
+
+  @override
+  State<_DeleteDialog> createState() => _DeleteDialogState();
+}
+
+class _DeleteDialogState extends State<_DeleteDialog> {
+  final TextEditingController _confirmCtrl = TextEditingController();
+  bool _isConfirmed = false;
+
+  @override
+  void dispose() {
+    _confirmCtrl.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       contentPadding: EdgeInsets.zero,
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              color: _kRed.withOpacity(0.06),
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(20),
+      content: SizedBox(
+        width: 480,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(24),
+              decoration: const BoxDecoration(
+                color: Color(0xFFFEF2F2),
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(20),
+                ),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: _kRed.withOpacity(0.15),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.delete_forever_rounded,
+                      color: _kRed,
+                      size: 28,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  const Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Delete Announcement',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w800,
+                            fontSize: 18,
+                            color: _kRed,
+                          ),
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          'This action cannot be undone',
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Color(0xFFB91C1C),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
-            child: Column(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                    color: _kRed.withOpacity(0.12),
-                    shape: BoxShape.circle,
+            Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFFF7ED),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: const Color(0xFFFED7AA)),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.info_outline,
+                            size: 16, color: Color(0xFFD97706)),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            'You are about to permanently delete "${widget.title}".',
+                            style: const TextStyle(
+                              fontSize: 13,
+                              color: Color(0xFF92400E),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  child: const Icon(
-                    Icons.delete_forever_rounded,
-                    color: _kRed,
-                    size: 28,
+                  const SizedBox(height: 20),
+                  const Text(
+                    'To confirm, type "delete" below:',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Color(0xFF475569),
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 12),
-                const Text(
-                  'Delete Announcement',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w800,
-                    fontSize: 17,
-                    color: _kNavy,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  'Delete "$title"?\nThis cannot be undone.',
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    color: _kSlate,
-                    height: 1.5,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              children: [
-                Expanded(
-                  child: OutlinedButton(
-                    onPressed: () => Navigator.pop(context, false),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: _kSlate,
-                      side: const BorderSide(color: _kBorder),
-                      padding: const EdgeInsets.symmetric(vertical: 13),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                  const SizedBox(height: 12),
+                  TextField(
+                    controller: _confirmCtrl,
+                    autofocus: true,
+                    decoration: InputDecoration(
+                      hintText: 'Type delete here...',
+                      hintStyle: const TextStyle(
+                        color: Color(0xFF94A3B8),
+                        fontSize: 14,
                       ),
-                    ),
-                    child: const Text(
-                      'Cancel',
-                      style: TextStyle(fontWeight: FontWeight.w600),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () => Navigator.pop(context, true),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: _kRed,
-                      foregroundColor: Colors.white,
-                      elevation: 0,
-                      padding: const EdgeInsets.symmetric(vertical: 13),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 12),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(
+                            color: Color(0xFFE2E8F0)),
                       ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(
+                            color: Color(0xFFE2E8F0)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(
+                            color: _kRed, width: 2),
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
+                      suffixIcon: _isConfirmed
+                          ? const Icon(Icons.check_circle,
+                              color: Colors.green)
+                          : (_confirmCtrl.text.isNotEmpty
+                              ? const Icon(Icons.close,
+                                  color: _kRed)
+                              : null),
                     ),
-                    child: const Text(
-                      'Delete',
-                      style: TextStyle(fontWeight: FontWeight.w700),
-                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        _isConfirmed = value.trim().toLowerCase() == 'delete';
+                      });
+                    },
                   ),
-                ),
-              ],
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () => Navigator.pop(context, false),
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: _kSlate,
+                            side: const BorderSide(color: _kBorder),
+                            padding: const EdgeInsets.symmetric(vertical: 13),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: const Text(
+                            'Cancel',
+                            style: TextStyle(fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: _isConfirmed
+                              ? () => Navigator.pop(context, true)
+                              : null,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: _kRed,
+                            foregroundColor: Colors.white,
+                            disabledBackgroundColor: _kRed.withOpacity(0.3),
+                            elevation: 0,
+                            padding: const EdgeInsets.symmetric(vertical: 13),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: const Text(
+                            'Delete',
+                            style: TextStyle(fontWeight: FontWeight.w700),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -1313,7 +1491,7 @@ class _AddAnnouncementViewState extends State<_AddAnnouncementView>
 
   Future<void> _pickDate({required bool isStart}) async {
     final now = DateTime.now();
-    final picked = await showDatePicker(
+    final pickedDate = await showDatePicker(
       context: context,
       initialDate: now,
       firstDate: now,
@@ -1325,9 +1503,29 @@ class _AddAnnouncementViewState extends State<_AddAnnouncementView>
         child: child!,
       ),
     );
-    if (picked != null && mounted) {
-      setState(() => isStart ? _startDate = picked : _endDate = picked);
-    }
+    if (pickedDate == null || !mounted) return;
+
+    final pickedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+      builder: (ctx, child) => Theme(
+        data: Theme.of(ctx).copyWith(
+          colorScheme: const ColorScheme.light(primary: _kSky),
+        ),
+        child: child!,
+      ),
+    );
+    if (!mounted) return;
+
+    final time = pickedTime ?? const TimeOfDay(hour: 0, minute: 0);
+    final combined = DateTime(
+      pickedDate.year,
+      pickedDate.month,
+      pickedDate.day,
+      time.hour,
+      time.minute,
+    );
+    setState(() => isStart ? _startDate = combined : _endDate = combined);
   }
 
   void _submit() {
@@ -1356,9 +1554,6 @@ class _AddAnnouncementViewState extends State<_AddAnnouncementView>
       listener: (ctx, state) {
         if (state is AnnouncementSuccess) {
           _showSnack(ctx, state.message, isError: false);
-          Future.delayed(const Duration(milliseconds: 700), () {
-            if (mounted) Navigator.pop(context);
-          });
         } else if (state is AnnouncementError) {
           _showSnack(ctx, state.message, isError: true);
         }
@@ -2560,7 +2755,7 @@ class _DateTile extends StatelessWidget {
                     style: const TextStyle(fontSize: 10, color: _kMuted),
                   ),
                   Text(
-                    has ? DateFormat('MMM d, y').format(date!) : 'Not set',
+                    has ? DateFormat('MMM d, y  h:mm a').format(date!) : 'Not set',
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,

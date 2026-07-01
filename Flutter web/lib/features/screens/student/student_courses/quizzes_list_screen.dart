@@ -148,7 +148,7 @@ class _QuizzesListView extends StatelessWidget {
                               constraints: BoxConstraints(maxWidth: maxWidth),
                               child: Column(
                                 children: [
-                                  for (final quiz in state.quizzes)
+                                  for (final quiz in state.quizzes.where((q) => q.isVisible))
                                     Padding(
                                       padding: const EdgeInsets.only(bottom: 16),
                                       child: _QuizCard(
@@ -176,6 +176,17 @@ class _QuizzesListView extends StatelessWidget {
   }
 
   void _onQuizTap(BuildContext context, StudentQuizListItem quiz) {
+    // Hidden quizzes: show message
+    if (!quiz.isVisible) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('This quiz is hidden by the instructor.'),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+    // Not yet started: show open date
     if (!quiz.hasStarted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -185,6 +196,7 @@ class _QuizzesListView extends StatelessWidget {
       );
       return;
     }
+    // Ended: navigate to entry which will show result if student took it
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -277,17 +289,29 @@ class _QuizCardState extends State<_QuizCard> {
   @override
   Widget build(BuildContext context) {
     final q = widget.quiz;
-    final statusColor = !q.hasStarted
-        ? const Color(0xFF64748B)
-        : q.hasEnded
-            ? const Color(0xFFDC2626)
-            : const Color(0xFF059669);
-    final statusBg = !q.hasStarted
-        ? const Color(0xFFF1F5F9)
-        : q.hasEnded
-            ? const Color(0xFFFEF2F2)
-            : const Color(0xFFECFDF5);
-    final statusLabel = !q.hasStarted ? 'Not yet open' : (q.hasEnded ? 'Closed' : 'Available now');
+    // Determine status: hidden (not visible), not yet open, closed, or available
+    final bool isHidden = !q.isVisible;
+    final String statusLabel;
+    final Color statusColor;
+    final Color statusBg;
+
+    if (isHidden) {
+      statusLabel = 'Hidden';
+      statusColor = const Color(0xFF64748B);
+      statusBg = const Color(0xFFF1F5F9);
+    } else if (!q.hasStarted) {
+      statusLabel = 'Not yet open';
+      statusColor = const Color(0xFF64748B);
+      statusBg = const Color(0xFFF1F5F9);
+    } else if (q.hasEnded) {
+      statusLabel = 'Closed';
+      statusColor = const Color(0xFFDC2626);
+      statusBg = const Color(0xFFFEF2F2);
+    } else {
+      statusLabel = 'Available now';
+      statusColor = const Color(0xFF059669);
+      statusBg = const Color(0xFFECFDF5);
+    }
 
     return MouseRegion(
       cursor: SystemMouseCursors.click,

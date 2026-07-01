@@ -1,12 +1,12 @@
-// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lms/core/widgets/app_network_image.dart';
+import 'package:lms/features/screens/admin/users/get_users/get_user_model/view.dart';
 import 'package:lms/features/screens/admin/users/get_users/state_managment/get_users_cubit.dart';
 import 'package:lms/features/screens/admin/users/get_users/state_managment/get_users_state.dart';
-import 'package:lms/features/screens/admin/users/get_users/get_user_model/view.dart';
 
-// ─── Role enum ────────────────────────────────────────────────────────────────
+
 enum FilteredRole { students, instructors, admins }
 
 extension FilteredRoleX on FilteredRole {
@@ -55,7 +55,7 @@ extension FilteredRoleX on FilteredRole {
   }
 }
 
-// ─── Entry point ──────────────────────────────────────────────────────────────
+
 class FilteredUsersScreen extends StatelessWidget {
   const FilteredUsersScreen({super.key, required this.role});
   final FilteredRole role;
@@ -74,7 +74,7 @@ class FilteredUsersScreen extends StatelessWidget {
   }
 }
 
-// ─── Main View ────────────────────────────────────────────────────────────────
+
 class _FilteredUsersView extends StatefulWidget {
   const _FilteredUsersView({required this.role});
   final FilteredRole role;
@@ -84,8 +84,13 @@ class _FilteredUsersView extends StatefulWidget {
 }
 
 class _FilteredUsersViewState extends State<_FilteredUsersView> {
+  static const double _expandedHeight = 200;
+  static const double _collapsedHeight = kToolbarHeight;
+
   final _searchCtrl = TextEditingController();
   final _scrollCtrl = ScrollController();
+
+  double _collapseProgress = 0; 
 
   @override
   void initState() {
@@ -101,10 +106,20 @@ class _FilteredUsersViewState extends State<_FilteredUsersView> {
   }
 
   void _onScroll() {
+    
     if (_scrollCtrl.position.pixels >=
         _scrollCtrl.position.maxScrollExtent - 200) {
       final cubit = context.read<GetUsersCubit>();
       if (cubit.state is GetUsersLoaded) cubit.loadMore();
+    }
+
+    
+    
+    
+    final scrollRange = _expandedHeight - _collapsedHeight;
+    final progress = (_scrollCtrl.offset / scrollRange).clamp(0.0, 1.0);
+    if (progress != _collapseProgress) {
+      setState(() => _collapseProgress = progress);
     }
   }
 
@@ -127,11 +142,14 @@ class _FilteredUsersViewState extends State<_FilteredUsersView> {
         controller: _scrollCtrl,
         physics: const BouncingScrollPhysics(),
         slivers: [
-          // ── App Bar ──
+          
           SliverAppBar(
-            expandedHeight: 180,
+            expandedHeight: _expandedHeight,
+            toolbarHeight: _collapsedHeight,
             pinned: true,
+            elevation: 0,
             backgroundColor: color,
+            surfaceTintColor: Colors.transparent,
             leading: IconButton(
               icon: const Icon(
                 Icons.arrow_back_ios_new_rounded,
@@ -139,7 +157,30 @@ class _FilteredUsersViewState extends State<_FilteredUsersView> {
               ),
               onPressed: () => Navigator.pop(context),
             ),
+            
+            
+            title: Opacity(
+              opacity: _collapseProgress,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(widget.role.icon, color: Colors.white, size: 18),
+                  const SizedBox(width: 8),
+                  Text(
+                    widget.role.label,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            centerTitle: false,
             flexibleSpace: FlexibleSpaceBar(
+              collapseMode: CollapseMode.pin,
+              titlePadding: EdgeInsets.zero,
               background: Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
@@ -148,75 +189,91 @@ class _FilteredUsersViewState extends State<_FilteredUsersView> {
                     end: Alignment.bottomRight,
                   ),
                 ),
-                child: SafeArea(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 56, 20, 16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.18),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Icon(
-                                widget.role.icon,
-                                color: Colors.white,
-                                size: 22,
-                              ),
-                            ),
-                            const SizedBox(width: 14),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                child: Stack(
+                  children: [
+                    
+                    Positioned(
+                      right: -18,
+                      bottom: -18,
+                      child: Icon(
+                        widget.role.icon,
+                        size: 120,
+                        color: Colors.white.withOpacity(0.08),
+                      ),
+                    ),
+                    SafeArea(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 8, 20, 18),
+                        child: Align(
+                          alignment: Alignment.bottomLeft,
+                          child: Opacity(
+                            
+                            
+                            opacity: 1 - _collapseProgress,
+                            child: Row(
                               children: [
-                                Text(
-                                  widget.role.label,
-                                  style: const TextStyle(
+                                Container(
+                                  padding: const EdgeInsets.all(12),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withOpacity(0.18),
+                                    borderRadius: BorderRadius.circular(14),
+                                    border: Border.all(
+                                      color: Colors.white.withOpacity(0.25),
+                                    ),
+                                  ),
+                                  child: Icon(
+                                    widget.role.icon,
                                     color: Colors.white,
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.w800,
-                                    letterSpacing: -0.4,
+                                    size: 26,
                                   ),
                                 ),
-                                BlocBuilder<GetUsersCubit, GetUsersState>(
-                                  builder: (_, state) {
-                                    final count = state is GetUsersLoaded
-                                        ? state.totalCount
-                                        : 0;
-                                    return Text(
-                                      '$count registered',
-                                      style: TextStyle(
-                                        color: Colors.white.withOpacity(0.85),
-                                        fontSize: 13,
+                                const SizedBox(width: 14),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      widget.role.label,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.w800,
+                                        letterSpacing: -0.4,
                                       ),
-                                    );
-                                  },
+                                    ),
+                                    const SizedBox(height: 3),
+                                    BlocBuilder<GetUsersCubit, GetUsersState>(
+                                      builder: (_, state) {
+                                        final count = state is GetUsersLoaded
+                                            ? state.totalCount
+                                            : 0;
+                                        return Text(
+                                          '$count registered',
+                                          style: TextStyle(
+                                            color: Colors.white.withOpacity(
+                                              0.85,
+                                            ),
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
-                          ],
+                          ),
                         ),
-                      ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ),
-              title: Text(
-                widget.role.label,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              titlePadding: const EdgeInsets.only(left: 56, bottom: 16),
             ),
           ),
 
-          // ── Search bar ──
+          
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
@@ -232,7 +289,7 @@ class _FilteredUsersViewState extends State<_FilteredUsersView> {
             ),
           ),
 
-          // ── List ──
+          
           BlocBuilder<GetUsersCubit, GetUsersState>(
             builder: (_, state) {
               if (state is GetUsersLoading) {
@@ -296,7 +353,7 @@ class _FilteredUsersViewState extends State<_FilteredUsersView> {
   }
 }
 
-// ─── Search Bar ───────────────────────────────────────────────────────────────
+
 class _SearchBar extends StatelessWidget {
   const _SearchBar({
     required this.ctrl,
@@ -348,7 +405,7 @@ class _SearchBar extends StatelessWidget {
   }
 }
 
-// ─── User Card ────────────────────────────────────────────────────────────────
+
 class _UserCard extends StatefulWidget {
   const _UserCard({
     required this.user,
@@ -398,10 +455,10 @@ class _UserCardState extends State<_UserCard>
     final user = widget.user;
     final color = widget.color;
 
-    // accountStatus: 'Active' | 'Inactive' | 'Suspended' …
+    
     final isActive = user.accountStatus.toLowerCase() == 'active';
 
-    // department comes from academicInfo (students/instructors)
+    
     final deptName = user.academicInfo?.department?.name;
 
     return FadeTransition(
@@ -424,7 +481,7 @@ class _UserCardState extends State<_UserCard>
           ),
           child: Row(
             children: [
-              // ── Avatar + active dot ──
+              
               Stack(
                 children: [
                   AppNetworkImage(
@@ -453,7 +510,7 @@ class _UserCardState extends State<_UserCard>
               ),
               const SizedBox(width: 12),
 
-              // ── Info ──
+              
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -494,7 +551,7 @@ class _UserCardState extends State<_UserCard>
               ),
               const SizedBox(width: 8),
 
-              // ── Status ──
+              
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
@@ -536,7 +593,7 @@ class _UserCardState extends State<_UserCard>
   }
 }
 
-// ─── Mini chip ────────────────────────────────────────────────────────────────
+
 class _MiniChip extends StatelessWidget {
   const _MiniChip({required this.label, required this.color});
   final String label;
@@ -562,7 +619,7 @@ class _MiniChip extends StatelessWidget {
   }
 }
 
-// ─── Empty view ───────────────────────────────────────────────────────────────
+
 class _EmptyView extends StatelessWidget {
   const _EmptyView({required this.role});
   final FilteredRole role;
@@ -601,7 +658,7 @@ class _EmptyView extends StatelessWidget {
   }
 }
 
-// ─── Error view ───────────────────────────────────────────────────────────────
+
 class _ErrorView extends StatelessWidget {
   const _ErrorView({required this.message, required this.onRetry});
   final String message;

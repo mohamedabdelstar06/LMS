@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker_web/image_picker_web.dart';
 import 'package:lms/core/widgets/management/management_layout.dart';
 import 'package:lms/core/widgets/management/management_menu_config.dart';
-import '../../../../../core/cons/Colors/app_colors.dart';
 import '../../users/get_users/get_user_dropdown/model_dropdown/view.dart';
 import '../../users/get_users/get_user_dropdown/state_managment/cubit.dart';
 import '../../users/get_users/get_user_dropdown/state_managment/states.dart';

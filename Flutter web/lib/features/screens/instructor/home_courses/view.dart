@@ -1,30 +1,25 @@
-import 'dart:ui_web' as ui;
 import 'dart:html' as html;
-
+import 'dart:ui_web' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lms/core/helpers/api_url_helper.dart';
+import 'package:lms/core/widgets/management/management_layout.dart';
+import 'package:lms/core/widgets/management/management_menu_config.dart';
 import 'package:lms/features/screens/admin/Noti_button.dart';
 
-
-import '../../../../core/cons/Colors/app_colors.dart';
 import '../../../../core/helpers/cach_helper/shared_pref_helper.dart';
 import '../../../../core/helpers/logout_server/logout.dart';
 import '../../../../generated/assets.dart';
-
 import '../../admin/courses/course_details/layout.dart';
 import '../../admin/courses/home_courses/model/model.dart';
 import '../../admin/courses/home_courses/state_managment/cubit.dart';
 import '../../admin/courses/home_courses/state_managment/states.dart';
 import '../../admin/courses/update_course/view.dart';
-import 'package:lms/core/widgets/management/management_layout.dart';
-import 'package:lms/core/widgets/management/management_menu_config.dart';
 import '../../instructor/teacher_profile/view.dart';
 String buildProfileImageUrl(String? image) {
-  if (image == null || image.isEmpty) return '';
-  if (image.startsWith('https')) return image;
-  return 'https://skylearn.runasp.net$image';
+  return ApiUrlHelper.resolveMediaUrl(image) ?? '';
 }
 
 
@@ -299,84 +294,70 @@ class _CourseScreenState extends State<TeacherCourseScreen> {
                                   children: [
                                     Container(
                                       width: double.infinity,
-                                      padding: const EdgeInsets.all(24),
+                                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
                                       decoration: BoxDecoration(
-                                        color: Colors.white.withValues(alpha: 0.9),
+                                        gradient: const LinearGradient(
+                                          colors: [
+                                            Color(0xFF175CD3),
+                                            Color(0xFF4F8DFD),
+                                          ],
+                                          begin: Alignment.centerLeft,
+                                          end: Alignment.centerRight,
+                                        ),
                                         borderRadius: BorderRadius.circular(20),
                                         boxShadow: [
                                           BoxShadow(
-                                            color: Colors.black.withValues(
-                                              alpha: 0.05,
-                                            ),
+                                            color: const Color(0xFF175CD3).withValues(alpha: 0.25),
                                             blurRadius: 20,
-                                            offset: const Offset(0, 10),
+                                            offset: const Offset(0, 8),
                                           ),
                                         ],
                                       ),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                      child: Row(
                                         children: [
-                                          Row(
-                                            children: [
-                                              Expanded(
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                                  children: [
-                                                    Row(
-                                                      children: [
-                                                        Text(
-                                                          'Welcome Back',
-                                                          style: TextStyle(
-                                                            color: const Color(
-                                                              0xff175CD3,
-                                                            ),
-                                                            fontSize: isLargeScreen
-                                                                ? 36
-                                                                : 28,
-                                                            fontWeight:
-                                                            FontWeight.w700,
-                                                            fontFamily: 'inter',
-                                                          ),
-                                                        ),
-                                                        const SizedBox(width: 8),
-                                                        Image.asset(
-                                                          Assets.iconsHand,
-                                                          width: isLargeScreen
-                                                              ? 32
-                                                              : 24,
-                                                          height: isLargeScreen
-                                                              ? 32
-                                                              : 24,
-                                                        ),
-                                                        const Spacer(),
-                                                        SizedBox(
-                                                          width: isLargeScreen ? 260 : 220,
-
-                                                          child: _buildCoursesCounter(
-                                                            count: courses.length,
-                                                            isLargeScreen: isLargeScreen,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    const SizedBox(height: 8),
-                                                    Text(
-                                                      'Manage your classes and track your students’ progress easily.',
-                                                      style: TextStyle(
-                                                        fontSize: isLargeScreen
-                                                            ? 16
-                                                            : 14,
-                                                        fontWeight: FontWeight.w400,
-                                                        fontFamily: 'inter',
-                                                        color: const Color(0xFF64748B),
-                                                      ),
-                                                    ),
-                                                  ],
+                                          Container(
+                                            padding: const EdgeInsets.all(12),
+                                            decoration: BoxDecoration(
+                                              color: Colors.white.withValues(alpha: 0.15),
+                                              borderRadius: BorderRadius.circular(14),
+                                            ),
+                                            child: Icon(
+                                              Icons.menu_book_rounded,
+                                              color: Colors.white,
+                                              size: isLargeScreen ? 28 : 22,
+                                            ),
+                                          ),
+                                          const SizedBox(width: 16),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  'My Courses',
+                                                  style: TextStyle(
+                                                    fontSize: isLargeScreen ? 14 : 12,
+                                                    fontWeight: FontWeight.w500,
+                                                    color: Colors.white.withValues(alpha: 0.8),
+                                                    fontFamily: 'inter',
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
+                                                const SizedBox(height: 2),
+                                                Text(
+                                                  '${courses.length} Course${courses.length == 1 ? '' : 's'}',
+                                                  style: TextStyle(
+                                                    fontSize: isLargeScreen ? 28 : 22,
+                                                    fontWeight: FontWeight.w800,
+                                                    color: Colors.white,
+                                                    fontFamily: 'inter',
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Icon(
+                                            Icons.arrow_forward_ios_rounded,
+                                            color: Colors.white.withValues(alpha: 0.5),
+                                            size: 16,
                                           ),
                                         ],
                                       ),
@@ -519,19 +500,23 @@ class _CourseScreenState extends State<TeacherCourseScreen> {
     bool isOnline = true,
   }) {
     final size = radius * 2;
+    final hasValidUrl = imageUrl != null &&
+        imageUrl.isNotEmpty &&
+        !imageUrl.startsWith('assets/') &&
+        (imageUrl.startsWith('http://') || imageUrl.startsWith('https://'));
     return Stack(
       children: [
         ClipOval(
           child: SizedBox(
             width: size,
             height: size,
-            child: imageUrl != null && imageUrl.isNotEmpty
+            child: hasValidUrl
                 ? WebImage(
-              url: imageUrl,
-              width: size,
-              height: size,
-            )
-                : avatarPlaceholder(size),
+                    url: imageUrl,
+                    width: size,
+                    height: size,
+                  )
+                : avatarPlaceholderIcon(size),
           ),
         ),
         onlineIndicator(isOnline: isOnline, size: radius / 2),
@@ -540,18 +525,23 @@ class _CourseScreenState extends State<TeacherCourseScreen> {
   }
 
 
-  Widget avatarPlaceholder(double size) {
+  Widget avatarPlaceholderIcon(double size) {
     return Container(
       width: size,
       height: size,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: Colors.grey.shade200,
+        gradient: LinearGradient(
+          colors: [Color(0xFF175CD3), Color(0xFF4F8DFD)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
       ),
-      child: const Center(
-        child: CircularProgressIndicator(
-          strokeWidth: 2,
-          color: Color(0xFF175CD3),
+      child: Center(
+        child: Icon(
+          Icons.person_rounded,
+          color: Colors.white,
+          size: size * 0.55,
         ),
       ),
     );
@@ -731,36 +721,7 @@ class _CourseScreenState extends State<TeacherCourseScreen> {
                   ),
                 ),
                 const SizedBox(height: 2),
-                // Row(
-                //   children: [
-                //     Icon(
-                //       Icons.people_outline,
-                //       size: 13,
-                //       color:
-                //       // hasStudents
-                //       //     ? const Color(0xFFEF4444)
-                //       //     :
-                //
-                //       const Color(0xFF64748B),
-                //     ),
-                //     const SizedBox(width: 4),
-                //     // Text(
-                //     //   hasStudents
-                //     //       ? '${course.enrolledStudentsCount} student${course.enrolledStudentsCount > 1 ? 's' : ''} — cannot delete'
-                //     //       :
-                //     //   'No students — safe to delete',
-                //     //   style: TextStyle(
-                //     //     fontSize: 12,
-                //     //     color: hasStudents
-                //     //         ? const Color(0xFFEF4444)
-                //     //         : const Color(0xFF64748B),
-                //     //     fontWeight: hasStudents
-                //     //         ? FontWeight.w500
-                //     //         : FontWeight.normal,
-                //     //   ),
-                //     // ),
-                //   ],
-                // ),
+                
               ],
             ),
           ),
@@ -1480,7 +1441,7 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
 
                 Expanded(
                   child: SizedBox(
-                    width: 304,
+                    width: 340,
                     height: 86,
                     // padding: EdgeInsets.all(12),
                     child: Column(
@@ -1577,8 +1538,7 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
     );
   }
   String buildImageUrl(String? imageUrl) {
-    if (imageUrl == null || imageUrl.isEmpty) return '';
-    return 'http://skylearn.runasp.net${imageUrl.startsWith('/') ? '' : '/'}$imageUrl';
+    return ApiUrlHelper.resolveMediaUrl(imageUrl) ?? '';
   }
 
 }

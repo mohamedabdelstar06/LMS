@@ -2,7 +2,6 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lms/core/cons/api_helper_resources/api_resources.dart';
 import 'package:lms/core/helpers/cach_helper/shared_pref_helper.dart';
 import 'package:lms/core/widgets/app_network_image.dart';
 import 'package:lms/features/screens/Announcement/dashboard_announcment_card.dart';
@@ -14,7 +13,6 @@ import 'package:lms/features/screens/admin/courses/home_courses/model/model.dart
 import 'package:lms/features/screens/admin/courses/home_courses/view.dart';
 import 'package:lms/features/screens/admin/courses/course_details/layout.dart';
 import 'package:lms/features/screens/admin/department/get_department/get_All_departments/view.dart';
-import 'package:lms/features/screens/admin/squadron/create_squadron/view.dart';
 import 'package:lms/features/screens/admin/squadron/get_squadron/get_all%20squadrons/view.dart';
 import 'package:lms/features/screens/admin/users/filtered_uses_screen.dart';
 import 'package:lms/features/screens/admin/users/get_users/view.dart';
@@ -182,6 +180,8 @@ class _DashboardBody extends StatelessWidget {
             const SizedBox(height: 24),
             _RecentCoursesCard(courses: overview.recentCourses),
              const SizedBox(height: 24), 
+            _CourseProgressCard(courses: overview.recentCourses),
+            const SizedBox(height: 24),
             DashboardAnnouncementCard(),
             DashboardAnalyticsSection(analytics: analytics),
             const SizedBox(height: 32),
@@ -1702,6 +1702,226 @@ class _Chip extends StatelessWidget {
   }
 }
 
+// ── Simulated Course Progress Card ──────────────────────────
+class _CourseProgressCard extends StatelessWidget {
+  const _CourseProgressCard({required this.courses});
+  final List<RecentCourse> courses;
+
+  // Generate a deterministic "simulated" progress based on course id
+  static int _simulatedProgress(int courseId) {
+    // Use a hash-like approach for consistent but varied percentages
+    final seed = (courseId * 31 + 17) % 100;
+    return seed < 10 ? 10 + seed : seed; // Ensure minimum 10%
+  }
+
+  static const _colors = [
+    _kBlue,
+    _kGreen,
+    _kOrange,
+    _kPurple,
+    _kRed,
+    _kIndigo,
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final displayedCourses = courses.take(6).toList();
+
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: _kCard,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 16,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: _kGreen.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Icon(Icons.trending_up_rounded,
+                    color: _kGreen, size: 18),
+              ),
+              const SizedBox(width: 10),
+              const Text(
+                'Course Progress Overview',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: _kText,
+                ),
+              ),
+              const Spacer(),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: _kBlue.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Text(
+                  'Estimated',
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                    color: _kBlue,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          if (displayedCourses.isEmpty)
+            const Padding(
+              padding: EdgeInsets.all(20),
+              child: Center(
+                child: Text(
+                  'No courses available',
+                  style: TextStyle(color: _kSub, fontSize: 13),
+                ),
+              ),
+            )
+          else
+            ...displayedCourses.asMap().entries.map((entry) {
+              final i = entry.key;
+              final course = entry.value;
+              final progress = _simulatedProgress(course.id);
+              final color = _colors[i % _colors.length];
+              return _CourseProgressTile(
+                title: course.title,
+                progress: progress,
+                color: color,
+                delay: i * 80,
+              );
+            }),
+        ],
+      ),
+    );
+  }
+}
+
+class _CourseProgressTile extends StatefulWidget {
+  const _CourseProgressTile({
+    required this.title,
+    required this.progress,
+    required this.color,
+    required this.delay,
+  });
+  final String title;
+  final int progress;
+  final Color color;
+  final int delay;
+
+  @override
+  State<_CourseProgressTile> createState() => _CourseProgressTileState();
+}
+
+class _CourseProgressTileState extends State<_CourseProgressTile>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _ctrl;
+  late final Animation<double> _width;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    );
+    _width = Tween<double>(
+      begin: 0,
+      end: widget.progress / 100,
+    ).animate(CurvedAnimation(parent: _ctrl, curve: Curves.easeOutCubic));
+    Future.delayed(Duration(milliseconds: widget.delay), () {
+      if (mounted) _ctrl.forward();
+    });
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 14),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Text(
+                  widget.title,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    color: _kText,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              Text(
+                '${widget.progress}%',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: widget.color,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          LayoutBuilder(
+            builder: (_, c) => AnimatedBuilder(
+              animation: _ctrl,
+              builder: (_, __) => Stack(
+                children: [
+                  Container(
+                    height: 8,
+                    width: c.maxWidth,
+                    decoration: BoxDecoration(
+                      color: widget.color.withOpacity(0.12),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                  Container(
+                    height: 8,
+                    width: c.maxWidth * _width.value,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          widget.color,
+                          widget.color.withOpacity(0.7),
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 
 
 
@@ -1900,41 +2120,13 @@ class _LogoBrand extends StatelessWidget {
   }
 }
 
-class _PulsingLogo extends StatefulWidget {
-  @override
-  State<_PulsingLogo> createState() => _PulsingLogoState();
-}
-
-class _PulsingLogoState extends State<_PulsingLogo>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _ctrl;
-  late final Animation<double> _scale;
-
-  @override
-  void initState() {
-    super.initState();
-    _ctrl = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 2200),
-    )..repeat(reverse: true);
-    _scale = Tween<double>(
-      begin: 0.92,
-      end: 1.08,
-    ).animate(CurvedAnimation(parent: _ctrl, curve: Curves.easeInOut));
-  }
-
-  @override
-  void dispose() {
-    _ctrl.dispose();
-    super.dispose();
-  }
+class _PulsingLogo extends StatelessWidget {
+ 
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _scale,
-      builder: (_, child) => Transform.scale(scale: _scale.value, child: child),
-      child: Container(
+    return 
+      Container(
         width: 36,
         height: 36,
         decoration: BoxDecoration(
@@ -1950,13 +2142,10 @@ class _PulsingLogoState extends State<_PulsingLogo>
         child: const CircleAvatar(
           radius: 18,
           backgroundImage: AssetImage(Assets.logo),
-        ),
-      ),
-    );
+      ));
+      
   }
 }
-
-
 
 class _NavLink extends StatefulWidget {
 
@@ -2037,14 +2226,7 @@ class _AdminAvatar extends StatelessWidget {
           fullName = state.profile.user.fullName;
         }
 
-        return MouseRegion(
-          cursor: SystemMouseCursors.click,
-          child: GestureDetector(
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const AdminProfileScreen()),
-            ),
-            child: AnimatedContainer(
+        return  AnimatedContainer(
               duration: const Duration(milliseconds: 150),
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
               decoration: BoxDecoration(
@@ -2090,17 +2272,10 @@ class _AdminAvatar extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(width: 6),
-                  const Icon(
-                    Icons.keyboard_arrow_down_rounded,
-                    size: 16,
-                    color: Color(0xFF94A3B8),
-                  ),
+               
                 ],
-              ),
-            ),
-          ),
-        );
+              ));
+            
       },
     );
   }

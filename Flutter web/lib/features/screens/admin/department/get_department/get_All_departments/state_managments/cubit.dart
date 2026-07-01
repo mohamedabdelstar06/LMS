@@ -14,6 +14,7 @@ class DepartmentsCubit extends Cubit<DepartmentsState> {
   final Dio dio = Dio(BaseOptions(baseUrl: ApiResources.apiUrl));
 
   Future<void> fetchDepartments() async {
+    if (isClosed) return;
     emit(DepartmentsLoading());
 
     try {
@@ -28,9 +29,9 @@ class DepartmentsCubit extends Cubit<DepartmentsState> {
           .map((e) => GetAllDepartmentModel.fromJson(e))
           .toList();
 
-      emit(DepartmentsLoaded(departments));
+      if (!isClosed) emit(DepartmentsLoaded(departments));
     } catch (e) {
-      emit(DepartmentsError(e.toString()));
+      if (!isClosed) emit(DepartmentsError(e.toString()));
     }
   }
 
@@ -52,7 +53,7 @@ class DepartmentsCubit extends Cubit<DepartmentsState> {
 
       if (response.statusCode == 200 || response.statusCode == 204) {
         emit(const DeleteDepartmentSuccess('Department deleted successfully'));
-        await fetchDepartments();
+        if (!isClosed) await fetchDepartments();
       } else {
         emit(
           DeleteDepartmentError(
@@ -180,7 +181,7 @@ class DepartmentsCubit extends Cubit<DepartmentsState> {
 
       if (response.statusCode == 200 || response.statusCode == 204) {
         emit(const UpdateDepartmentSuccess('Department updated successfully'));
-        fetchDepartments();
+        if (!isClosed) await fetchDepartments();
       } else {
         emit(
           DepartmentByIdError(

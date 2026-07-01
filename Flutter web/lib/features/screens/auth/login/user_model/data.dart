@@ -49,7 +49,7 @@ class User {
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
-    String? profileUrl = json['profileImageUrl'];
+    final String? profileUrl = json['profileImageUrl'];
 
     return User(
       id: json['id'] ?? 0,

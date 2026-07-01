@@ -2,6 +2,7 @@ import 'dart:ui_web' as ui;
 import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lms/core/helpers/api_url_helper.dart';
 import 'package:lms/core/widgets/management/management_layout.dart';
 import 'package:lms/core/widgets/management/management_menu_config.dart';
 import 'package:lms/features/screens/admin/courses/home_courses/state_managment/cubit.dart';
@@ -585,8 +586,7 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
   }
 
   String buildImageUrl(String? imageUrl) {
-    if (imageUrl == null || imageUrl.isEmpty) return '';
-    return 'http://skylearn.runasp.net${imageUrl.startsWith('/') ? '' : '/'}$imageUrl';
+    return ApiUrlHelper.resolveMediaUrl(imageUrl) ?? '';
   }
 }
 

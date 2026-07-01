@@ -20,7 +20,7 @@ class _LoginScreenState extends State<VerifyScreen>
     with SingleTickerProviderStateMixin {
   final formKey = GlobalKey<FormState>();
   final usernameController = TextEditingController(
-    text: 'mohamedabdelstar06@gmail.com',
+
   );
 
   late final AnimationController _animCtrl;
@@ -46,7 +46,7 @@ class _LoginScreenState extends State<VerifyScreen>
       end: Offset.zero,
     ).animate(CurvedAnimation(parent: _animCtrl, curve: Curves.easeOutCubic));
 
-    // ابدأ الأنيميشن بعد ما الـ splash يخلص
+    
     Future.delayed(const Duration(milliseconds: 100), () {
       if (mounted) _animCtrl.forward();
     });
