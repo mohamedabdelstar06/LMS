@@ -1,6 +1,6 @@
-// ============================================================
-// quiz_cubit.dart
-// ============================================================
+
+
+
 import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,17 +30,33 @@ class QuizCubit extends Cubit<QuizState> {
   List<QuizModel> get quizzes => _quizzes;
   int get quizCount => _quizzes.length;
 
-  // ── Load quizzes list ────────────────────────────────────
+  
   Future<void> loadQuizzes() async {
     emit(const QuizLoading());
     try {
       _quizzes = await _repo.getCourseQuizzes(courseId);
+      // For students: only show quizzes that are currently available
+      // - Must be visible (isVisible = true)
+      // - Must have started (startDate is null or in the past)
+      // - Must not be closed (deadLineDate is null or in the future)
+      if (role == UserRole.student) {
+        final now = DateTime.now();
+        _quizzes = _quizzes.where((q) {
+          // Hide invisible quizzes
+          if (!q.isVisible) return false;
+          // Hide quizzes that haven't opened yet
+          if (q.startDate != null && now.isBefore(q.startDate!)) return false;
+          // Hide closed quizzes (deadline passed)
+          if (q.deadLineDate != null && now.isAfter(q.deadLineDate!)) return false;
+          return true;
+        }).toList();
+      }
       emit(QuizLoaded(_quizzes));
     } catch (e) {
       emit(QuizError(_parseError(e)));
     }
   }
-  // ── Grade quiz (manual grading for short answers) ────────────
+  
   Future<bool> gradeQuiz({
     required int quizId,
     required List<StudentAnswerForGrading> grades,
@@ -58,7 +74,7 @@ class QuizCubit extends Cubit<QuizState> {
     }
   }
 
-  // ── Create quiz (manual, with questions) ──────────────────
+  
   Future<bool> createQuiz(QuizFormData data) async {
     emit(const QuizActionInProgress('Creating quiz...'));
     try {
@@ -74,7 +90,7 @@ class QuizCubit extends Cubit<QuizState> {
     }
   }
 
-  // ── Load full quiz detail (for edit) ───────────────────────
+  
   Future<QuizDetailModel?> loadQuizDetail(int quizId) async {
     emit(const QuizDetailLoading());
     try {
@@ -87,7 +103,7 @@ class QuizCubit extends Cubit<QuizState> {
     }
   }
 
-  // ── Update quiz ─────────────────────────────────────────────
+  
   Future<bool> updateQuiz({
     required int quizId,
     required QuizFormData data,
@@ -106,7 +122,7 @@ class QuizCubit extends Cubit<QuizState> {
     }
   }
 
-  // ── Delete quiz ──────────────────────────────────────────────
+  
   Future<bool> deleteQuiz(int quizId) async {
     emit(const QuizActionInProgress('Deleting quiz...'));
     try {
@@ -122,7 +138,7 @@ class QuizCubit extends Cubit<QuizState> {
     }
   }
 
-  // ── Toggle visibility (quick action) ─────────────────────────
+  
   Future<void> toggleVisibility(QuizModel quiz) async {
     final data = QuizFormData(
       title: quiz.title,
@@ -142,7 +158,7 @@ class QuizCubit extends Cubit<QuizState> {
       sortOrder: quiz.sortOrder,
       isVisible: !quiz.isVisible,
     );
-    // optimistic update
+    
     _quizzes = _quizzes
         .map((q) => q.id == quiz.id ? q.copyWith(isVisible: !quiz.isVisible) : q)
         .toList();
@@ -150,7 +166,7 @@ class QuizCubit extends Cubit<QuizState> {
     try {
       await _repo.updateQuiz(quizId: quiz.id, data: data);
     } catch (e) {
-      // revert on failure
+      
       _quizzes = _quizzes
           .map((q) => q.id == quiz.id ? q.copyWith(isVisible: quiz.isVisible) : q)
           .toList();
@@ -159,7 +175,7 @@ class QuizCubit extends Cubit<QuizState> {
     }
   }
 
-  // ── Generate quiz with AI (multipart) ──────────────────────
+  
   Future<bool> generateQuiz(GenerateQuizRequest req) async {
     emit(const QuizGenerating());
     try {
@@ -182,7 +198,7 @@ class QuizCubit extends Cubit<QuizState> {
     }
   }
 
-  // ── Start taking a quiz (student) ───────────────────────────
+  
   Future<void> startQuiz(int quizId) async {
     emit(const QuizSessionLoading());
     try {
@@ -245,7 +261,7 @@ class QuizCubit extends Cubit<QuizState> {
         answers: current.answers.values.toList(),
       );
     } catch (_) {
-      // silent fail — will retry next cycle
+      
     } finally {
       if (state is QuizSessionLoaded) {
         emit((state as QuizSessionLoaded).copyWith(autoSaving: false));
@@ -269,7 +285,7 @@ class QuizCubit extends Cubit<QuizState> {
     }
   }
 
-  // ── Results (admin: all submissions) ────────────────────────
+  
   Future<void> loadResults(int quizId) async {
     emit(const QuizLoading());
     try {
@@ -281,7 +297,7 @@ class QuizCubit extends Cubit<QuizState> {
     }
   }
 
-  // ── My result (student) ──────────────────────────────────────
+  
   Future<void> loadMyResult(int quizId) async {
     emit(const QuizLoading());
     try {
@@ -292,7 +308,7 @@ class QuizCubit extends Cubit<QuizState> {
     }
   }
 
-  // ── Translate ──────────────────────────────────────────────
+  
   Future<void> translateQuiz(int quizId, {String lang = 'ar'}) async {
     emit(const QuizActionInProgress('Translating...'));
     try {

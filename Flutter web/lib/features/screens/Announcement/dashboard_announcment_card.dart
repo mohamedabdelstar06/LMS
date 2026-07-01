@@ -7,6 +7,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:lms/core/helpers/api_url_helper.dart';
 
 import 'package:lms/features/screens/Announcement/cubit.dart';
 import 'package:lms/features/screens/Announcement/model.dart';
@@ -195,7 +196,8 @@ class _AnnouncementTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final a = announcement;
     final fmt = DateFormat('d MMM · h:mm a');
-    final hasImage = a.imageUrl != null && a.imageUrl!.isNotEmpty;
+    final resolvedImageUrl = ApiUrlHelper.resolveMediaUrl(a.imageUrl);
+    final hasImage = resolvedImageUrl != null && resolvedImageUrl.isNotEmpty;
 
     return InkWell(
       onTap: () => Navigator.push(
@@ -230,7 +232,7 @@ class _AnnouncementTile extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: Image.network(
-                  a.imageUrl!,
+                  resolvedImageUrl!,
                   width: 56,
                   height: 56,
                   fit: BoxFit.cover,

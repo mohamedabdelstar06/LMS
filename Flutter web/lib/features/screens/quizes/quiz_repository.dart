@@ -1,6 +1,6 @@
-// ============================================================
-// quiz_repository.dart — all 13 endpoints, exact contract
-// ============================================================
+
+
+
 import 'package:dio/dio.dart';
 import 'package:lms/core/helpers/json_list_parser.dart';
 import 'package:lms/features/screens/quizes/quiz_model.dart';
@@ -36,7 +36,7 @@ class QuizRepository {
     ).map(QuizModel.fromJson).toList();
   }
 
-  // ── GET /api/quizzes/{id} ───────────────────────────────────
+  
   Future<QuizDetailModel> getQuizById(int quizId) async {
     final res = await _dio.get('quizzes/$quizId');
     final data = res.data;
@@ -49,7 +49,7 @@ class QuizRepository {
     throw StateError('Unexpected quiz detail response format');
   }
 
-  // ── PUT /api/quizzes/{id} ───────────────────────────────────
+  
   Future<QuizModel> updateQuiz({
     required int quizId,
     required QuizFormData data,
@@ -58,18 +58,18 @@ class QuizRepository {
     return QuizModel.fromJson(res.data as Map<String, dynamic>);
   }
 
-  // ── DELETE /api/quizzes/{id} ─────────────────────────────────
+  
   Future<void> deleteQuiz(int quizId) async {
     await _dio.delete('quizzes/$quizId');
   }
 
-  // ── POST /api/quizzes/generate  (multipart/form-data) ────────
+  
   Future<QuizModel> generateQuiz(
     GenerateQuizRequest req, {
     void Function(int sent, int total)? onSendProgress,
   }) async {
     final formData = FormData();
-    // Add scalar fields
+    
     formData.fields
       ..add(MapEntry('CourseId', req.courseId.toString()))
       ..add(MapEntry('QuestionTypes', req.questionTypes))
@@ -77,11 +77,11 @@ class QuizRepository {
       ..add(MapEntry('DifficultyLevel', req.difficultyLevel))
       ..add(MapEntry('QuizScope', req.quizScope))
       ..add(MapEntry('Title', req.title));
-    // Add repeated LectureIds
+    
     for (final lectureId in req.lectureIds) {
       formData.fields.add(MapEntry('LectureIds', lectureId.toString()));
     }
-    // Add optional fields
+    
     if (req.customPrompt.isNotEmpty) {
       formData.fields.add(MapEntry('CustomPrompt', req.customPrompt));
     }
@@ -90,7 +90,7 @@ class QuizRepository {
         MapEntry('TargetSquadronId', req.targetSquadronId!.toString()),
       );
     }
-    // Add optional PDF file
+    
     final pdfBytes = req.importedPdfBytes;
     if (pdfBytes != null && pdfBytes.isNotEmpty) {
       formData.files.add(
@@ -119,13 +119,13 @@ class QuizRepository {
     throw StateError('Unexpected quiz generate response format: $data');
   }
 
-  // ── GET /api/quizzes/{id}/take ────────────────────────────────
+  
   Future<QuizTakeSession> startQuiz(int quizId) async {
     final res = await _dio.get('quizzes/$quizId/take');
     return QuizTakeSession.fromJson(res.data as Map<String, dynamic>);
   }
 
-  // ── POST /api/quizzes/{id}/auto-save ────────────────────────
+  
   Future<void> autoSave({
     required int quizId,
     required List<QuizAnswer> answers,
@@ -136,7 +136,7 @@ class QuizRepository {
     );
   }
 
-  // ── POST /api/quizzes/{id}/submit ───────────────────────────
+  
   Future<QuizResult> submitQuiz({
     required int quizId,
     required List<QuizAnswer> answers,
@@ -152,13 +152,13 @@ class QuizRepository {
     return QuizResult.fromJson(parseJsonObjectList(data).first);
   }
 
-  // ── GET /api/quizzes/{id}/results  (admin: all submissions) ──
+  
   Future<List<QuizResult>> getQuizResults(int quizId) async {
     final res = await _dio.get('quizzes/$quizId/results');
     return parseJsonObjectList(res.data).map(QuizResult.fromJson).toList();
   }
 
-  // ── GET /api/quizzes/{id}/my-result  (student: own result) ───
+  
   Future<QuizResult> getMyResult(int quizId) async {
     final res = await _dio.get('quizzes/$quizId/my-result');
     final data = res.data;
@@ -172,7 +172,7 @@ class QuizRepository {
     return QuizResult.fromJson(list.first);
   }
 
-  // ── POST /api/quizzes/{id}/grade  (manual grading) ───────────
+  
   Future<void> gradeQuiz({
     required int quizId,
     required List<StudentAnswerForGrading> grades,
@@ -183,7 +183,7 @@ class QuizRepository {
     );
   }
 
-  // ── POST /api/quizzes/{id}/translate ──────────────────────────
+  
   Future<QuizDetailModel> translateQuiz({
     required int quizId,
     String targetLanguage = 'ar',

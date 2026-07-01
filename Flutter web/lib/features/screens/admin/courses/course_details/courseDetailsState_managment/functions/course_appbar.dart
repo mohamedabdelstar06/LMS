@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lms/core/helpers/api_url_helper.dart';
 import '../../../home_courses/model/model.dart';
 import 'department_chip.dart';
 
@@ -7,9 +8,7 @@ class CourseHeroAppBar extends StatelessWidget {
   final GetCoursesModel course;
 
   String _buildImageUrl(String imageUrl) {
-    if (imageUrl.isEmpty) return '';
-    if (imageUrl.startsWith('https')) return imageUrl;
-    return 'https://skylearn.runasp.net${imageUrl.startsWith('/') ? '' : '/'}$imageUrl';
+    return ApiUrlHelper.resolveMediaUrl(imageUrl) ?? '';
   }
 
   @override

@@ -217,7 +217,7 @@ class _CourseDropdownState extends State<_CourseDropdown> {
           ),
         ),
         const SizedBox(height: 16),
-        ElevatedButton.icon(
+       /* ElevatedButton.icon(
           onPressed: _selected == null
               ? null
               : () => context.read<GradesOverviewCubit>().selectCourse(_selected!),
@@ -235,7 +235,7 @@ class _CourseDropdownState extends State<_CourseDropdown> {
               fontWeight: FontWeight.w700,
             ),
           ),
-        ),
+        ),*/
       ],
     );
   }

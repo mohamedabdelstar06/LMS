@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:intl/intl.dart';
+import 'package:lms/core/helpers/api_url_helper.dart';
 
 import '../../../home_courses/model/model.dart';
 
-const String _kBase = 'https://skylearn.runasp.net';
-
 String _buildUrl(String? path) {
-  if (path == null || path.isEmpty) return '';
-  if (path.startsWith('http')) return path;
-  return '$_kBase${path.startsWith('/') ? '' : '/'}$path';
+  return ApiUrlHelper.resolveMediaUrl(path) ?? '';
 }
 
 class InstructorCard extends StatefulWidget {

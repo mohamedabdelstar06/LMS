@@ -49,7 +49,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
                 const Spacer(),
 
-                // ── Nav links ────────────────────────────────────
+                // ── Nav links ──────────────────R──────────────────
                 _NavLink(
                   label: 'Dashboard',
                   icon: Icons.dashboard_rounded,

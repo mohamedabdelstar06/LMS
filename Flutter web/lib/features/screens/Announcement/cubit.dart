@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lms/core/cons/api_helper_resources/api_resources.dart';
 import 'package:lms/core/helpers/cach_helper/shared_pref_helper.dart';
 import 'package:lms/features/screens/Announcement/model.dart';
 import 'package:lms/features/screens/Announcement/states.dart';
@@ -14,10 +15,10 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
   AnnouncementCubit() : super(AnnouncementInitial());
 
   final Dio _dio = Dio(
-    BaseOptions(baseUrl: 'https://skylearn.runasp.net/api/'),
+    BaseOptions(baseUrl: ApiResources.apiUrl),
   );
 
-  // ── helpers ───────────────────────────────────────────────────────────────
+  
 
   Future<Options> _authOptions() async {
     final token = await TokenStorageHelper.getTokenSecure();
@@ -27,16 +28,29 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
   String _extractErrorMessage(DioException e, String fallback) {
     final data = e.response?.data;
     if (data is Map<String, dynamic>) {
+      // ASP.NET Core validation error format: {"errors": {"field": ["msg"]}}
+      if (data.containsKey('errors')) {
+        final errors = data['errors'];
+        if (errors is Map<String, dynamic>) {
+          final messages = <String>[];
+          errors.forEach((field, msgs) {
+            if (msgs is List) {
+              messages.addAll(msgs.map((m) => '$field: $m'));
+            }
+          });
+          if (messages.isNotEmpty) return messages.join('\n');
+        }
+      }
       final message = data['message'] ?? data['error'] ?? data['title'];
       return message?.toString() ?? fallback;
     }
-    if (data is String) {
+    if (data is String && data.isNotEmpty) {
       return data;
     }
     return e.message ?? fallback;
   }
 
-  // ── Load all dropdown data at once (call on AddAnnouncementScreen init) ───
+  
 
   Future<void> loadDropdownData() async {
     emit(DropdownDataLoading());
@@ -54,22 +68,22 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
         ),
       ]);
 
-      // Departments — array response
+      
       final deptList = (results[0].data as List<dynamic>? ?? [])
           .map((e) => GetAllDepartmentModel.fromJson(e as Map<String, dynamic>))
           .toList();
 
-      // Years — array response
+      
       final yearList = (results[1].data as List<dynamic>? ?? [])
           .map((e) => GetAllYearModel.fromJson(e as Map<String, dynamic>))
           .toList();
 
-      // Squadrons — array response
+      
       final squadList = (results[2].data as List<dynamic>? ?? [])
           .map((e) => SquadronModel.fromJson(e as Map<String, dynamic>))
           .toList();
 
-      // Courses — paginated response
+      
       final courseItems = results[3].data['items'] as List<dynamic>? ?? [];
       final courseList = courseItems
           .map((e) => GetCourseModel.fromJson(e as Map<String, dynamic>))
@@ -94,7 +108,7 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
     }
   }
 
-  // ── Add Announcement ──────────────────────────────────────────────────────
+  
 
   Future<void> addAnnouncement({
     required String title,
@@ -128,7 +142,9 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
         if (startDate != null) 'StartDate': startDate.toIso8601String(),
         if (endDate != null) 'EndDate': endDate.toIso8601String(),
         'IsPinned': isPinned,
-        'AudienceType': audienceType,
+        // Only send AudienceType when it's a specific type (>0)
+        // When 0 (All), omit and let backend default to All
+        if (audienceType > 0) 'AudienceType': audienceType,
         if (departmentId != null) 'DepartmentId': departmentId,
         if (yearId != null) 'YearId': yearId,
         if (squadronId != null) 'SquadronId': squadronId,
@@ -153,13 +169,13 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
     }
   }
 
-  // ── Get All Announcements (Admin) ─────────────────────────────────────────
+  
 
   Future<void> getAllAnnouncements({int page = 1, int pageSize = 10}) async {
     emit(GetAllAnnouncementsLoading());
     try {
       final res = await _dio.get(
-        'Announcements/all',
+        'Announcements',
         queryParameters: {'page': page, 'pageSize': pageSize},
         options: await _authOptions(),
       );
@@ -189,13 +205,20 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
     }
   }
 
-  // ── Delete Announcement ───────────────────────────────────────────────────
+  
 
   Future<void> deleteAnnouncement(int id) async {
     emit(DeleteAnnouncementLoading());
     try {
-      await _dio.delete('Announcements/$id', options: await _authOptions());
-      emit(DeleteAnnouncementSuccess());
+      final response = await _dio.delete(
+        'Announcements/$id',
+        options: await _authOptions(),
+      );
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        emit(DeleteAnnouncementSuccess());
+      } else {
+        emit(DeleteAnnouncementError('Failed to delete. Status: ${response.statusCode}'));
+      }
     } on DioException catch (e) {
       emit(
         DeleteAnnouncementError(
@@ -204,10 +227,13 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
       );
     } catch (e) {
       emit(DeleteAnnouncementError('Unexpected error: $e'));
+    } finally {
+      
+      await getAllAnnouncements();
     }
   }
 
-  // ── Reset ─────────────────────────────────────────────────────────────────
+  
 
   void reset() => emit(AnnouncementInitial());
 }

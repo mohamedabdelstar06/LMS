@@ -141,7 +141,9 @@ class _ManagementScaffoldState extends State<ManagementScaffold> {
           Icon(
             widget.role == ManagementRole.admin
                 ? Icons.manage_accounts_rounded
-                : Icons.school_rounded,
+                : widget.role == ManagementRole.instructor
+                    ? Icons.school_rounded
+                    : Icons.person_rounded,
             size: 20,
             color: const Color(0xFF2563EB),
           ),

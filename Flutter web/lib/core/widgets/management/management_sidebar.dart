@@ -54,9 +54,11 @@ class _ManagementSidebarState extends State<ManagementSidebar> {
   @override
   Widget build(BuildContext context) {
     final sections = ManagementMenuConfig.sectionsFor(widget.role);
-    final portalLabel = widget.role == ManagementRole.admin
-        ? 'Admin Portal'
-        : 'Instructor Portal';
+    final portalLabel = switch (widget.role) {
+      ManagementRole.admin => 'Admin Portal',
+      ManagementRole.instructor => 'Instructor Portal',
+      ManagementRole.student => 'Student Portal',
+    };
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 250),
@@ -128,7 +130,7 @@ class _ManagementSidebarState extends State<ManagementSidebar> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    'اّفــــــاق',
+                    'اّفــــــاق', 
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w800,
@@ -276,7 +278,9 @@ class _ManagementSidebarState extends State<ManagementSidebar> {
       onExit: (_) => setState(() => _isLogoutHovered = false),
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
-        onTap: () => _showLogoutDialog(context),
+        onTap: () async {
+          await LogoutServer.logout();
+        },
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 180),
           margin: EdgeInsets.symmetric(
@@ -289,7 +293,7 @@ class _ManagementSidebarState extends State<ManagementSidebar> {
           ),
           decoration: BoxDecoration(
             color: _isLogoutHovered
-                ? const Color(0xFFEF4444).withOpacity(0.15)
+                ? const Color(0xFFEF4444).withValues(alpha: 0.15)
                 : Colors.transparent,
             borderRadius: BorderRadius.circular(10),
             border: _isLogoutHovered
@@ -314,13 +318,16 @@ class _ManagementSidebarState extends State<ManagementSidebar> {
                       size: 20,
                     ),
                     SizedBox(width: 12),
-                    Text(
-                      'Logout',
-                      style: TextStyle(
-                        color: Color(0xFFEF4444),
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'inter',
+                    Flexible(
+                      child: Text(
+                        'Logout',
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: Color(0xFFEF4444),
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: 'inter',
+                        ),
                       ),
                     ),
                   ],
@@ -382,28 +389,5 @@ class _ManagementSidebarState extends State<ManagementSidebar> {
     );
   }
 
-  void _showLogoutDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text('Logout'),
-        content: const Text('Are you sure you want to logout?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel'),
-          ),
-          ElevatedButton(
-            onPressed: () async => await LogoutServer.logout(),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFEF4444),
-              foregroundColor: Colors.white,
-            ),
-            child: const Text('Logout'),
-          ),
-        ],
-      ),
-    );
-  }
+
 }

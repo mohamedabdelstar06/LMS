@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lms/core/helpers/api_url_helper.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'dart:ui_web' as ui;
 import 'dart:html' as html;
@@ -341,13 +342,7 @@ class _CommentTileState extends State<_CommentTile> {
 
 
   String buildImageUrl(String? path) {
-    if (path == null || path.isEmpty) return '';
-
-    if (path.startsWith('http')) return path;
-
-    final cleanPath = path.startsWith('/') ? path.substring(1) : path;
-
-    return 'https://skylearn.runasp.net/$cleanPath';
+    return ApiUrlHelper.resolveMediaUrl(path) ?? '';
   }
 
 

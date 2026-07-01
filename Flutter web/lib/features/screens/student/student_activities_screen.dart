@@ -1,8 +1,6 @@
-// ============================================================
-// student_activities_screen.dart
-// ============================================================
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lms/features/screens/student_dashboard_screen.dart';
 
 import 'student_activities_grades_cubits.dart';
 import 'student_activities_grades_models.dart';
@@ -104,6 +102,7 @@ class _ActivitiesBodyState extends State<_ActivitiesBody> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       backgroundColor: _kBg,
       body: Column(
         children: [
@@ -188,42 +187,73 @@ class _ActivitiesBodyState extends State<_ActivitiesBody> {
 
   Widget _buildHeader() {
     return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 12),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+       
+      ),
+      padding: const EdgeInsets.fromLTRB(16, 12, 20, 12),
       child: Row(
         children: [
+          // Professional back button
+          _ProfessionalBackButton(
+            onTap: () {
+              Navigator.pushReplacement(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (_, __, ___) => const StudentDashboardScreen(),
+                  transitionDuration: const Duration(milliseconds: 250),
+                  transitionsBuilder: (_, animation, __, child) => FadeTransition(
+                    opacity: animation,
+                    child: child,
+                  ),
+                ),
+              );
+            },
+          ),
+          const SizedBox(width: 16),
+          // Icon badge
           Container(
-            width: 40,
-            height: 40,
+            width: 44,
+            height: 44,
             decoration: BoxDecoration(
               gradient: const LinearGradient(
                 colors: [Color(0xFF2563EB), Color(0xFF7C3AED)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
               ),
               borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF2563EB).withOpacity(0.25),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
+                ),
+              ],
             ),
             child: const Icon(Icons.timeline_rounded,
-                color: Colors.white, size: 20),
+                color: Colors.white, size: 22),
           ),
           const SizedBox(width: 12),
+          // Title
           const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('My Activities',
                   style: TextStyle(
-                      fontSize: 17,
+                      fontSize: 18,
                       fontWeight: FontWeight.w800,
-                      color: _kText)),
+                      color: _kText,
+                      letterSpacing: -0.3)),
+              SizedBox(height: 2),
               Text('Track your learning progress',
                   style: TextStyle(fontSize: 11, color: _kSub)),
             ],
           ),
           const Spacer(),
-          IconButton(
-            onPressed: () => setState(() => _showSearch = !_showSearch),
-            icon: Icon(
-              _showSearch ? Icons.close_rounded : Icons.search_rounded,
-              color: _kSub,
-            ),
+          // Search toggle
+          _SearchToggleButton(
+            isActive: _showSearch,
+            onTap: () => setState(() => _showSearch = !_showSearch),
           ),
         ],
       ),
@@ -868,6 +898,115 @@ class _ErrorView extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+// ── Professional Back Button ──────────────────────────────────
+class _ProfessionalBackButton extends StatefulWidget {
+  const _ProfessionalBackButton({required this.onTap});
+  final VoidCallback onTap;
+
+  @override
+  State<_ProfessionalBackButton> createState() => _ProfessionalBackButtonState();
+}
+
+class _ProfessionalBackButtonState extends State<_ProfessionalBackButton>
+    with SingleTickerProviderStateMixin {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: widget.onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          decoration: BoxDecoration(
+            color: _isHovered ? _kBg : Colors.transparent,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+              color: _isHovered ? _kBlue.withOpacity(0.3) : _kBorder,
+              width: 1,
+            ),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              AnimatedRotation(
+                duration: const Duration(milliseconds: 200),
+                turns: _isHovered ? -0.1 : 0,
+                child: const Icon(
+                  Icons.arrow_back_ios_new_rounded,
+                  size: 16,
+                  color: _kBlue,
+                ),
+              ),
+              const SizedBox(width: 6),
+              Text(
+                'Back',
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: _isHovered ? _kBlue : _kSub,
+                  fontFamily: 'inter',
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ── Search Toggle Button ──────────────────────────────────────
+class _SearchToggleButton extends StatefulWidget {
+  const _SearchToggleButton({required this.isActive, required this.onTap});
+  final bool isActive;
+  final VoidCallback onTap;
+
+  @override
+  State<_SearchToggleButton> createState() => _SearchToggleButtonState();
+}
+
+class _SearchToggleButtonState extends State<_SearchToggleButton>
+    with SingleTickerProviderStateMixin {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: widget.onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: widget.isActive
+                ? _kBlue.withOpacity(0.1)
+                : (_isHovered ? _kBg : Colors.transparent),
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+              color: widget.isActive
+                  ? _kBlue.withOpacity(0.3)
+                  : (_isHovered ? _kBorder : Colors.transparent),
+            ),
+          ),
+          child: Icon(
+            widget.isActive ? Icons.close_rounded : Icons.search_rounded,
+            size: 18,
+            color: widget.isActive ? _kBlue : _kSub,
+          ),
+        ),
       ),
     );
   }

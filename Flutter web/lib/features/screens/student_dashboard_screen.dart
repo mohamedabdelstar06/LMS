@@ -1,13 +1,13 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lms/features/screens/grades_overview/grades_overview_screen.dart';
-import 'package:lms/features/screens/student/dashboard_Appbar.dart';
+import 'package:lms/core/widgets/management/management_layout.dart';
+import 'package:lms/core/widgets/management/management_menu_config.dart';
 import 'package:lms/features/screens/student_dashboard_states.dart';
 import 'student_dashboard_analytics_section.dart';
 import 'student_dashboard_cubit.dart';
 
-// ── Palette ───────────────────────────────────────────────────────────────────
+
 const _kBg = Color(0xFFF0F6FF);
 const _kCard = Colors.white;
 const _kBlue = Color(0xFF2563EB);
@@ -20,16 +20,20 @@ const _kText = Color(0xFF0F172A);
 const _kSub = Color(0xFF64748B);
 const _kBorder = Color(0xFFE2E8F0);
 
-// ── Entry ─────────────────────────────────────────────────────────────────────
+
 
 class StudentDashboardScreen extends StatelessWidget {
   const StudentDashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => StudentDashboardCubit()..loadDashboard(),
-      child: const _StudentDashboardView(),
+    return ManagementScaffold(
+      selectedMenuItem: 'Dashboard',
+      role: ManagementRole.student,
+      child: BlocProvider(
+        create: (_) => StudentDashboardCubit()..loadDashboard(),
+        child: const _StudentDashboardView(),
+      ),
     );
   }
 }
@@ -63,60 +67,42 @@ class _StudentDashboardViewState extends State<_StudentDashboardView>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: _kBg,
-      appBar: StudentDashboardAppBar(
-        onNavigateToGrades: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => const GradesOverviewScreen(isStudent: true),
-            ),
-          );
-        },
-      ),
-      // ✅ Stack هنا عشان ChatFab يكون فوق المحتوى بس في الـ dashboard
-      body: Stack(
-        children: [
-          // ── Main content ────────────────────────────────────────────────
-          BlocConsumer<StudentDashboardCubit, StudentDashboardState>(
-            listener: (_, state) {
-              if (state is StudentDashboardLoaded) _fadeCtrl.forward(from: 0);
-            },
-            builder: (context, state) {
-              if (state is StudentDashboardLoading ||
-                  state is StudentDashboardInitial) {
-                return const _LoadingView();
-              }
-              if (state is StudentDashboardError) {
-                return _ErrorView(
-                  message: state.message,
-                  onRetry: () =>
-                      context.read<StudentDashboardCubit>().loadDashboard(),
-                );
-              }
-              if (state is StudentDashboardLoaded) {
-                return FadeTransition(
-                  opacity: _fadeAnim,
-                  child: _DashboardBody(
-                    model: state.model,
-                    analytics: state.analytics,
-                  ),
-                );
-              }
-              return const SizedBox();
-            },
-          ),
-
-          // ✅ ChatFab هنا بس — مش في login ولا verify
-        
-        ],
-      ),
+    return Stack(
+      children: [
+        BlocConsumer<StudentDashboardCubit, StudentDashboardState>(
+          listener: (_, state) {
+            if (state is StudentDashboardLoaded) _fadeCtrl.forward(from: 0);
+          },
+          builder: (context, state) {
+            if (state is StudentDashboardLoading ||
+                state is StudentDashboardInitial) {
+              return const _LoadingView();
+            }
+            if (state is StudentDashboardError) {
+              return _ErrorView(
+                message: state.message,
+                onRetry: () =>
+                    context.read<StudentDashboardCubit>().loadDashboard(),
+              );
+            }
+            if (state is StudentDashboardLoaded) {
+              return FadeTransition(
+                opacity: _fadeAnim,
+                child: _DashboardBody(
+                  model: state.model,
+                  analytics: state.analytics,
+                ),
+              );
+            }
+            return const SizedBox();
+          },
+        ),
+      ],
     );
   }
 }
 
-// ── Body ──────────────────────────────────────────────────────────────────────
+
 
 class _DashboardBody extends StatelessWidget {
   final StudentDashboardModel model;
@@ -218,7 +204,7 @@ class _DashboardBody extends StatelessWidget {
   }
 }
 
-// ── GPA Hero Card ─────────────────────────────────────────────────────────────
+
 
 class _GpaHeroCard extends StatefulWidget {
   final StudentDashboardModel model;
@@ -384,7 +370,7 @@ class _MiniStat extends StatelessWidget {
   }
 }
 
-// ── Ongoing Courses ───────────────────────────────────────────────────────────
+
 
 class _OngoingCoursesCard extends StatelessWidget {
   final List<EnrolledCourse> courses;
@@ -464,6 +450,10 @@ class _CourseProgressRowState extends State<_CourseProgressRow>
 
   @override
   Widget build(BuildContext context) {
+    final course = widget.course;
+    final hasAssignmentData = course.assignmentsSubmitted > 0 || course.assignmentsPending > 0;
+    final hasQuizData = course.quizzesTaken > 0 || course.quizzesNotTaken > 0;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -472,7 +462,7 @@ class _CourseProgressRowState extends State<_CourseProgressRow>
           children: [
             Expanded(
               child: Text(
-                widget.course.title,
+                course.title,
                 style: const TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
@@ -482,7 +472,7 @@ class _CourseProgressRowState extends State<_CourseProgressRow>
               ),
             ),
             Text(
-              '${widget.course.progressPercent.toStringAsFixed(0)}/100',
+              '${course.progressPercent.toStringAsFixed(0)}/100',
               style: const TextStyle(
                 fontSize: 12,
                 color: _kSub,
@@ -523,12 +513,81 @@ class _CourseProgressRowState extends State<_CourseProgressRow>
             ],
           ),
         ),
+        // Assignment & Quiz counts
+        if (hasAssignmentData || hasQuizData) ...[          const SizedBox(height: 6),
+          Wrap(
+            spacing: 8,
+            runSpacing: 4,
+            children: [
+              if (hasAssignmentData) ...[                _CourseMiniBadge(
+                  icon: Icons.assignment_turned_in_rounded,
+                  label: '${course.assignmentsSubmitted} submitted',
+                  color: _kGreen,
+                ),
+                _CourseMiniBadge(
+                  icon: Icons.pending_outlined,
+                  label: '${course.assignmentsPending} pending',
+                  color: _kOrange,
+                ),
+              ],
+              if (hasQuizData) ...[                _CourseMiniBadge(
+                  icon: Icons.check_circle_outline_rounded,
+                  label: '${course.quizzesTaken} quizzes taken',
+                  color: _kPurple,
+                ),
+                if (course.quizzesNotTaken > 0)
+                  _CourseMiniBadge(
+                    icon: Icons.quiz_outlined,
+                    label: '${course.quizzesNotTaken} quizzes available',
+                    color: _kBlue,
+                  ),
+              ],
+            ],
+          ),
+        ],
       ],
     );
   }
 }
 
-// ── Stats Row ─────────────────────────────────────────────────────────────────
+class _CourseMiniBadge extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final Color color;
+  const _CourseMiniBadge({
+    required this.icon,
+    required this.label,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.08),
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 11, color: color),
+          const SizedBox(width: 4),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.w600,
+              color: color,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+
 
 class _StatsRow extends StatelessWidget {
   final StudentDashboardModel model;
@@ -693,7 +752,7 @@ class _AnimatedStatCardState extends State<_AnimatedStatCard>
   }
 }
 
-// ── Line Chart ────────────────────────────────────────────────────────────────
+
 
 class _LineChartCard extends StatefulWidget {
   final List<ProgressPoint> points;
@@ -893,7 +952,7 @@ class _LineChartPainter extends CustomPainter {
       old.progress != progress;
 }
 
-// ── Bar Chart ─────────────────────────────────────────────────────────────────
+
 
 class _BarChartCard extends StatefulWidget {
   final List<GradePerCourse> grades;
@@ -1045,7 +1104,7 @@ class _BarChartPainter extends CustomPainter {
       old.progress != progress;
 }
 
-// ── Completion Donut ──────────────────────────────────────────────────────────
+
 
 class _CompletionDonutCard extends StatefulWidget {
   final CompletionStatus status;
@@ -1243,7 +1302,7 @@ class _DonutLegend extends StatelessWidget {
   }
 }
 
-// ── Deadlines ─────────────────────────────────────────────────────────────────
+
 
 class _DeadlinesCard extends StatelessWidget {
   final List<UpcomingDeadline> deadlines;
@@ -1387,7 +1446,7 @@ class _DeadlineTileState extends State<_DeadlineTile>
   }
 }
 
-// ── Achievements ──────────────────────────────────────────────────────────────
+
 
 class _AchievementsCard extends StatelessWidget {
   final List<Achievement> achievements;
@@ -1448,7 +1507,7 @@ class _AchievementChip extends StatelessWidget {
   }
 }
 
-// ── Reusable Widgets ──────────────────────────────────────────────────────────
+
 
 class _Card extends StatelessWidget {
   final String title;

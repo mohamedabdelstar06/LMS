@@ -2,23 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lms/core/widgets/management/management_layout.dart';
 import 'package:lms/core/widgets/management/management_menu_config.dart';
-import 'package:lms/features/screens/admin/users/get_users/view.dart';
 import 'package:lms/features/screens/admin/year/create_year/state_management/years_cubit.dart';
 import 'package:lms/features/screens/admin/year/create_year/state_management/years_states.dart';
-import '../../../../../core/cons/Colors/app_colors.dart';
-import '../../../../../core/helpers/logout_server/logout.dart';
-import '../../../Announcement/view.dart';
-import '../../admin_profile/view.dart';
-import '../../courses/create_course/Adding_view.dart';
-import '../../courses/home_courses/view.dart';
-import '../../department/create_department/view.dart';
-import '../../department/get_department/get_All_departments/view.dart';
 import '../../department/get_department/model/model.dart';
 import '../../department/get_department/state_mangment/cubit.dart';
 import '../../department/get_department/state_mangment/states.dart';
-import '../../squadron/create_squadron/view.dart';
-import '../../users/create_user/View.dart';
-import '../get_year/get_All_years/view.dart';
 
 class CreateYearPage extends StatelessWidget {
   const CreateYearPage({super.key});
