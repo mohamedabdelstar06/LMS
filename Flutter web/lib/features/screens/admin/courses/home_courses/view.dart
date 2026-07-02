@@ -3,6 +3,7 @@ import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lms/core/helpers/api_url_helper.dart';
+import 'package:lms/core/widgets/app_network_image.dart';
 import 'package:lms/core/widgets/management/management_layout.dart';
 import 'package:lms/core/widgets/management/management_menu_config.dart';
 import 'package:lms/features/screens/admin/courses/home_courses/state_managment/cubit.dart';
@@ -482,23 +483,15 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
-                  width: 340,
-                  height: 164,
+                  width: double.infinity,
+                  height: 120,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(16),
-                    child: widget.courseModel.imageUrl.isNotEmpty
-                        ? IgnorePointer(
-                      child: WebImage(
-                        url: buildImageUrl(widget.courseModel.imageUrl),
-                        width: double.infinity,
-                        height: 120,
-                      ),
-                    )
-                        : const SizedBox(
+                    child: AppNetworkImage(
+                      imageUrl: widget.courseModel.imageUrl,
+                      width: double.infinity,
                       height: 120,
-                      child: Center(
-                        child: Icon(Icons.image_not_supported),
-                      ),
+                      imageType: AppImageType.course,
                     ),
                   ),
                 ),
@@ -590,44 +583,7 @@ class _CourseCardWidgetState extends State<_CourseCardWidget> {
   }
 }
 
-class WebImage extends StatelessWidget {
-  WebImage({
-    super.key,
-    required this.url,
-    required this.width,
-    required this.height,
-  }) {
-    _register();
-  }
 
-  final String url;
-  final double width;
-  final double height;
-
-  static final Set<String> _registeredViews = {};
-
-  void _register() {
-    if (_registeredViews.contains(url)) return;
-    ui.platformViewRegistry.registerViewFactory(url, (int _) {
-      final img = html.ImageElement()
-        ..src = url
-        ..style.width = '100%'
-        ..style.height = '100%'
-        ..style.objectFit = 'cover';
-      return img;
-    });
-    _registeredViews.add(url);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: width,
-      height: height,
-      child: HtmlElementView(viewType: url),
-    );
-  }
-}
 
 void _showUserMenu(BuildContext context) async {
   final RenderBox button = context.findRenderObject() as RenderBox;

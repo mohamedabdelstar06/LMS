@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'app_network_image.dart';
 
 /// Stub for non-web platforms - uses CachedNetworkImage.
 Widget buildWebNetworkImage({
@@ -10,6 +11,7 @@ Widget buildWebNetworkImage({
   BorderRadius? borderRadius,
   String? fallbackText,
   Color? backgroundColor,
+  AppImageType imageType = AppImageType.general,
 }) {
   return CachedNetworkImage(
     imageUrl: url,
@@ -37,7 +39,7 @@ Widget buildWebNetworkImage({
       ),
     ),
     errorWidget: (_, __, ___) => _buildFallback(
-      width, height, shape, borderRadius, fallbackText, backgroundColor,
+      width, height, shape, borderRadius, fallbackText, backgroundColor, imageType,
     ),
   );
 }
@@ -49,26 +51,47 @@ Widget _buildFallback(
   BorderRadius? borderRadius,
   String? fallbackText,
   Color? backgroundColor,
+  AppImageType imageType,
 ) {
-  final char = (fallbackText != null && fallbackText.isNotEmpty)
-      ? fallbackText.trim()[0].toUpperCase()
-      : '?';
+  IconData fallbackIcon;
+  List<Color> gradientColors;
+  switch (imageType) {
+    case AppImageType.user:
+      fallbackIcon = Icons.person_rounded;
+      gradientColors = [const Color(0xFFE0E7FF), const Color(0xFFC7D2FE)];
+      break;
+    case AppImageType.course:
+      fallbackIcon = Icons.menu_book_rounded;
+      gradientColors = [const Color(0xFFFEF08A), const Color(0xFFFDE047)];
+      break;
+    case AppImageType.department:
+      fallbackIcon = Icons.domain_rounded;
+      gradientColors = [const Color(0xFFD1FAE5), const Color(0xFFA7F3D0)];
+      break;
+    case AppImageType.general:
+    default:
+      fallbackIcon = Icons.image_rounded;
+      gradientColors = [const Color(0xFFF3F4F6), const Color(0xFFE5E7EB)];
+      break;
+  }
+
   return Container(
     width: width,
     height: height,
     decoration: BoxDecoration(
       shape: borderRadius != null ? BoxShape.rectangle : shape,
-      borderRadius: borderRadius,
-      color: backgroundColor ?? Colors.blue.shade100,
+      borderRadius: borderRadius ?? (shape == BoxShape.rectangle ? BorderRadius.circular(12) : null),
+      gradient: LinearGradient(
+        colors: gradientColors,
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      ),
     ),
     child: Center(
-      child: Text(
-        char,
-        style: TextStyle(
-          fontSize: (width < height ? width : height) * 0.45,
-          fontWeight: FontWeight.bold,
-          color: Colors.blue.shade800,
-        ),
+      child: Icon(
+        fallbackIcon,
+        size: (width < height ? width : height) * 0.45,
+        color: Colors.black.withOpacity(0.3),
       ),
     ),
   );

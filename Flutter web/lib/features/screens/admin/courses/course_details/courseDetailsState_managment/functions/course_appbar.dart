@@ -156,12 +156,10 @@ class CourseHeroAppBar extends StatelessWidget {
                         ),
                       );
                     },
-                    errorBuilder: (_, __, ___) => Container(
+                    errorBuilder: (_, __, ___) => Image.asset(
+                      'assets/images/default_fallback.png',
                       height: 185,
-                      color: Colors.white10,
-                      child: const Center(
-                        child: Icon(Icons.school, size: 60, color: Colors.white54),
-                      ),
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),
