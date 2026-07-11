@@ -123,9 +123,9 @@ class ActivateCubit extends Cubit<ActivateState> {
       return 'Email is required';
     }
 
-    // if (!email.endsWith("@gmail.com")) {
-    //   return "Email must be a valid Gmail address";
-    // }
+    if (!email.endsWith('@gmail.com')) {
+     return 'Email must be a valid Gmail address';
+    }
 
     if (password.isEmpty) {
       return 'Password is required';

@@ -531,7 +531,8 @@ class _SubmissionSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final blocked = assignment.hasDeadlinePassed && !assignment.allowLateSubmission;
+    final blocked = assignment.isSubmitted ||
+        (assignment.hasDeadlinePassed && !assignment.allowLateSubmission);
 
     return _SectionCard(
       title: assignment.isSubmitted ? 'Your Submission' : 'Submit Your Work',

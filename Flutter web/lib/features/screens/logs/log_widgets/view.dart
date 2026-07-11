@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import '../log_helper/helper.dart';
 import '../model.dart';
 
-// ─── Sky Palette (same as screen) ─────────────────────────────────────────────
+
 class _Sky {
   static const bg         = Color(0xFFF0F7FF);
   static const surface    = Color(0xFFFFFFFF);
@@ -26,7 +26,7 @@ class _Sky {
   static const pink   = Color(0xFFEC4899);
   static const red    = Color(0xFFEF4444);
 }
-// ───────────────────────────────────────────────────────────────────────────────
+
 
 class LogCard extends StatefulWidget {
 
@@ -69,7 +69,7 @@ class _LogCardState extends State<LogCard> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     final log            = widget.log;
     final componentColor = LogHelpers.componentColor(log.component);
-    final originIcon     = LogHelpers.originIcon(log.origin);
+    
 
     return FadeTransition(
       opacity: _fadeAnim,
@@ -120,7 +120,7 @@ class _LogCardState extends State<LogCard> with SingleTickerProviderStateMixin {
                   const SizedBox(width: 16),
                   Expanded(child: _buildMainContent(log, componentColor)),
                   const SizedBox(width: 16),
-                  _buildMetaColumn(log, originIcon),
+                  _buildMetaColumn(log ),
                 ],
               ),
             ),
@@ -204,23 +204,7 @@ class _LogCardState extends State<LogCard> with SingleTickerProviderStateMixin {
           ],
         ),
         const SizedBox(height: 6),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          decoration: BoxDecoration(
-            color: _Sky.surfaceAlt,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: _Sky.border),
-          ),
-          child: Text(
-            log.description,
-            style: const TextStyle(
-              color: _Sky.textSecondary,
-              fontSize: 12,
-              fontFamily: 'monospace',
-            ),
-          ),
-        ),
-        const SizedBox(height: 8),
+      
         Row(
           children: [
             const Icon(Icons.person_outline,
@@ -249,7 +233,7 @@ class _LogCardState extends State<LogCard> with SingleTickerProviderStateMixin {
     );
   }
 
-  Widget _buildMetaColumn(ActivityLog log, IconData originIcon) {
+  Widget _buildMetaColumn(ActivityLog log, ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
@@ -268,14 +252,14 @@ class _LogCardState extends State<LogCard> with SingleTickerProviderStateMixin {
         ),
         const SizedBox(height: 10),
         _IpChip(ip: log.ipAddress),
-        const SizedBox(height: 8),
-        _OriginBadge(origin: log.origin, icon: originIcon),
+       
+        
       ],
     );
   }
 }
 
-// ─── Event Tag ─────────────────────────────────────────────────────────────────
+
 class _EventTag extends StatelessWidget {
 
   const _EventTag({required this.eventName, required this.color});
@@ -324,7 +308,7 @@ class _EventTag extends StatelessWidget {
   }
 }
 
-// ─── IP Chip ───────────────────────────────────────────────────────────────────
+
 class _IpChip extends StatefulWidget {
   const _IpChip({required this.ip});
   final String ip;
@@ -391,46 +375,10 @@ class _IpChipState extends State<_IpChip> {
   }
 }
 
-// ─── Origin Badge ──────────────────────────────────────────────────────────────
-class _OriginBadge extends StatelessWidget {
 
-  const _OriginBadge({required this.origin, required this.icon});
-  final String origin;
-  final IconData icon;
 
-  @override
-  Widget build(BuildContext context) {
-    final isWeb  = origin == 'web';
-    final color  = isWeb ? _Sky.blue1 : _Sky.amber;
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.09),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: color.withOpacity(0.28)),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 11, color: color),
-          const SizedBox(width: 4),
-          Text(
-            origin.toUpperCase(),
-            style: TextStyle(
-              color: color,
-              fontSize: 9.5,
-              fontWeight: FontWeight.w800,
-              letterSpacing: 0.8,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
 
-// ─── Stats Card ────────────────────────────────────────────────────────────────
 class StatsCard extends StatelessWidget {
 
   const StatsCard({
@@ -500,7 +448,7 @@ class StatsCard extends StatelessWidget {
   }
 }
 
-// ─── Filter Chip ───────────────────────────────────────────────────────────────
+
 class FilterChipWidget extends StatefulWidget {
 
   const FilterChipWidget({

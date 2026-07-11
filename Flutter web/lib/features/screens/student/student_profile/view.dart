@@ -9,14 +9,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
+import 'package:lms/core/helpers/api_url_helper.dart';
+import 'package:lms/core/widgets/management/management_layout.dart';
+import 'package:lms/core/widgets/management/management_menu_config.dart';
 import 'package:lms/features/screens/student/student_profile/state_mangement/cubit.dart';
 import 'package:lms/features/screens/student/student_profile/state_mangement/states.dart';
 
 import '../../../../core/cons/Colors/app_colors.dart';
-import '../../../../core/helpers/logout_server/logout.dart';
 import '../../../../generated/assets.dart';
-import '../../Announcement/view.dart';
-import '../student_courses/view.dart';
 import 'ProfileModel/view.dart';
 
 class WebImage extends StatelessWidget {
@@ -54,13 +54,7 @@ class WebImage extends StatelessWidget {
 }
 
 String buildImageUrl(String? imageUrl) {
-  if (imageUrl == null || imageUrl.isEmpty) return '';
-
-  if (imageUrl.startsWith('http')) return imageUrl;
-
-  final cleanPath = imageUrl.startsWith('/') ? imageUrl.substring(1) : imageUrl;
-
-  return 'https://skylearn.runasp.net/$cleanPath';
+  return ApiUrlHelper.resolveMediaUrl(imageUrl) ?? '';
 }
 
 class StudentProfileScreen extends StatefulWidget {
@@ -208,261 +202,43 @@ class _ProfileScreenState extends State<StudentProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => StudentProfileCubit()..getProfile(),
-      child: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).unfocus();
-        },
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                MYColors.gradientColor_3,
-                MYColors.gradientColor_2.withValues(alpha: 0.25),
-                MYColors.gradientColor_3,
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-          child: Scaffold(
-            backgroundColor: Colors.transparent,
-            body: Row(
-              children: [
-                _buildSidebar(),
-                Expanded(
-                  child: BlocBuilder<StudentProfileCubit, StudentProfileState>(
-                    builder: (context, state) {
-                      if (state is StudentProfileLoading) {
-                        return const Center(child: CircularProgressIndicator());
-                      } else if (state is StudentProfileError) {
-                        return Center(child: Text(state.message));
-                      } else if (state is StudentProfileLoaded) {
-                        final user = state.profile.user;
-
-                        _initControllers(user);
-
-                        return _buildProfileContent(user: user);
-                      }
-                      return const Center(child: Text('Loading...'));
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSidebar() {
-    return Container(
-      width: 250,
-      margin: const EdgeInsetsDirectional.only(
-        start: 40,
-        top: 50,
-        bottom: 50,
-      ),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 20,
-            offset: const Offset(0, 4),
-            spreadRadius: 2,
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          const SizedBox(height: 40),
-          _buildMenuItem(
-            Icons.person_outline,
-            Icons.person,
-            'Profile',
-            'Profile',
-            () {},
-          ),
-          _buildMenuItem(
-            Icons.book_outlined,
-            Icons.book,
-            'My Courses',
-            'My Courses',
-            () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const StudentCourseScreen(),
-                ),
-              );
-            },
-          ),
-          _buildMenuItem(
-            Icons.notifications_active_outlined,
-            Icons.notifications_active_rounded,
-            'Announcements',
-            'Announcements',
-            () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AnnouncementScreen(),
-                ),
-              );
-            },
-          ),
-          _buildMenuItem(
-            Icons.grade_outlined,
-            Icons.grade,
-            'Grades overview',
-            'Grades overview',
-            () {},
-          ),
-          const Spacer(),
-          _buildLogoutButton(),
-          const SizedBox(height: 20),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildMenuItem(
-    IconData outlinedIcon,
-    IconData filledIcon,
-    String title,
-    String value,
-    onTap,
-  ) {
-    final isSelected = selectedMenuItem == value;
-    final isHovered = hoveredMenuItem == value;
-
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) => setState(() => hoveredMenuItem = value),
-      onExit: (_) => setState(() => hoveredMenuItem = null),
-      child: GestureDetector(
-        onTap: () {
-          setState(() {
-            selectedMenuItem = value;
-          });
-        },
+    return ManagementScaffold(
+      selectedMenuItem: 'Profile',
+      role: ManagementRole.student,
+      child: BlocProvider(
+        create: (context) => StudentProfileCubit()..getProfile(),
         child: GestureDetector(
-          onTap: onTap,
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: Container(
             decoration: BoxDecoration(
-              color: isSelected
-                  ? const Color(0xFF2563EB)
-                  : isHovered
-                  ? const Color(0xFF2563EB).withOpacity(0.1)
-                  : Colors.transparent,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(
-                color: isHovered && !isSelected
-                    ? const Color(0xFF2563EB).withOpacity(0.3)
-                    : Colors.transparent,
+              gradient: LinearGradient(
+                colors: [
+                  MYColors.gradientColor_3,
+                  MYColors.gradientColor_2.withValues(alpha: 0.25),
+                  MYColors.gradientColor_3,
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
               ),
             ),
-            child: Row(
-              children: [
-                AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 200),
-                  child: Icon(
-                    isSelected ? filledIcon : outlinedIcon,
-                    key: ValueKey(isSelected),
-                    color: isSelected
-                        ? Colors.white
-                        : isHovered
-                        ? const Color(0xFF2563EB)
-                        : const Color(0xFF64748B),
-                    size: 20,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Text(
-                  title,
-                  style: TextStyle(
-                    color: isSelected
-                        ? Colors.white
-                        : isHovered
-                        ? const Color(0xFF2563EB)
-                        : Colors.black87,
-                    fontSize: 14,
-                    fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+            child: BlocBuilder<StudentProfileCubit, StudentProfileState>(
+              builder: (context, state) {
+                if (state is StudentProfileLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (state is StudentProfileError) {
+                  return Center(child: Text(state.message));
+                } else if (state is StudentProfileLoaded) {
+                  final user = state.profile.user;
 
-  Widget _buildLogoutButton() {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) => setState(() => isLogoutHovered = true),
-      onExit: (_) => setState(() => isLogoutHovered = false),
-      child: GestureDetector(
-        onTap: () {
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: const Text('Logout'),
-              content: const Text('Are you sure you want to logout?'),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text('Cancel'),
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-                    await LogoutServer.logout();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFEF4444),
-                  ),
-                  child: const Text('Logout'),
-                ),
-              ],
+                  _initControllers(user);
+
+                  return _buildProfileContent(user: user);
+                }
+                return const Center(child: Text('Loading...'));
+              },
             ),
-          );
-        },
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          margin: const EdgeInsets.symmetric(horizontal: 12),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          decoration: BoxDecoration(
-            color: isLogoutHovered
-                ? const Color(0xFFEF4444).withOpacity(0.1)
-                : Colors.transparent,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(
-              color: isLogoutHovered
-                  ? const Color(0xFFEF4444).withOpacity(0.3)
-                  : Colors.transparent,
-            ),
-          ),
-          child: const Row(
-            children: [
-              Icon(Icons.logout, color: Color(0xFFEF4444), size: 20),
-              SizedBox(width: 12),
-              Text(
-                'Logout',
-                style: TextStyle(
-                  color: Color(0xFFEF4444),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
           ),
         ),
       ),

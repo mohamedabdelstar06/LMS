@@ -103,7 +103,12 @@ class _SidebarState extends State<Sidebar>
             _SidebarHeader(
               collapsed: widget.collapsed,
               expandAnim: _expandAnim,
-              onToggle: widget.onToggle,
+              onToggle: null, // collapse moved to bottom
+            ),
+            const SizedBox(height: 4),
+            _BackButton(
+              collapsed: widget.collapsed,
+              expandAnim: _expandAnim,
             ),
             const SizedBox(height: 6),
             Expanded(
@@ -124,6 +129,11 @@ class _SidebarState extends State<Sidebar>
               collapsed: widget.collapsed,
               expandAnim: _expandAnim,
             ),
+            _CollapseToggle(
+              collapsed: widget.collapsed,
+              onToggle: widget.onToggle,
+              expandAnim: _expandAnim,
+            ),
           ],
         ),
       ),
@@ -140,43 +150,10 @@ class _SidebarHeader extends StatelessWidget {
 
   final bool collapsed;
   final Animation<double> expandAnim;
-  final VoidCallback onToggle;
+  final VoidCallback? onToggle;
 
   @override
   Widget build(BuildContext context) {
-    if (collapsed) {
-      return Container(
-        height: 66,
-        padding: const EdgeInsets.symmetric(horizontal: 6),
-        decoration: const BoxDecoration(
-          border: Border(bottom: BorderSide(color: Color(0xFFE0F2FE))),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              width: 32,
-              height: 32,
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF0369A1), Color(0xFF0EA5E9)],
-                ),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Icon(Icons.school_rounded,
-                  color: Colors.white, size: 16),
-            ),
-           const SizedBox(width: 7,),
-
-            _ToggleButton(
-              onTap: onToggle,
-              collapsed: collapsed,
-            ),
-          ],
-        ),
-      );
-    }
-
     return Container(
       height: 66,
       padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -198,41 +175,43 @@ class _SidebarHeader extends StatelessWidget {
                 color: Colors.white, size: 18),
           ),
 
-          const SizedBox(width: 10),
-
-          Expanded(
-            child: FadeTransition(
-              opacity: expandAnim,
-              child: const Text(
-                'SkyLearn',
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  color: Color(0xFF0369A1),
-                  fontSize: 15,
-                  fontWeight: FontWeight.w800,
+          if (!collapsed) ...[
+            const SizedBox(width: 10),
+            Expanded(
+              child: FadeTransition(
+                opacity: expandAnim,
+                child: const Text(
+                  'اّفــــــاق',
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: Color(0xFF0369A1),
+                    fontSize: 15,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
               ),
             ),
-          ),
-
-          _ToggleButton(
-            onTap: onToggle,
-            collapsed: collapsed,
-          ),
+          ],
         ],
       ),
     );
   }
-}class _ToggleButton extends StatefulWidget {
-  const _ToggleButton({required this.onTap, required this.collapsed});
-  final VoidCallback onTap;
-  final bool collapsed;
-
-  @override
-  State<_ToggleButton> createState() => _ToggleButtonState();
 }
 
-class _ToggleButtonState extends State<_ToggleButton> {
+// ── Back Arrow Button ─────────────────────────────────────────
+class _BackButton extends StatefulWidget {
+  const _BackButton({
+    required this.collapsed,
+    required this.expandAnim,
+  });
+  final bool collapsed;
+  final Animation<double> expandAnim;
+
+  @override
+  State<_BackButton> createState() => _BackButtonState();
+}
+
+class _BackButtonState extends State<_BackButton> {
   bool _hov = false;
 
   @override
@@ -242,30 +221,122 @@ class _ToggleButtonState extends State<_ToggleButton> {
       onEnter: (_) => setState(() => _hov = true),
       onExit: (_) => setState(() => _hov = false),
       child: GestureDetector(
-        onTap: widget.onTap,
+        onTap: () => Navigator.pop(context),
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 160),
-          width: 28,
-          height: 28,
-          decoration: BoxDecoration(
-            color: _hov ? const Color(0xFF0EA5E9) : const Color(0xFFE0F2FE),
-            shape: BoxShape.circle,
-            boxShadow: _hov
-                ? const [
-              BoxShadow(
-                color: Color(0x440EA5E9),
-                blurRadius: 8,
-                offset: Offset(0, 2),
-              )
-            ]
-                : [],
+          duration: const Duration(milliseconds: 180),
+          margin: EdgeInsets.symmetric(
+            horizontal: widget.collapsed ? 8 : 12,
+            vertical: 2,
           ),
-          child: Icon(
-            widget.collapsed
-                ? Icons.chevron_right_rounded
-                : Icons.chevron_left_rounded,
-            size: 16,
-            color: _hov ? Colors.white : const Color(0xFF0EA5E9),
+          padding: EdgeInsets.symmetric(
+            horizontal: widget.collapsed ? 0 : 10,
+            vertical: 9,
+          ),
+          decoration: BoxDecoration(
+            color: _hov
+                ? const Color(0xFFE0F2FE).withOpacity(0.8)
+                : Colors.transparent,
+            borderRadius: BorderRadius.circular(11),
+            border: _hov
+                ? Border.all(color: const Color(0xFFBAE6FD).withOpacity(0.6))
+                : null,
+          ),
+          child: widget.collapsed
+              ? Center(
+                  child: Icon(
+                    Icons.arrow_back_rounded,
+                    size: 20,
+                    color: _hov ? const Color(0xFF0EA5E9) : const Color(0xFF94A3B8),
+                  ),
+                )
+              : FadeTransition(
+                  opacity: widget.expandAnim,
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 28,
+                        height: 28,
+                        decoration: BoxDecoration(
+                          color: _hov
+                              ? const Color(0xFF0EA5E9).withOpacity(0.12)
+                              : const Color(0xFFE0F2FE),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Icon(
+                          Icons.arrow_back_rounded,
+                          size: 16,
+                          color: _hov ? const Color(0xFF0EA5E9) : const Color(0xFF0369A1),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      const Expanded(
+                        child: Text(
+                          'Back to Courses',
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFF0369A1),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+        ),
+      ),
+    );
+  }
+}
+
+// ── Bottom Collapse Toggle ────────────────────────────────────
+class _CollapseToggle extends StatelessWidget {
+  const _CollapseToggle({
+    required this.collapsed,
+    required this.onToggle,
+    required this.expandAnim,
+  });
+  final bool collapsed;
+  final VoidCallback onToggle;
+  final Animation<double> expandAnim;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: onToggle,
+        child: Container(
+          height: 42,
+          decoration: const BoxDecoration(
+            border: Border(top: BorderSide(color: Color(0xFFE0F2FE))),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              AnimatedRotation(
+                turns: collapsed ? 0.5 : 0,
+                duration: const Duration(milliseconds: 250),
+                child: Icon(
+                  Icons.chevron_left_rounded,
+                  color: const Color(0xFF0369A1).withOpacity(0.5),
+                  size: 20,
+                ),
+              ),
+              if (!collapsed) ...[
+                const SizedBox(width: 6),
+                FadeTransition(
+                  opacity: expandAnim,
+                  child: const Text(
+                    'Collapse',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Color(0xFF0369A1),
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ],
+            ],
           ),
         ),
       ),

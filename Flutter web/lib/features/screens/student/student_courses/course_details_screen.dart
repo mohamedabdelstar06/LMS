@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lms/core/helpers/api_url_helper.dart';
 import 'package:lms/features/screens/admin/courses/course_details/lectures/state_managment/lectures_cubit.dart';
 import 'package:lms/features/screens/admin/courses/course_details/lectures/view/view.dart';
 import 'package:lms/features/screens/student/course_grades_screen.dart';
@@ -15,9 +16,7 @@ import 'course_detail_cubit.dart';
 import 'course_detail_states.dart';
 
 String buildImageUrl(String? image) {
-  if (image == null || image.isEmpty) return '';
-  if (image.startsWith('http')) return image;
-  return 'https://skylearn.runasp.net$image';
+  return ApiUrlHelper.resolveMediaUrl(image) ?? '';
 }
 
 class CourseDetailsScreen extends StatelessWidget {

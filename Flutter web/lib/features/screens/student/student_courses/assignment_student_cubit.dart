@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lms/core/helpers/cach_helper/submission_tracker.dart';
 import 'package:lms/features/screens/student/student_courses/student_assignment_model.dart';
 import 'package:lms/features/screens/student/student_courses/student_assignment_repository.dart';
 
@@ -19,8 +20,34 @@ class AssignmentStudentCubit extends Cubit<AssignmentStudentState> {
     emit(AssignmentListLoading());
     try {
       final list = await _repository.getCourseAssignments(courseId);
-      _cachedList = list;
-      emit(AssignmentListSuccess(list));
+      // Check local tracker for any assignments that were submitted
+      // but backend hasn't caught up yet
+      final submittedIds = await SubmissionTracker.getSubmittedIds();
+      _cachedList = list.map((a) {
+        if (submittedIds.contains(a.id) && !a.isSubmitted) {
+          return StudentAssignmentModel(
+            id: a.id,
+            courseId: a.courseId,
+            title: a.title,
+            description: a.description,
+            instructions: a.instructions,
+            maxGrade: a.maxGrade,
+            allowLateSubmission: a.allowLateSubmission,
+            startDate: a.startDate,
+            deadlineDate: a.deadlineDate,
+            targetSquadronId: a.targetSquadronId,
+            targetSquadronName: a.targetSquadronName,
+            submissionCount: 1,
+            isVisible: a.isVisible,
+            createdById: a.createdById,
+            createdByName: a.createdByName,
+            createdAt: a.createdAt,
+            fileUrls: a.fileUrls,
+          );
+        }
+        return a;
+      }).toList();
+      emit(AssignmentListSuccess(_cachedList));
     } on DioException catch (e) {
       emit(AssignmentListError(_readable(e)));
     } catch (e) {
@@ -32,7 +59,31 @@ class AssignmentStudentCubit extends Cubit<AssignmentStudentState> {
     emit(AssignmentDetailLoading());
     try {
       final assignment = await _repository.getAssignmentById(assignmentId);
-      emit(AssignmentDetailSuccess(assignment));
+      // Check local tracker: if we know it was submitted but the backend
+      // hasn't caught up yet, override the submission count
+      final locallySubmitted = await SubmissionTracker.isSubmitted(assignmentId);
+      final effectiveAssignment = (locallySubmitted && !assignment.isSubmitted)
+          ? StudentAssignmentModel(
+              id: assignment.id,
+              courseId: assignment.courseId,
+              title: assignment.title,
+              description: assignment.description,
+              instructions: assignment.instructions,
+              maxGrade: assignment.maxGrade,
+              allowLateSubmission: assignment.allowLateSubmission,
+              startDate: assignment.startDate,
+              deadlineDate: assignment.deadlineDate,
+              targetSquadronId: assignment.targetSquadronId,
+              targetSquadronName: assignment.targetSquadronName,
+              submissionCount: 1, // override to show as submitted
+              isVisible: assignment.isVisible,
+              createdById: assignment.createdById,
+              createdByName: assignment.createdByName,
+              createdAt: assignment.createdAt,
+              fileUrls: assignment.fileUrls,
+            )
+          : assignment;
+      emit(AssignmentDetailSuccess(effectiveAssignment));
     } on DioException catch (e) {
       emit(AssignmentDetailError(_readable(e)));
     } catch (e) {
@@ -55,6 +106,8 @@ class AssignmentStudentCubit extends Cubit<AssignmentStudentState> {
           }
         },
       );
+      // Mark as submitted locally so status updates immediately
+      await SubmissionTracker.markSubmitted(assignmentId);
       emit(AssignmentSubmitSuccess());
       await loadAssignmentDetail(assignmentId);
       return true;

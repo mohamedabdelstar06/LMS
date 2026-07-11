@@ -1,29 +1,24 @@
+import 'dart:html' as html;
+import 'dart:io';
 import 'dart:ui_web' as ui;
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io';
-import 'package:flutter/foundation.dart';
 import 'package:lms/core/helpers/api_url_helper.dart';
+import 'package:lms/core/widgets/management/management_layout.dart';
+import 'package:lms/core/widgets/management/management_menu_config.dart';
 import 'package:lms/features/screens/instructor/home_courses/view.dart';
 import 'package:lms/features/screens/instructor/teacher_profile/state_managment/cubit_d_profile.dart';
 import 'package:lms/features/screens/instructor/teacher_profile/state_managment/state_d_profile.dart';
 
-
-
-import 'package:lms/core/widgets/management/management_layout.dart';
-import 'package:lms/core/widgets/management/management_menu_config.dart';
 import '../../../../core/helpers/logout_server/logout.dart';
 import '../../../../generated/assets.dart';
 import '../../Announcement/view.dart';
-import '../../admin/admin_profile/view.dart';
-import '../../admin/courses/create_course/Adding_view.dart';
-import '../../student/student_courses/view.dart';
 import '../create_course/Adding_view.dart';
 import 'model/view.dart';
-import 'dart:html' as html;
 
 
 class WebImage extends StatelessWidget {
@@ -287,7 +282,7 @@ class _ProfileScreenState extends State<TeacherProfileScreen> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const AnnouncementScreen(),
+                  builder: (context) => const AllAnnouncementScreen(),
                 ),
               );
             },

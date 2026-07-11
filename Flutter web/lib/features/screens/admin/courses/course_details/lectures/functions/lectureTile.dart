@@ -168,7 +168,10 @@ class LectureTileState extends State<LectureTile> {
               Image.network(
                 imageUrl,
                 fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => _buildDefaultThumb(),
+                errorBuilder: (_, __, ___) => Image.asset(
+                  'assets/images/default_fallback.png',
+                  fit: BoxFit.cover,
+                ),
               )
             else
               _buildDefaultThumb(),

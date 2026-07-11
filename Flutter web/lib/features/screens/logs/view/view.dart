@@ -8,7 +8,7 @@ import '../model.dart';
 import '../state_mangement/logs_cubit.dart';
 import '../state_mangement/logs_state.dart';
 
-// ─── Sky Palette ───────────────────────────────────────────────────────────────
+
 class _Sky {
   static const surfaceAlt = Color(0xFFF5F9FF);
   static const border = Color(0xFFD4E6F9);
@@ -24,7 +24,6 @@ class _Sky {
 
   static const green = Color(0xFF10B981);
   static const purple = Color(0xFF7C3AED);
-  static const amber = Color(0xFFF59E0B);
   static const pink = Color(0xFFEC4899);
   static const red = Color(0xFFEF4444);
 }
@@ -76,22 +75,14 @@ class _ActivityLogsScreenState extends State<ActivityLogsScreen> {
     );
     context.read<ActivityLogsCubit>().applyFilter(
       component: _selectedComponent,
-      origin: _selectedOrigin,
     );
   }
 
-  void _selectOrigin(String? origin) {
-    setState(() => _selectedOrigin = _selectedOrigin == origin ? null : origin);
-    context.read<ActivityLogsCubit>().applyFilter(
-      component: _selectedComponent,
-      origin: _selectedOrigin,
-    );
-  }
+  
 
   void _clearAll() {
     setState(() {
       _selectedComponent = null;
-      _selectedOrigin = null;
       _searchController.clear();
     });
     context.read<ActivityLogsCubit>().clearFilters();
@@ -211,7 +202,7 @@ class _ActivityLogsScreenState extends State<ActivityLogsScreen> {
               ),
             ),
             Text(
-              'SkyLearn Platform · Monitor all system events',
+              'Monitor all system events',
               style: TextStyle(color: _Sky.textMuted, fontSize: 12),
             ),
           ],
@@ -333,7 +324,6 @@ class _ActivityLogsScreenState extends State<ActivityLogsScreen> {
     final lectureCount = logs
         .where((l) => l.component.toLowerCase().contains('lecture'))
         .length;
-    final webCount = logs.where((l) => l.origin == 'web').length;
 
     return Row(
       children: [
@@ -364,15 +354,7 @@ class _ActivityLogsScreenState extends State<ActivityLogsScreen> {
           ),
         ),
         const SizedBox(width: 10),
-        Expanded(
-          child: _LightStatsCard(
-            label: 'Web Origin',
-            value: webCount.toString(),
-            icon: Icons.language_rounded,
-            color: _Sky.amber,
-          ),
-        ),
-        const SizedBox(width: 10),
+        
         Expanded(
           child: _LightStatsCard(
             label: 'Pages',
@@ -414,29 +396,9 @@ class _ActivityLogsScreenState extends State<ActivityLogsScreen> {
               ),
             ),
           ),
-          const SizedBox(width: 16),
-          const Text(
-            'Origin:',
-            style: TextStyle(
-              color: _Sky.textSecondary,
-              fontSize: 12.5,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(width: 10),
-          ...LogHelpers.origins.map(
-            (o) => Padding(
-              padding: const EdgeInsets.only(right: 8),
-              child: _LightFilterChip(
-                label: o,
-                selected: _selectedOrigin == o,
-                color: o == 'web' ? _Sky.blue1 : _Sky.amber,
-                onTap: () => _selectOrigin(o),
-              ),
-            ),
-          ),
+          
           const Spacer(),
-          if (_selectedComponent != null || _selectedOrigin != null)
+          if (_selectedComponent != null )
             GestureDetector(
               onTap: _clearAll,
               child: MouseRegion(

@@ -242,6 +242,7 @@ class BuildProfilePictureState extends State<BuildProfilePicture> {
       imageUrl: widget.userImageUrl ?? '',
       width: 100,
       height: 100,
+      imageType: AppImageType.user,
     );
   }
 

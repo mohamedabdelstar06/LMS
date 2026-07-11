@@ -8,8 +8,6 @@ class ActivityLog {
     required this.eventContext,
     required this.component,
     required this.eventName,
-    required this.description,
-    required this.origin,
     required this.ipAddress,
   });
 
@@ -22,8 +20,6 @@ class ActivityLog {
       eventContext: json['eventContext'] ?? '',
       component: json['component'] ?? '',
       eventName: json['eventName'] ?? '',
-      description: json['description'] ?? '',
-      origin: json['origin'] ?? '',
       ipAddress: json['ipAddress'] ?? '',
     );
   }
@@ -34,8 +30,6 @@ class ActivityLog {
   final String eventContext;
   final String component;
   final String eventName;
-  final String description;
-  final String origin;
   final String ipAddress;
 }
 

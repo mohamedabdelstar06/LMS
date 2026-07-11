@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lms/core/helpers/api_url_helper.dart';
 import '../../../home_courses/model/model.dart';
 import 'department_chip.dart';
 
@@ -7,9 +8,7 @@ class CourseHeroAppBar extends StatelessWidget {
   final GetCoursesModel course;
 
   String _buildImageUrl(String imageUrl) {
-    if (imageUrl.isEmpty) return '';
-    if (imageUrl.startsWith('https')) return imageUrl;
-    return 'https://skylearn.runasp.net${imageUrl.startsWith('/') ? '' : '/'}$imageUrl';
+    return ApiUrlHelper.resolveMediaUrl(imageUrl) ?? '';
   }
 
   @override
@@ -157,12 +156,10 @@ class CourseHeroAppBar extends StatelessWidget {
                         ),
                       );
                     },
-                    errorBuilder: (_, __, ___) => Container(
+                    errorBuilder: (_, __, ___) => Image.asset(
+                      'assets/images/default_fallback.png',
                       height: 185,
-                      color: Colors.white10,
-                      child: const Center(
-                        child: Icon(Icons.school, size: 60, color: Colors.white54),
-                      ),
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),

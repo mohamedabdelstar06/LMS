@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker_web/image_picker_web.dart';
 import 'package:lms/core/widgets/management/management_layout.dart';
 import 'package:lms/core/widgets/management/management_menu_config.dart';
-import 'package:lms/features/screens/Announcement/all_announcement.dart';
+
 import 'package:lms/features/screens/admin/courses/create_course/state_managment/cubit.dart';
 import 'package:lms/features/screens/admin/courses/create_course/state_managment/states.dart';
 
@@ -427,7 +427,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const AnnouncementScreen(),
+                  builder: (context) => const AllAnnouncementScreen(),
                 ),
               );
             },
@@ -576,30 +576,11 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
       onEnter: (_) => setState(() => isLogoutHovered = true),
       onExit: (_) => setState(() => isLogoutHovered = false),
       child: GestureDetector(
-        onTap: () {
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: const Text('Logout'),
-              content: const Text('Are you sure you want to logout?'),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text('Cancel'),
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-                    await LogoutServer.logout();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFEF4444),
-                  ),
-                  child: const Text('Logout'),
-                ),
-              ],
-            ),
-          );
+                   
+        onTap: () async {
+          await LogoutServer.logout();
         },
+    
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           margin: const EdgeInsets.symmetric(horizontal: 12),

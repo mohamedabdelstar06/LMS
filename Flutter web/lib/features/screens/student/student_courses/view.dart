@@ -5,6 +5,10 @@ import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lms/core/helpers/api_url_helper.dart';
+import 'package:lms/core/helpers/logout_server/logout.dart';
+import 'package:lms/core/widgets/management/management_layout.dart';
+import 'package:lms/core/widgets/management/management_menu_config.dart';
 import 'package:lms/features/screens/admin/Noti_button.dart';
 import 'package:lms/features/screens/student/student_courses/course_details_screen.dart';
 import 'package:lms/features/screens/student/student_courses/state_managment/cubit.dart';
@@ -13,15 +17,12 @@ import 'package:lms/features/screens/student_dashboard_screen.dart';
 
 import '../../../../core/cons/Colors/app_colors.dart';
 import '../../../../core/helpers/cach_helper/shared_pref_helper.dart';
-import '../../../../core/helpers/logout_server/logout.dart';
 import '../../../../generated/assets.dart';
 import '../../student/student_profile/view.dart' hide buildImageUrl;
 import 'model/view.dart';
 
 String buildProfileImageUrl(String? image) {
-  if (image == null || image.isEmpty) return '';
-  if (image.startsWith('https')) return image;
-  return 'https://skylearn.runasp.net$image';
+  return ApiUrlHelper.resolveMediaUrl(image) ?? '';
 }
 
 
@@ -75,7 +76,7 @@ void loadImageProfile() async {
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {
+    /*if (_isLoading) {
       return
         Container(
         decoration: BoxDecoration(
@@ -114,153 +115,58 @@ void loadImageProfile() async {
           ),
         ),
       );
-    }
+    }*/
 
     final screenWidth = MediaQuery.of(context).size.width;
     // final screenHeight = MediaQuery.of(context).size.height;
     final isLargeScreen = screenWidth > 1200;
     final isMediumScreen = screenWidth > 800;
 
-    return BlocProvider(
-  create: (context) => GetCourseStudentCubit()..getCourses(),
-  child: Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            MYColors.gradientColor_3,
-            MYColors.gradientColor_2.withValues(alpha: 0.25),
-            MYColors.gradientColor_3,
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-      ),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: BlocBuilder<GetCourseStudentCubit, GetCourseStudentState>(
-  builder: (context, state) {
-    if (state is GetCourseStudentLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
+    return ManagementScaffold(
+      selectedMenuItem: 'My Courses',
+      role: ManagementRole.student,
+      child: BlocProvider(
+        create: (context) => GetCourseStudentCubit()..getCourses(),
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                MYColors.gradientColor_3,
+                MYColors.gradientColor_2.withValues(alpha: 0.25),
+                MYColors.gradientColor_3,
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+          child: BlocBuilder<GetCourseStudentCubit, GetCourseStudentState>(
+            builder: (context, state) {
+              if (state is GetCourseStudentLoading) {
+                return const Center(child: CircularProgressIndicator());
+              }
 
-    if (state is GetCourseStudentError) {
-      return Center(child: Text(state.message));
-    }
-    if (state is GetCourseStudentSuccess) {
-      return SafeArea(
-        child: Column(
-          children: [
-            const CoursesAppBar()
-        /*    Container(
-              width: double.infinity,
-              constraints: BoxConstraints(
-                maxWidth: isLargeScreen
-                    ? 1400
-                    : (isMediumScreen ? 1000 : double.infinity),
-              ),
-              margin: EdgeInsets.symmetric(
-                horizontal: isLargeScreen ? 40 : (isMediumScreen ? 20 : 16),
-                vertical: 20,
-              ),
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: const Color(0xffE3F6FF),
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
-                    blurRadius: 20,
-                    spreadRadius: 0,
-                    offset: const Offset(0, 10),
-                  ),
-                ],
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: isLargeScreen ? 2 : 1,
-                    child: Container(
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: const Color(0xffF8FAFC),
-                        borderRadius: BorderRadius.circular(15),
-                        border: Border.all(
-                          color: const Color(0xffE2E8F0),
-                          width: 1,
-                        ),
-                      ),
-                      child: TextFormField(
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 15,
-                          ),
-                          hintText: 'Search courses...',
-                          hintStyle: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            fontFamily: 'inter',
-                            color: Color(0xFF64748B),
-                          ),
-                          prefixIcon: Padding(
-                            padding: const EdgeInsets.all(12),
-                            child: SvgPicture.asset(
-                              Assets.courseSearchIcon,
-                              width: 20,
-                              height: 20,
-                              colorFilter: const ColorFilter.mode(
-                                Color(0xFF64748B),
-                                BlendMode.srcIn,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
+              if (state is GetCourseStudentError) {
+                return Center(child: Text(state.message));
+              }
+
+              if (state is GetCourseStudentSuccess) {
+                return SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Container(
+                    width: double.infinity,
+                    constraints: BoxConstraints(
+                      maxWidth: isLargeScreen
+                          ? 1400
+                          : (isMediumScreen ? 1000 : double.infinity),
                     ),
-                  ),
-                  const SizedBox(width: 20),
-
-                  Row(
-                    children: [
-FutureBuilder<String?>(
-                                  future: TokenStorageHelper.getTokenSecure(),
-                                  builder: (context, snapshot) {
-                                    if (!snapshot.hasData) {
-                                      return const SizedBox.shrink();
-                                    }
-
-                                    return NotificationBellButton(
-                                      token: snapshot.data!,
-                                      role: 'student',
-                                    );
-                                  },
-                                ),
-                      const SizedBox(width: 20),
-                      buildUserProfile(context),
-                    ],
-                  ),
-                ],
-              ),
-            ),*/
-
-            ,Expanded(
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: Container(
-                  width: double.infinity,
-                  constraints: BoxConstraints(
-                    maxWidth: isLargeScreen
-                        ? 1400
-                        : (isMediumScreen ? 1000 : double.infinity),
-                  ),
-                  margin: EdgeInsets.symmetric(
-                    horizontal: isLargeScreen
-                        ? 40
-                        : (isMediumScreen ? 20 : 16),
-                  ),
-                  child: Column(
-                    children: [
+                    margin: EdgeInsets.symmetric(
+                      horizontal: isLargeScreen
+                          ? 40
+                          : (isMediumScreen ? 20 : 16),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: Column(
+                      children: [
                       Container(
                         width: double.infinity,
                         padding: const EdgeInsets.all(24),
@@ -360,7 +266,7 @@ FutureBuilder<String?>(
                               childAspectRatio = 1.18;
                             } else if (constraints.maxWidth > 900) {
                               crossAxisCount = 3;
-                              childAspectRatio = 1.14;
+                              childAspectRatio = 1.3;
                             } else if (constraints.maxWidth > 600) {
                               crossAxisCount = 2;
                               childAspectRatio = 1.14;
@@ -400,17 +306,14 @@ FutureBuilder<String?>(
                     ],
                   ),
                 ),
-              ),
-            ),
-          ],
+              );
+          }
+              return const SizedBox();
+            },
+          ),
         ),
-      );
-    }
-    return const SizedBox();
-  }),
       ),
-    ),
-);
+    );
   }
   Widget _buildCoursesCounter({
     required int count,

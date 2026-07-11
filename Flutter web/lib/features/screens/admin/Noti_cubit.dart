@@ -4,7 +4,6 @@ import 'package:lms/features/screens/admin/Noti_states.dart';
 import 'package:lms/features/screens/admin/Notifications_model.dart';
 
 
-// Replace with your actual token helper import
 
 class NotificationCubit extends Cubit<NotificationState> {
 
@@ -14,11 +13,9 @@ class NotificationCubit extends Cubit<NotificationState> {
   final NotificationRepository _repository;
 
   int _currentPage = 1;
-  static const int _pageSize = 20;
   List<NotificationModel> _allItems = [];
   int _unreadCount = 0;
 
-  // ── Fetch unread count (for bell badge only) ───────────────────────────────
   Future<void> fetchUnreadCount(String token) async {
     try {
       final count = await _repository.getUnreadCount(token: token);
@@ -29,7 +26,6 @@ class NotificationCubit extends Cubit<NotificationState> {
     }
   }
 
-  // ── Load first page ────────────────────────────────────────────────────────
   Future<void> loadNotifications({
     required String token,
     bool? isRead,

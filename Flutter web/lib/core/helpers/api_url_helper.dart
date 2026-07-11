@@ -12,23 +12,10 @@ class ApiUrlHelper {
     }
 
     if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
-      return _fixUploadsInAbsoluteUrl(_normalizeSlashes(trimmed));
+      return _normalizeSlashes(trimmed);
     }
 
     var path = trimmed.startsWith('/') ? trimmed : '/$trimmed';
-
-    // Static uploads are served from the site root, not under /api.
-    if (path.startsWith('/api/uploads/')) {
-      path = path.replaceFirst('/api', '');
-    } else if (path.startsWith('/uploads/')) {
-      // already site-relative
-    } else if (!path.startsWith('/api/')) {
-      path = '/uploads$path';
-    }
-
-    if (path.startsWith('/api/')) {
-      return _normalizeSlashes('$siteBase$path');
-    }
 
     return _normalizeSlashes('$siteBase$path');
   }
